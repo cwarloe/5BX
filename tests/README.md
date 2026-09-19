@@ -15,7 +15,7 @@ npm test                        # all suites
 ```bash
 npm test -- 04 07               # only suites whose filename starts with 04 or 07
 node tests/04-integrity.js  # one suite, against a server you started yourself
-BASE_URL=https://cwarloe.github.io/5bx/ npm test   # against a deployed copy
+BASE_URL=https://cwarloe.github.io/5BX/ npm test   # against a deployed copy
 PORT=3000 npm test              # if 8080 is taken
 CHROMIUM_PATH=/path/to/chrome npm test       # use a specific browser binary
 ```
