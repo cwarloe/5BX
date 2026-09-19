@@ -1,7 +1,7 @@
 /* A new deploy is picked up on the first relaunch, and never
    reloads out from under a workout.
 
-   Run one:  node 5bx/tests/08-updates.js
+   Run one:  node tests/08-updates.js
    Run all:  npm test          (from the repo root) */
 const { URL, launch, phone } = require('./harness');
 const fs = require('fs');

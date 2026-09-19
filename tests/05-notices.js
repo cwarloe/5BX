@@ -1,6 +1,6 @@
 /* Today shows one notice at a time, in priority order.
 
-   Run one:  node 5bx/tests/05-notices.js
+   Run one:  node tests/05-notices.js
    Run all:  npm test          (from the repo root) */
 const { URL, launch, phone } = require('./harness');
 let pass = 0, fail = 0;

@@ -1,7 +1,7 @@
 /* Navigation: the start screen waits, the tab bar reaches everything,
    and a workout can be left without losing it.
 
-   Run one:  node 5bx/tests/03-navigation.js
+   Run one:  node tests/03-navigation.js
    Run all:  npm test          (from the repo root) */
 const { URL, launch, phone } = require('./harness');
 let pass = 0, fail = 0;

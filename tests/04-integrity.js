@@ -2,7 +2,7 @@
    wrong level logged, skips not recorded, lost workouts, back button,
    silent save failures.
 
-   Run one:  node 5bx/tests/04-integrity.js
+   Run one:  node tests/04-integrity.js
    Run all:  npm test          (from the repo root) */
 const { URL, launch, phone } = require('./harness');
 let pass = 0, fail = 0;
@@ -134,7 +134,7 @@ async function land(page) {
   await page.waitForTimeout(400);
   check('back from Settings lands on Today', await page.evaluate(() =>
     !document.getElementById('screen-home').hidden && document.getElementById('screen-settings').hidden), 'true');
-  check('still in the app', page.url().includes('/5bx/'), 'true');
+  check('still in the app', page.url().startsWith(URL), 'true');
   await page.click('#screen-home [data-go="preview"]');
   await page.waitForSelector('#screen-preview:not([hidden])');
   await page.goBack();

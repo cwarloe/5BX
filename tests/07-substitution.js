@@ -1,7 +1,7 @@
 /* A substituted exercise 5 describes the substitution everywhere,
    not the stationary run.
 
-   Run one:  node 5bx/tests/07-substitution.js
+   Run one:  node tests/07-substitution.js
    Run all:  npm test          (from the repo root) */
 const { URL, launch, phone } = require('./harness');
 let pass = 0, fail = 0;

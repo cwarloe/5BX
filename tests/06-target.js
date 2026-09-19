@@ -1,6 +1,6 @@
 /* The rep count is the hero of the workout screen.
 
-   Run one:  node 5bx/tests/06-target.js
+   Run one:  node tests/06-target.js
    Run all:  npm test          (from the repo root) */
 const { URL, launch, phone } = require('./harness');
 let pass = 0, fail = 0;

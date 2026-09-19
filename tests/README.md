@@ -14,8 +14,8 @@ npm test                        # all suites
 
 ```bash
 npm test -- 04 07               # only suites whose filename starts with 04 or 07
-node 5bx/tests/04-integrity.js  # one suite, against a server you started yourself
-BASE_URL=https://example.com/5bx/ npm test   # against a deployed copy
+node tests/04-integrity.js  # one suite, against a server you started yourself
+BASE_URL=https://cwarloe.github.io/5bx/ npm test   # against a deployed copy
 PORT=3000 npm test              # if 8080 is taken
 CHROMIUM_PATH=/path/to/chrome npm test       # use a specific browser binary
 ```
@@ -41,12 +41,12 @@ About 190 assertions. Console errors fail a suite even when every assertion pass
 `probes/` holds the adversarial scripts that **report** rather than assert — corrupt stored state, racing the UI, hostile input, 800 sessions, a full disk. They never fail; a human reads the output and judges it. They are how the bugs in `04-integrity.js` were found, so they are worth rerunning after any large change.
 
 ```bash
-node 5bx/tests/probes/state-and-timing.js   # needs a server running
+node tests/probes/state-and-timing.js   # needs a server running
 ```
 
 ## Two things to know
 
-**`08-updates.js` writes to `app.js` and `sw.js`** while it runs — it has to, because it simulates deploying a new version. It restores them on every exit path, including a crash or Ctrl-C, and that restore is itself tested. If a run is ever killed hard enough to skip it, `git checkout 5bx/app.js 5bx/sw.js` puts things back.
+**`08-updates.js` writes to `app.js` and `sw.js`** while it runs — it has to, because it simulates deploying a new version. It restores them on every exit path, including a crash or Ctrl-C, and that restore is itself tested. If a run is ever killed hard enough to skip it, `git checkout app.js sw.js` puts things back.
 
 **`harness.js` holds everything machine-specific** — the base URL and how to find a browser. A suite never hard-codes a path or a port, so these run the same here and in CI.
 

@@ -1,5 +1,5 @@
 /* Shared bits for the 5BX test suites.
-   Every suite is a standalone Node script: `node 5bx/tests/01-core.js` runs one,
+   Every suite is a standalone Node script: `node tests/01-core.js` runs one,
    `npm test` runs them all. Only the things that differ between machines live
    here, so a suite never hard-codes a path or a port. */
 
@@ -8,7 +8,7 @@ const fs = require('fs');
 
 /* Where the app is served. run.js starts the repo's own server on this port;
    point BASE_URL elsewhere to test a deployed copy. */
-const URL = process.env.BASE_URL || 'http://localhost:8080/5bx/';
+const URL = process.env.BASE_URL || 'http://localhost:8080/';
 
 /* Some sandboxes ship a pinned Chromium instead of Playwright's own download.
    Use it when it is there, otherwise let Playwright find the browser it

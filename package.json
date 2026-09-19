@@ -1,0 +1,15 @@
+{
+  "name": "5bx",
+  "version": "1.0.0",
+  "description": "The RCAF 5BX Plan as an installable, offline-first PWA",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node tests/run.js",
+    "test:probes": "node tests/probes/state-and-timing.js"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "playwright": "^1.63.0"
+  }
+}

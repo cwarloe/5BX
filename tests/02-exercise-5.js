@@ -1,7 +1,7 @@
 /* Exercise 5: the stationary run is primary, substitutions live in
    Settings, and the walk disappears above Chart 4.
 
-   Run one:  node 5bx/tests/02-exercise-5.js
+   Run one:  node tests/02-exercise-5.js
    Run all:  npm test          (from the repo root) */
 const { URL, launch, phone } = require('./harness');
 let pass = 0, fail = 0;

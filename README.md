@@ -2,7 +2,15 @@
 
 A mobile-first, installable PWA for the RCAF **5BX Plan** (Five Basic Exercises, Dr. Bill Orban, 1961). No build step, no backend, no accounts — everything lives in `localStorage` on the device.
 
-Open `5bx/index.html` over HTTP (the app `fetch`es its data file, so `file://` won't work). The repo's existing `server.js` already serves the directory statically: run `npm start` and visit `/5bx/`.
+Open the app over HTTP — it `fetch`es its data file, so `file://` won't work:
+
+```bash
+npm start          # serves this directory on http://localhost:8080/
+```
+
+`server.js` is a dependency-free static file server that exists only so there's something to open the app with. The app itself has no backend.
+
+> **Moved.** 5BX used to live in `cwarloe/classic-games-portal` under `/5bx/`. It's its own repo now. If you installed it to a home screen from the old URL, that install points at the old path — install again from the new one.
 
 ## Files
 
@@ -14,7 +22,7 @@ Open `5bx/index.html` over HTTP (the app `fetch`es its data file, so `file://` w
 | `styles.css` | Dark theme, large tap targets. |
 | `figures/` | The booklet's exercise illustrations, `c{chart}e{exercise}.png`. Regenerate with `tools/extract-5bx-figures.py`. |
 | `sw.js` | Service worker — offline-first over a fixed asset list. |
-| `tests/` | End-to-end tests driving the real app. `npm test` from the repo root; see `tests/README.md`. |
+| `tests/` | End-to-end tests driving the real app. `npm test`; see `tests/README.md`. |
 | `manifest.webmanifest` | Install metadata. |
 
 ## Editing the data

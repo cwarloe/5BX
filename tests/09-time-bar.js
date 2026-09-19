@@ -1,6 +1,6 @@
 /* The clock lives in a time bar above the controls.
 
-   Run one:  node 5bx/tests/09-time-bar.js
+   Run one:  node tests/09-time-bar.js
    Run all:  npm test          (from the repo root) */
 const { URL, launch, phone } = require('./harness');
 let pass = 0, fail = 0;

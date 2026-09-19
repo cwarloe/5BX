@@ -1,7 +1,7 @@
 /* Core walkthrough: welcome, targets, preview, a full workout,
    progression, layoff, the metronome, history and offline.
 
-   Run one:  node 5bx/tests/01-core.js
+   Run one:  node tests/01-core.js
    Run all:  npm test          (from the repo root) */
 const { URL, launch, phone } = require('./harness');
 

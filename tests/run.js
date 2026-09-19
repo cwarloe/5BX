@@ -13,9 +13,9 @@ const path = require('path');
 const http = require('http');
 
 const HERE = __dirname;
-const ROOT = path.join(HERE, '..', '..');
+const ROOT = path.join(HERE, '..');
 const PORT = process.env.PORT || 8080;
-const BASE = process.env.BASE_URL || `http://localhost:${PORT}/5bx/`;
+const BASE = process.env.BASE_URL || `http://localhost:${PORT}/`;
 const OWN_SERVER = !process.env.BASE_URL;
 
 const only = process.argv.slice(2);

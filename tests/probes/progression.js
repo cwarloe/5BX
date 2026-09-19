@@ -5,7 +5,7 @@
    Backgrounding, whether a skipped session can drive progression,
    changing exercise 5 mid-run, notices stacking on Today.
 
-   node 5bx/tests/probes/progression.js   (needs a server on :8080, or set BASE_URL) */
+   node tests/probes/progression.js   (needs a server on :8080, or set BASE_URL) */
 const { URL, launch, phone } = require('../harness');
 function probe(n, r) { console.log(`  ${n}\n     -> ${r}`); }
 async function fresh(page, prefs) {

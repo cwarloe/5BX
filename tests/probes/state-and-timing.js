@@ -5,7 +5,7 @@
    Corrupt stored state, what level a workout logs, double-tap Start,
    skipping past the end, the back button, backgrounding mid-workout.
 
-   node 5bx/tests/probes/state-and-timing.js   (needs a server on :8080, or set BASE_URL) */
+   node tests/probes/state-and-timing.js   (needs a server on :8080, or set BASE_URL) */
 const { URL, launch, phone } = require('../harness');
 function probe(n, r) { console.log(`  ${n}\n     -> ${r}`); }
 async function fresh(page, prefs) {
