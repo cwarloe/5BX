@@ -85,7 +85,8 @@ async function begin(page, level) {
     +getComputedStyle(document.getElementById('jump')).zIndex), 'true');
 
   console.log('--- the header says which clock it is ---');
-  check('header labels the 11 minutes', await page.textContent('.elapsed'), /of 11:00/.test(await page.textContent('.elapsed')) ? await page.textContent('.elapsed') : 'MISSING LABEL');
+  check('header labels the 11 minutes',
+    /of 11:00/.test(await page.textContent('.elapsed')), 'true');
   check('header still counts exercise time', /^\d+:\d\d$/.test(await page.textContent('#work-elapsed')), 'true');
 
   console.log(`\n${pass} passed, ${fail} failed`);
