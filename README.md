@@ -104,6 +104,34 @@ Screens other than the roots (splash, welcome, Today) are pushed onto `history`,
 
 `run` is stamped with `chartId`, `level` and `ex5Mode` when it is built, and every read during a workout goes through `run.*` rather than `prefs.*`. Because you can now leave a run paused and change level on Today, reading the *current* selection at the finish meant a Chart 1 D− workout could be logged as Chart 4 A — corrupting history and the progression rule with it.
 
+## Backup and restore
+
+Everything lives in `localStorage` and nowhere else, so a backup is the only thing between a cleared site and a lost year. Export used to be clipboard-only with no way back in — a memento, not a backup.
+
+**Settings → Your data** offers *Save backup* (a real `.json` file, named for the date) and *Copy text*, plus **Restore from a backup**, which takes a file or pasted text.
+
+- **Merge** keeps what is on the device and adds only sessions it does not already have, deduped by id. Merging the same backup twice changes nothing.
+- **Replace** throws away what is here — it asks first, naming both counts.
+- Restoring brings back your level, age, settings and history. `layoffAck` is dropped, because a layoff someone dismissed on another device is not this device's decision.
+- Rows that fail validation are skipped and counted rather than failing the whole import, and the result line says how many.
+- It refuses to restore while a workout is open, and says so rather than silently discarding the run.
+
+Validation is deliberately strict: `chartOrNull()` exists alongside `chartById()` because the latter falls back to Chart 1 for an unknown id — fine for rendering, wrong for deciding whether imported data is real.
+
+## Text size
+
+Every font size in `styles.css` is `rem`, and the root carries the scale:
+
+```css
+html { font-size: 100%; }              /* the browser's own default */
+html[data-text="large"]  { font-size: 112.5%; }
+html[data-text="xlarge"] { font-size: 125%; }
+```
+
+So a font-size preference set in the browser is respected, and **Settings → Text size** (S/M/L/XL) works on every platform including iOS, where web content does not otherwise follow Dynamic Type. The age table in this app runs to 65+; hard-coded `px` meant none of those readers could make the text bigger.
+
+The base size belongs on `body`, never on `html` — a `rem` font-size on the root resolves against the root's own starting size and pins the whole chain, which is exactly the bug the first attempt had.
+
 ## Settings, and what is deliberately not settable
 
 Tunable defaults live in `appDefaults` in the data file, not as constants in `app.js`. Settings writes overrides into `localStorage`; **Reset to defaults** clears those and falls back to the file. So everything adjustable is in one hand-editable place.
