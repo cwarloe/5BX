@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>BBP Outline - 5BX</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: white;
+    }
+
+    .bbp-table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 2px solid black;
+      margin-bottom: 20px;
+      table-layout: fixed;
+    }
+
+    .bbp-table td {
+      border: 1px solid black;
+      padding: 12px;
+      vertical-align: top;
+      font-size: 11pt;
+    }
+
+    .section-header {
+      background-color: #e8e8e8;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .act-header {
+      background-color: #d0d0d0;
+      font-weight: bold;
+      font-size: 12pt;
+      text-align: center;
+    }
+
+    .key-idea-cell {
+      background-color: #f0f0f0;
+      font-weight: bold;
+      vertical-align: middle;
+    }
+
+    .explanation-cell {
+      background-color: #f8f8f8;
+      vertical-align: middle;
+    }
+
+    .footer-text {
+      font-size: 10pt;
+      font-style: italic;
+      text-align: center;
+    }
+
+    .label {
+      display: block;
+      font-size: 9pt;
+      font-weight: normal;
+      text-transform: uppercase;
+      color: #555;
+      margin-bottom: 4px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Beyond Bullet Points Outline</h1>
+  <h2>5BX</h2>
+  <h3>Audience: people who want a simple offline fitness plan, and whoever maintains the app</h3>
+
+  <table class="bbp-table">
+    <colgroup>
+      <col style="width: 30%">
+      <col style="width: 30%">
+      <col style="width: 40%">
+    </colgroup>
+
+    <tr><td colspan="3" class="section-header">TITLE</td></tr>
+    <tr>
+      <td colspan="3"><strong>A Classic Fitness Plan in Your Pocket</strong><br>The RCAF 5BX Plan as an installable, private, offline phone app.</td>
+    </tr>
+
+    <tr><td colspan="3" class="act-header">ACT 1: SETUP</td></tr>
+    <tr>
+      <td class="section-header">Setting</td>
+      <td class="section-header">Role</td>
+      <td class="section-header">Point A</td>
+    </tr>
+    <tr>
+      <td>You want a short, structured daily workout that needs no gym or equipment.</td>
+      <td>You're someone who wants to follow a proven plan and track progress.</td>
+      <td>Printed charts are easy to lose, and most fitness apps want accounts and connectivity.</td>
+    </tr>
+
+    <tr><td colspan="3" class="section-header">TRANSITION 1</td></tr>
+    <tr><td colspan="3">5BX brings the 1961 plan to your phone. Three ideas explain it: the plan itself, the data behind it, and the simple build.</td></tr>
+
+    <tr><td colspan="3" class="act-header">ACT 2: DEVELOP THE ACTION</td></tr>
+    <tr>
+      <td class="section-header">Key Idea (5 minutes)</td>
+      <td class="section-header">Explanation (15 minutes)</td>
+      <td class="section-header">Details (45 minutes)</td>
+    </tr>
+
+    <tr>
+      <td rowspan="9" class="key-idea-cell"><span class="label">Key Idea 1</span>A Classic Fitness Plan Becomes an Installable App</td><td rowspan="3" class="explanation-cell"><span class="label">Explanation 1</span><strong>The 5BX Plan:</strong> a proven routine</td><td>RCAF plan from 1961 (Dr. Bill Orban)</td>
+    </tr>
+    <tr>
+      <td>Five basic exercises</td>
+    </tr>
+    <tr>
+      <td>Six charts with rising levels</td>
+    </tr>
+    <tr>
+      <td rowspan="3" class="explanation-cell"><span class="label">Explanation 2</span><strong>Mobile-First PWA:</strong> built for the phone</td><td>Installs to the home screen</td>
+    </tr>
+    <tr>
+      <td>Works offline via service worker</td>
+    </tr>
+    <tr>
+      <td>Dark theme with large tap targets</td>
+    </tr>
+    <tr>
+      <td rowspan="3" class="explanation-cell"><span class="label">Explanation 3</span><strong>Private by Design:</strong> your data stays with you</td><td>No backend or accounts</td>
+    </tr>
+    <tr>
+      <td>Progress saved in localStorage</td>
+    </tr>
+    <tr>
+      <td>Everything runs on the device</td>
+    </tr>
+
+    <tr><td colspan="3" class="section-header">TRANSITION 2</td></tr>
+    <tr><td colspan="3">Restate: one plan, installed on your phone. Relate: the app is only as good as its data. Introduce: the single file behind every chart.</td></tr>
+
+    <tr>
+      <td rowspan="9" class="key-idea-cell"><span class="label">Key Idea 2</span>One Data File Drives the Whole Plan</td><td rowspan="3" class="explanation-cell"><span class="label">Explanation 1</span><strong>Single Source of Truth:</strong> all plan data in one place</td><td>data/5bx-charts.json</td>
+    </tr>
+    <tr>
+      <td>Reps, steps, run and walk times</td>
+    </tr>
+    <tr>
+      <td>Age goals and progression rules</td>
+    </tr>
+    <tr>
+      <td rowspan="3" class="explanation-cell"><span class="label">Explanation 2</span><strong>Hand-Editable:</strong> change it without code</td><td>Edit a number and reload</td>
+    </tr>
+    <tr>
+      <td>Levels run from D- up to A+</td>
+    </tr>
+    <tr>
+      <td>Bump the cache to update installed copies</td>
+    </tr>
+    <tr>
+      <td rowspan="3" class="explanation-cell"><span class="label">Explanation 3</span><strong>Booklet Illustrations:</strong> figures for each exercise</td><td>One image per chart and exercise</td>
+    </tr>
+    <tr>
+      <td>Stored in the figures folder</td>
+    </tr>
+    <tr>
+      <td>Regenerated with an extraction script</td>
+    </tr>
+
+    <tr><td colspan="3" class="section-header">TRANSITION 3</td></tr>
+    <tr><td colspan="3">Restate: one data file drives the plan. Relate: simple parts keep the app dependable. Introduce: how it is built and tested.</td></tr>
+
+    <tr>
+      <td rowspan="9" class="key-idea-cell"><span class="label">Key Idea 3</span>Simple Pieces Keep It Easy to Run and Trust</td><td rowspan="3" class="explanation-cell"><span class="label">Explanation 1</span><strong>No Build Step:</strong> plain web technology</td><td>HTML, CSS, and JavaScript</td>
+    </tr>
+    <tr>
+      <td>No dependencies in the app</td>
+    </tr>
+    <tr>
+      <td>Dependency-free static server for local use</td>
+    </tr>
+    <tr>
+      <td rowspan="3" class="explanation-cell"><span class="label">Explanation 2</span><strong>Core Screens:</strong> a short path through a workout</td><td>Welcome, today, and preview</td>
+    </tr>
+    <tr>
+      <td>Workout, log, and history</td>
+    </tr>
+    <tr>
+      <td>Reference and settings</td>
+    </tr>
+    <tr>
+      <td rowspan="3" class="explanation-cell"><span class="label">Explanation 3</span><strong>Tested End to End:</strong> real app, real checks</td><td>Tests drive the actual app</td>
+    </tr>
+    <tr>
+      <td>Run with npm test</td>
+    </tr>
+    <tr>
+      <td>Tests have their own README</td>
+    </tr>
+
+    <tr><td colspan="3" class="act-header">ACT 3: RESOLUTION</td></tr>
+    <tr>
+      <td class="section-header">Challenge</td>
+      <td class="section-header">Action</td>
+      <td class="section-header">Outcome</td>
+    </tr>
+    <tr>
+      <td><strong>Can I stick with a plan I trust?</strong><br><br>• Where do I start today?<br>• How do I track progress privately?<br>• How do I change the plan if needed?</td>
+      <td><strong>Try it:</strong><br><br>• Open the app and install it<br>• Follow today's workout and log it<br>• Edit the data file to adjust levels</td>
+      <td><strong>A routine that sticks:</strong><br><br>• A short daily workout<br>• Progress kept on your device<br>• A plan you can maintain yourself</td>
+    </tr>
+
+    <tr><td colspan="3" class="section-header">CLOSING LINE</td></tr>
+    <tr><td colspan="3">Five basic exercises, one data file, no accounts.</td></tr>
+
+    <tr>
+      <td colspan="3" class="footer-text">
+        Beyond Bullet Points Story Template, &copy; 2007 Cliff Atkinson<br>
+        5BX
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
