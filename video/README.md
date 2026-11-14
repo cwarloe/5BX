@@ -81,3 +81,10 @@ project where being wrong can hurt someone.
   look nearly identical, so the alternation is subtle.
 - **Scissor jumps** — the mid-air pose does not read as clearly airborne.
 - No voiceover yet. `Voice.say()` in the app is the equivalent seam.
+
+## Why it looks the way it does
+
+`design/NOTES.md` records the aesthetic directions that were tried and dropped
+on the way here, with the images themselves in `design/`. Read it before
+changing the style — several of the obvious-looking alternatives are already
+ruled out, some of them by the pipeline rather than by taste.
