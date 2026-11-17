@@ -81,15 +81,15 @@ export const RUN_BANNERS = [
 export const FRAME_COUNTS: Record<Action, number> = {
   idle: 4,
   toe: 4,
-  "toe-multi": 4,
+  "toe-multi": 6,   // Chart 3+: arms up, outside L, between, press, outside R, backbend
   situp: 4,
   back: 4,
   pushup: 4,
-  "pushup-c3": 4,
+  "pushup-c3": 3,   // chin front, downward-dog/pike, arms straight
   run: 4,
   scissor: 4,
   astride: 4,
-  halfknee: 4,
+  halfknee: 3,      // upright, ~110° bend, upright on toes
   crash: 1,
 };
 
