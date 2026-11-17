@@ -78,16 +78,28 @@ export const RUN_BANNERS = [
   { at: 300, text: "1 MINUTE LEFT" },
 ] as const;
 
+/**
+ * HARD RULE: Frame counts are NOT fixed at 4.
+ * Each action uses exactly the number of frames that match the actual
+ * beats described in the 5BX chart text and the original RCAF figures.
+ * Do not pad, truncate, or force any exercise to 4 frames.
+ * Chart 1 examples:
+ *   toe: 4 (arms up, floor, stretch up, backbend)
+ *   situp: 2 (lying, partial see-heels)
+ *   back: 3 (lying, right leg, left leg)
+ *   pushup: 2 (chest down, arms straight knees down)
+ *   scissor: 2 (start stance, reverse in air)
+ */
 export const FRAME_COUNTS: Record<Action, number> = {
   idle: 4,
-  toe: 4,
+  toe: 4,           // Chart 1: arms up, floor, stretch up, backbend
   "toe-multi": 6,   // Chart 3+: arms up, outside L, between, press, outside R, backbend
-  situp: 4,
-  back: 4,
-  pushup: 4,
+  situp: 2,         // Chart 1: lying, partial (see heels)
+  back: 3,          // Chart 1: lying, right leg, left leg
+  pushup: 2,        // Chart 1: chest down, arms straight (knees down)
   "pushup-c3": 3,   // chin front, downward-dog/pike, arms straight
   run: 4,
-  scissor: 4,
+  scissor: 2,       // start stance, reverse in air
   astride: 4,
   halfknee: 3,      // upright, ~110° bend, upright on toes
   crash: 1,
