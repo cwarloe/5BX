@@ -24,7 +24,10 @@ import {
   exerciseCue,
   formatClock,
   formatRemain,
-  isLevelId,
+  runActionForChart,
+  toeActionForChart,
+  pushupActionForChart,
+  jumpActionForChart,
   spriteSrc,
   type Action,
   type Exercise,
@@ -63,9 +66,15 @@ function frameOf(sim: Sim): "teal" | "gold" | "red" {
 function actionOf(sim: Sim, level: Level): Action {
   if (sim.phase === "idle" || sim.phase === "intro") return "idle";
   const t = sim.phase === "done" ? OUTRO_SECONDS : sim.phaseElapsed;
-  if (sim.phase === "outro" || sim.phase === "done") return t >= 2.62 ? "crash" : "run";
-  if (sim.index === RUN_INDEX && sim.phaseElapsed % RUN_CYCLE >= JOG_SECONDS) return "scissor";
-  return level.exercises[sim.index]!.action;
+  if (sim.phase === "outro" || sim.phase === "done") return t >= 2.62 ? "crash" : runActionForChart(level.chart);
+  if (sim.index === RUN_INDEX && sim.phaseElapsed % RUN_CYCLE >= JOG_SECONDS) {
+    return jumpActionForChart(level.chart);
+  }
+  if (sim.index === RUN_INDEX) return runActionForChart(level.chart);
+  const base = level.exercises[sim.index]!.action;
+  if (base === "toe") return toeActionForChart(level.chart);
+  if (base === "pushup") return pushupActionForChart(level.chart);
+  return base;
 }
 
 function popOf(sim: Sim, level: Level): number | null {

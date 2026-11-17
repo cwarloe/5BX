@@ -3,11 +3,15 @@ export type Unit = "REPS" | "STEPS";
 export type Action =
   | "idle"
   | "toe"
+  | "toe-multi"     // Charts 3+: multi-point + trunk circle
   | "situp"
   | "back"
   | "pushup"
-  | "run"
-  | "scissor"
+  | "pushup-c3"     // Chart 3: three discrete positions
+  | "run"           // All charts: feet ~4 inches off floor
+  | "scissor"       // Chart 1 jump
+  | "astride"       // Chart 2 jump
+  | "halfknee"      // Chart 3: half knee bends (feet stay on floor)
   | "crash";
 
 export type Exercise = {
@@ -24,6 +28,7 @@ export type LevelId = "D-" | "D" | "D+";
 export type Level = {
   id: LevelId;
   label: string;
+  chart: number;          // 1–6; controls run height and jump style
   exercises: Exercise[];
 };
 
@@ -47,9 +52,9 @@ function chart(goals: [number, number, number, number, number]): Exercise[] {
 }
 
 export const LEVELS: Record<LevelId, Level> = {
-  "D-": { id: "D-", label: "Chart 1: D-", exercises: chart([2, 3, 4, 2, 100]) },
-  D: { id: "D", label: "Chart 1: D", exercises: chart([3, 4, 5, 3, 145]) },
-  "D+": { id: "D+", label: "Chart 1: D+", exercises: chart([4, 5, 6, 3, 175]) },
+  "D-": { id: "D-", label: "Chart 1: D-", chart: 1, exercises: chart([2, 3, 4, 2, 100]) },
+  D: { id: "D", label: "Chart 1: D", chart: 1, exercises: chart([3, 4, 5, 3, 145]) },
+  "D+": { id: "D+", label: "Chart 1: D+", chart: 1, exercises: chart([4, 5, 6, 3, 175]) },
 };
 
 export const LEVEL_ORDER: LevelId[] = ["D-", "D", "D+"];
@@ -76,13 +81,41 @@ export const RUN_BANNERS = [
 export const FRAME_COUNTS: Record<Action, number> = {
   idle: 4,
   toe: 4,
+  "toe-multi": 4,
   situp: 4,
   back: 4,
   pushup: 4,
+  "pushup-c3": 4,
   run: 4,
   scissor: 4,
+  astride: 4,
+  halfknee: 4,
   crash: 1,
 };
+
+/** All charts use the same low-foot run (~4 inches). */
+export function runActionForChart(_chart: number): "run" {
+  return "run";
+}
+
+/** Returns the correct toe-touch action. */
+export function toeActionForChart(chart: number): "toe" | "toe-multi" {
+  return chart >= 3 ? "toe-multi" : "toe";
+}
+
+/** Returns the correct push-up action. */
+export function pushupActionForChart(chart: number): "pushup" | "pushup-c3" {
+  return chart === 3 ? "pushup-c3" : "pushup";
+}
+
+/** Returns the correct every-75-steps action for the chart. */
+export function jumpActionForChart(chart: number): Action {
+  if (chart === 1) return "scissor";
+  if (chart === 2) return "astride";
+  if (chart === 3) return "halfknee";
+  // Charts 4–6 jumps not yet sprite-ready; fall back
+  return "scissor";
+}
 
 export function spriteSrc(action: Action, frame: number): string {
   return `/sprites/${action}/${frame}.png`;
