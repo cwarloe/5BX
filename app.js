@@ -1266,16 +1266,27 @@
       (ex.notes || []).forEach(function (n) { box.appendChild(el('p', 'note', n)); });
     }
 
-    // The original booklet's illustration for this exercise, as a reminder.
-    // A substitution has none, and showing the stationary run's would be a lie.
-    var img = $('fig-img');
+    // Prefer the live sprite player (generated pose sheets, consistent character).
+    // Fall back to the booklet figure when the player is absent or for substitutions.
+    var key = null;
     if (s.figure) {
-      img.src = 'figures/c' + run.chartId + 'e' + (run.i + 1) + '.png';
-      img.alt = 'Illustration: ' + s.name;
+      if (run.i < 4) key = 'ex' + (run.i + 1);
+      else if (!run.ex5Mode || run.ex5Mode === 'asPrinted') key = 'run';
+    }
+    if (window.SpritePlayer && key) {
+      SpritePlayer.start(key, 1.2);
       $('fig').hidden = false;
-      img.onerror = function () { $('fig').hidden = true; };
     } else {
-      $('fig').hidden = true;
+      if (window.SpritePlayer) SpritePlayer.stop();
+      var img = $('fig-img');
+      if (s.figure) {
+        img.src = 'figures/c' + run.chartId + 'e' + (run.i + 1) + '.png';
+        img.alt = 'Illustration: ' + s.name;
+        $('fig').hidden = false;
+        img.onerror = function () { $('fig').hidden = true; };
+      } else {
+        $('fig').hidden = true;
+      }
     }
 
     // The metronome is started by endTransition, never here — otherwise it
