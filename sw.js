@@ -1,6 +1,6 @@
 /* 5BX service worker — offline-first for a fixed, tiny asset set. */
 
-var CACHE = '5bx-v19';
+var CACHE = '5bx-v17';
 var ASSETS = [
   './',
   './index.html',
@@ -40,27 +40,7 @@ var ASSETS = [
   './figures/c6e2.png',
   './figures/c6e3.png',
   './figures/c6e4.png',
-  './figures/c6e5.png',
-  './sprites/player.js',
-  './sprites/ex1-p1.png',
-  './sprites/ex1-p2.png',
-  './sprites/ex1-p3.png',
-  './sprites/ex2-p1.png',
-  './sprites/ex2-p2.png',
-  './sprites/ex2-p3.png',
-  './sprites/ex3-p1.png',
-  './sprites/ex3-p2.png',
-  './sprites/ex3-p3.png',
-  './sprites/ex4-p1.png',
-  './sprites/ex4-p2.png',
-  './sprites/ex4-p3.png',
-  './sprites/run-p1.png',
-  './sprites/run-p2.png',
-  './sprites/run-p3.png',
-  './sprites/run-p4.png',
-  './sprites/jump-p1.png',
-  './sprites/jump-p2.png',
-  './sprites/jump-p3.png',
+  './figures/c6e5.png'
 ];
 
 self.addEventListener('install', function (e) {
