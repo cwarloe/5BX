@@ -60,6 +60,18 @@ def analyze(plan, registry, prompt_data, library, sheets_dir):
         if type(n) is not int or n < 1:
             errors.append(f"{name}: invalid registered pose count {n!r}")
             continue
+        qc = strip.get("qc") or {}
+        if qc:
+            grounded = qc.get("grounded", [])
+            if not isinstance(grounded, list) or any(type(i) is not int or not 0 <= i < n for i in grounded):
+                errors.append(f"{name}: invalid QC grounded pose index (zero-based, 0–{n - 1})")
+            airborne = qc.get("airborne", {})
+            if not isinstance(airborne, dict) or any(not str(i).isdigit() or int(i) >= n or
+                    type(v) not in (int, float) or not 0 <= v <= 1
+                    for i, v in airborne.items()):
+                errors.append(f"{name}: invalid QC airborne pose index or lift threshold")
+            if "floor_check" in qc and type(qc["floor_check"]) is not bool:
+                errors.append(f"{name}: QC floor_check must be a boolean")
         for field in ("cycle", "cycle_reverse"):
             steps = strip.get(field, [])
             if field == "cycle" and not steps:

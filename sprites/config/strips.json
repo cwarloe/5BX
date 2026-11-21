@@ -65,6 +65,7 @@
       "file": "ex5-stationary-run.png",
       "poses": 4,
       "anchor": "head",
+      "qc": {"floor_check": true, "grounded": [0, 1, 2, 3]},
       "cycle": [
         1,
         2,
@@ -89,6 +90,7 @@
       "file": "c2-ex1-toe-touching.png",
       "poses": 5,
       "anchor": "shoe-left",
+      "qc": {"floor_check": true, "grounded": [0, 1, 2, 3, 4]},
       "cycle": [
         1,
         2,
@@ -102,6 +104,7 @@
       "file": "c2-ex4-push-up.png",
       "poses": 3,
       "anchor": "shoes",
+      "qc": {"floor_check": true, "grounded": [0, 1, 2]},
       "cycle": [
         1,
         2,
@@ -114,6 +117,7 @@
       "file": "c2-ex2-sit-up.png",
       "poses": 3,
       "anchor": "shoes",
+      "qc": {"floor_check": true, "grounded": [0, 1, 2]},
       "cycle": [
         1,
         2,
@@ -126,6 +130,7 @@
       "file": "c2-jump-astride-jumps.png",
       "poses": 4,
       "anchor": "shoes",
+      "qc": {"floor_check": true, "grounded": [0, 2], "airborne": {"1": 0.06, "3": 0.06}},
       "cycle": [
         1,
         2,
@@ -138,6 +143,7 @@
       "file": "e-back-extension-c2.png",
       "poses": 3,
       "anchor": "hips",
+      "qc": {"floor_check": true, "grounded": [0, 1, 2]},
       "cycle": [
         1,
         2,
