@@ -10,12 +10,13 @@ Everything that is likely to change lives in config/, not here:
     sheets/                the strips themselves
 
 Useful flags
-    --preview          5 s per exercise, 2 s breaks (a quick look; the whole video in about a minute)
-    --only ex3,run     render just those slots, no breaks (review one exercise in seconds)
+    --preview          5 s per exercise, 2 s breaks; uses private baked-art cache in --work
+    --only ex3,run     render just those slots, no breaks; also uses the private cache
     --no-fade          pure hold-and-cut instead of a short crossfade
     --theme FILE       try another look without editing the default
     --format portrait  1080x1920
     --list             show what each chart slot uses, and what is missing
+    --bake             explicitly refresh the shared sprites/assets/ production cache
 
 Timing is never typed here. Every rep count, step count, break and jump window is read from the
 data file, so the video cannot disagree with the plan.
@@ -26,7 +27,8 @@ from PIL import Image, ImageDraw
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
-ASSETS = os.path.join(ROOT, "assets")          # layers as real files: sprites, backdrops, props (committed)
+SOURCE_ASSETS = os.path.join(ROOT, "assets")    # approved/imported layers, never changed by a preview
+ASSETS = SOURCE_ASSETS                          # --bake still explicitly updates these production assets
 BAKE_VERSION = "4"                              # bump when the cut-out or backdrop drawing changes
 sys.path.insert(0, HERE)
 from keyer import key as chroma_key
@@ -35,12 +37,16 @@ from recolor import recolor, REGIONS
 SLOTS = ["ex1", "ex2", "ex3", "ex4"]
 
 
-def jload(p): return json.load(open(p))
+def jload(p):
+    with open(p, encoding="utf-8") as handle:
+        return json.load(handle)
 def sha(*parts):
     h = hashlib.sha1()
     for p in parts: h.update(p if isinstance(p, bytes) else str(p).encode())
     return h.hexdigest()[:12]
-def filehash(p): return sha(open(p, "rb").read())
+def filehash(p):
+    with open(p, "rb") as handle:
+        return sha(handle.read())
 IMG_EXT = (".png", ".jpg", ".jpeg", ".webp")
 def referenced_images_hash(*objs):
     """Hash of the CONTENTS of every image file named anywhere in these JSON-like objects, so replacing a picture
@@ -105,13 +111,22 @@ def backdrop_layers(theme, F, fmt):
     b = theme["backdrop"]; bid = b.get("id", "forest"); d = os.path.join(ASSETS, "backdrops", bid, fmt); mp = os.path.join(d, "manifest.json")
     want = sha(json.dumps({k: v for k, v in b.items() if k != "overrides"}, sort_keys=True), F["W"], F["H"], F["ground"], BAKE_VERSION,
                referenced_images_hash({k: v for k, v in b.items() if k != "overrides"}))
-    mj = jload(mp) if os.path.exists(mp) else None
-    files_ok = bool(mj) and all(os.path.exists(os.path.join(d, f)) for _, f in mj["layers"])
-    if mj and mj.get("source") == "images" and not files_ok:        # imported pictures cannot be redrawn: they are art, kept in Drive
-        sys.exit(f"missing imported backdrop pictures in {d}: restore sprites/assets from the Drive zip 2026-11-21_knowledge-harvest_sprite-kit-assets.zip")
-    if files_ok and (mj.get("source") == "images" or mj.get("hash") == want):          # imported images are used as they are
-        layers = [(n, Image.open(os.path.join(d, f)).convert("RGBA")) for n, f in mj["layers"]]
-    else:
+    layers, broken_import = None, None
+    bases = [d] if ASSETS == SOURCE_ASSETS else [d, os.path.join(SOURCE_ASSETS, "backdrops", bid, fmt)]
+    for candidate in bases:
+        manifest = os.path.join(candidate, "manifest.json")
+        mj = jload(manifest) if os.path.exists(manifest) else None
+        if not mj: continue
+        files_ok = all(os.path.exists(os.path.join(candidate, f)) for _, f in mj["layers"])
+        if mj.get("source") == "images" and not files_ok:
+            broken_import = candidate
+            continue
+        if files_ok and (mj.get("source") == "images" or mj.get("hash") == want):
+            layers = [(n, Image.open(os.path.join(candidate, f)).convert("RGBA")) for n, f in mj["layers"]]
+            break
+    if layers is None:
+        if broken_import:  # imported pictures cannot be reconstructed from a drawing recipe
+            sys.exit(f"missing imported backdrop pictures in {broken_import}: restore sprites/assets from the Drive zip 2026-11-21_knowledge-harvest_sprite-kit-assets.zip")
         os.makedirs(d, exist_ok=True)
         for f in os.listdir(d):
             if f.endswith(".png"): os.remove(os.path.join(d, f))
@@ -230,10 +245,14 @@ def bake(name, strip, theme):
     src = os.path.join(ROOT, "sheets", strip["file"])
     if not os.path.exists(src): sys.exit(f"missing strip sheet {src}: restore sprites/sheets from the Drive zips 2026-11-21_knowledge-harvest_sprite-kit-sheets.zip, 2026-11-21_sprite-kit-sheets-batch-e.zip and 2026-11-21_sprite-kit-sheets-charts-4-6.zip")
     h = filehash(src); d = os.path.join(ASSETS, "sprites", name); mp = os.path.join(d, "meta.json")
-    if os.path.exists(mp):
-        m = jload(mp)
-        if (all(os.path.exists(os.path.join(d, q["file"])) for q in m.get("poses", [])) and m.get("source_hash") == h and m.get("key") == theme["key"] and m.get("n") == strip["poses"] and m.get("version") == BAKE_VERSION
-                and m.get("rows") == strip.get("rows") and m.get("row") == strip.get("row") and m.get("erase") == strip.get("erase")): return m
+    bases = [ASSETS] if ASSETS == SOURCE_ASSETS else [ASSETS, SOURCE_ASSETS]
+    for base in bases:
+        cached = os.path.join(base, "sprites", name); manifest = os.path.join(cached, "meta.json")
+        if not os.path.exists(manifest): continue
+        m = jload(manifest)
+        if (all(os.path.exists(os.path.join(cached, q["file"])) for q in m.get("poses", [])) and m.get("source_hash") == h and m.get("key") == theme["key"] and m.get("n") == strip["poses"] and m.get("version") == BAKE_VERSION
+                and m.get("rows") == strip.get("rows") and m.get("row") == strip.get("row") and m.get("erase") == strip.get("erase")):
+            return dict(m, _cache_dir=cached)
     os.makedirs(d, exist_ok=True)
     for f in os.listdir(d):
         if f.endswith(".png"): os.remove(os.path.join(d, f))
@@ -249,7 +268,7 @@ def bake(name, strip, theme):
     for k, (p, off) in enumerate(poses, 1):
         p.save(os.path.join(d, f"p{k}.png")); meta["poses"].append({"file": f"p{k}.png", "offset": list(off), "size": list(p.size), "anchors": anchors_of(p)})
     meta["floor"] = max(o[1] + p.size[1] for p, o in poses); meta["top"] = min(o[1] for p, o in poses)
-    json.dump(meta, open(mp, "w"), indent=1); return meta
+    json.dump(meta, open(mp, "w"), indent=1); return dict(meta, _cache_dir=d)
 
 
 def pose_anchor(strip, k, meta_pose):
@@ -319,7 +338,7 @@ def mirror_anchor(strip, k, meta_pose):
 
 
 def load_sprites(name, strip, theme):
-    meta = bake(name, strip, theme); d = os.path.join(ASSETS, "sprites", name)
+    meta = bake(name, strip, theme); d = meta["_cache_dir"]
     return [recolor(Image.open(os.path.join(d, m["file"])).convert("RGBA"), theme.get("recolor")) for m in meta["poses"]], meta
 
 
@@ -554,6 +573,8 @@ def export_layers(dirpath, plan, theme, scene, reg, slots, F, fmt, work, chart_i
 
 
 def main():
+    global ASSETS
+    ASSETS = SOURCE_ASSETS
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--data", help="5bx-charts.json (the plan; never copied into this kit)")
     ap.add_argument("--chart", type=int, default=1); ap.add_argument("--level", default="A+")
@@ -594,6 +615,10 @@ def main():
         if missing and not args.list: raise SystemExit(f"\nchart {args.chart} needs strips for: {', '.join(missing)}. See README: 'Add an exercise'.")
         return
 
+    # Trial renders use private baked-art caches. Reuse unchanged production art
+    # read-only; only --bake explicitly writes to sprites/assets/.
+    if args.preview or only:
+        ASSETS = os.path.join(args.work, "asset-cache")
     F = theme["formats"][args.format]; fps = theme["fps"]; fade_max = 0 if args.no_fade else theme["fade_max_seconds"]
     plan, ex5 = make_plan(data, chart, args.level, only); os.makedirs(args.work, exist_ok=True); hud = Hud(theme, F); S = theme["strings"]
     lv = chart["levels"][args.level]; sstep = lambda sl: reg["strips"][slots[sl]]

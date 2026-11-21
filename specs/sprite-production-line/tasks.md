@@ -38,4 +38,10 @@ Charles selected `--no-fade` for the knee push-up. Artwork/video generation is
 paused while another bot revises the generation instructions; do not duplicate
 that work. The wider archive recoverability audit remains open.
 
+2026-11-21 cache hygiene: observed preview writes to tracked baked-art
+manifests; isolated the *trial* asset cache under `--work` with read-only reuse
+of valid imported artwork. Verified no tracked asset edits and pixel-identical
+no-fade output for Chart 1 knee push-up (D-15). This is a narrow process fix,
+not an image or format change; full builds and `--bake` keep existing behavior.
+
 Tasks 6–9 are intentionally *not* being implemented in this first increment. This is a prioritized queue, not authorization for unattended paid media generation.

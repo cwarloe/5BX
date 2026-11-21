@@ -146,3 +146,28 @@ of the character's anatomical form.
 manual touch time and first-pass **form** approval once an actual human review
 has occurred; neither can be inferred from successful renders. Scissor jumps
 remain held for the additional reference material.
+
+## 11. D-15: Preview cache changes production metadata (2026-11-21)
+
+**Observed defect:** The first knee-push-up pilot regenerated missing baked
+pose/background files inside `sprites/assets/` and changed two tracked JSON
+manifests, even though it was only a 5-second trial. This creates cleanup work
+and a risk of accidentally committing throwaway render state.
+
+**Countermeasure:** Preview and one-exercise (`--only`) builds now use the
+existing work directory for new baked-art cache files. Valid approved/imported
+art can still be read from `sprites/assets/`, but no trial writes there.
+Explicit `--bake` and normal full-build behavior remain unchanged.
+
+**Verification:** On the same Chart 1 knee-push-up source sheet and gym picture,
+the isolated no-fade preview rendered in 5.35 s cold and ~1.02 s with a warm
+cache (single measurements, not a performance guarantee). Both videos were
+5.0 s at 1920x1080/30 fps. An FFmpeg decoded-frame PSNR comparison with the
+pre-change no-fade preview was **infinite** (pixel-identical). No tracked asset
+metadata changed in the clean trial worktree. Two optional local integration
+tests check that valid source sprite and imported backdrop caches remain
+untouched; the lightweight CI separately checks renderer syntax.
+
+**Disposition:** Fix verified on one movement. Do not add another tracker or
+make broad renderer changes until a different actual defect appears. New
+image/video generation remains on hold for the other bot's work.
