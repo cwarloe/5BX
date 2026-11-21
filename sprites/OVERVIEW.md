@@ -43,5 +43,14 @@ Written before the kit's batch C review (`batches/2026-11-20-C/REVIEW.md`) was r
 
 Raw art does not live in Git (see `/ART.md`). The images that used to sit next to this code (strip sheets, the
 sprite library, baked assets, batch folders, exports and the demo) are in the Drive folder
-*Sprite Art 5BX Workout*; `ART.md` lists the file names. The kit's `build.py` reads `sheets/` and `library/`, so
-download those zips back into this folder to build a video.
+*Sprite Art 5BX Workout*; `ART.md` lists the file names. To build a video from a fresh clone, unzip the `sheets`,
+`library` and `assets` zips inside this folder. `kit/build.py --bake` redraws the sprite PNGs from `sheets/` if only
+those are missing, but the imported backdrop pictures (`assets/backgrounds/`) are art and cannot be redrawn: the
+build stops with a message naming the `assets` zip if they are absent.
+
+## Fixes made while moving it in
+
+Review of the move found three bugs in the kit's `build.py` (all fixed here, and worth sending back to the kit's
+own history): cached sprite and backdrop records were trusted even when their PNGs were absent; the cache key for
+composed frames hashed an image's path but not its contents; and exercise 5 reserved one jump window more than the
+plan emits, so it ran 12 s short (now 360 s of the 360 s allotted at chart 1, level A).

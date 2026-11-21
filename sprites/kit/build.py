@@ -41,6 +41,19 @@ def sha(*parts):
     for p in parts: h.update(p if isinstance(p, bytes) else str(p).encode())
     return h.hexdigest()[:12]
 def filehash(p): return sha(open(p, "rb").read())
+IMG_EXT = (".png", ".jpg", ".jpeg", ".webp")
+def referenced_images_hash(*objs):
+    """Hash of the CONTENTS of every image file named anywhere in these JSON-like objects, so replacing a picture
+    in place (same path) changes the cache key. Paths are relative to the kit root; names that are not files are ignored."""
+    found = set()
+    def walk(o):
+        if isinstance(o, dict): [walk(v) for v in o.values()]
+        elif isinstance(o, (list, tuple)): [walk(v) for v in o]
+        elif isinstance(o, str) and o.lower().endswith(IMG_EXT):
+            q = o if os.path.isabs(o) else os.path.join(ROOT, o)
+            if os.path.isfile(q): found.add((o, filehash(q)))
+    for o in objs: walk(o)
+    return sha(json.dumps(sorted(found)))
 def rgb(hexstr): return tuple(int(hexstr.lstrip("#")[i:i + 2], 16) for i in (0, 2, 4))
 
 CODE_VERSION = sha(open(__file__, "rb").read(), open(os.path.join(HERE, "keyer.py"), "rb").read(),
@@ -90,15 +103,22 @@ def draw_forest(b, F):
 def backdrop_layers(theme, F, fmt):
     """Ordered [(name, RGBA)]. Cached on disk as assets/backdrops/<id>/<format>/NN-<name>.png (one file per layer)."""
     b = theme["backdrop"]; bid = b.get("id", "forest"); d = os.path.join(ASSETS, "backdrops", bid, fmt); mp = os.path.join(d, "manifest.json")
-    want = sha(json.dumps({k: v for k, v in b.items() if k != "overrides"}, sort_keys=True), F["W"], F["H"], F["ground"], BAKE_VERSION)
-    if os.path.exists(mp) and (jload(mp).get("source") == "images" or jload(mp).get("hash") == want):          # imported images are used as they are
-        layers = [(n, Image.open(os.path.join(d, f)).convert("RGBA")) for n, f in jload(mp)["layers"]]
+    want = sha(json.dumps({k: v for k, v in b.items() if k != "overrides"}, sort_keys=True), F["W"], F["H"], F["ground"], BAKE_VERSION,
+               referenced_images_hash({k: v for k, v in b.items() if k != "overrides"}))
+    mj = jload(mp) if os.path.exists(mp) else None
+    files_ok = bool(mj) and all(os.path.exists(os.path.join(d, f)) for _, f in mj["layers"])
+    if mj and mj.get("source") == "images" and not files_ok:        # imported pictures cannot be redrawn: they are art, kept in Drive
+        sys.exit(f"missing imported backdrop pictures in {d}: restore sprites/assets from the Drive zip 2026-11-21_knowledge-harvest_sprite-kit-assets.zip")
+    if files_ok and (mj.get("source") == "images" or mj.get("hash") == want):          # imported images are used as they are
+        layers = [(n, Image.open(os.path.join(d, f)).convert("RGBA")) for n, f in mj["layers"]]
     else:
         os.makedirs(d, exist_ok=True)
         for f in os.listdir(d):
             if f.endswith(".png"): os.remove(os.path.join(d, f))
         if b.get("style") == "image" and b.get("image"):
-            im = Image.open(os.path.join(ROOT, b["image"])).convert("RGB"); sc = max(F["W"] / im.width, F["H"] / im.height)
+            ip = os.path.join(ROOT, b["image"])
+            if not os.path.exists(ip): sys.exit(f"missing backdrop picture {ip}: restore sprites/assets from the Drive zip 2026-11-21_knowledge-harvest_sprite-kit-assets.zip")
+            im = Image.open(ip).convert("RGB"); sc = max(F["W"] / im.width, F["H"] / im.height)
             im = im.resize((round(im.width * sc), round(im.height * sc)), Image.LANCZOS)
             drawn = {"picture": im.crop(((im.width - F["W"]) // 2, (im.height - F["H"]) // 2, (im.width - F["W"]) // 2 + F["W"], (im.height - F["H"]) // 2 + F["H"])).convert("RGBA")}
         else: drawn = draw_forest(b, F)
@@ -207,10 +227,12 @@ def anchors_of(p):
 
 def bake(name, strip, theme):
     """sheets/<file> -> assets/sprites/<name>/p1..pN.png + meta.json. Re-bakes only if the strip or the key changed."""
-    src = os.path.join(ROOT, "sheets", strip["file"]); h = filehash(src); d = os.path.join(ASSETS, "sprites", name); mp = os.path.join(d, "meta.json")
+    src = os.path.join(ROOT, "sheets", strip["file"])
+    if not os.path.exists(src): sys.exit(f"missing strip sheet {src}: restore sprites/sheets from the Drive zip 2026-11-21_knowledge-harvest_sprite-kit-sheets.zip")
+    h = filehash(src); d = os.path.join(ASSETS, "sprites", name); mp = os.path.join(d, "meta.json")
     if os.path.exists(mp):
         m = jload(mp)
-        if (m.get("source_hash") == h and m.get("key") == theme["key"] and m.get("n") == strip["poses"] and m.get("version") == BAKE_VERSION
+        if (all(os.path.exists(os.path.join(d, q["file"])) for q in m.get("poses", [])) and m.get("source_hash") == h and m.get("key") == theme["key"] and m.get("n") == strip["poses"] and m.get("version") == BAKE_VERSION
                 and m.get("rows") == strip.get("rows") and m.get("row") == strip.get("row") and m.get("erase") == strip.get("erase")): return m
     os.makedirs(d, exist_ok=True)
     for f in os.listdir(d):
@@ -342,7 +364,8 @@ def compose(name, strip, theme, scene, F, fmt, work, slot, plan=None):
     """Per pose: layer_pN.png (boy alone), plus backdrop.png, props_*.png and the finished pN.png. Cached."""
     meta = bake(name, strip, theme); blayers = backdrop_layers(theme, F, fmt)
     tag = sha(meta["source_hash"], json.dumps(strip, sort_keys=True), json.dumps(theme["key"]), json.dumps(theme.get("recolor")), json.dumps(scene, sort_keys=True),
-              json.dumps(theme["backdrop"], sort_keys=True), json.dumps(F, sort_keys=True), slot, json.dumps(plan or {}, sort_keys=True), CODE_VERSION)
+              json.dumps(theme["backdrop"], sort_keys=True), json.dumps(F, sort_keys=True), slot, json.dumps(plan or {}, sort_keys=True), CODE_VERSION,
+              referenced_images_hash(theme, scene))
     out = os.path.join(work, "frames", f"{slot}-{name}-{fmt}-{tag}")
     if os.path.exists(os.path.join(out, "DONE")): return out
     os.makedirs(out, exist_ok=True)
@@ -492,7 +515,7 @@ def make_plan(data, chart, level, only):
         if not only: plan.append(dict(kind="break", secs=data["appDefaults"]["transitionSeconds"], next=chart["exercises"][i + 1]["name"]))
     if not only or "run" in only or "jump" in only:
         allot, steps = timing[4], lv["steps"]; every, jcount = ex5["jumpEvery"], ex5["jumpCount"]; window = ex5.get("jumpWindowSeconds", 12)
-        sets = steps // every; step_s = (allot - sets * window) / steps; off, done, k = 0.0, 0, 0
+        sets = (steps - 1) // every; step_s = (allot - sets * window) / steps; off, done, k = 0.0, 0, 0
         while done < steps:
             block = min(every, steps - done); dur = block * step_s
             if not only or "run" in only: plan.append(dict(kind="run", slot="run", name=ex5["name"], dur=dur, allot=allot, off=off, steps=steps, step_s=step_s, label=f"run block {k + 1}"))
