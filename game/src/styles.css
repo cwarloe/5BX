@@ -37,6 +37,12 @@
   body {
     font-family: var(--font-condensed);
   }
+
+  /* The static Pages build mounts the app in #root; give it the full height
+     so .shell's 100% resolves (the Grok/Vercel build has no #root). */
+  #root {
+    height: 100%;
+  }
 }
 
 .shell {

@@ -1,4 +1,4 @@
-# Project instructions: 5bx-video-game
+# Project instructions: 5BX arcade game (game/)
 
 `AGENTS.md` is the App Builder platform contract and is left as shipped. This
 file covers what is specific to this repo. Where they differ, this file wins.
@@ -9,8 +9,8 @@ This repo uses spec-driven development for features that take more than one
 sitting, touch several files, or have testable behavior. Small fixes skip it.
 Full guide: https://github.com/cwarloe/lessons-learned/blob/main/SPEC_DRIVEN_DEVELOPMENT.md
 
-- Specs live in `specs/<feature-slug>/` (requirements.md, design.md, tasks.md).
-  Start a new one by copying `specs/_template/`.
+- Specs live in `../specs/<feature-slug>/` at the 5BX repo root
+  (requirements.md, design.md, tasks.md). Start one by copying `../specs/_template/`.
 - Before writing code for a feature, read its spec. If there is no spec and the
   change qualifies, write `requirements.md` first and wait for Charles to
   approve it, then design, then tasks.
@@ -22,7 +22,7 @@ Full guide: https://github.com/cwarloe/lessons-learned/blob/main/SPEC_DRIVEN_DEV
 ## Source of truth for 5BX numbers
 
 Exercise counts, step targets, timings, and chart wording come from
-`data/5bx-charts.json` in the `cwarloe/5BX` repo, transcribed from the 1965 RCAF
+`../data/5bx-charts.json` (the 5BX repo root), transcribed from the 1965 RCAF
 booklet. Do not type chart numbers by hand from memory.
 
 ## Sprite frame rule
@@ -30,3 +30,9 @@ booklet. Do not type chart numbers by hand from memory.
 Frame counts per action follow the beats in the chart text and the original
 RCAF figures (see the HARD RULE comment in `src/lib/levels.ts`). Never pad or
 truncate an exercise to a fixed frame count.
+
+## Publishing
+
+The game is published to GitHub Pages at https://cwarloe.github.io/5BX/game/
+by `../.github/workflows/pages.yml`, using `npm run pages`. Build output
+(`dist-pages/`, `.vercel/`) is never committed.
