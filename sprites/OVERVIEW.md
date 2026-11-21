@@ -58,18 +58,19 @@ plan emits, so it ran 12 s short (now 360 s of the 360 s allotted at chart 1, le
 
 ## The 5BX Workout Mixer demo page
 
-Live at https://cwarloe.github.io/5BX/sprite-boy/ . It moved here from the `knowledge-harvest` repo's `gh-pages` branch.
+Live at https://workout-mixer.pages.dev/ (a Cloudflare Pages project called `workout-mixer`). It used to be served from the
+`knowledge-harvest` repo and then from this repo's GitHub Pages; both copies are down.
 
-The demo is about 57 MB of generated pictures and clips, so it is **not on `main`**. It lives on its own branch,
-`sprite-boy-demo`, which the Pages workflow (`.github/workflows/pages.yml`) copies into the site at `/sprite-boy/`
-on every deploy. To refresh it:
+The demo is about 57 MB of generated pictures and clips, so it is **not on `main`**. The built site is kept on its own
+orphan branch, `sprite-boy-demo`, as a store; Cloudflare is not connected to it, so nothing deploys by itself. To refresh it:
 
 1. Restore the art zips into `sprites/` (see above) and run, from `sprites/`:
    `python kit/make_demo.py --data ../data/5bx-charts.json --out ../_demo --reel`
 2. Copy your clips into `_demo/clips/` (`chart4-exercises.mp4`, `chart5-exercises.mp4`, `chart6-exercises.mp4`; made with
    `kit/build.py ... --chart N --only ... --preview`).
-3. Commit the contents of `_demo/` as a single new commit on the `sprite-boy-demo` branch (an orphan branch: replace its
-   history, do not stack 57 MB per refresh) and push it, then run the Pages workflow.
+3. Deploy the folder: `npx wrangler pages deploy _demo --project-name workout-mixer --branch main` (needs `wrangler login`
+   once; Wrangler 4 needs Node 22, Wrangler 3 works on Node 20).
+4. Commit the contents of `_demo/` as a single new commit on the `sprite-boy-demo` branch (replace its history, do not stack
+   57 MB per refresh) and push it, so the branch matches what is live.
 
 The full chart 1 video is a GitHub release asset (`sprite-boy-videos-2026-11-21`), linked from the page; videos are not in Git.
-

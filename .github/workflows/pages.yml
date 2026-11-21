@@ -1,7 +1,6 @@
 # Publishes https://cwarloe.github.io/5BX/
 #   /5BX/       the workout app (repo root, served as-is)
 #   /5BX/game/  the arcade game (built from game/ with `npm run pages`)
-#   /5BX/sprite-boy/  the 5BX Workout Mixer demo (the `sprite-boy-demo` branch, copied as-is)
 #
 # One-time setting: Settings → Pages → Build and deployment → Source:
 # "GitHub Actions". Until then the site keeps deploying from the branch and
@@ -28,13 +27,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # The 5BX Workout Mixer demo is generated art, so it lives on its own branch, not on main.
-      - uses: actions/checkout@v4
-        continue-on-error: true
-        with:
-          ref: sprite-boy-demo
-          path: _demo
-
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -52,12 +44,8 @@ jobs:
           mkdir _site
           rsync -a ./ _site/ \
             --exclude .git --exclude .github --exclude _site \
-            --exclude node_modules --exclude game --exclude specs --exclude _demo
+            --exclude node_modules --exclude game --exclude specs
           cp -r game/dist-pages _site/game
-          if [ -f _demo/index.html ]; then
-            mkdir -p _site/sprite-boy
-            rsync -a _demo/ _site/sprite-boy/ --exclude .git
-          fi
 
       - uses: actions/upload-pages-artifact@v3
         with:

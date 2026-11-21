@@ -15,7 +15,7 @@ material into another one.
 | `game/` | The arcade game (TanStack/Vite). Its own instructions: `game/AGENTS.project.md` |
 | `sprites/` | The sprite kit: builds the exercise video from pose strips, makes the ChatGPT/Grok prompts and batches, keys sheets, checks backgrounds. Start at `sprites/OVERVIEW.md` |
 | `sprites/qc-line/` | A second, smaller pipeline (sheet QC, cut-out manifest, he/she prompt tokens, mats drawn in code). To be ported into the kit, then deleted |
-| branch `sprite-boy-demo` | The published 5BX Workout Mixer demo page (generated; about 57 MB, not on `main`). Served at `/5BX/sprite-boy/`; how to refresh it is in `sprites/OVERVIEW.md` |
+| branch `sprite-boy-demo` | The built 5BX Workout Mixer demo page (generated; about 57 MB, not on `main`). Hosted on Cloudflare Pages at https://workout-mixer.pages.dev/, not on GitHub Pages; how to refresh it is in `sprites/OVERVIEW.md` |
 | `specs/` | Feature specs (see below) |
 | `.github/workflows/pages.yml` | Publishes the app at `/5BX/` and the game at `/5BX/game/` |
 
