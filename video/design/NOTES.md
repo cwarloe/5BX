@@ -127,4 +127,33 @@ shades of magenta. Snapping to a fixed palette is the only thing that works, and
 palette means flat areas. Several of the rejected designs above are rejected for exactly
 this reason, not for taste.
 
+
+## 6. The backdrop is retired (2026-11-21)
+
+The drawn backdrop goes: navy gradient, receding perspective grid, orange glow
+at the ground line. It is a 2D video-game look and it only holds together if
+everything in front of it commits to that look. The figures no longer do. They
+settled into flat screen-print shapes on near-black, and against that the grid
+competes rather than supports.
+
+This is the one decision in this file that was *not* reached by comparing
+generated options. It followed from the art moving on and leaving the backdrop
+behind — the same reason the booklet figures stopped being the source.
+
+Nothing replaces it yet. The figures carry their own ground reference in the
+orange horizon line, so the cheapest honest replacement is a flat dark field
+plus that line, with the grid and glow removed. A static illustrated background
+remains open, with the caution from direction 1 attached: whatever sits behind
+the figure has to stay tonally clear of it, or the body dissolves into the
+scenery over eleven minutes.
+
+**Naming caveat.** This was called "the mountain background" when the call was
+made, and nothing by that name exists in the repository — no mountain asset, no
+mountain code path, nothing matching "mountain" in any file. The decision is
+recorded against the gradient-and-grid backdrop in `chart.py`'s `backdrop()`,
+the only drawn backdrop the pipeline has. If a different image was meant, this
+note needs re-filing.
+
+---
+
 See `../README.md` for the pipeline itself.

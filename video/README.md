@@ -30,14 +30,20 @@ arguments to build another chart.
 3. **Split** into poses on the empty gutters, all aligned to one floor line.
 4. **Composite** onto a backdrop drawn in code, not generated. Generated
    backdrops drift on every run; a drawn one is identical across all 30
-   exercises and costs nothing.
+   exercises and costs nothing. The current one is on its way out - see
+   **The backdrop is being retired** below.
 5. **Loop** each pose cycle at the exercise's real cadence, overlay the title,
    countdown and progress bar, and concatenate with break cards.
 
-One scale is used for every pose in a sheet, and it must satisfy both width and
-height: on a toe touch the *widest* pose is the fold and the *tallest* is the
-stand, and they are not the same pose. Scaling on width alone pushes the
-standing figure off the top of the frame.
+One scale is used for every pose in a sheet, so the figure does not resize
+mid-rep: on a toe touch the *widest* pose is the fold and the *tallest* is the
+stand, and they are not the same pose. How that one scale is chosen is below,
+under **Scale and staging** - fitting it to the frame is the obvious answer and
+the wrong one.
+
+Each pose is also available on its own, cut out on transparency and numbered in
+movement order, under `poses/`. Those are generated from the sheets by
+`extract_poses.py`; see `poses/README.md`.
 
 ## Exercise 5
 
@@ -113,6 +119,27 @@ Only chart 1 is drawn. `chart.py ... --chart 4` fails with a message saying so.
 however many poses the sheet actually holds - sheets are not required to have
 three. The kinds are `pingpong` (there and back), `centre` (pose 1 is the
 neutral the body returns through) and `loop` (a continuous gait that wraps).
+
+## The backdrop is being retired
+
+**Decision, 2026-11-21: stop using the current drawn backdrop.**
+
+`backdrop()` draws a navy vertical gradient, a receding perspective grid and an
+orange glow pooling at the ground line. That is a 2D video-game look, and it
+only works if everything in front of it commits to the same look. The figures
+no longer do - the art moved to flat screen-print shapes on near-black, and the
+grid now fights them instead of supporting them.
+
+Nothing replaces it yet. The figures already carry their own ground reference
+through the orange horizon line, so the cheapest honest replacement is a flat
+dark field and that line, with the grid and glow dropped.
+
+One caveat on this note: the backdrop was described as "the mountain
+background" when the decision was made, and there is nothing by that name
+anywhere in this repository - no mountain asset, no mountain code path. The
+decision is recorded here against the gradient-and-grid backdrop in
+`backdrop()`, which is the only drawn backdrop the pipeline has. If a different
+image was meant, this note is filed in the wrong place.
 
 ## Known weak spots
 
