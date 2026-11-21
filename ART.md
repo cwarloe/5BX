@@ -42,7 +42,7 @@ Each zip unpacks inside `sprites/` to put the files back where the kit expects t
 | `2026-11-20_chatgpt-overnight_passing-sprites-and-backgrounds.zip` | `qc-line` review | The 18 outputs that passed review, plus the mats drawn in code | `1HznihJiHM1MoAhiJC-8eIyVs81o4I-z0` |
 | `2026-11-20_chatgpt-overnight_reference-images.zip` | overnight batch | The 14 sprite and 4 background reference images the prompts name | `1jmrAUkCQr_y2z8ss2pxggz7TTAkC9vsD` |
 | `2026-11-20_chatgpt-overnight_returned-sheets-part1.zip`, `..._part2.zip` | overnight batch | Everything ChatGPT returned in run 1 (51 files), including rejected takes | `1o-mH3ZgDL8DaEg28k079kfgIeSw64WzL` (part 1), `114jAaCNnlE_0Rb7by4rn7s5d_HFqpSDA` (part 2) |
-| `2026-11-21_chatgpt-batch-e_scissor-and-back-extension-sheets.zip` | `sprites/batches/2026-11-21-E/` | The four returned sheets (two kept: `JOB-01-open-hands`, `JOB-02-optional-start-edit`) | pending upload |
-| `2026-11-21_sprite-kit-sheets-batch-e.zip` | `sprites/sheets/`, `sprites/library/images/` | The two batch E sheets now wired into `config/strips.json` (`e-scissor-jumps-c1.png`, `e-back-extension-c2.png`) and their library copies | pending upload |
+| `2026-11-21_chatgpt-batch-e_scissor-and-back-extension-sheets.zip` | `sprites/batches/2026-11-21-E/` | The four returned sheets (two kept: `JOB-01-open-hands`, `JOB-02-optional-start-edit`) | `1PtDD3tXPD2E8lLlIakwiv-hAFk2EQHMl` |
+| `2026-11-21_sprite-kit-sheets-batch-e.zip` | `sprites/sheets/`, `sprites/library/images/` | The two batch E sheets now wired into `config/strips.json` (`e-scissor-jumps-c1.png`, `e-back-extension-c2.png`) and their library copies | `1DokiIilRLf75Dbh1ZG_tDhCatU3EsL0e` |
 
 Large uploads: Claude can send at most ~3 MB per file to Drive; anything bigger is handed to Charles to drag in, then checked here by file size.
