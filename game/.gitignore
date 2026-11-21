@@ -1,0 +1,11 @@
+node_modules/
+.project_id
+.github_repo
+.env
+.env.*
+
+# Build output and QA captures (never commit)
+.vercel/
+screenshots/
+dist/
+dist-pages/

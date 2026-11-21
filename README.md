@@ -10,6 +10,8 @@ npm start          # serves this directory on http://localhost:8080/
 
 `server.js` is a dependency-free static file server that exists only so there's something to open the app with. The app itself has no backend.
 
+> **Everything 5BX is here now.** The arcade game (formerly `cwarloe/5bx-video-game` and `cwarloe/video-game-5bx`) lives in [`game/`](game/) and is published at <https://cwarloe.github.io/5BX/game/>. Feature specs are in [`specs/`](specs/), the art index is [`ART.md`](ART.md), and agent instructions are in [`CLAUDE.md`](CLAUDE.md).
+
 > **Moved.** 5BX used to live in `cwarloe/classic-games-portal` under `/5bx/`. It's its own repo now. If you installed it to a home screen from the old URL, that install points at the old path — install again from the new one.
 
 ## Files

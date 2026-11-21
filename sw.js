@@ -1,6 +1,6 @@
 /* 5BX service worker — offline-first for a fixed, tiny asset set. */
 
-var CACHE = '5bx-v17';
+var CACHE = '5bx-v19';
 var ASSETS = [
   './',
   './index.html',
@@ -69,6 +69,13 @@ self.addEventListener('fetch', function (e) {
 
   var url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
+
+  // The arcade game lives at ./game/ under the same scope. Leave it alone, or a
+  // visit to the game would be saved as this app's offline home page.
+  var gamePath = new URL('./game/', self.location).pathname;
+  // Match the directory URL without its trailing slash too: the server redirects
+  // /game to /game/, and that navigation must not be cached as this app's home page.
+  if (url.pathname.indexOf(gamePath) === 0 || url.pathname === gamePath.slice(0, -1)) return;
 
   // Navigations: network first so updates land, cache as the offline fallback.
   if (req.mode === 'navigate') {
