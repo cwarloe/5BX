@@ -5,6 +5,7 @@ From the repository root:
   python3 sprites/kit/line.py status   # what is ready, missing or needs review?
   python3 sprites/kit/line.py check    # validate structure; nonzero only for real data errors
   python3 sprites/kit/line.py release-check --chart 2  # strict artwork gate before publishing
+  python3 sprites/kit/line.py restore-plan --chart 1 --only ex4  # find the exact Drive ZIPs
 
 No images, paid calls, network, image libraries or extra database required.
 Raw art is intentionally stored outside Git; absence from a clean clone is a
@@ -155,6 +156,105 @@ def missing_backdrop_images(theme, sprites_dir, chart_ids):
     return missing
 
 
+def required_render_files(registry, theme, scene, chart, only=()):
+    """Paths read by the builder for a chart/slot; no archive or approval assumptions."""
+    paths, issues = set(), []
+    mapped = registry.get("charts", {}).get(str(chart), {})
+    selected = tuple(only) if only else SLOTS
+    for slot in selected:
+        name = mapped.get(slot)
+        if not name:
+            issues.append(f"{slot}: exercise not mapped")
+        elif name not in registry.get("strips", {}):
+            issues.append(f"{slot}: unknown strip {name}")
+        else:
+            paths.add("sheets/" + registry["strips"][name]["file"])
+    look = (theme.get("chart_looks") or {}).get(str(chart)) or {}
+    backdrop = look.get("backdrop") or theme.get("backdrop", {})
+    if backdrop.get("style") == "image":
+        if backdrop.get("image"):
+            paths.add(backdrop["image"])
+        else:
+            issues.append("image backdrop has no source path")
+    paths.update(path for path in (backdrop.get("overrides") or {}).values() if path)
+    for font in ("font", "mono"):
+        if theme.get("hud", {}).get(font):
+            paths.add(theme["hud"][font])
+    for prop in scene.get("props", []):
+        if not prop.get("enabled", True) or prop.get("kind") not in ("image", "overlay"):
+            continue
+        applies = prop.get("slots", "*")
+        if applies == "*" or any(slot in applies for slot in selected):
+            if prop.get("file"):
+                paths.add(prop["file"])
+            else:
+                issues.append(f"prop {prop.get('id', '?')}: missing source path")
+    return paths, issues
+
+
+def archive_restore_plan(repo_root, chart, only=()):
+    """Find missing inputs in direct Drive files or historical ZIPs, read-only."""
+    sprites = repo_root / "sprites"
+    plan = read_json(repo_root / "data" / "5bx-charts.json")
+    registry = read_json(sprites / "config" / "strips.json")
+    theme = read_json(sprites / "config" / "theme.json")
+    look = (theme.get("chart_looks") or {}).get(str(chart)) or {}
+    scene = read_json(sprites / (look.get("scene") or "config/scene.json"))
+    required, issues = required_render_files(registry, theme, scene, chart, only)
+    if not any(item.get("id") == chart for item in plan.get("charts", [])):
+        issues.insert(0, f"chart {chart}: not in 5bx-charts.json")
+    index = read_json(sprites / "config" / "art-archive-index.json")
+    sources, ambiguous = {}, set()
+    for archive in index["archives"]:
+        for path in archive["files"]:
+            if path in sources:
+                ambiguous.add(path)
+            sources[path] = archive
+    direct, duplicated_direct = {}, set()
+    for item in index.get("direct_files", []):
+        if item["path"] in direct:
+            duplicated_direct.add(item["path"])
+        direct[item["path"]] = item
+    present = [path for path in required if (sprites / path).is_file()]
+    grouped, individual, unknown = {}, [], []
+    for path in sorted(required.difference(present)):
+        if path in duplicated_direct:
+            unknown.append(path)
+        elif path in direct:
+            individual.append(direct[path])
+        elif path not in sources or path in ambiguous:
+            unknown.append(path)
+        else:
+            group = sources[path]["file_name"]
+            grouped.setdefault(group, {"archive": sources[path], "paths": []})["paths"].append(path)
+    return {"chart": chart, "only": list(only), "required": len(required),
+            "present": len(present), "direct": individual, "archives": grouped, "unknown": unknown,
+            "issues": issues}
+
+
+def show_restore_plan(plan):
+    slots = ",".join(plan["only"]) if plan["only"] else "all mapped slots"
+    print(f"5BX source restore plan — Chart {plan['chart']} ({slots})")
+    print(f"  {plan['required']} unique source file(s); {plan['present']} already local")
+    for item in plan["direct"]:
+        print(f"  FILE: {item['path']}")
+        print(f"        https://drive.google.com/file/d/{item['drive_id']}/view")
+    for group in plan["archives"].values():
+        archive = group["archive"]
+        print(f"  ZIP: {archive['file_name']}")
+        print(f"       https://drive.google.com/file/d/{archive['drive_id']}/view")
+        for path in group["paths"]:
+            print(f"       {path}")
+    for path in plan["unknown"]:
+        print(f"  UNINDEXED: {path} (archive not yet recorded)")
+    for issue in plan["issues"]:
+        print(f"  UNRESOLVED: {issue}")
+    if not plan["direct"] and not plan["archives"] and not plan["unknown"] and not plan["issues"]:
+        print("  All required files are present.")
+    else:
+        print("Restore the listed files/ZIP paths under sprites/; preserve names and review status.")
+
+
 def release_readiness(report, registry, library, sheets_dir, chart=None):
     """Strict artwork gate: verify selected bytes and a positive human form grade.
 
@@ -241,11 +341,26 @@ def show(report, detailed=False):
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("command", choices=("status", "check", "release-check"))
-    parser.add_argument("--chart", type=int, help="for release-check, validate just this chart")
+    parser.add_argument("command", choices=("status", "check", "release-check", "restore-plan"))
+    parser.add_argument("--chart", type=int, help="for release-check/restore-plan, choose this chart")
+    parser.add_argument("--only", default="", help="for restore-plan, comma-separated slots such as ex4,run")
     parser.add_argument("--repo-root", type=Path, default=Path(__file__).resolve().parents[2],
                         help="override repository root for tests")
     args = parser.parse_args(argv)
+    if args.command == "restore-plan":
+        if args.chart is None:
+            parser.error("restore-plan requires --chart")
+        selected = [s for s in args.only.split(",") if s]
+        if any(s not in SLOTS for s in selected):
+            parser.error(f"--only must use slots: {', '.join(SLOTS)}")
+        try:
+            plan = archive_restore_plan(args.repo_root, args.chart, selected)
+        except (OSError, ValueError, KeyError) as exc:
+            parser.exit(1, f"unable to inspect archive inputs: {exc}\n")
+        show_restore_plan(plan)
+        return 1 if plan["issues"] or plan["unknown"] else 0
+    if args.only:
+        parser.error("--only is only for restore-plan")
     try:
         report = repository_report(args.repo_root)
     except (OSError, ValueError, KeyError) as exc:

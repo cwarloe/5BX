@@ -1,6 +1,7 @@
 """Pure production-line checks; no image assets or nonstandard packages needed."""
 
 import hashlib
+import json
 import sys
 import tempfile
 import unittest
@@ -72,6 +73,54 @@ class ProductionLineTest(unittest.TestCase):
                  "chart_looks": {"1": {"backdrop": {"style": "forest"}}}}
         self.assertEqual(line.missing_backdrop_images(theme, self.sheets, [1, 2]),
                          {2: "assets/backgrounds/default.png"})
+
+    def test_restore_sources_limit_to_selected_slot_and_active_props(self):
+        theme = {"backdrop": {"style": "forest"},
+                 "chart_looks": {"1": {"backdrop": {"style": "image", "image": "assets/room.png"}}},
+                 "hud": {"font": "assets/fonts/title.ttf"}}
+        scene = {"props": [{"id": "bottle", "kind": "image", "enabled": True,
+                            "slots": ["ex4"], "file": "assets/props/bottle.png"},
+                           {"id": "unused", "kind": "image", "enabled": False,
+                            "file": "assets/props/unused.png"}]}
+        paths, issues = line.required_render_files(self.registry, theme, scene, 1, ["ex4"])
+        self.assertEqual(issues, [])
+        self.assertEqual(paths, {"sheets/ex4.png", "assets/room.png",
+                                 "assets/fonts/title.ttf", "assets/props/bottle.png"})
+
+    def test_archive_restore_plan_finds_exact_zip_and_unindexed_work(self):
+        root = self.sheets / "repo"
+        sprites = root / "sprites"
+        (sprites / "config").mkdir(parents=True)
+        (root / "data").mkdir(parents=True)
+        theme = {"backdrop": {"style": "image", "image": "assets/gym.png"}, "hud": {}}
+        archive_index = {"archives": [
+            {"file_name": "source.zip", "drive_id": "source-id", "files": ["sheets/ex4.png"]},
+            {"file_name": "background.zip", "drive_id": "background-id", "files": ["assets/gym.png"]},
+        ]}
+        for path, data in ((sprites / "config" / "strips.json", self.registry),
+                           (sprites / "config" / "theme.json", theme),
+                           (sprites / "config" / "scene.json", {"props": []}),
+                           (sprites / "config" / "art-archive-index.json", archive_index),
+                           (root / "data" / "5bx-charts.json", {"charts": [{"id": 1}]})):
+            path.write_text(json.dumps(data))
+        report = line.archive_restore_plan(root, 1, ["ex4"])
+        self.assertEqual(report["issues"], [])
+        self.assertEqual(report["unknown"], [])
+        self.assertEqual(set(report["archives"]), {"source.zip", "background.zip"})
+        self.assertEqual((report["required"], report["present"]), (2, 0))
+        archive_index["direct_files"] = [{"path": "sheets/ex4.png", "drive_id": "direct-source-id"}]
+        (sprites / "config" / "art-archive-index.json").write_text(json.dumps(archive_index))
+        report = line.archive_restore_plan(root, 1, ["ex4"])
+        self.assertEqual(report["direct"], archive_index["direct_files"])
+        self.assertEqual(set(report["archives"]), {"background.zip"})
+        (sprites / "sheets").mkdir()
+        (sprites / "sheets" / "ex4.png").write_bytes(b"restored")
+        self.assertEqual(set(line.archive_restore_plan(root, 1, ["ex4"])["archives"]),
+                         {"background.zip"})
+        self.registry["strips"]["ex4"]["file"] = "new-unarchived.png"
+        (sprites / "config" / "strips.json").write_text(json.dumps(self.registry))
+        self.assertEqual(line.archive_restore_plan(root, 1, ["ex4"])["unknown"],
+                         ["sheets/new-unarchived.png"])
 
     def test_unknown_registered_strip_blocks_check(self):
         self.registry["charts"]["1"]["jump"] = "not-a-strip"

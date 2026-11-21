@@ -10,6 +10,55 @@ that aren't shipped) lives in Google Drive, never in Git.
 File names in Drive: `YYYY-MM-DD_<source>_<what-it-is>.<ext>`, where the date is
 when the art was made and `<source>` is the repo or tool it came from.
 
+## Name new assets consistently; keep the old ones working
+
+The **stable identity** is the existing sprite-library asset ID (for example
+`c1-ex4-w1` or `c3-ex4-03`), **not** a descriptive filename. Do not invent a
+second revision number outside the library. For new art, use that exact ID as
+the prefix, lowercase names, and underscores between fields:
+
+| Artifact | Example new filename |
+|---|---|
+| Source pose sheet | `c1-ex4-02_knee-push-up_sprite-boy_sheet.png` |
+| Individual transparent pose | `c1-ex4-02_knee-push-up_sprite-boy_pose-02.png` |
+| Optional backup bundle | `2026-11-21_5bx_sprite-boy_chart1-sheets_b02.zip` |
+
+Use a new, unique library ID for every changed source revision (existing `w1`
+IDs remain valid); `b01`, `b02` distinguish archive batches. Never name a take
+`final`, `final2`, or `approved`: approval and selection belong in
+`sprites/library/index.json`, with a review attribution and content hash.
+A second avatar gets a new avatar ID, not a new exercise definition.
+
+**Do not bulk-rename legacy files or move the existing ZIPs.** Their exact
+paths are already referenced by the builder, library and archived batches.
+The ZIPs were convenient batch snapshots, not a required production format.
+Store **new working source art as individual Drive files**, and record their
+Drive IDs in `direct_files` in the recovery index; make an immutable ZIP only
+when a batch backup is useful. No deeper folder tree is needed yet. If the
+Drive folder later becomes crowded, separate working files and archive backups
+into two shallow folders rather than nesting every chart and revision.
+The `direct_files` list starts empty: existing art remains in its verified ZIPs.
+There is no reason to extract and re-upload that history just to populate it.
+
+### Find exactly what to restore
+
+The read-only recovery index at `sprites/config/art-archive-index.json` supports
+**direct Drive files first** (for new work) and records the verified contents,
+Drive IDs and SHA-256 of four historical source/baked-asset ZIPs as fallback.
+It is an index of **where files are**, not an approval record.
+For a clean clone, run:
+
+```bash
+python3 sprites/kit/line.py restore-plan --chart 1 --only ex4
+python3 sprites/kit/line.py restore-plan --chart 6
+```
+
+The command groups only *missing* sources by direct Drive link or the exact
+historical ZIP, showing the expected paths relative to `sprites/`. Restore
+those files without renaming or overwriting approved local art. A new file not
+yet uploaded/indexed is marked `UNINDEXED`; record its **direct Drive ID** after
+uploading it. This does **not** download or alter anything automatically.
+
 ## In this repo
 
 | Path | What it is |
