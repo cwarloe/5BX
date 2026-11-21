@@ -1,0 +1,79 @@
+{
+ "version": "4",
+ "source": "ex1-toe-touching.png",
+ "source_hash": "6f6ce8022261",
+ "key": {
+  "lo": 28,
+  "hi": 95
+ },
+ "n": 3,
+ "rows": null,
+ "row": null,
+ "poses": [
+  {
+   "file": "p1.png",
+   "offset": [
+    200,
+    41
+   ],
+   "size": [
+    130,
+    665
+   ],
+   "anchors": {
+    "head": 60.5,
+    "span-left": 24.0,
+    "span-right": 126.0,
+    "span-center": 75.0,
+    "hips": 64.22686084142394,
+    "shoes": 71.20215255030416,
+    "shoe-left": 26.0,
+    "shoe-right": 126.0
+   }
+  },
+  {
+   "file": "p2.png",
+   "offset": [
+    547,
+    349
+   ],
+   "size": [
+    317,
+    355
+   ],
+   "anchors": {
+    "head": 96.5,
+    "span-left": 65.0,
+    "span-right": 169.0,
+    "span-center": 117.0,
+    "hips": 46.58585298196949,
+    "shoes": 110.60992217898833,
+    "shoe-left": 67.0,
+    "shoe-right": 168.0
+   }
+  },
+  {
+   "file": "p3.png",
+   "offset": [
+    922,
+    115
+   ],
+   "size": [
+    311,
+    591
+   ],
+   "anchors": {
+    "head": 119.0,
+    "span-left": 176.0,
+    "span-right": 280.0,
+    "span-center": 228.0,
+    "hips": 255.98410578335782,
+    "shoes": 224.4524929444967,
+    "shoe-left": 178.0,
+    "shoe-right": 279.0
+   }
+  }
+ ],
+ "floor": 706,
+ "top": 41
+}

@@ -1,0 +1,1246 @@
+{
+  "_about": "Pose lists for every strip in sheets/, reconstructed from the prompts that produced them (2026-11-19). Same pose text; the surrounding wording now comes from config/character.json. 'rule' is a rule that applies to every pose.",
+  "_generation": {
+    "model": "gemini-3-pro-image",
+    "aspect": "16:9",
+    "resolution": "1K (about 1376x768)",
+    "variations": 4,
+    "reference": "None for the first strip. After that, one pinned image of the character, and the words 'use only for appearance, ignore the poses'. Prone exercises: pin a standing strip, not a lying one.",
+    "credits_each": "about 1,218 without a reference, 1,827 with one (ElevenLabs, 2026-11-19)",
+    "order": [
+      "knee-push-up-c1 (pilot, no reference)",
+      "toe-touch-c1",
+      "partial-sit-up-c1",
+      "stationary-run-c1",
+      "scissor-jumps-c1",
+      "alternate-leg-raise-c1"
+    ]
+  },
+  "strips": {
+    "toe-touch-c1": {
+      "exercise": "TOE TOUCHES",
+      "kept": "take 1 of 4",
+      "layout": "Same scale, feet on the same invisible floor line, with wide empty gaps so the figures never touch.",
+      "poses": [
+        "START: standing tall, feet about shoulder-width apart, both arms straight up overhead, upper arms beside the ears.",
+        "FOLD: deep forward bend, torso folded down toward the legs, knees only slightly bent (not forced straight, not deeply squatting), fingertips touching the floor beside the feet, head hanging relaxed.",
+        "STRETCH BACK: standing again with arms still stretched up and reaching backward, a gentle backward bend, hips pushed slightly forward, chest and face lifted toward the sky, knees straight."
+      ],
+      "learned": [
+        "Take 2's backward bend swept the arms down behind him; the booklet says up and back. Take 1 kept the arms up and reaching back.",
+        "The model draws a ground shadow even when told not to; the key removes it."
+      ],
+      "chart": 1,
+      "slot": "ex1",
+      "view": "strict side view facing right"
+    },
+    "partial-sit-up-c1": {
+      "exercise": "a PARTIAL SIT-UP",
+      "kept": "take 4 of 4 (take 1 bent the knees)",
+      "layout": "In every pose he lies on his back with his HEAD ON THE LEFT and his FEET ON THE RIGHT, same scale, all on the same invisible floor line, wide empty gaps so the figures never touch.",
+      "poses": [
+        "START: lying flat on his back, LEGS STRAIGHT and flat on the floor with the feet a few inches apart, arms straight and resting at his sides.",
+        "LIFTING: head and shoulders lifted clear off the floor, chin slightly tucked, arms reaching forward along his sides, LEGS STILL STRAIGHT AND FLAT.",
+        "TOP: upper body raised only far enough that he can see his heels, looking down toward his feet, arms reaching forward toward the shins, LEGS STAY COMPLETELY STRAIGHT with heels on the floor (knees NOT bent, NOT sitting fully upright, hands NOT behind the head)."
+      ],
+      "learned": [
+        "Take 1 bent the knees at the top: the booklet says keep the legs straight. Always include 'knees NOT bent' and 'NOT sitting fully upright, hands NOT behind the head'.",
+        "Takes 2 and 3 sat almost fully upright. Take 4 lifted only the head and shoulders in the middle pose."
+      ],
+      "chart": 1,
+      "slot": "ex2",
+      "view": "strict side view facing right"
+    },
+    "alternate-leg-raise-c1": {
+      "exercise": "an ALTERNATE LEG RAISE",
+      "kept": "retry take 1 of 4 (first batch failed: push-up arms leaked in from the reference)",
+      "layout": "In every pose he lies FACE DOWN, flat on his belly, with his HEAD ON THE RIGHT looking right and his FEET ON THE LEFT. Same scale, all on the same invisible floor line, wide empty gaps between figures.",
+      "rule": "KEY BODY RULE FOR ALL THREE POSES: his arms are NOT pushing up and NOT planted in front of him. Both arms are STRAIGHT and stretched back along his sides, with the hands tucked flat, palms down, UNDER THE FRONT OF HIS THIGHS. Elbows straight. Shoulders stay low.",
+      "poses": [
+        "START: lying completely flat face down, legs straight and together, chin near the floor, arms straight back with palms under the thighs.",
+        "FIRST LEG: head and chest lifted only slightly off the floor (a small lift), arms still straight back under the thighs, the leg NEAREST the viewer raised straight up behind him with the knee LOCKED STRAIGHT (a straight line from hip to heel, about 35 to 40 degrees above the floor, thigh clearly lifted off his hand), the other leg flat on the floor.",
+        "OTHER LEG: same lifted head and chest, arms still straight back under the thighs, now the leg FARTHEST from the viewer is raised with the knee LOCKED STRAIGHT, and the near leg is flat on the floor."
+      ],
+      "learned": [
+        "First batch failed all four times: the push-up strip, used as the reference, leaked push-up arms and a bent kicking leg into this exercise.",
+        "Fix: use a neutral standing strip as the reference, say 'use it only for appearance, ignore its poses', and spell out the geometry (arms straight back, palms under the thighs, knee locked straight).",
+        "The darker far-side shading is what lets near leg and far leg read differently in profile."
+      ],
+      "chart": 1,
+      "slot": "ex3",
+      "view": "strict side view facing right"
+    },
+    "knee-push-up-c1": {
+      "exercise": "a KNEE PUSH-UP",
+      "kept": "take 4 of 4 of the no-reference pilot (this one became the first character reference)",
+      "layout": "Same scale, all three standing on the same invisible floor line, with generous empty space between the three figures so they do not touch or overlap.",
+      "poses": [
+        "DOWN position: face-down, chest touching the floor, elbows bent and tucked close to the ribs, palms flat on the floor directly under the shoulders. The KNEES are on the floor and the lower legs are bent up behind him with the feet in the air. Body is a straight line from the knees to the head.",
+        "MIDDLE position: halfway up, elbows bent about 90 degrees, chest a hand-width above the floor, knees still on the floor, body still a straight line from knees to head.",
+        "UP position: arms fully straightened, palms flat on the floor directly under the shoulders, upper body raised, KNEES STILL ON THE FLOOR, lower legs bent up behind with feet in the air, body one straight diagonal line from the knees to the head (hips NOT piked up, back NOT sagging)."
+      ],
+      "learned": [
+        "This was the pilot: no reference image, the character described in words. It came out right in all four takes.",
+        "Take 4 was kept because the chest actually touches the floor at the bottom and the arms are fully straight at the top. Then it became the first character reference."
+      ],
+      "chart": 1,
+      "slot": "ex4",
+      "view": "strict side view facing right"
+    },
+    "stationary-run-c1": {
+      "exercise": "a STATIONARY RUN (running in place)",
+      "kept": "retry take 3 of 4 (first batch lifted the same leg twice)",
+      "layout": "Same scale, same invisible floor line, wide empty gaps. He does not travel forward: jogging on the spot with small quick steps, the lifted foot only a few inches off the floor, knee bent only slightly, NOT a sprint stride, NOT high knees, NOT a long stride. Arms bent about 90 degrees and pumping like a jogger.",
+      "rule": "The boy's NEAR leg and near arm are closest to the viewer, in the normal colors. His FAR leg and far arm are in a noticeably darker shade. The two lifts must use DIFFERENT legs.",
+      "poses": [
+        "NEAR FOOT LIFTED: the NEAR (lighter) foot lifted a few inches off the floor with the knee slightly bent; the FAR (darker) foot flat on the floor. Near arm bent and swinging forward, far arm bent and back.",
+        "PASSING: both feet close to the floor under the hips, standing nearly upright, near arm back and far arm forward, both arms bent.",
+        "FAR FOOT LIFTED: the FAR (darker) foot lifted a few inches off the floor with the knee slightly bent; the NEAR (lighter) foot planted flat. Far arm bent and forward, near arm bent and back. Clearly different from pose 1: the lifted foot is the darker one.",
+        "PASSING: both feet close to the floor, nearly upright, near arm forward and far arm back, both arms bent."
+      ],
+      "learned": [
+        "First batch: the same (near) leg was lifted in both lift poses, so it read as hopping on one foot. Fix: name the near and far legs, shade the far one, and say 'the two lifts must use DIFFERENT legs'.",
+        "The model lifts the foot higher than the booklet's 4 inches. An edit pass ('lower the lifted foot to about 4 inches') brought it down; see edits.json."
+      ],
+      "chart": 1,
+      "slot": "run",
+      "view": "strict side view facing right",
+      "retake": {
+        "attach": [
+          "the previous sheet to fix: ex5-stationary-run.png",
+          "the character reference: c4-run-knees-waist-high.png"
+        ],
+        "problems": [
+          "The lifted foot rises far higher than the booklet's four inches and the stride is a jog. Make it a low march in place: the lifted shoe only about four inches off the floor (the sole of the lifted shoe just above the top of the planted shoe), the knee only slightly bent, the body upright, small steps, the arms bent about 90 degrees swinging gently.",
+          "Keep the rule that the two lifts use DIFFERENT legs: near (lighter) leg in pose 1, far (darker) leg in pose 3."
+        ],
+        "keep": "the boy's look, line weight and colors, four poses in the same order, the side-on body with the head and shoulders turned toward the camera, and the same angle in every pose.",
+        "rows": null
+      }
+    },
+    "scissor-jumps-c1": {
+      "exercise": "SCISSOR JUMPS",
+      "kept": "take 1 of 4. Known weak spot: stance A and B look alike in profile; only shading differs",
+      "layout": "Same scale, wide empty gaps. The two standing poses rest on the same invisible floor line; the two jumping poses are drawn clearly higher, with both feet well above that line.",
+      "poses": [
+        "STANCE A, on the floor: the leg NEAREST the viewer extended forward and the other leg extended backward in a wide scissor stance, both feet on the floor; the arm FARTHEST from the viewer extended forward and the near arm extended backward, both arms straight at SHOULDER HEIGHT.",
+        "JUMP, in the air: jumped straight up, both feet well off the floor, legs and arms passing each other mid-switch (legs close together under the hips, arms crossing near the body), knees slightly bent.",
+        "STANCE B, on the floor: the mirror of stance A. The leg FARTHEST from the viewer is now forward and the near leg is back; the NEAR arm extended forward and the far arm backward, arms straight at shoulder height, both feet on the floor.",
+        "JUMP, in the air: the same airborne switching pose as pose 2, both feet well above the floor line."
+      ],
+      "learned": [
+        "Stance A and stance B look almost the same in profile; only the shading differs. A front view would fix it.",
+        "Stance B came out as a lunge with a bent back knee. An edit pass made it upright; see edits.json.",
+        "Batch C (2026-11-20): two camera rows came back almost identical and stance B was still indistinguishable from A. Remake in a single three-quarter front view with a stance diagram attached."
+      ],
+      "chart": 1,
+      "slot": "jump",
+      "view": "strict side view facing right",
+      "retake": {
+        "attach": [
+          "the previous sheet to fix: ex5-scissor-jumps.png",
+          "the character reference: c4-run-knees-waist-high.png"
+        ],
+        "problems": [
+          "Stance A and stance B looked almost the same. They are mirror images: in stance A his RIGHT leg and LEFT arm are forward; in stance B his LEFT leg and RIGHT arm are forward. In a strict side view this is hard to see, so draw a three-quarter front view where the forward leg is clearly the one nearer the camera in A and the one farther from the camera in B.",
+          "One stance came out as a lunge. In both stances the front knee is only slightly bent, the back leg is STRAIGHT, the body upright, both arms straight at shoulder height (one forward, one back).",
+          "In the two jump poses both feet are clearly off the floor, the legs passing each other under the hips."
+        ],
+        "keep": "the boy's look, line weight and colors, four poses in the same order, the same scale, and the stances resting on one floor line with the jump poses clearly higher.",
+        "rows": [
+          "three-quarter FRONT view, from the front and a little from the left, so that the forward and backward legs and arms can be told apart",
+          "SIDE view facing right with a clearly darker shade on the far arm and far leg"
+        ],
+        "why_rows": "Scissor stances are hard to tell apart from the side, so this asks for two cameras; send me the whole image and I will pick the row that reads best."
+      },
+      "check": [
+        "Four poses: STANCE A, JUMP, STANCE B, JUMP",
+        "Stance A: right leg and left arm forward. Stance B: left leg and right arm forward. You can tell them apart without looking at shading",
+        "Back leg straight in both stances, no lunge",
+        "Both jump poses clearly higher than the stances, both feet off the floor"
+      ],
+      "remake": {
+        "booklet": "BOOKLET-c1e5.png",
+        "schematic": "REF-scissor-stances.png",
+        "schematic_note": "a stick-figure diagram of the four poses seen from the side: which leg and which arm are forward in stance A and in stance B, and both feet off the floor in the jumps. Copy the positions only, never its style, colors or text.",
+        "view": "a THREE-QUARTER FRONT view: the body turned about 45 degrees toward the camera, facing right, so the viewer can see which leg and which arm are forward. The SAME angle in all four poses"
+      }
+    },
+    "toe-touch-c2": {
+      "chart": 2,
+      "slot": "ex1",
+      "exercise": "TOE TOUCHES WITH A BOUNCE",
+      "kept": "Grok Imagine take, kept (5 figures: it added an extra bounce pose). Cycle start, touch, press, rebound, stretch back.",
+      "layout": "Same scale, feet on the same invisible floor line, with wide empty gaps so the figures never touch.",
+      "poses": [
+        "START: standing tall, feet about shoulder-width apart, both arms straight up overhead, upper arms beside the ears.",
+        "TOUCH: deep forward bend, torso folded down toward the legs, knees only slightly bent (not forced straight, not deeply squatting), fingertips touching the floor beside the feet, head hanging relaxed.",
+        "PRESS: the same forward bend pressed one small bounce lower: fingertips pressing on the floor, torso and head a little lower than in the TOUCH pose, knees still only slightly bent.",
+        "STRETCH BACK: standing again with arms still stretched up and reaching backward, a gentle backward bend, hips pushed slightly forward, chest and face lifted toward the sky, knees straight."
+      ],
+      "check": [
+        "Four poses, left to right",
+        "Knees only slightly bent in the two bends (not forced straight, not a squat)",
+        "Fingertips reach the floor in TOUCH and PRESS; PRESS is a little lower than TOUCH",
+        "In STRETCH BACK the arms are UP and back, not swept down behind him"
+      ],
+      "draft": [
+        "The booklet says 'touch floor and press (bounce) once'. Pose 3 (PRESS) is my reading of 'press once'. It differs only slightly from pose 2, so check it looks like a bounce, not a duplicate."
+      ],
+      "suggest": {
+        "file": "c2-ex1-toe-touching.png",
+        "poses": 4,
+        "anchor": "span-center",
+        "cycle": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "reps_per_cycle": 1
+      },
+      "learned": [
+        "Asked for 4 poses; Grok Imagine returned 5. Poses 2 and 3 are almost the same depth (3 px apart) and pose 4 is the real press (31 px lower), so the extra one works as the rebound after the press.",
+        "Pose 1 came back in a front-facing three-quarter view with the feet wide apart; the other four are side views. It matches 'feet astride' but is a camera change.",
+        "The author liked the slight turn toward the camera in the first figure (not a pure 90 degree side view). Later strips ask for it on purpose; see config/character.json 'view'."
+      ],
+      "view": "strict side view facing right"
+    },
+    "sit-up-c2": {
+      "chart": 2,
+      "slot": "ex2",
+      "exercise": "a SIT-UP",
+      "kept": "Grok Imagine, first take, kept as made (3 figures).",
+      "layout": "In every pose he lies on his back with his HEAD ON THE LEFT and his FEET ON THE RIGHT, same scale, all on the same invisible floor line, wide empty gaps so the figures never touch. Draw only the boy: no chair, no objects.",
+      "poses": [
+        "START: lying flat on his back, legs straight on the floor with the feet about six inches apart, arms straight and resting at his sides.",
+        "RISING: halfway up, upper body lifted about 45 degrees off the floor, arms reaching forward, heels still on the floor, knees allowed to bend very slightly.",
+        "TOP: sitting up to a vertical position, back straight and upright, arms reaching forward toward the feet, FEET STAYING FLAT ON THE FLOOR, knees bent only slightly (hands NOT behind the head, heels NOT lifted)."
+      ],
+      "check": [
+        "Three poses, head on the left, feet on the right",
+        "Feet stay on the floor in every pose",
+        "TOP is a vertical, upright torso (this is a full sit-up, not the partial one in chart 1)",
+        "Knees at most slightly bent",
+        "Hands at the sides or reaching forward, not behind the head; no chair"
+      ],
+      "draft": [
+        "The booklet allows 'knees bend slightly' for this exercise. Chart 1's partial sit-up did not."
+      ],
+      "suggest": {
+        "file": "c2-ex2-sit-up.png",
+        "poses": 3,
+        "anchor": "span-right",
+        "cycle": [
+          1,
+          2,
+          3,
+          2
+        ],
+        "reps_per_cycle": 1
+      },
+      "learned": [
+        "Right on the first try: lying flat, rising to about 45 degrees, then a vertical torso with the arms reaching and the feet staying on the floor.",
+        "Anchored by the feet (span-right): the shorts wander 46 px across the poses. Anchoring by the hips would be steadier still."
+      ]
+    },
+    "back-extension-c2": {
+      "chart": 2,
+      "slot": "ex3",
+      "exercise": "a BACK EXTENSION",
+      "kept": "Grok Imagine, first take, kept as made (3 figures).",
+      "layout": "In every pose he lies FACE DOWN, flat on his belly, with his HEAD ON THE RIGHT looking right and his FEET ON THE LEFT. Same scale, all on the same invisible floor line, wide empty gaps between figures.",
+      "rule": "KEY BODY RULE FOR ALL THREE POSES: his arms are NOT pushing up and NOT planted in front of him. Both arms are STRAIGHT and stretched back along his sides, with the hands tucked flat, palms down, UNDER THE FRONT OF HIS THIGHS. Elbows straight.",
+      "poses": [
+        "START: lying completely flat face down, legs straight and together, chin near the floor, arms straight back with palms under the thighs.",
+        "LIFTING: head, shoulders and both legs just beginning to lift off the floor together, legs straight, arms still straight back under the thighs.",
+        "TOP: head, shoulders AND BOTH LEGS raised off the floor at the same time, legs straight with the knees LOCKED, thighs clearly lifted off his hands, back gently arched, looking forward; only his belly stays on the floor."
+      ],
+      "check": [
+        "Three poses, head on the right, feet on the left",
+        "Arms straight back, hands under the thighs (not planted in front like a push-up)",
+        "In TOP the head, shoulders and BOTH legs are up together",
+        "Legs straight, thighs clear of the hands",
+        "The hands are in the same place, under the front of the thighs, in all three poses",
+        "START, LIFTING and TOP are three clearly different heights"
+      ],
+      "draft": [],
+      "suggest": {
+        "file": "c2-ex3-back-extension.png",
+        "poses": 3,
+        "anchor": "span-left",
+        "cycle": [
+          1,
+          2,
+          3,
+          2
+        ],
+        "reps_per_cycle": 1
+      },
+      "learned": [
+        "Form is right: head, shoulders and both legs up, back gently arched, arms straight back, hands on the floor.",
+        "The leg raise is modest: the feet rise about 20 px more than at the start, so the thighs only just clear the hands. If a clearer raise is wanted, ask for 'legs raised high' or run an edit pass.",
+        "The START pose already has the feet a few pixels off the floor.",
+        "Both feet lift at the top, so a planted-foot anchor makes him slide 364 px. The new 'hips' anchor (the red shorts) holds him to 2 px. Use it for any exercise where he lies and the hips stay on the floor.",
+        "Batch C (2026-11-20): the lift improved but the hands moved forward to the hips, and START and LIFTING looked the same. Remake with the booklet drawing and a hands-and-thighs diagram attached."
+      ],
+      "retake": {
+        "attach": [
+          "the previous sheet to fix: c2-ex3-back-extension.png",
+          "the character reference: c4-run-knees-waist-high.png"
+        ],
+        "problems": [
+          "The hands drifted forward to the hips and belly. Both hands stay flat on the floor UNDER THE FRONT OF THE THIGHS, just below the hips, fingers pointing toward the feet, arms straight back along the sides. They do not move between poses.",
+          "In TOP the thighs must lift clearly OFF the hands: a visible gap between the bottom of each thigh and the hand under it, the legs straight with the knees locked, the feet well above the floor.",
+          "START must lie completely flat (chest, thighs, shins and feet on the floor), and LIFTING must be clearly in between START and TOP. Earlier sheets drew START and LIFTING the same."
+        ],
+        "keep": "the boy's look, line weight and colors, three poses in the same order, head on the right and feet on the left, the same three-quarter view as the previous sheet.",
+        "rows": null
+      },
+      "remake": {
+        "booklet": "BOOKLET-c2e3.png",
+        "schematic": "REF-backext-hands.png",
+        "schematic_note": "a stick-figure diagram of where the HANDS and THIGHS are in START and TOP, seen from the side. Copy the positions only, never its style, colors or text."
+      }
+    },
+    "push-up-c2": {
+      "chart": 2,
+      "slot": "ex4",
+      "exercise": "a PUSH-UP (on the palms and toes, knees OFF the floor)",
+      "kept": "Grok Imagine, first take, kept as made (3 figures).",
+      "layout": "Same scale, all on the same invisible floor line, with generous empty space between the figures so they do not touch or overlap.",
+      "poses": [
+        "DOWN: face down with the chest touching the floor, palms flat on the floor directly under the shoulders, elbows bent and tucked close to the ribs, only the palms and the toes touching the floor, the body one straight line from head to heels.",
+        "MIDDLE: halfway up, elbows bent about 90 degrees, chest a hand-width above the floor, only the palms and toes touching the floor, body still one straight line, back straight.",
+        "UP: arms fully straightened, palms flat directly under the shoulders, only the palms and toes touching the floor, body one straight diagonal line from the heels to the head (hips NOT piked up, back NOT sagging, knees NOT on the floor)."
+      ],
+      "check": [
+        "Three poses, facing right",
+        "Only palms and toes touch the floor; knees are OFF the floor in every pose",
+        "Body a straight line, back straight (no sagging hips, no piked hips)",
+        "Chest touches the floor in DOWN; arms fully straight in UP"
+      ],
+      "draft": [
+        "This is a different exercise from chart 1's knee push-up. Grok's chart 1 push-up drew this form by mistake; here it is correct."
+      ],
+      "suggest": {
+        "file": "c2-ex4-push-up.png",
+        "poses": 3,
+        "anchor": "span-right",
+        "cycle": [
+          1,
+          2,
+          3,
+          2
+        ],
+        "reps_per_cycle": 1
+      },
+      "learned": [
+        "Right on the first try, with the prompt unchanged: palms and toes only, knees off the floor, body one straight line, arms fully straight at the top.",
+        "The DOWN pose has the chest a hair above the floor rather than literally on it. At video size it reads as touching. The booklet says the chest must touch the floor, so look at this on a real screen."
+      ]
+    },
+    "astride-jumps-c2": {
+      "chart": 2,
+      "slot": "jump",
+      "exercise": "ASTRIDE JUMPS",
+      "kept": "Grok Imagine, first take, kept as made (4 figures, front view).",
+      "view": "strict FRONT view, the boy facing the camera (not a side view)",
+      "far_side": false,
+      "layout": "Same scale, wide empty gaps so the figures never touch. The two standing poses rest on the same invisible floor line; the two jumping poses are drawn clearly higher, with both feet well above that line.",
+      "poses": [
+        "START: standing with the FEET TOGETHER and the arms straight down at his sides.",
+        "JUMP OUT: in the air, both feet off the floor, legs spreading apart, arms swinging out sideways, arms straight.",
+        "LAND ASTRIDE: landed with the feet wide apart (astride), both feet flat on the floor, arms straight and raised sideways to slightly above shoulder height.",
+        "JUMP BACK: in the air, both feet off the floor, legs coming back together, arms coming down toward his sides, arms straight."
+      ],
+      "check": [
+        "Four poses, strict front view, same boy",
+        "START has the feet together and the arms down",
+        "In LAND ASTRIDE the arms are straight and just above shoulder height, the feet wide apart",
+        "The two jump poses are clearly higher than the two standing poses"
+      ],
+      "draft": [
+        "Front view, because the legs and arms move sideways and a side view would hide it.",
+        "The booklet says 'return with a jump to the starting position for count of one', so one count is out AND back. I will decide how that maps to '10 astride jumps' when I wire it in."
+      ],
+      "suggest": {
+        "file": "c2-jump-astride-jumps.png",
+        "poses": 4,
+        "anchor": "head",
+        "cycle": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "jumps_per_cycle": 2
+      },
+      "learned": [
+        "Right on the first try: feet together and arms down, jump out with the legs spread, land astride with the arms straight and above shoulder height, jump back.",
+        "The two jump poses sit about 89 px above the standing poses.",
+        "One count is taken to be a complete out-and-back (the booklet says 'return with a jump to the starting position for count of one'), so one cycle per count: jumps_per_cycle is 1 and a cycle takes 1.2 s. If the count should be each jump, set jumps_per_cycle to 2 in config/strips.json (2.4 s a cycle)."
+      ]
+    },
+    "toe-touch-c3": {
+      "chart": 3,
+      "slot": "ex1",
+      "exercise": "TOE TOUCHES TO THE LEFT, CENTRE AND RIGHT",
+      "kept": "(not made yet)",
+      "view": "strict FRONT view, the boy facing the camera (not a side view)",
+      "far_side": false,
+      "layout": "Same scale, feet on the same invisible floor line, with wide empty gaps so the figures never touch. The five figures are in the ORDER OF THE MOVEMENT, left to right across the picture, not in the order of where the hands land.",
+      "poses": [
+        "START: standing tall facing the camera, feet wide apart (astride, a little wider than the shoulders), both arms straight up overhead, upper arms beside the ears.",
+        "TOUCH LEFT: bent forward at the waist, seen from the front, both hands reaching down together with the fingertips touching the floor about six inches OUTSIDE HIS LEFT FOOT (his left foot is on the RIGHT side of the picture), knees only slightly bent, head hanging down.",
+        "TOUCH BETWEEN: bent forward in the same way, fingertips of both hands touching the floor BETWEEN HIS FEET, pressing down a little, knees only slightly bent, head hanging down.",
+        "TOUCH RIGHT: bent forward in the same way, fingertips of both hands touching the floor about six inches OUTSIDE HIS RIGHT FOOT (his right foot is on the LEFT side of the picture), knees only slightly bent, head hanging down.",
+        "BEND BACK: standing again, feet still wide apart, both arms stretched up and back, bending backward as far as he can, hips pushed forward, chest and face lifted toward the sky, knees straight."
+      ],
+      "check": [
+        "Five poses in movement order",
+        "Front view in every pose, feet wide apart throughout",
+        "TOUCH LEFT: fingertips on the floor outside his left foot (the picture-right foot); TOUCH RIGHT: outside his right foot (the picture-left foot); TOUCH BETWEEN: between the feet",
+        "Knees only slightly bent in the three bends",
+        "BEND BACK: arms up and back, leaning backward as far as he can"
+      ],
+      "draft": [
+        "Front view, because the three touches land at different places across the floor and a side view would hide that.",
+        "Left and right are the boy's own: his left foot is on the right side of the picture when he faces us.",
+        "The booklet says to reverse the direction after half the number of counts (right, between, left in the second half). That needs no extra picture: I will run the same poses in reverse order in the build.",
+        "If the generator struggles with a bend seen from the front, try 'three-quarter front view' instead, and tell me."
+      ],
+      "suggest": {
+        "file": "c3-ex1-toe-touching.png",
+        "poses": 5,
+        "anchor": "span-center",
+        "cycle": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "reps_per_cycle": 1
+      }
+    },
+    "sit-up-hands-behind-head-c3": {
+      "chart": 3,
+      "slot": "ex2",
+      "exercise": "a SIT-UP WITH THE HANDS CLASPED BEHIND THE HEAD",
+      "kept": "(not made yet)",
+      "layout": "In every pose he lies on his back with his HEAD ON THE LEFT and his FEET ON THE RIGHT, same scale, all on the same invisible floor line, wide empty gaps so the figures never touch. Draw only the boy: no chair, no objects.",
+      "poses": [
+        "START: lying flat on his back, legs straight on the floor with the feet about six inches apart, fingers clasped behind his head with the elbows out to the sides.",
+        "RISING: halfway up, upper body lifted about 45 degrees off the floor, hands still clasped behind his head with the elbows wide, heels still on the floor, knees allowed to bend very slightly.",
+        "TOP: sitting up to a vertical position, back straight and upright, hands still clasped behind his head with the elbows wide, FEET STAYING FLAT ON THE FLOOR, knees bent only slightly (hands NOT reaching forward, heels NOT lifted)."
+      ],
+      "check": [
+        "Three poses, head on the left, feet on the right",
+        "Fingers clasped behind the head in ALL three poses (the arms do not reach forward)",
+        "Feet stay on the floor; TOP is a vertical, upright torso",
+        "Knees at most slightly bent; no chair"
+      ],
+      "draft": [
+        "The same exercise as chart 2's sit-up, with the hands clasped behind the head."
+      ],
+      "suggest": {
+        "file": "c3-ex2-sit-up-hands-behind-head.png",
+        "poses": 3,
+        "anchor": "hips",
+        "cycle": [
+          1,
+          2,
+          3,
+          2
+        ],
+        "reps_per_cycle": 1
+      }
+    },
+    "back-extension-hands-behind-back-c3": {
+      "chart": 3,
+      "slot": "ex3",
+      "exercise": "a BACK EXTENSION WITH THE HANDS INTERLOCKED BEHIND THE BACK",
+      "kept": "(not made yet)",
+      "layout": "In every pose he lies FACE DOWN, flat on his belly, with his HEAD ON THE RIGHT looking right and his FEET ON THE LEFT. Same scale, all on the same invisible floor line, wide empty gaps between figures.",
+      "rule": "KEY BODY RULE FOR ALL THREE POSES: his hands are INTERLOCKED BEHIND HIS BACK, fingers clasped over the lower back, arms straight. His hands are NOT under his thighs, NOT in front of him and NOT on the floor.",
+      "poses": [
+        "START: lying completely flat face down, legs straight and together, chin near the floor, hands interlocked behind the back.",
+        "LIFTING: head, shoulders, chest and both legs just beginning to lift off the floor together, legs straight, hands still interlocked behind the back.",
+        "TOP: head, shoulders, chest AND BOTH THIGHS lifted completely off the floor, as high as he can, legs straight with the knees LOCKED, back strongly arched, looking forward, hands still interlocked behind the back; only his lower belly and hips stay on the floor."
+      ],
+      "check": [
+        "Three poses, head on the right, feet on the left",
+        "Hands interlocked behind the back in ALL three poses (not under the thighs, not on the floor)",
+        "TOP: chest AND both thighs clear of the floor, higher than chart 2's back extension",
+        "Legs straight"
+      ],
+      "draft": [
+        "Chart 2's back extension kept the hands on the floor under the thighs. Here the hands are clasped behind the back, so the lift can go higher."
+      ],
+      "suggest": {
+        "file": "c3-ex3-back-extension-hands-behind-back.png",
+        "poses": 3,
+        "anchor": "hips",
+        "cycle": [
+          1,
+          2,
+          3,
+          2
+        ],
+        "reps_per_cycle": 1
+      }
+    },
+    "chin-forehead-push-up-c3": {
+      "chart": 3,
+      "slot": "ex4",
+      "exercise": "a CHIN-FOREHEAD PUSH-UP (on the palms and toes, knees OFF the floor)",
+      "kept": "(not made yet)",
+      "layout": "Same scale, all on the same invisible floor line, with generous empty space between the figures so they do not touch or overlap.",
+      "poses": [
+        "UP: arms fully straightened, palms flat directly under the shoulders, only the palms and toes touching the floor, the body one straight line from the heels to the head (hips NOT piked up, back NOT sagging, knees NOT on the floor).",
+        "CHIN: lowered until the CHIN touches the floor in front of the hands (the head pushed forward past the hands), elbows bent, palms still flat on the floor under the shoulders, only the palms, toes and chin touching the floor, the body one straight line.",
+        "FOREHEAD (a PIKE, as in the booklet's drawing): the hips pushed UP HIGH so the body makes an upside-down V, the palms still flat on the floor where they were, the elbows bent, the head tucked down and back between the arms so the FOREHEAD touches the floor just BEHIND the hands (on the feet side of the hands), the toes on the floor. Only the palms, the toes and the forehead touch the floor. This pose is NOT a straight body: the hips are the highest point."
+      ],
+      "check": [
+        "Three poses, facing right: UP, CHIN, FOREHEAD",
+        "UP: arms straight, body one straight line, knees off the floor",
+        "CHIN: body low and straight, the chin on the floor IN FRONT of the hands, the head ahead of the hands",
+        "FOREHEAD: hips high in an upside-down V (a pike), the forehead on the floor BEHIND the hands, hands ahead of the forehead",
+        "The three poses are clearly different at a glance"
+      ],
+      "draft": [
+        "The booklet does not say whether this push-up is on the toes or the knees. I assumed palms and toes, continuing chart 2. If it should be the knees, tell me and I will change one phrase.",
+        "'Forehead on the floor behind the hands' is physically awkward. If Grok's FOREHEAD pose is not clearly different from CHIN, send me what it gives and I will check it against the booklet.",
+        "The booklet stresses three separate movements (chin, forehead, arms straightened), not one continuous one. The build will hold each pose."
+      ],
+      "suggest": {
+        "file": "c3-ex4-chin-forehead-push-up.png",
+        "poses": 3,
+        "anchor": "span-right",
+        "cycle": [
+          1,
+          2,
+          3,
+          1
+        ],
+        "reps_per_cycle": 1
+      },
+      "retake": {
+        "attach": [
+          "the previous sheet to fix: c3-ex234-sit-back-push.png (use only its bottom row, the push-up)",
+          "the character reference: c4-run-knees-waist-high.png"
+        ],
+        "problems": [
+          "In the FOREHEAD pose the forehead landed IN FRONT of the hands. The forehead touches the floor BEHIND the hands. The way to get it there is a PIKE, as in the booklet drawing: hips up high, head tucked down between the arms.",
+          "The CHIN pose must be clearly lower than UP: the chin touching the floor in front of the hands, the head pushed forward past the hands, the elbows bent, the body low and straight."
+        ],
+        "keep": "the boy's look, line weight and colors, three poses in the same order, palms and toes only (knees off the floor), the body one straight line, and the feet on one floor line.",
+        "rows": [
+          "plain SIDE view facing right, with both hands visible at the ends of the arms",
+          "three-quarter FRONT view, from the front and a little from one side, so that the head and the hands can be seen clearly"
+        ],
+        "why_rows": "The forehead-behind-the-hands pose is hard to draw, so this asks for two cameras; send me the whole image and I will pick the row that shows it.",
+        "poses": [
+          "UP: arms fully straightened, palms flat directly under the shoulders, only the palms and toes touching the floor, the body one straight line from the heels to the head (hips NOT piked up, back NOT sagging, knees NOT on the floor).",
+          "CHIN: lowered until the CHIN touches the floor in front of the hands (the head pushed forward past the hands), elbows bent, palms still flat on the floor under the shoulders, only the palms, toes and chin touching the floor, the body one straight line.",
+          "FOREHEAD: lowered until the chest is almost on the floor, the head tucked down and back so that the FOREHEAD touches the floor between the hands, level with the line of the hands or slightly behind it (the hands are visibly AHEAD of the forehead, in the direction he is facing), the elbows bent and flared out, the palms flat, only the palms, toes and forehead touching the floor, the body one straight line."
+        ]
+      },
+      "learned": [
+        "Batch C (2026-11-20): our FOREHEAD wording (body straight, chest almost on the floor) contradicted the booklet. The booklet drawing (5BX figures/c3e4.png) shows the forehead pose as a pike: hips high, head tucked between the arms, which is how the forehead gets behind the hands. Rewritten to match; attach the booklet drawing."
+      ],
+      "remake": {
+        "booklet": "BOOKLET-c3e4.png"
+      }
+    },
+    "half-knee-bends-c3": {
+      "chart": 3,
+      "slot": "jump",
+      "exercise": "HALF KNEE BENDS",
+      "kept": "(not made yet)",
+      "layout": "Same scale, all three figures standing on the same invisible floor line (the toes of the third figure stay on that line while the heels lift), with wide empty gaps so the figures never touch.",
+      "poses": [
+        "START: standing upright, feet together, hands on the hips, back straight.",
+        "HALF BEND: knees bent to an angle of about 110 degrees (a HALF bend, NOT a deep squat, knees NOT bent past a right angle), back upright and straight, hands on the hips, both feet flat on the floor, feet together.",
+        "RISE: straightened to a fully upright position and raised UP ON THE TOES, the heels lifted off the floor and the toes still touching the floor, legs straight, back upright and straight, hands on the hips."
+      ],
+      "check": [
+        "Three poses",
+        "Feet together and hands on the hips in every pose",
+        "Back upright and straight in every pose (no leaning forward)",
+        "HALF BEND: a moderate knee bend, not a deep squat",
+        "RISE: heels off the floor, toes on it"
+      ],
+      "draft": [
+        "The booklet gives 'about 110 degrees' for the knee angle and says not to bend past a right angle. I read a half bend as a moderate bend, well short of a squat.",
+        "Each count is taken as bend, rise onto the toes, return to standing: one cycle per count."
+      ],
+      "suggest": {
+        "file": "c3-jump-half-knee-bends.png",
+        "poses": 3,
+        "anchor": "span-center",
+        "cycle": [
+          1,
+          2,
+          3
+        ],
+        "jumps_per_cycle": 1
+      }
+    },
+    "toe-touch-circle-c4": {
+      "chart": 4,
+      "slot": "ex1",
+      "exercise": "TOE TOUCHES TO THE LEFT, CENTRE AND RIGHT, THEN A CIRCLE BEND",
+      "kept": "(not made yet)",
+      "view": "strict FRONT view, the boy facing the camera (not a side view)",
+      "far_side": false,
+      "layout": "Same scale, feet on the same invisible floor line, with wide empty gaps so the figures never touch. The six figures are in the ORDER OF THE MOVEMENT, left to right across the picture, not in the order of where the hands land.",
+      "poses": [
+        "START: standing tall facing the camera, feet wide apart (astride, a little wider than the shoulders), both arms straight up overhead, upper arms beside the ears.",
+        "TOUCH LEFT: bent forward at the waist, seen from the front, both hands reaching down together with the fingertips touching the floor about six inches OUTSIDE HIS LEFT FOOT (his left foot is on the RIGHT side of the picture), knees only slightly bent, head hanging down.",
+        "TOUCH BETWEEN: bent forward in the same way, fingertips of both hands touching the floor BETWEEN HIS FEET, pressing down a little, knees only slightly bent, head hanging down.",
+        "TOUCH RIGHT: bent forward in the same way, fingertips of both hands touching the floor about six inches OUTSIDE HIS RIGHT FOOT (his right foot is on the LEFT side of the picture), knees only slightly bent, head hanging down.",
+        "LEAN RIGHT: standing up again out of the right-hand touch, feet still wide apart, both arms held straight up above the head with the upper arms touching the ears, the whole upper body leaning sideways toward HIS RIGHT (the left side of the picture) as part of a big circle.",
+        "BEND BACK: standing, feet wide apart, both arms held straight up above the head with the upper arms touching the ears, bending backward past upright as far as he can, hips pushed forward, chest and face lifted toward the sky, knees straight."
+      ],
+      "check": [
+        "Six poses in movement order, front view, feet wide apart throughout",
+        "TOUCH LEFT outside his left foot (the picture-right foot); TOUCH BETWEEN between the feet; TOUCH RIGHT outside his right foot (the picture-left foot)",
+        "Knees only slightly bent in the three touches",
+        "LEAN RIGHT and BEND BACK: the arms stay straight up above the head, against the ears, the whole time",
+        "BEND BACK leans past upright"
+      ],
+      "draft": [
+        "The booklet's circle goes: touch right foot, then up and round backwards, with the arms above the head, as a full circle. A full circle also passes the LEFT side before coming down to the left-foot touch. To keep the strip to six figures I have asked for the right-hand lean only. I will mirror that figure in the build for the left-hand lean (front view is symmetrical).",
+        "As in chart 3: front view because the touches land at different places across the floor; left and right are the boy's own; the second half of the counts runs the order in reverse, which needs no extra picture.",
+        "If a bend seen from the front gives trouble, try 'three-quarter front view' and tell me."
+      ],
+      "suggest": {
+        "file": "c4-ex1-toe-touching-circle-bend.png",
+        "poses": 6,
+        "anchor": "span-center",
+        "cycle": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          "5m"
+        ],
+        "reps_per_cycle": 1
+      }
+    },
+    "sit-up-toe-touch-c4": {
+      "chart": 4,
+      "slot": "ex2",
+      "exercise": "a SIT-UP THAT ENDS BY TOUCHING THE TOES, with the arms kept straight overhead against the ears",
+      "kept": "(not made yet)",
+      "layout": "In every pose he lies on his back (or sits) with his HEAD ON THE LEFT and his FEET ON THE RIGHT, same scale, all on the same invisible floor line, wide empty gaps so the figures never touch. Draw only the boy: no chair, no objects.",
+      "poses": [
+        "START: lying flat on his back, legs straight and the feet together, both arms stretched straight out above the head along the floor, the upper arms touching the sides of the head.",
+        "RISING: halfway up, upper body lifted about 45 degrees off the floor, both arms still straight above the head with the upper arms touching the sides of the head, legs straight, heels on the floor.",
+        "TOUCH: sitting up and folded forward over the legs, both arms straight and still touching the sides of the head, the fingertips touching the toes, legs straight with the feet flat (knees bent only very slightly), heels on the floor."
+      ],
+      "check": [
+        "Three poses, head on the left, feet on the right",
+        "Arms straight and against the sides of the head in ALL three poses (never swung down or out)",
+        "TOUCH: the fingertips reach the toes; the legs stay straight (knees at most very slightly bent); feet on the floor",
+        "Feet together at the start; no chair"
+      ],
+      "draft": [
+        "Different from chart 2 and 3's sit-ups: the arms stay overhead and the top is a forward fold to the toes, not a vertical torso."
+      ],
+      "suggest": {
+        "file": "c4-ex2-sit-up-toe-touch.png",
+        "poses": 3,
+        "anchor": "hips",
+        "cycle": [
+          1,
+          2,
+          3,
+          2
+        ],
+        "reps_per_cycle": 1
+      },
+      "retake": {
+        "attach": [
+          "the previous sheet to fix: c4-ex2-sit-up-toe-touch.png",
+          "the character reference: c4-run-knees-waist-high.png"
+        ],
+        "problems": [
+          "In the last pose the head is upright and sits above the arms, and the arms reach forward below the face. The booklet says the arms stay in contact with the sides of the head THROUGHOUT. In the TOUCH pose his head must be tucked down between his upper arms, with both upper arms pressed against his ears, the whole upper body folded forward over the legs, and the straight arms carrying on forward from the head to the toes.",
+          "In the middle pose the arms must again be straight and against the sides of his head (the head between the arms), not out in front of the face.",
+          "Leave a wide empty gap between the figures so that no figure is clipped by or touches its neighbour."
+        ],
+        "keep": "the boy's look, line weight and colors, three poses in the same order, head on the left and feet on the right, legs straight with the feet together and flat, the same camera angle in every pose, and the START pose with the arms straight along the floor above the head.",
+        "rows": null
+      }
+    },
+    "back-extension-arms-sideways-c4": {
+      "chart": 4,
+      "slot": "ex3",
+      "exercise": "a BACK EXTENSION WITH THE ARMS STRETCHED SIDEWAYS",
+      "kept": "ChatGPT retake 1, row 1 (front view). The side three-quarter row failed: the near arm trailed back along the body.",
+      "view": "seen from the FRONT and slightly above, his head nearer the camera and his feet farther away, so that both arms stick out to the left and right of his body like a T",
+      "layout": "In every pose he lies FACE DOWN, flat on his belly, head toward the camera. Same scale, all on the same invisible floor line, wide empty gaps between figures.",
+      "rule": "KEY BODY RULE FOR ALL THREE POSES: his arms are stretched straight out SIDEWAYS from the shoulders, like the letter T, one arm out to each side of his body, palms down. His arms are NOT under his thighs and NOT in front of him.",
+      "poses": [
+        "START: lying completely flat face down, legs straight and together, chin near the floor, both arms stretched straight out sideways on the floor.",
+        "LIFTING: head, shoulders, arms, chest and both legs just beginning to lift off the floor together, legs straight, arms still stretched out sideways.",
+        "TOP: head, shoulders, both ARMS, chest AND BOTH THIGHS lifted completely off the floor as high as he can, legs straight with the knees LOCKED, back strongly arched, looking forward, arms still stretched straight out sideways and raised; only his lower belly and hips stay on the floor."
+      ],
+      "check": [
+        "Three poses, head on the right, feet on the left",
+        "BOTH arms stretched out sideways (a T shape) in every pose, and clearly lifted off the floor in TOP",
+        "TOP: chest and both thighs clear of the floor, legs straight",
+        "Legs together, the same camera angle in every pose"
+      ],
+      "draft": [
+        "Front view chosen after a two-camera test: it is the only one that shows both arms as a T. The lift reads as the head and chest rising toward the camera and the feet rising behind; it is subtler than in a side view.",
+        "A side three-quarter view made the near arm trail back along the body (a swimmer, not a T), so it was rejected."
+      ],
+      "suggest": {
+        "file": "c4-ex3-back-extension-arms-sideways.png",
+        "poses": 3,
+        "anchor": "span-center",
+        "cycle": [
+          1,
+          2,
+          3,
+          2
+        ],
+        "reps_per_cycle": 1
+      },
+      "retake": {
+        "attach": [
+          "the previous sheet to fix: c4-ex3-back-extension-arms-sideways.png (it has two rows; the first row, seen from the front, is the better one)",
+          "the character reference: c4-run-knees-waist-high.png",
+          "the geometry schematic: REF-backext-geometry.png"
+        ],
+        "problems": [
+          "In the side-view rows of earlier attempts the start pose did not rest flat. In pose 1 he must lie completely flat: belly, chest, thighs and shins resting on the floor line, legs together, chin down near the floor, the arms flat on the floor (see the schematic).",
+          "In the front view the lift is hard to see. Show how far the chest and the thighs lift in the TOP pose: the chest about 35 degrees up from the floor and the legs about 25 degrees up, with only the lower belly and hips still on the floor (see the schematic), and make the legs, knees and shoes clearly visible rising behind him.",
+          "He must have exactly two arms and two legs, and the arms must stretch straight out SIDEWAYS at right angles to his body, like the letter T, palms down (see the top-down part of the schematic). An earlier attempt had the near arm trailing back along his body, which is wrong.",
+          "Only the belly and hips may stay on the floor in poses 2 and 3; the legs stay straight and together."
+        ],
+        "keep": "the boy's look, the line weight and colors, three poses in the same order, and in the TOP pose the chest and both thighs clearly lifted with the legs straight.",
+        "rows": [
+          "seen from the FRONT and slightly above, his head nearer the camera and his feet farther away, so that both arms stick out left and right like a T; raise the camera a little more than before so the legs and shoes can be seen rising behind him",
+          "seen from the FOOT END and well above, his feet nearer the camera and his head farther away, so that both arms stick out left and right like a T and the legs rising toward the camera are clearly visible",
+          "three-quarter view from the SIDE and well above, head on the right and feet on the left, the near arm pointing straight toward the camera at a right angle to his body (it will look short because it points at the camera) and the far arm pointing straight away"
+        ],
+        "why_rows": "Three cameras on one image: the T arms and the lift are hard to show together, so I will pick the row that reads best.",
+        "layout": "In every figure he lies FACE DOWN, flat on his belly, with the same orientation within a row. In every row the figures lie on one invisible floor line.",
+        "schematic": "a schematic of the body angles (side view) and of the T-shaped arms (top-down). Copy the angles and positions only; do NOT copy its drawing style or any of its text."
+      }
+    },
+    "wide-hand-push-up-c4": {
+      "chart": 4,
+      "slot": "ex4",
+      "exercise": "a WIDE-HAND PUSH-UP (on the palms and toes, knees OFF the floor)",
+      "kept": "(not made yet)",
+      "far_side": false,
+      "view": "three-quarter FRONT view: seen from the front and a little from one side, with his head nearer the camera and his feet farther away, so that both widely placed hands are visible, with the SAME camera angle in every pose",
+      "layout": "Same scale, all on the same invisible floor line, with generous empty space between the figures so they do not touch or overlap.",
+      "poses": [
+        "DOWN: face down with the chest touching the floor, the palms flat on the floor about one foot out to each side of the head (directly beside the ears, far apart), elbows bent and pointing out to the sides, only the palms and the toes touching the floor, the body one straight line.",
+        "MIDDLE: halfway up, elbows bent about 90 degrees and pointing out to the sides, the palms flat on the floor about one foot out to each side of the head, chest a hand-width above the floor, only the palms and toes touching the floor, body one straight line.",
+        "UP: arms fully straightened with the hands wide apart, palms flat on the floor about one foot out to each side of the head, only the palms and toes touching the floor, the body one straight line from the heels to the head (hips NOT piked up, back NOT sagging, knees NOT on the floor)."
+      ],
+      "check": [
+        "Three poses, the same camera angle in every pose",
+        "Both hands visible, wide apart and level with the head (about a foot out to each side), not under the shoulders",
+        "Only palms and toes touch the floor; knees OFF the floor",
+        "DOWN: the chest touching the floor; UP: arms fully straight; body a straight line"
+      ],
+      "draft": [
+        "The booklet does not say toes or knees for this push-up either. I assumed palms and toes, continuing charts 2 and 3. Tell me if it should be knees.",
+        "A wide hand placement is hidden in a pure side view, so I asked for a three-quarter front view. If Grok struggles, a plain side view still works but will not show how wide the hands are."
+      ],
+      "suggest": {
+        "file": "c4-ex4-wide-hand-push-up.png",
+        "poses": 3,
+        "anchor": "span-center",
+        "cycle": [
+          1,
+          2,
+          3,
+          2
+        ],
+        "reps_per_cycle": 1
+      }
+    },
+    "high-knee-run-c4": {
+      "chart": 4,
+      "slot": "run",
+      "exercise": "a STATIONARY RUN (running in place) with the KNEES LIFTED WAIST HIGH",
+      "kept": "(not made yet)",
+      "layout": "Same scale, same invisible floor line, wide empty gaps between figures. He does not travel forward: this is running on the spot, lifting each knee up to waist height, NOT a sprint stride and NOT a long stride. Arms are bent about 90 degrees and pump like a runner.",
+      "rule": "The boy's NEAR leg and near arm are the ones closest to the viewer, drawn in the normal colors. His FAR leg and far arm are drawn in a noticeably darker shade (darker skin tone, darker shorts, darker shoe). The two knee lifts must use DIFFERENT legs.",
+      "poses": [
+        "NEAR KNEE UP: the NEAR (lighter) knee lifted up to waist height so the thigh is horizontal and the shin hangs down, that foot off the floor; the FAR (darker) leg straight with its foot flat on the floor. Far arm bent and swinging forward, near arm bent and back.",
+        "PASSING: both feet close to the floor under the hips, standing nearly upright, near arm back and far arm forward, both arms bent.",
+        "FAR KNEE UP: the FAR (darker) knee lifted up to waist height so the thigh is horizontal and the shin hangs down; the NEAR (lighter) foot planted flat on the floor. Near arm bent and swinging forward, far arm bent and back. This pose must be clearly different from pose 1: the lifted knee is the darker leg.",
+        "PASSING: both feet close to the floor, nearly upright, near arm forward and far arm back, both arms bent."
+      ],
+      "check": [
+        "Four poses",
+        "The lifted knee reaches waist height (thigh about horizontal), NOT a low step",
+        "The two knee lifts are different legs (near/lighter in pose 1, far/darker in pose 3)",
+        "He stays in place: no long stride, upright body, arms bent about 90 degrees"
+      ],
+      "draft": [
+        "Chart 1 to 3's run lifted the feet about 4 inches. Charts 4 to 6 say 'lift knees waist high'. So this is a separate strip."
+      ],
+      "suggest": {
+        "file": "c4-run-knees-waist-high.png",
+        "poses": 4,
+        "anchor": "head",
+        "cycle": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "steps_per_cycle": 1
+      }
+    },
+    "semi-squat-jumps-c4": {
+      "chart": 4,
+      "slot": "jump",
+      "exercise": "SEMI-SQUAT JUMPS",
+      "kept": "(not made yet)",
+      "layout": "Same scale, wide empty gaps so the figures never touch. The two crouching poses rest on the same invisible floor line; the two jumping poses are drawn clearly higher, with both feet well above that line.",
+      "poses": [
+        "CROUCH, NEAR FOOT AHEAD: a half crouch with the knees bent about halfway, the back straight and leaning forward about 45 degrees, the chest up, the head up and looking ahead, the hands resting on the knees with the arms straight, the NEAR foot (his right foot, lighter) one full shoe length ahead of the FAR foot (his left foot, darker), both feet flat on the floor.",
+        "FIRST HOP: in the air after the jump from crouch 1, the body upright and straight, both knees slightly bent, both feet about a hand's width off the floor with the shoes mostly level (toes NOT pointed), the feet already swapped so the FAR foot (his left, darker) is ahead of the near foot, the arms swinging forward and a little up for balance, the elbows slightly bent, the fists relaxed.",
+        "CROUCH, FAR FOOT AHEAD: landed in the half crouch, the back straight and leaning forward about 45 degrees, the chest up, the head up and looking ahead, the hands resting on the knees with the arms straight, the FAR foot (his left, darker) one full shoe length ahead of the NEAR foot (his right, lighter), both feet flat on the floor.",
+        "SECOND HOP: in the air after the jump from crouch 3, the same hop as the first hop but with the feet swapped back, so the NEAR foot (his right, lighter) is ahead of the far foot in the air: body upright and straight, knees slightly bent, feet a hand's width off the floor with the shoes mostly level, the arms swinging forward and a little up."
+      ],
+      "check": [
+        "Four poses, same boy, same angle",
+        "Crouch: knees bent about halfway (a HALF crouch), hands on the knees, arms straight, back as straight as possible",
+        "Pose 1 and pose 3 have DIFFERENT feet ahead (near foot ahead, then far foot ahead)",
+        "The two jump poses are upright and clearly higher than the crouches"
+      ],
+      "draft": [
+        "Feet: crouch 1 has the near (right) foot one full shoe length ahead, crouch 3 the far (left) foot; in the air the feet have already swapped (hop 1 far foot ahead, hop 2 near foot ahead). The booklet does not say where the arms go in the hop; I chose a small swing forward and up for balance. [DRAFT]",
+        "One cycle is crouch, hop, crouch with the feet reversed, hop: two jumps per cycle."
+      ],
+      "suggest": {
+        "file": "c4-jump-semi-squat-jumps.png",
+        "poses": 4,
+        "anchor": "head",
+        "cycle": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "jumps_per_cycle": 2
+      },
+      "retake": {
+        "attach": [
+          "the previous sheet to fix: c4-jump-semi-squat-jumps.png",
+          "the character reference: c4-run-knees-waist-high.png",
+          "the foot-switch schematic: REF-footswitch.png"
+        ],
+        "problems": [
+          "The two hop poses look like ballet: toes pointed straight down, the legs stiff, the arms hanging limp and curved. Make it an athletic hop: both knees slightly bent, the feet only about a hand's width off the floor, the shoes mostly level (toes NOT pointed), and the arms swinging forward and a little up for balance with the elbows slightly bent and the fists relaxed.",
+          "The two crouches do not clearly show the feet swapping. In crouch 1 the NEAR foot (his right, the lighter one) is ahead of the FAR foot (his left, the darker one) by one FULL shoe length, measured toe to toe. In crouch 3 it is the other way round: the FAR foot is one full shoe length ahead of the near foot. Use the schematic (image 3) for exactly where the feet go.",
+          "The two hop poses look too similar. They must be different: in pose 2 (the first hop) the feet have ALREADY swapped, so the FAR (left, darker) foot is ahead of the near foot in the air, ready to land that way; in pose 4 (the second hop) the NEAR (right, lighter) foot is ahead of the far foot in the air.",
+          "The face has a smirk. Use a calm, focused, friendly face: a small closed smile, the eyes looking straight ahead (not up), the eyebrows level.",
+          "The shorts look like tights. Use loose red athletic shorts with a wide leg opening that hang to mid-thigh and clearly stand away from the leg.",
+          "In the crouch the back is rounded and the head is pushed forward. The booklet says keep the back as straight as possible: a straight spine leaning forward about 45 degrees, the chest up, the head up and looking ahead, the hands on the knees, the arms straight."
+        ],
+        "keep": "the boy's look, line weight and colors, four poses in the same order, the same scale, and the two crouches resting on one floor line with the two jump poses clearly higher.",
+        "poses": [
+          "CROUCH, NEAR FOOT AHEAD: a half crouch with the knees bent about halfway, the back straight and leaning forward about 45 degrees, the chest up, the head up and looking ahead, the hands resting on the knees with the arms straight, the NEAR foot (his right foot, lighter) one full shoe length ahead of the FAR foot (his left foot, darker), both feet flat on the floor.",
+          "FIRST HOP: in the air after the jump from crouch 1, the body upright and straight, both knees slightly bent, both feet about a hand's width off the floor with the shoes mostly level (toes NOT pointed), the feet already swapped so the FAR foot (his left, darker) is ahead of the near foot, the arms swinging forward and a little up for balance, the elbows slightly bent, the fists relaxed.",
+          "CROUCH, FAR FOOT AHEAD: landed in the half crouch, the back straight and leaning forward about 45 degrees, the chest up, the head up and looking ahead, the hands resting on the knees with the arms straight, the FAR foot (his left, darker) one full shoe length ahead of the NEAR foot (his right, lighter), both feet flat on the floor.",
+          "SECOND HOP: in the air after the jump from crouch 3, the same hop as the first hop but with the feet swapped back, so the NEAR foot (his right, lighter) is ahead of the far foot in the air: body upright and straight, knees slightly bent, feet a hand's width off the floor with the shoes mostly level, the arms swinging forward and a little up."
+        ],
+        "schematic": "a schematic of WHERE the feet are in the four poses (stick figures, side view). Copy the foot positions only; do NOT copy its drawing style or any of its text."
+      }
+    },
+    "toe-touch-clasped-c5": {
+      "chart": 5,
+      "slot": "ex1",
+      "exercise": "TOE TOUCHES WITH THE HANDS CLASPED, TO THE LEFT, CENTRE AND RIGHT, THEN A CIRCLE BEND",
+      "kept": "(not made yet)",
+      "view": "strict FRONT view, the boy facing the camera (not a side view)",
+      "far_side": false,
+      "layout": "Same scale, feet on the same invisible floor line, with wide empty gaps so the figures never touch. The six figures are in the ORDER OF THE MOVEMENT, left to right across the picture, not in the order of where the hands land.",
+      "poses": [
+        "START: standing tall facing the camera, feet wide apart (astride, a little wider than the shoulders), both arms straight up overhead with the hands CLASPED together (fingers interlocked) and the arms straight, upper arms beside the ears.",
+        "TOUCH LEFT: bent forward at the waist, seen from the front, both hands reaching down together, still CLASPED together, with the fingertips touching the floor about six inches OUTSIDE HIS LEFT FOOT (his left foot is on the RIGHT side of the picture), knees only slightly bent, head hanging down.",
+        "TOUCH BETWEEN: bent forward in the same way, the clasped fingertips of both hands touching the floor BETWEEN HIS FEET, pressing down a little, knees only slightly bent, head hanging down.",
+        "TOUCH RIGHT: bent forward in the same way, the clasped fingertips of both hands touching the floor about six inches OUTSIDE HIS RIGHT FOOT (his right foot is on the LEFT side of the picture), knees only slightly bent, head hanging down.",
+        "LEAN RIGHT: standing up again out of the right-hand touch, feet still wide apart, both arms held straight up above the head with the hands CLASPED together (fingers interlocked) and the arms straight and the upper arms touching the ears, the whole upper body leaning sideways toward HIS RIGHT (the left side of the picture) as part of a big circle.",
+        "BEND BACK: standing, feet wide apart, both arms held straight up above the head with the hands CLASPED together (fingers interlocked) and the arms straight and the upper arms touching the ears, bending backward past upright as far as he can, hips pushed forward, chest and face lifted toward the sky, knees straight."
+      ],
+      "check": [
+        "Six poses in movement order, front view, feet wide apart throughout",
+        "TOUCH LEFT outside his left foot (the picture-right foot); TOUCH BETWEEN between the feet; TOUCH RIGHT outside his right foot (the picture-left foot)",
+        "Knees only slightly bent in the three touches",
+        "LEAN RIGHT and BEND BACK: the arms stay straight up above the head, against the ears, the whole time",
+        "BEND BACK leans past upright",
+        "In EVERY pose the hands stay clasped together and the arms stay straight (never unclasped)"
+      ],
+      "draft": [
+        "The booklet's circle goes: touch right foot, then up and round backwards, with the arms above the head, as a full circle. A full circle also passes the LEFT side before coming down to the left-foot touch. To keep the strip to six figures I have asked for the right-hand lean only. I will mirror that figure in the build for the left-hand lean (front view is symmetrical).",
+        "As in chart 3: front view because the touches land at different places across the floor; left and right are the boy's own; the second half of the counts runs the order in reverse, which needs no extra picture.",
+        "If a bend seen from the front gives trouble, try 'three-quarter front view' and tell me.",
+        "Chart 5 is the chart 4 circle bend with the hands clasped and the arms straight. The booklet note is only 'do not strain to keep knees straight'."
+      ],
+      "suggest": {
+        "file": "c5-ex1-toe-touching-clasped.png",
+        "poses": 6,
+        "anchor": "shoe-left",
+        "cycle": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          "5m"
+        ],
+        "reps_per_cycle": 1
+      },
+      "learned": []
+    },
+    "toe-touch-reverse-clasp-c6": {
+      "chart": 6,
+      "slot": "ex1",
+      "exercise": "TOE TOUCHES WITH THE HANDS REVERSE CLASPED, TO THE LEFT, CENTRE AND RIGHT, THEN A CIRCLE BEND",
+      "kept": "(not made yet)",
+      "view": "strict FRONT view, the boy facing the camera (not a side view)",
+      "far_side": false,
+      "layout": "Same scale, feet on the same invisible floor line, with wide empty gaps so the figures never touch. The six figures are in the ORDER OF THE MOVEMENT, left to right across the picture, not in the order of where the hands land.",
+      "poses": [
+        "START: standing tall facing the camera, feet wide apart (astride, a little wider than the shoulders), both arms straight up overhead with the hands REVERSE CLASPED (fingers interlocked with the palms turned OUTWARD, away from the head) and the arms straight, upper arms beside the ears.",
+        "TOUCH LEFT: bent forward at the waist, seen from the front, both hands reaching down together, still REVERSE CLASPED, with the fingertips touching the floor about six inches OUTSIDE HIS LEFT FOOT (his left foot is on the RIGHT side of the picture), knees only slightly bent, head hanging down.",
+        "TOUCH BETWEEN: bent forward in the same way, the clasped fingertips of both hands touching the floor BETWEEN HIS FEET, pressing down a little, knees only slightly bent, head hanging down.",
+        "TOUCH RIGHT: bent forward in the same way, the clasped fingertips of both hands touching the floor about six inches OUTSIDE HIS RIGHT FOOT (his right foot is on the LEFT side of the picture), knees only slightly bent, head hanging down.",
+        "LEAN RIGHT: standing up again out of the right-hand touch, feet still wide apart, both arms held straight up above the head with the hands REVERSE CLASPED (fingers interlocked with the palms turned OUTWARD, away from the head) and the arms straight and the upper arms touching the ears, the whole upper body leaning sideways toward HIS RIGHT (the left side of the picture) as part of a big circle.",
+        "BEND BACK: standing, feet wide apart, both arms held straight up above the head with the hands REVERSE CLASPED (fingers interlocked with the palms turned OUTWARD, away from the head) and the arms straight and the upper arms touching the ears, bending backward past upright as far as he can, hips pushed forward, chest and face lifted toward the sky, knees straight."
+      ],
+      "check": [
+        "Six poses in movement order, front view, feet wide apart throughout",
+        "TOUCH LEFT outside his left foot (the picture-right foot); TOUCH BETWEEN between the feet; TOUCH RIGHT outside his right foot (the picture-left foot)",
+        "Knees only slightly bent in the three touches",
+        "LEAN RIGHT and BEND BACK: the arms stay straight up above the head, against the ears, the whole time",
+        "BEND BACK leans past upright",
+        "In EVERY pose the hands stay clasped with the palms turned outward and the arms stay straight"
+      ],
+      "draft": [
+        "The booklet's circle goes: touch right foot, then up and round backwards, with the arms above the head, as a full circle. A full circle also passes the LEFT side before coming down to the left-foot touch. To keep the strip to six figures I have asked for the right-hand lean only. I will mirror that figure in the build for the left-hand lean (front view is symmetrical).",
+        "As in chart 3: front view because the touches land at different places across the floor; left and right are the boy's own; the second half of the counts runs the order in reverse, which needs no extra picture.",
+        "If a bend seen from the front gives trouble, try 'three-quarter front view' and tell me.",
+        "Reverse clasp: fingers interlocked with the palms turned OUTWARD, away from the head. [AUTHOR, confirmed 2026-11-20]"
+      ],
+      "suggest": {
+        "file": "c6-ex1-toe-touching-reverse-clasp.png",
+        "poses": 6,
+        "anchor": "shoe-left",
+        "cycle": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          "5m"
+        ],
+        "reps_per_cycle": 1
+      },
+      "learned": []
+    },
+    "sit-up-twist-c5": {
+      "chart": 5,
+      "slot": "ex2",
+      "exercise": "a SIT-UP WITH A TWIST, drawing the knees up and touching an elbow to the opposite knee",
+      "kept": "(not made yet)",
+      "view": "three-quarter FRONT view, seen from the foot end so that the twist toward each knee is readable, the boy facing the camera, with the SAME camera angle in every pose",
+      "layout": "In every pose he is on the floor with his HEAD AWAY from the camera and his FEET TOWARD the camera, same scale, all on the same invisible floor line, wide empty gaps so the figures never touch. Draw only the boy: no chair, no objects.",
+      "poses": [
+        "START: lying flat on his back, legs straight and the feet together, fingers clasped behind his head with the elbows out to the sides.",
+        "TWIST RIGHT: sitting up with the legs drawn up bent and the FEET OFF THE FLOOR, the upper body twisted so that his RIGHT ELBOW touches his LEFT KNEE, fingers still clasped behind the head.",
+        "TWIST LEFT: the same, sitting up with the legs drawn up bent and the FEET OFF THE FLOOR, the upper body twisted the other way so that his LEFT ELBOW touches his RIGHT KNEE, fingers still clasped behind the head."
+      ],
+      "check": [
+        "Three poses, same camera angle",
+        "Hands clasped behind the head in every pose",
+        "TWIST RIGHT: right elbow meets left knee; TWIST LEFT: left elbow meets right knee (the two poses must be clearly different)",
+        "Feet OFF the floor when the elbow touches the knee; no chair"
+      ],
+      "draft": [
+        "The booklet: sit up and raise the legs bent, twist to touch the right elbow to the left knee, and alternate the direction each time. A side view would hide which elbow goes to which knee, so I asked for a view from the foot end. If Grok struggles, try a plain side view and tell me.",
+        "One cycle is start, twist right, start, twist left: two twists make one cycle. [AUTHOR, confirmed 2026-11-20]"
+      ],
+      "suggest": {
+        "file": "c5-ex2-sit-up-twist.png",
+        "poses": 3,
+        "anchor": "shoes",
+        "cycle": [
+          1,
+          2,
+          1,
+          3
+        ],
+        "reps_per_cycle": 2
+      },
+      "learned": [],
+      "far_side": false
+    },
+    "back-extension-arms-overhead-c5": {
+      "chart": 5,
+      "slot": "ex3",
+      "exercise": "a BACK EXTENSION WITH THE ARMS STRETCHED STRAIGHT OVERHEAD",
+      "kept": "(not made yet)",
+      "view": "side-on body with the head and shoulders turned about 30 to 45 degrees toward the camera, facing LEFT, with the SAME camera angle in every pose",
+      "layout": "In every pose he lies FACE DOWN, flat on his belly, with his HEAD ON THE LEFT and his FEET ON THE RIGHT. Same scale, all on the same invisible floor line, wide empty gaps between figures.",
+      "poses": [
+        "START: lying completely flat face down, legs straight and together, both arms stretched straight out in front, overhead, along the floor, palms down.",
+        "LIFTING: the arms, head, shoulders, chest and both legs just beginning to lift off the floor together, arms and legs straight.",
+        "TOP: the arms, head, chest AND BOTH THIGHS lifted completely off the floor as high as he can, arms straight and stretched forward and slightly up beside the ears, legs straight with the knees LOCKED, back strongly arched, looking forward; only his lower belly and hips stay on the floor."
+      ],
+      "check": [
+        "Three poses, head on the left, feet on the right",
+        "The arms are stretched overhead (in front of the head) in all three poses, never under the thighs or out sideways",
+        "TOP: arms, chest and both thighs clear of the floor, arms and legs straight",
+        "Same camera angle in every pose"
+      ],
+      "draft": [
+        "Chart 2's back extension kept the hands under the thighs, chart 3's behind the back, chart 4's out sideways. This one stretches them overhead; it is the same movement, so its poses and cycle match chart 2's."
+      ],
+      "suggest": {
+        "file": "c5-ex3-back-extension-arms-overhead.png",
+        "poses": 3,
+        "anchor": "hips",
+        "cycle": [
+          1,
+          2,
+          3,
+          2
+        ]
+      },
+      "learned": []
+    },
+    "clap-push-up-c5": {
+      "chart": 5,
+      "slot": "ex4",
+      "exercise": "a CLAP PUSH-UP (on the palms and toes, knees OFF the floor)",
+      "kept": "(not made yet)",
+      "view": "three-quarter FRONT view: seen from the front and a little from one side, with his head nearer the camera and his feet farther away, so the hands are clearly visible, with the SAME camera angle in every pose",
+      "layout": "Same scale, all on the same invisible floor line (the toes stay on it in the first two poses), with generous empty space between the figures so they do not touch or overlap.",
+      "poses": [
+        "START: lying face down, hands under the shoulders with the palms flat on the floor, only the palms and toes touching the floor, the body one straight line (the chest just above the floor, elbows bent).",
+        "PUSH: arms straightened, the body one straight line from the heels to the head, only the palms and toes touching the floor (the top of a normal push-up).",
+        "CLAP: pushed so hard that both HANDS ARE OFF THE FLOOR, the body still one straight line with only the toes touching the floor, both hands brought together in front of the chest as they CLAP."
+      ],
+      "check": [
+        "Three poses, the same camera angle in every pose",
+        "Body one straight line in every pose (hips NOT piked up, back NOT sagging, knees NOT on the floor)",
+        "PUSH: arms fully straight, palms flat",
+        "CLAP: both hands clearly OFF the floor and meeting in front of the chest; only the toes touch the floor; body still straight"
+      ],
+      "draft": [
+        "The booklet does not say toes or knees; I assumed palms and toes as in charts 2 to 4. In the CLAP pose I asked for only the toes touching so it reads as a push-off. [DRAFT: author]",
+        "The booklet: 'push off the floor and clap hands before returning to the starting position', and 'hand clap must be heard'. One cycle is start, push, clap (then back to start)."
+      ],
+      "suggest": {
+        "file": "c5-ex4-clap-push-up.png",
+        "poses": 3,
+        "anchor": "shoes",
+        "cycle": [
+          1,
+          2,
+          3
+        ]
+      },
+      "far_side": false,
+      "learned": []
+    },
+    "chest-slap-push-up-c6": {
+      "chart": 6,
+      "slot": "ex4",
+      "exercise": "a CHEST-SLAP PUSH-UP (on the palms and toes, knees OFF the floor)",
+      "kept": "(not made yet)",
+      "view": "three-quarter FRONT view: seen from the front and a little from one side, with his head nearer the camera and his feet farther away, so the hands are clearly visible, with the SAME camera angle in every pose",
+      "layout": "Same scale, all on the same invisible floor line (the toes stay on it in the first two poses), with generous empty space between the figures so they do not touch or overlap.",
+      "poses": [
+        "START: lying face down, hands under the shoulders with the palms flat on the floor, only the palms and toes touching the floor, the body one straight line (the chest just above the floor, elbows bent).",
+        "PUSH: arms straightened, the body one straight line from the heels to the head, only the palms and toes touching the floor (the top of a normal push-up).",
+        "SLAP: pushed so hard that both HANDS ARE OFF THE FLOOR, the body still one straight line with only the toes touching the floor, both hands slapping flat against the CHEST."
+      ],
+      "check": [
+        "Three poses, the same camera angle in every pose",
+        "Body one straight line in every pose (hips NOT piked up, back NOT sagging, knees NOT on the floor)",
+        "PUSH: arms fully straight, palms flat",
+        "SLAP: both hands clearly OFF the floor and flat against the chest; only the toes touch the floor; body still straight"
+      ],
+      "draft": [
+        "Both hands slap the chest. The booklet does not say toes or knees; palms and toes assumed. [AUTHOR confirmed both hands, 2026-11-20]",
+        "The booklet: 'push off floor and slap chest before returning to starting position', 'chest slap must be heard'."
+      ],
+      "suggest": {
+        "file": "c6-ex4-chest-slap-push-up.png",
+        "poses": 3,
+        "anchor": "shoes",
+        "cycle": [
+          1,
+          2,
+          3
+        ]
+      },
+      "far_side": false,
+      "learned": []
+    },
+    "pike-sit-up-c6": {
+      "chart": 6,
+      "slot": "ex2",
+      "exercise": "a PIKE SIT-UP: sitting up and lifting both legs at the same time to touch the toes in a V",
+      "kept": "(not made yet)",
+      "view": "strict SIDE view, the boy facing right, with the SAME camera angle in every pose",
+      "layout": "In every pose he lies on his back (or sits) with his HEAD ON THE LEFT and his FEET ON THE RIGHT, same scale, all on the same invisible floor line, wide empty gaps so the figures never touch. Draw only the boy: no chair, no objects.",
+      "poses": [
+        "START: lying flat on his back, legs straight and the feet together, both arms stretched straight over the head along the floor.",
+        "RISING: the upper body and BOTH straight legs lifting off the floor together about halfway, arms reaching forward toward the toes, feet together.",
+        "PIKE: balanced on his seat in a V shape, the upper body AND both straight legs lifted clear of the floor, the arms straight and the fingertips touching the toes, feet together, legs and arms straight."
+      ],
+      "check": [
+        "Three poses, head on the left, feet on the right",
+        "Feet together, legs and arms straight in every pose",
+        "PIKE: a clear V; all of the upper back and both legs off the floor; fingertips touch the toes",
+        "No chair, no objects"
+      ],
+      "draft": [
+        "The booklet: 'sit up and at the same time lift both legs to touch the toes in a pike (V) position; keep feet together, legs and arms straight, all of the upper back and legs clear floor, fingers touch toes each time'. Nothing here is guessed."
+      ],
+      "suggest": {
+        "file": "c6-ex2-pike-sit-up.png",
+        "poses": 3,
+        "anchor": "hips",
+        "cycle": [
+          1,
+          2,
+          3,
+          2
+        ]
+      },
+      "far_side": true,
+      "learned": []
+    },
+    "back-extension-press-c6": {
+      "chart": 6,
+      "slot": "ex3",
+      "exercise": "a BACK EXTENSION WITH A PRESS BACK",
+      "kept": "(not made yet)",
+      "view": "side-on body with the head and shoulders turned about 30 to 45 degrees toward the camera, facing LEFT, with the SAME camera angle in every pose",
+      "layout": "In every pose he lies FACE DOWN, flat on his belly, with his HEAD ON THE LEFT and his FEET ON THE RIGHT. Same scale, all on the same invisible floor line, wide empty gaps between figures.",
+      "poses": [
+        "START: lying completely flat face down, legs straight and together, both arms stretched straight out in front, overhead, along the floor.",
+        "TOP: the arms, head, chest AND BOTH THIGHS lifted completely off the floor as high as he can, arms and legs straight, back strongly arched, looking forward.",
+        "PRESS: from the top, one extra small push BACK and UP: the arms, chest and legs a little higher still, the back arched a little further, still with the arms and legs straight."
+      ],
+      "check": [
+        "Three poses, head on the left, feet on the right",
+        "Arms stretched overhead and legs straight in every pose",
+        "TOP: chest and both thighs clear of the floor",
+        "PRESS is only slightly higher than TOP (a small extra lift), not a different position"
+      ],
+      "draft": [
+        "The press back is one small extra lift at the top. [AUTHOR, confirmed 2026-11-20]"
+      ],
+      "suggest": {
+        "file": "c6-ex3-back-extension-press.png",
+        "poses": 3,
+        "anchor": "hips",
+        "cycle": [
+          1,
+          2,
+          3,
+          2
+        ]
+      },
+      "learned": []
+    },
+    "semi-spread-eagle-jumps-c5": {
+      "chart": 5,
+      "slot": "jump",
+      "exercise": "SEMI-SPREAD EAGLE JUMPS",
+      "kept": "(not made yet)",
+      "view": "strict FRONT view, the boy facing the camera (not a side view)",
+      "layout": "Same scale, wide empty gaps so the figures never touch. The crouch rests on the invisible floor line; the two jumping poses are drawn clearly higher, with both feet well above that line.",
+      "poses": [
+        "CROUCH: feet together, dropped to a half crouch with the knees bent about halfway, the hands resting on the knees with the arms straight, the back straight, both feet flat on the floor.",
+        "TAKE-OFF: just leaving the floor, the legs straightening with the feet together and both feet a little off the floor, the arms swinging up in front of him.",
+        "SPREAD EAGLE: in mid-air, both feet well off the floor and spread astride at least shoulder width apart, both arms swung up overhead with the hands above head level."
+      ],
+      "check": [
+        "Three poses, front view, same boy and scale",
+        "CROUCH: a HALF crouch, hands on knees, arms straight, feet together",
+        "SPREAD EAGLE: feet clearly astride (at least shoulder width), hands above the head, both feet off the floor",
+        "The two jump poses are clearly higher than the crouch"
+      ],
+      "draft": [
+        "The booklet: 'jump up to feet astride, swing arms overhead in mid-air, return directly to the starting position on landing; raise hands above head level, spread feet at least shoulder width apart before landing with feet together'. Landing is the same as the crouch, so I did not ask for a fourth picture.",
+        "One cycle is crouch, take-off, spread eagle, then back to the crouch: one jump per cycle."
+      ],
+      "suggest": {
+        "file": "c5-jump-semi-spread-eagle.png",
+        "poses": 3,
+        "anchor": "shoes",
+        "cycle": [
+          1,
+          2,
+          3
+        ],
+        "jumps_per_cycle": 1
+      },
+      "far_side": false,
+      "learned": []
+    },
+    "jack-jumps-c6": {
+      "chart": 6,
+      "slot": "jump",
+      "exercise": "JACK JUMPS (a squat jump into a straight-leg pike)",
+      "kept": "(not made yet)",
+      "view": "strict SIDE view, the boy facing right, with the SAME camera angle in every pose",
+      "layout": "Same scale, wide empty gaps so the figures never touch. The squat rests on the invisible floor line; the take-off is drawn slightly higher and the pike clearly higher, with both feet well above that line.",
+      "poses": [
+        "SQUAT: feet together, the knees fully bent, sitting on the heels, the fingertips of both hands touching the floor.",
+        "TAKE-OFF: just leaving the floor, the legs straightening and swinging up, feet together, the arms reaching forward.",
+        "PIKE: in mid-air, both legs straight and raised to waist height in front of him, feet together, the body bent at the waist and the fingertips of both hands touching the toes."
+      ],
+      "check": [
+        "Three poses, side view, same boy and scale",
+        "SQUAT: sitting on the heels, fingertips on the floor",
+        "PIKE: both legs STRAIGHT and raised to about waist height, the hands touching the toes, both feet off the floor",
+        "The pike pose is clearly higher than the squat"
+      ],
+      "draft": [
+        "The booklet: 'feet together, knees bent, sit on heels, fingertips touch floor; jump up, raise legs waist high, keep legs straight and touch toes in midair'. Nothing here is guessed.",
+        "One cycle is squat, take-off, pike, take-off: one jump per cycle."
+      ],
+      "suggest": {
+        "file": "c6-jump-jack-jumps.png",
+        "poses": 3,
+        "anchor": "shoes",
+        "cycle": [
+          1,
+          2,
+          3,
+          2
+        ],
+        "jumps_per_cycle": 1
+      },
+      "far_side": true,
+      "learned": []
+    }
+  }
+}
