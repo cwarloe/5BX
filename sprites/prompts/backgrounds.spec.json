@@ -25,6 +25,8 @@
   "light": "LIGHT: {light} One light direction in every layer.",
   "depth": "DEPTH: objects shrink steadily with distance and every layer sits on the same horizon. Atmospheric perspective: the farther a layer is, the lighter, bluer, simpler and lower in contrast it is (but never blurry: keep the edges crisp); the nearer a layer is, the darker, warmer, more saturated and more detailed.",
   "keying": "COLOR RULE: do not use pink, magenta or saturated purple anywhere in the artwork (the magenta background is removed by software). Use blue-grey for haze and distance. All edges crisp: no glow, feathering, blur or airbrushed edges against the background.",
+  "contrast": "OVERLAY CONTRAST (subtle): white on-screen graphics (a ring timer in the top right corner and a name card in the top left) sit over the top corners of this scene, so the top-left and top-right areas must be slightly darker than white, about 10 to 20 percent below pure white in brightness, but never dark, grey or gloomy. Indoors, paint walls a slightly deeper cream, beige or other soft light color, not near-white. Outdoors, make the sky a true clear blue in the upper part of the image, not a very pale or washed-out blue. Keep the change gentle; the scene must still read as bright and cheerful.",
+  "_contrast_note": "Charles, 2026-11-21: every background option needs mildly darker color behind the overlay corners so the white timer has slight contrast. Subtle only. See qc-line/LESSONS.md D-21 and config/theme.json overlay.background_contrast.",
   "lights": {
     "morning": "bright clear morning, the sun high in the upper left, warm soft light, soft shadows falling slightly to the right and behind objects.",
     "golden": "golden evening, the sun low on the left, warm orange-gold light, long soft shadows falling to the right, a warmer sky near the horizon.",
@@ -78,7 +80,7 @@
       "setting": "a crisp snowy alpine valley on a clear winter day",
       "ground_top": "horizon",
       "planes": {
-        "sky": "a smooth gradient from clear pale blue at the top to near-white blue near the horizon, with a gentle glow where the sun is. No clouds, no objects.",
+        "sky": "a smooth gradient from clear true blue at the top to a soft light blue near the horizon (not near-white), with a gentle glow where the sun is. No clouds, no objects.",
         "clouds": "a few thin high wispy white clouds in the upper half only, with one pale blue-grey shadow tone.",
         "far": "jagged snow-capped alpine peaks in blue-white with one soft blue-grey shadow tone, hazy and simple, about 24% of the image height; the base sits on the horizon. Use blue-grey for shadows, not purple.",
         "near": "lower rounded snowy slopes with a band of dark-green pine forest along the base, about 14% of the image height; the base sits on the horizon.",

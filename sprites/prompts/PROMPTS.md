@@ -8,7 +8,7 @@ Read `docs/HOW-TO-GENERATE-STRIPS.md` first for the method. This file is the pas
 
 - **Model:** gemini-3-pro-image (ElevenLabs). Any image model that accepts a reference image should be able to follow the same text; results will differ.
 - **Shape:** 16:9, 1K (about 1376x768). **Takes:** 4 per strip, then pick one.
-- **Reference:** None for the first strip. After that, one pinned image of the character, and the words 'use only for appearance, ignore the poses'. Prone exercises: pin a standing strip, not a lying one.
+- **Reference:** Attach, as image references: (1) the master character sheet, for appearance and LOCKED proportions (until one is committed, the current character reference c4-run-knees-waist-high.png stands in), with the words 'use only for appearance and proportions, ignore the poses'; (2) for form, one or two stills from the 1959 RCAF 5BX film (docs/reference/rcaf-1959-stills/, added in PR #20) or the booklet drawing for that exercise, with the words 'use only for the body position'. Prone exercises: pin a standing character image, not a lying one. (Charles, 2026-11-21; earlier rule: none for the first strip, then one pinned character image.)
 - **Cost then:** about 1,218 without a reference, 1,827 with one (ElevenLabs, 2026-11-19)
 - **Order used:** knee-push-up-c1 (pilot, no reference); toe-touch-c1; partial-sit-up-c1; stationary-run-c1; scissor-jumps-c1; alternate-leg-raise-c1
 
@@ -16,7 +16,7 @@ Read `docs/HOW-TO-GENERATE-STRIPS.md` first for the method. This file is the pas
 
 a 12-year-old boy: short spiky black hair, warm tan skin, simple friendly face with small dark eyes, athletic but slim build. Bright cyan-blue sleeveless tank top, red athletic shorts, white ankle socks, blue sneakers with white laces and soles. Clean cartoon video-game illustration: confident medium-weight black outline, flat cel shading with one soft shadow tone, vivid saturated colors, high detail, crisp edges.
 
-Locked: Blue sneakers. No green shoes (author decision, 2026-11-19). Clothing as in the original Grok sprites.
+Locked: Blue sneakers. No green shoes (author decision, 2026-11-19). Clothing as in the original Grok sprites. Proportions locked to the master character sheet (Charles, 2026-11-21). No shadows on sprites. A keyed-out drawn shadow made him look like he was floating; the contact shadow is a composite-time layer (config/scene.json, contact-shadow) (Charles, 2026-11-21).
 
 ## The background, in words
 
@@ -24,7 +24,7 @@ perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor
 
 ## How the far-side shading is asked for
 
-Draw the arm and leg on the far side of the body in a noticeably darker shade of the same color (darker skin tone, darker shorts, darker shoe) so near and far limbs are easy to tell apart.
+Draw the arm and leg on the far side of the body in a SLIGHTLY darker shade of the SAME color, only about 10% darker (skin a little deeper, shorts a little deeper red, shoe a little deeper blue), the same hue as the near side, never brown, grey or near-black, so near and far limbs can be told apart without looking dirty or shadowed.
 
 ---
 
@@ -36,7 +36,7 @@ Draw the arm and leg on the far side of the body in a noticeably darker shade of
 - Movement: Forward bend to floor touching then stretch upward and backward bend.
 - Note: Do not strain to keep knees straight.
 
-**Kept:** take 1 of 4
+**Status:** take 1 of 4
 
 **Prompt, with a character reference attached:**
 
@@ -50,9 +50,9 @@ THE THREE POSES (official exercise, follow exactly):
 2. FOLD: deep forward bend, torso folded down toward the legs, knees only slightly bent (not forced straight, not deeply squatting), fingertips touching the floor beside the feet, head hanging relaxed.
 3. STRETCH BACK: standing again with arms still stretched up and reaching backward, a gentle backward bend, hips pushed slightly forward, chest and face lifted toward the sky, knees straight.
 
-Draw the arm and leg on the far side of the body in a noticeably darker shade of the same color (darker skin tone, darker shorts, darker shoe) so near and far limbs are easy to tell apart.
+Draw the arm and leg on the far side of the body in a SLIGHTLY darker shade of the SAME color, only about 10% darker (skin a little deeper, shorts a little deeper red, shoe a little deeper blue), the same hue as the near side, never brown, grey or near-black, so near and far limbs can be told apart without looking dirty or shadowed.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -69,9 +69,9 @@ THE THREE POSES (official exercise, follow exactly):
 2. FOLD: deep forward bend, torso folded down toward the legs, knees only slightly bent (not forced straight, not deeply squatting), fingertips touching the floor beside the feet, head hanging relaxed.
 3. STRETCH BACK: standing again with arms still stretched up and reaching backward, a gentle backward bend, hips pushed slightly forward, chest and face lifted toward the sky, knees straight.
 
-Draw the arm and leg on the far side of the body in a noticeably darker shade of the same color (darker skin tone, darker shorts, darker shoe) so near and far limbs are easy to tell apart.
+Draw the arm and leg on the far side of the body in a SLIGHTLY darker shade of the SAME color, only about 10% darker (skin a little deeper, shorts a little deeper red, shoe a little deeper blue), the same hue as the near side, never brown, grey or near-black, so near and far limbs can be told apart without looking dirty or shadowed.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -91,7 +91,7 @@ BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shad
 - Movement: Sit up just far enough to see your heels.
 - Note: Keep legs straight, head and shoulders must clear the floor.
 
-**Kept:** take 4 of 4 (take 1 bent the knees)
+**Status:** take 4 of 4 (take 1 bent the knees)
 
 **Prompt, with a character reference attached:**
 
@@ -105,9 +105,9 @@ THE THREE POSES (official exercise, follow exactly):
 2. LIFTING: head and shoulders lifted clear off the floor, chin slightly tucked, arms reaching forward along his sides, LEGS STILL STRAIGHT AND FLAT.
 3. TOP: upper body raised only far enough that he can see his heels, looking down toward his feet, arms reaching forward toward the shins, LEGS STAY COMPLETELY STRAIGHT with heels on the floor (knees NOT bent, NOT sitting fully upright, hands NOT behind the head).
 
-Draw the arm and leg on the far side of the body in a noticeably darker shade of the same color (darker skin tone, darker shorts, darker shoe) so near and far limbs are easy to tell apart.
+Draw the arm and leg on the far side of the body in a SLIGHTLY darker shade of the SAME color, only about 10% darker (skin a little deeper, shorts a little deeper red, shoe a little deeper blue), the same hue as the near side, never brown, grey or near-black, so near and far limbs can be told apart without looking dirty or shadowed.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -124,9 +124,9 @@ THE THREE POSES (official exercise, follow exactly):
 2. LIFTING: head and shoulders lifted clear off the floor, chin slightly tucked, arms reaching forward along his sides, LEGS STILL STRAIGHT AND FLAT.
 3. TOP: upper body raised only far enough that he can see his heels, looking down toward his feet, arms reaching forward toward the shins, LEGS STAY COMPLETELY STRAIGHT with heels on the floor (knees NOT bent, NOT sitting fully upright, hands NOT behind the head).
 
-Draw the arm and leg on the far side of the body in a noticeably darker shade of the same color (darker skin tone, darker shorts, darker shoe) so near and far limbs are easy to tell apart.
+Draw the arm and leg on the far side of the body in a SLIGHTLY darker shade of the SAME color, only about 10% darker (skin a little deeper, shorts a little deeper red, shoe a little deeper blue), the same hue as the near side, never brown, grey or near-black, so near and far limbs can be told apart without looking dirty or shadowed.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -147,7 +147,7 @@ BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shad
 - Note: Keep leg straight at the knee, thighs must clear the palms.
 - Note: Count one each time second leg touches floor.
 
-**Kept:** retry take 1 of 4 (first batch failed: push-up arms leaked in from the reference)
+**Status:** retry take 1 of 4 (first batch failed: push-up arms leaked in from the reference)
 
 **Prompt, with a character reference attached:**
 
@@ -163,9 +163,9 @@ THE THREE POSES (official exercise, follow exactly):
 2. FIRST LEG: head and chest lifted only slightly off the floor (a small lift), arms still straight back under the thighs, the leg NEAREST the viewer raised straight up behind him with the knee LOCKED STRAIGHT (a straight line from hip to heel, about 35 to 40 degrees above the floor, thigh clearly lifted off his hand), the other leg flat on the floor.
 3. OTHER LEG: same lifted head and chest, arms still straight back under the thighs, now the leg FARTHEST from the viewer is raised with the knee LOCKED STRAIGHT, and the near leg is flat on the floor.
 
-Draw the arm and leg on the far side of the body in a noticeably darker shade of the same color (darker skin tone, darker shorts, darker shoe) so near and far limbs are easy to tell apart.
+Draw the arm and leg on the far side of the body in a SLIGHTLY darker shade of the SAME color, only about 10% darker (skin a little deeper, shorts a little deeper red, shoe a little deeper blue), the same hue as the near side, never brown, grey or near-black, so near and far limbs can be told apart without looking dirty or shadowed.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -184,9 +184,9 @@ THE THREE POSES (official exercise, follow exactly):
 2. FIRST LEG: head and chest lifted only slightly off the floor (a small lift), arms still straight back under the thighs, the leg NEAREST the viewer raised straight up behind him with the knee LOCKED STRAIGHT (a straight line from hip to heel, about 35 to 40 degrees above the floor, thigh clearly lifted off his hand), the other leg flat on the floor.
 3. OTHER LEG: same lifted head and chest, arms still straight back under the thighs, now the leg FARTHEST from the viewer is raised with the knee LOCKED STRAIGHT, and the near leg is flat on the floor.
 
-Draw the arm and leg on the far side of the body in a noticeably darker shade of the same color (darker skin tone, darker shorts, darker shoe) so near and far limbs are easy to tell apart.
+Draw the arm and leg on the far side of the body in a SLIGHTLY darker shade of the SAME color, only about 10% darker (skin a little deeper, shorts a little deeper red, shoe a little deeper blue), the same hue as the near side, never brown, grey or near-black, so near and far limbs can be told apart without looking dirty or shadowed.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -207,7 +207,7 @@ BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shad
 - Movement: Straighten arms lifting upper body, keeping the knees on the floor. Bend arms to lower body.
 - Note: Keep body straight from the knees, arms must be fully extended, chest must touch floor to complete one movement.
 
-**Kept:** take 4 of 4 of the no-reference pilot (this one became the first character reference)
+**Status:** take 4 of 4 of the no-reference pilot (this one became the first character reference)
 
 **Prompt, with a character reference attached:**
 
@@ -221,9 +221,9 @@ THE THREE POSES (official exercise, follow exactly):
 2. MIDDLE position: halfway up, elbows bent about 90 degrees, chest a hand-width above the floor, knees still on the floor, body still a straight line from knees to head.
 3. UP position: arms fully straightened, palms flat on the floor directly under the shoulders, upper body raised, KNEES STILL ON THE FLOOR, lower legs bent up behind with feet in the air, body one straight diagonal line from the knees to the head (hips NOT piked up, back NOT sagging).
 
-Draw the arm and leg on the far side of the body in a noticeably darker shade of the same color (darker skin tone, darker shorts, darker shoe) so near and far limbs are easy to tell apart.
+Draw the arm and leg on the far side of the body in a SLIGHTLY darker shade of the SAME color, only about 10% darker (skin a little deeper, shorts a little deeper red, shoe a little deeper blue), the same hue as the near side, never brown, grey or near-black, so near and far limbs can be told apart without looking dirty or shadowed.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -240,9 +240,9 @@ THE THREE POSES (official exercise, follow exactly):
 2. MIDDLE position: halfway up, elbows bent about 90 degrees, chest a hand-width above the floor, knees still on the floor, body still a straight line from knees to head.
 3. UP position: arms fully straightened, palms flat on the floor directly under the shoulders, upper body raised, KNEES STILL ON THE FLOOR, lower legs bent up behind with feet in the air, body one straight diagonal line from the knees to the head (hips NOT piked up, back NOT sagging).
 
-Draw the arm and leg on the far side of the body in a noticeably darker shade of the same color (darker skin tone, darker shorts, darker shoe) so near and far limbs are easy to tell apart.
+Draw the arm and leg on the far side of the body in a SLIGHTLY darker shade of the SAME color, only about 10% darker (skin a little deeper, shorts a little deeper red, shoe a little deeper blue), the same hue as the near side, never brown, grey or near-black, so near and far limbs can be told apart without looking dirty or shadowed.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -263,7 +263,7 @@ BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shad
 - Note: Scissor jumps - Stand with right leg and left arm extended forward, and left leg and right arm extended backward.
 - Note: Jump up - change position of arms and legs before landing. Repeat (arms shoulder high).
 
-**Kept:** retry take 3 of 4 (first batch lifted the same leg twice)
+**Status:** retry take 3 of 4 (first batch lifted the same leg twice)
 
 **Prompt, with a character reference attached:**
 
@@ -280,9 +280,9 @@ THE FOUR POSES (official exercise, follow exactly):
 3. FAR FOOT LIFTED: the FAR (darker) foot lifted a few inches off the floor with the knee slightly bent; the NEAR (lighter) foot planted flat. Far arm bent and forward, near arm bent and back. Clearly different from pose 1: the lifted foot is the darker one.
 4. PASSING: both feet close to the floor, nearly upright, near arm forward and far arm back, both arms bent.
 
-Draw the arm and leg on the far side of the body in a noticeably darker shade of the same color (darker skin tone, darker shorts, darker shoe) so near and far limbs are easy to tell apart.
+Draw the arm and leg on the far side of the body in a SLIGHTLY darker shade of the SAME color, only about 10% darker (skin a little deeper, shorts a little deeper red, shoe a little deeper blue), the same hue as the near side, never brown, grey or near-black, so near and far limbs can be told apart without looking dirty or shadowed.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -302,9 +302,9 @@ THE FOUR POSES (official exercise, follow exactly):
 3. FAR FOOT LIFTED: the FAR (darker) foot lifted a few inches off the floor with the knee slightly bent; the NEAR (lighter) foot planted flat. Far arm bent and forward, near arm bent and back. Clearly different from pose 1: the lifted foot is the darker one.
 4. PASSING: both feet close to the floor, nearly upright, near arm forward and far arm back, both arms bent.
 
-Draw the arm and leg on the far side of the body in a noticeably darker shade of the same color (darker skin tone, darker shorts, darker shoe) so near and far limbs are easy to tell apart.
+Draw the arm and leg on the far side of the body in a SLIGHTLY darker shade of the SAME color, only about 10% darker (skin a little deeper, shorts a little deeper red, shoe a little deeper blue), the same hue as the near side, never brown, grey or near-black, so near and far limbs can be told apart without looking dirty or shadowed.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -334,9 +334,9 @@ THE FOUR POSES (official exercise, follow exactly):
 3. FAR FOOT LIFTED: the FAR (darker) foot lifted a few inches off the floor with the knee slightly bent; the NEAR (lighter) foot planted flat. Far arm bent and forward, near arm bent and back. Clearly different from pose 1: the lifted foot is the darker one.
 4. PASSING: both feet close to the floor, nearly upright, near arm forward and far arm back, both arms bent.
 
-Draw the arm and leg on the far side of the body in a noticeably darker shade of the same color (darker skin tone, darker shorts, darker shoe) so near and far limbs are easy to tell apart.
+Draw the arm and leg on the far side of the body in a SLIGHTLY darker shade of the SAME color, only about 10% darker (skin a little deeper, shorts a little deeper red, shoe a little deeper blue), the same hue as the near side, never brown, grey or near-black, so near and far limbs can be told apart without looking dirty or shadowed.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 
@@ -359,12 +359,12 @@ ALSO GIVE ME each figure as a separate transparent PNG at the original size, not
 - Note: Scissor jumps - Stand with right leg and left arm extended forward, and left leg and right arm extended backward.
 - Note: Jump up - change position of arms and legs before landing. Repeat (arms shoulder high).
 
-**Kept:** take 1 of 4. Known weak spot: stance A and B look alike in profile; only shading differs
+**Status:** Batch E open-hands take chosen (2026-11-21): stance A has the light near shoe forward and stance B the dark far shoe forward; jumps clearly airborne. A human form check is still needed.
 
 **Check before you keep a take:**
 
 - Four poses: STANCE A, JUMP, STANCE B, JUMP
-- Stance A: right leg and left arm forward. Stance B: left leg and right arm forward. You can tell them apart without looking at shading
+- Stance A: LIGHT near leg and DARK far arm forward. Stance B: DARK far leg and LIGHT near arm forward; the shoes must clearly swap which is in front
 - Back leg straight in both stances, no lunge
 - Both jump poses clearly higher than the stances, both feet off the floor
 
@@ -373,17 +373,17 @@ ALSO GIVE ME each figure as a separate transparent PNG at the original size, not
 ```text
 Using the attached reference image ONLY for the character's appearance and art style (a 12-year-old boy: short spiky black hair, warm tan skin, simple friendly face with small dark eyes, athletic but slim build. Bright cyan-blue sleeveless tank top, red athletic shorts, white ankle socks, blue sneakers with white laces and soles. Clean cartoon video-game illustration: confident medium-weight black outline, flat cel shading with one soft shadow tone, vivid saturated colors, high detail, crisp edges). IGNORE the poses in the reference image completely.
 
-Create a NEW wide 16:9 pose sheet of that same boy doing SCISSOR JUMPS, shown FOUR times left to right, strict side view facing right. Same scale, wide empty gaps. The two standing poses rest on the same invisible floor line; the two jumping poses are drawn clearly higher, with both feet well above that line.
+Create a NEW wide 16:9 pose sheet of that same boy doing SCISSOR JUMPS, shown FOUR times left to right, three-quarter view: side-on body turned about 45 degrees toward the camera, facing right, so the forward and backward arms and legs separate clearly, with the SAME camera angle in every pose. Same scale, wide empty gaps. The two standing poses rest on the same invisible floor line; the two jumping poses are drawn clearly higher, with both feet well above that line.
 
 THE FOUR POSES (official exercise, follow exactly):
-1. STANCE A, on the floor: the leg NEAREST the viewer extended forward and the other leg extended backward in a wide scissor stance, both feet on the floor; the arm FARTHEST from the viewer extended forward and the near arm extended backward, both arms straight at SHOULDER HEIGHT.
-2. JUMP, in the air: jumped straight up, both feet well off the floor, legs and arms passing each other mid-switch (legs close together under the hips, arms crossing near the body), knees slightly bent.
-3. STANCE B, on the floor: the mirror of stance A. The leg FARTHEST from the viewer is now forward and the near leg is back; the NEAR arm extended forward and the far arm backward, arms straight at shoulder height, both feet on the floor.
+1. STANCE A, on the floor: wide stride, LIGHT (near) leg forward and DARK (far) leg back, DARK (far) arm forward and LIGHT (near) arm back, both arms straight and horizontal at shoulder height, both feet flat on the floor; not a lunge.
+2. JUMP, in the air: jumped straight up, both feet clearly off the floor, legs close together under the hips, knees slightly bent, arms coming down toward the sides as they switch.
+3. STANCE B, on the floor: the mirror of stance A, DARK (far) leg forward and LIGHT (near) leg back, LIGHT (near) arm forward and DARK (far) arm back, both arms straight and horizontal at shoulder height, both feet flat on the floor; not a lunge.
 4. JUMP, in the air: the same airborne switching pose as pose 2, both feet well above the floor line.
 
-Draw the arm and leg on the far side of the body in a noticeably darker shade of the same color (darker skin tone, darker shorts, darker shoe) so near and far limbs are easy to tell apart.
+Draw the arm and leg on the far side of the body in a SLIGHTLY darker shade of the SAME color, only about 10% darker (skin a little deeper, shorts a little deeper red, shoe a little deeper blue), the same hue as the near side, never brown, grey or near-black, so near and far limbs can be told apart without looking dirty or shadowed.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -391,19 +391,19 @@ BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shad
 **Prompt for the very first strip (no reference, character in words):**
 
 ```text
-Generate a wide 16:9 character pose sheet for a fitness animation: ONE boy shown FOUR times, left to right, doing SCISSOR JUMPS, strict side view facing right. This is a pose-by-pose animation reference, so all four figures must be the same character at the same scale. Same scale, wide empty gaps. The two standing poses rest on the same invisible floor line; the two jumping poses are drawn clearly higher, with both feet well above that line.
+Generate a wide 16:9 character pose sheet for a fitness animation: ONE boy shown FOUR times, left to right, doing SCISSOR JUMPS, three-quarter view: side-on body turned about 45 degrees toward the camera, facing right, so the forward and backward arms and legs separate clearly, with the SAME camera angle in every pose. This is a pose-by-pose animation reference, so all four figures must be the same character at the same scale. Same scale, wide empty gaps. The two standing poses rest on the same invisible floor line; the two jumping poses are drawn clearly higher, with both feet well above that line.
 
 CHARACTER (keep identical in every pose): a 12-year-old boy: short spiky black hair, warm tan skin, simple friendly face with small dark eyes, athletic but slim build. Bright cyan-blue sleeveless tank top, red athletic shorts, white ankle socks, blue sneakers with white laces and soles. Clean cartoon video-game illustration: confident medium-weight black outline, flat cel shading with one soft shadow tone, vivid saturated colors, high detail, crisp edges.
 
 THE FOUR POSES (official exercise, follow exactly):
-1. STANCE A, on the floor: the leg NEAREST the viewer extended forward and the other leg extended backward in a wide scissor stance, both feet on the floor; the arm FARTHEST from the viewer extended forward and the near arm extended backward, both arms straight at SHOULDER HEIGHT.
-2. JUMP, in the air: jumped straight up, both feet well off the floor, legs and arms passing each other mid-switch (legs close together under the hips, arms crossing near the body), knees slightly bent.
-3. STANCE B, on the floor: the mirror of stance A. The leg FARTHEST from the viewer is now forward and the near leg is back; the NEAR arm extended forward and the far arm backward, arms straight at shoulder height, both feet on the floor.
+1. STANCE A, on the floor: wide stride, LIGHT (near) leg forward and DARK (far) leg back, DARK (far) arm forward and LIGHT (near) arm back, both arms straight and horizontal at shoulder height, both feet flat on the floor; not a lunge.
+2. JUMP, in the air: jumped straight up, both feet clearly off the floor, legs close together under the hips, knees slightly bent, arms coming down toward the sides as they switch.
+3. STANCE B, on the floor: the mirror of stance A, DARK (far) leg forward and LIGHT (near) leg back, LIGHT (near) arm forward and DARK (far) arm back, both arms straight and horizontal at shoulder height, both feet flat on the floor; not a lunge.
 4. JUMP, in the air: the same airborne switching pose as pose 2, both feet well above the floor line.
 
-Draw the arm and leg on the far side of the body in a noticeably darker shade of the same color (darker skin tone, darker shorts, darker shoe) so near and far limbs are easy to tell apart.
+Draw the arm and leg on the far side of the body in a SLIGHTLY darker shade of the SAME color, only about 10% darker (skin a little deeper, shorts a little deeper red, shoe a little deeper blue), the same hue as the near side, never brown, grey or near-black, so near and far limbs can be told apart without looking dirty or shadowed.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -433,14 +433,14 @@ ROW 2: SIDE view facing right with a clearly darker shade on the far arm and far
 Same scale, wide empty gaps. The two standing poses rest on the same invisible floor line; the two jumping poses are drawn clearly higher, with both feet well above that line. Same scale in every figure and every row, a wide empty gap between figures and a wide empty band between rows.
 
 THE FOUR POSES (official exercise, follow exactly):
-1. STANCE A, on the floor: the leg NEAREST the viewer extended forward and the other leg extended backward in a wide scissor stance, both feet on the floor; the arm FARTHEST from the viewer extended forward and the near arm extended backward, both arms straight at SHOULDER HEIGHT.
-2. JUMP, in the air: jumped straight up, both feet well off the floor, legs and arms passing each other mid-switch (legs close together under the hips, arms crossing near the body), knees slightly bent.
-3. STANCE B, on the floor: the mirror of stance A. The leg FARTHEST from the viewer is now forward and the near leg is back; the NEAR arm extended forward and the far arm backward, arms straight at shoulder height, both feet on the floor.
+1. STANCE A, on the floor: wide stride, LIGHT (near) leg forward and DARK (far) leg back, DARK (far) arm forward and LIGHT (near) arm back, both arms straight and horizontal at shoulder height, both feet flat on the floor; not a lunge.
+2. JUMP, in the air: jumped straight up, both feet clearly off the floor, legs close together under the hips, knees slightly bent, arms coming down toward the sides as they switch.
+3. STANCE B, on the floor: the mirror of stance A, DARK (far) leg forward and LIGHT (near) leg back, LIGHT (near) arm forward and DARK (far) arm back, both arms straight and horizontal at shoulder height, both feet flat on the floor; not a lunge.
 4. JUMP, in the air: the same airborne switching pose as pose 2, both feet well above the floor line.
 
-Draw the arm and leg on the far side of the body in a noticeably darker shade of the same color (darker skin tone, darker shorts, darker shoe) so near and far limbs are easy to tell apart.
+Draw the arm and leg on the far side of the body in a SLIGHTLY darker shade of the SAME color, only about 10% darker (skin a little deeper, shorts a little deeper red, shoe a little deeper blue), the same hue as the near side, never brown, grey or near-black, so near and far limbs can be told apart without looking dirty or shadowed.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 
@@ -451,7 +451,9 @@ ALSO GIVE ME each figure as a separate transparent PNG at the original size, not
 
 - Stance A and stance B look almost the same in profile; only the shading differs. A front view would fix it.
 - Stance B came out as a lunge with a bent back knee. An edit pass made it upright; see edits.json.
-- Batch C (2026-11-20): two camera rows came back almost identical and stance B was still indistinguishable from A. Remake in a single three-quarter front view with a stance diagram attached.
+- Batch C (2026-11-20): two camera rows came back almost identical and stance B was still indistinguishable from A. A three-quarter front view was attempted but the model would not produce it.
+- Batch E (2026-11-21): one side-on row, near/far limb shading and an explicit light-shoe versus dark-shoe swap made both stances distinct; horizontal arms and clear airborne poses improved the result. Do not repeat the old multi-camera retake.
+- Charles (2026-11-21): jump frames use a 3/4 view. This SUPERSEDES the Batch E note above that kept one strict side-on row: in side view the two stances still read alike, and a 3/4 view separates the forward and back limbs. Keep the light-shoe versus dark-shoe swap and the horizontal arms from Batch E; do not bring back the two-camera retake.
 
 ---
 
@@ -463,7 +465,7 @@ ALSO GIVE ME each figure as a separate transparent PNG at the original size, not
 - Movement: Touch floor and press (bounce) once then stretch upward and backward bend.
 - Note: Do not strain to keep knees straight.
 
-**Kept:** Grok Imagine take, kept (5 figures: it added an extra bounce pose). Cycle start, touch, press, rebound, stretch back.
+**Status:** Grok Imagine take, kept (5 figures: it added an extra bounce pose). Cycle start, touch, press, rebound, stretch back.
 
 **Check before you keep a take:**
 
@@ -489,9 +491,9 @@ THE FOUR POSES (official exercise, follow exactly):
 3. PRESS: the same forward bend pressed one small bounce lower: fingertips pressing on the floor, torso and head a little lower than in the TOUCH pose, knees still only slightly bent.
 4. STRETCH BACK: standing again with arms still stretched up and reaching backward, a gentle backward bend, hips pushed slightly forward, chest and face lifted toward the sky, knees straight.
 
-Draw the arm and leg on the far side of the body in a noticeably darker shade of the same color (darker skin tone, darker shorts, darker shoe) so near and far limbs are easy to tell apart.
+Draw the arm and leg on the far side of the body in a SLIGHTLY darker shade of the SAME color, only about 10% darker (skin a little deeper, shorts a little deeper red, shoe a little deeper blue), the same hue as the near side, never brown, grey or near-black, so near and far limbs can be told apart without looking dirty or shadowed.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -509,9 +511,9 @@ THE FOUR POSES (official exercise, follow exactly):
 3. PRESS: the same forward bend pressed one small bounce lower: fingertips pressing on the floor, torso and head a little lower than in the TOUCH pose, knees still only slightly bent.
 4. STRETCH BACK: standing again with arms still stretched up and reaching backward, a gentle backward bend, hips pushed slightly forward, chest and face lifted toward the sky, knees straight.
 
-Draw the arm and leg on the far side of the body in a noticeably darker shade of the same color (darker skin tone, darker shorts, darker shoe) so near and far limbs are easy to tell apart.
+Draw the arm and leg on the far side of the body in a SLIGHTLY darker shade of the SAME color, only about 10% darker (skin a little deeper, shorts a little deeper red, shoe a little deeper blue), the same hue as the near side, never brown, grey or near-black, so near and far limbs can be told apart without looking dirty or shadowed.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -532,7 +534,7 @@ BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shad
 - Movement: "Sit up" to vertical position, keep feet on floor even if it is necessary to hook them under a chair.
 - Note: Allow knees to bend slightly.
 
-**Kept:** Grok Imagine, first take, kept as made (3 figures).
+**Status:** Grok Imagine, first take, kept as made (3 figures).
 
 **Check before you keep a take:**
 
@@ -541,6 +543,7 @@ BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shad
 - TOP is a vertical, upright torso (this is a full sit-up, not the partial one in chart 1)
 - Knees at most slightly bent
 - Hands at the sides or reaching forward, not behind the head; no chair
+- The hands slide along the thighs toward the knees as he rises: on the thighs in RISING, at or past the knees at TOP
 
 **My decisions to check [DRAFT]:**
 
@@ -555,12 +558,12 @@ Create a NEW wide 16:9 pose sheet of that same boy doing a SIT-UP, shown THREE t
 
 THE THREE POSES (official exercise, follow exactly):
 1. START: lying flat on his back, legs straight on the floor with the feet about six inches apart, arms straight and resting at his sides.
-2. RISING: halfway up, upper body lifted about 45 degrees off the floor, arms reaching forward, heels still on the floor, knees allowed to bend very slightly.
-3. TOP: sitting up to a vertical position, back straight and upright, arms reaching forward toward the feet, FEET STAYING FLAT ON THE FLOOR, knees bent only slightly (hands NOT behind the head, heels NOT lifted).
+2. RISING: halfway up, upper body lifted about 45 degrees off the floor, arms straight and reaching forward with the HANDS SLIDING ALONG THE TOPS OF THE THIGHS toward the knees (palms resting on the thighs, not floating above them), heels still on the floor, knees allowed to bend very slightly.
+3. TOP: sitting up to a vertical position, back straight and upright, arms straight with the hands having slid along the thighs PAST THE KNEES toward the feet, FEET STAYING FLAT ON THE FLOOR, knees bent only slightly (hands NOT behind the head, heels NOT lifted).
 
-Draw the arm and leg on the far side of the body in a noticeably darker shade of the same color (darker skin tone, darker shorts, darker shoe) so near and far limbs are easy to tell apart.
+Draw the arm and leg on the far side of the body in a SLIGHTLY darker shade of the SAME color, only about 10% darker (skin a little deeper, shorts a little deeper red, shoe a little deeper blue), the same hue as the near side, never brown, grey or near-black, so near and far limbs can be told apart without looking dirty or shadowed.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -574,12 +577,12 @@ CHARACTER (keep identical in every pose): a 12-year-old boy: short spiky black h
 
 THE THREE POSES (official exercise, follow exactly):
 1. START: lying flat on his back, legs straight on the floor with the feet about six inches apart, arms straight and resting at his sides.
-2. RISING: halfway up, upper body lifted about 45 degrees off the floor, arms reaching forward, heels still on the floor, knees allowed to bend very slightly.
-3. TOP: sitting up to a vertical position, back straight and upright, arms reaching forward toward the feet, FEET STAYING FLAT ON THE FLOOR, knees bent only slightly (hands NOT behind the head, heels NOT lifted).
+2. RISING: halfway up, upper body lifted about 45 degrees off the floor, arms straight and reaching forward with the HANDS SLIDING ALONG THE TOPS OF THE THIGHS toward the knees (palms resting on the thighs, not floating above them), heels still on the floor, knees allowed to bend very slightly.
+3. TOP: sitting up to a vertical position, back straight and upright, arms straight with the hands having slid along the thighs PAST THE KNEES toward the feet, FEET STAYING FLAT ON THE FLOOR, knees bent only slightly (hands NOT behind the head, heels NOT lifted).
 
-Draw the arm and leg on the far side of the body in a noticeably darker shade of the same color (darker skin tone, darker shorts, darker shoe) so near and far limbs are easy to tell apart.
+Draw the arm and leg on the far side of the body in a SLIGHTLY darker shade of the SAME color, only about 10% darker (skin a little deeper, shorts a little deeper red, shoe a little deeper blue), the same hue as the near side, never brown, grey or near-black, so near and far limbs can be told apart without looking dirty or shadowed.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -588,6 +591,7 @@ BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shad
 
 - Right on the first try: lying flat, rising to about 45 degrees, then a vertical torso with the arms reaching and the feet staying on the floor.
 - Anchored by the feet (span-right): the shorts wander 46 px across the poses. Anchoring by the hips would be steadier still.
+- Charles (2026-11-21): the hands did not track the legs, so in the loop they appeared to float and then jump. RISING and TOP now say the hands slide along the tops of the thighs toward and past the knees. One prompt revision only; not a show-stopper.
 
 ---
 
@@ -599,7 +603,7 @@ BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shad
 - Movement: Raise head, shoulders, and both legs.
 - Note: Keep legs straight, both thighs must clear the palms.
 
-**Kept:** Grok Imagine, first take, kept as made (3 figures).
+**Status:** Batch E edited START pose chosen (2026-11-21): flat start, clear middle lift and raised top with thighs visibly off hands; human form check pending.
 
 **Check before you keep a take:**
 
@@ -620,13 +624,13 @@ Create a NEW wide 16:9 pose sheet of that same boy doing a BACK EXTENSION, shown
 KEY BODY RULE FOR ALL THREE POSES: his arms are NOT pushing up and NOT planted in front of him. Both arms are STRAIGHT and stretched back along his sides, with the hands tucked flat, palms down, UNDER THE FRONT OF HIS THIGHS. Elbows straight.
 
 THE THREE POSES (official exercise, follow exactly):
-1. START: lying completely flat face down, legs straight and together, chin near the floor, arms straight back with palms under the thighs.
-2. LIFTING: head, shoulders and both legs just beginning to lift off the floor together, legs straight, arms still straight back under the thighs.
-3. TOP: head, shoulders AND BOTH LEGS raised off the floor at the same time, legs straight with the knees LOCKED, thighs clearly lifted off his hands, back gently arched, looking forward; only his belly stays on the floor.
+1. START (0 degrees): lying completely flat face down with chin, chest, thighs, shins and shoes on the floor, legs straight and together, arms straight back with palms under the front of the thighs.
+2. LIFTING (about 15 degrees): head, shoulders and both straight legs visibly lifting together, hands still under the thighs and in the same place; a clear midpoint between START and TOP.
+3. TOP (about 30 degrees): head, shoulders AND BOTH LEGS raised together, knees locked straight, thighs visibly CLEAR of the hands, gently arched back; the belly and palms remain on the floor.
 
-Draw the arm and leg on the far side of the body in a noticeably darker shade of the same color (darker skin tone, darker shorts, darker shoe) so near and far limbs are easy to tell apart.
+Draw the arm and leg on the far side of the body in a SLIGHTLY darker shade of the SAME color, only about 10% darker (skin a little deeper, shorts a little deeper red, shoe a little deeper blue), the same hue as the near side, never brown, grey or near-black, so near and far limbs can be told apart without looking dirty or shadowed.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -641,13 +645,13 @@ CHARACTER (keep identical in every pose): a 12-year-old boy: short spiky black h
 KEY BODY RULE FOR ALL THREE POSES: his arms are NOT pushing up and NOT planted in front of him. Both arms are STRAIGHT and stretched back along his sides, with the hands tucked flat, palms down, UNDER THE FRONT OF HIS THIGHS. Elbows straight.
 
 THE THREE POSES (official exercise, follow exactly):
-1. START: lying completely flat face down, legs straight and together, chin near the floor, arms straight back with palms under the thighs.
-2. LIFTING: head, shoulders and both legs just beginning to lift off the floor together, legs straight, arms still straight back under the thighs.
-3. TOP: head, shoulders AND BOTH LEGS raised off the floor at the same time, legs straight with the knees LOCKED, thighs clearly lifted off his hands, back gently arched, looking forward; only his belly stays on the floor.
+1. START (0 degrees): lying completely flat face down with chin, chest, thighs, shins and shoes on the floor, legs straight and together, arms straight back with palms under the front of the thighs.
+2. LIFTING (about 15 degrees): head, shoulders and both straight legs visibly lifting together, hands still under the thighs and in the same place; a clear midpoint between START and TOP.
+3. TOP (about 30 degrees): head, shoulders AND BOTH LEGS raised together, knees locked straight, thighs visibly CLEAR of the hands, gently arched back; the belly and palms remain on the floor.
 
-Draw the arm and leg on the far side of the body in a noticeably darker shade of the same color (darker skin tone, darker shorts, darker shoe) so near and far limbs are easy to tell apart.
+Draw the arm and leg on the far side of the body in a SLIGHTLY darker shade of the SAME color, only about 10% darker (skin a little deeper, shorts a little deeper red, shoe a little deeper blue), the same hue as the near side, never brown, grey or near-black, so near and far limbs can be told apart without looking dirty or shadowed.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -673,13 +677,13 @@ Create a NEW wide 16:9 pose sheet of that same boy doing a BACK EXTENSION, shown
 KEY BODY RULE FOR ALL THREE POSES: his arms are NOT pushing up and NOT planted in front of him. Both arms are STRAIGHT and stretched back along his sides, with the hands tucked flat, palms down, UNDER THE FRONT OF HIS THIGHS. Elbows straight.
 
 THE THREE POSES (official exercise, follow exactly):
-1. START: lying completely flat face down, legs straight and together, chin near the floor, arms straight back with palms under the thighs.
-2. LIFTING: head, shoulders and both legs just beginning to lift off the floor together, legs straight, arms still straight back under the thighs.
-3. TOP: head, shoulders AND BOTH LEGS raised off the floor at the same time, legs straight with the knees LOCKED, thighs clearly lifted off his hands, back gently arched, looking forward; only his belly stays on the floor.
+1. START (0 degrees): lying completely flat face down with chin, chest, thighs, shins and shoes on the floor, legs straight and together, arms straight back with palms under the front of the thighs.
+2. LIFTING (about 15 degrees): head, shoulders and both straight legs visibly lifting together, hands still under the thighs and in the same place; a clear midpoint between START and TOP.
+3. TOP (about 30 degrees): head, shoulders AND BOTH LEGS raised together, knees locked straight, thighs visibly CLEAR of the hands, gently arched back; the belly and palms remain on the floor.
 
-Draw the arm and leg on the far side of the body in a noticeably darker shade of the same color (darker skin tone, darker shorts, darker shoe) so near and far limbs are easy to tell apart.
+Draw the arm and leg on the far side of the body in a SLIGHTLY darker shade of the SAME color, only about 10% darker (skin a little deeper, shorts a little deeper red, shoe a little deeper blue), the same hue as the near side, never brown, grey or near-black, so near and far limbs can be told apart without looking dirty or shadowed.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 
@@ -693,6 +697,7 @@ ALSO GIVE ME each figure as a separate transparent PNG at the original size, not
 - The START pose already has the feet a few pixels off the floor.
 - Both feet lift at the top, so a planted-foot anchor makes him slide 364 px. The new 'hips' anchor (the red shorts) holds him to 2 px. Use it for any exercise where he lies and the hips stay on the floor.
 - Batch C (2026-11-20): the lift improved but the hands moved forward to the hips, and START and LIFTING looked the same. Remake with the booklet drawing and a hands-and-thighs diagram attached.
+- Batch E (2026-11-21): specifying 0/15/30-degree lift stages and where the shoes rest made the differences visible. A one-figure START correction kept the other poses nearly unchanged by eye; review their anatomy again after every edit.
 
 ---
 
@@ -704,7 +709,7 @@ ALSO GIVE ME each figure as a separate transparent PNG at the original size, not
 - Movement: Straighten arms to lift body with only palms and toes on the floor. Back straight.
 - Note: Chest must touch floor for each completed movement after arms have been fully extended.
 
-**Kept:** Grok Imagine, first take, kept as made (3 figures).
+**Status:** Grok Imagine, first take, kept as made (3 figures).
 
 **Check before you keep a take:**
 
@@ -729,9 +734,9 @@ THE THREE POSES (official exercise, follow exactly):
 2. MIDDLE: halfway up, elbows bent about 90 degrees, chest a hand-width above the floor, only the palms and toes touching the floor, body still one straight line, back straight.
 3. UP: arms fully straightened, palms flat directly under the shoulders, only the palms and toes touching the floor, body one straight diagonal line from the heels to the head (hips NOT piked up, back NOT sagging, knees NOT on the floor).
 
-Draw the arm and leg on the far side of the body in a noticeably darker shade of the same color (darker skin tone, darker shorts, darker shoe) so near and far limbs are easy to tell apart.
+Draw the arm and leg on the far side of the body in a SLIGHTLY darker shade of the SAME color, only about 10% darker (skin a little deeper, shorts a little deeper red, shoe a little deeper blue), the same hue as the near side, never brown, grey or near-black, so near and far limbs can be told apart without looking dirty or shadowed.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -748,9 +753,9 @@ THE THREE POSES (official exercise, follow exactly):
 2. MIDDLE: halfway up, elbows bent about 90 degrees, chest a hand-width above the floor, only the palms and toes touching the floor, body still one straight line, back straight.
 3. UP: arms fully straightened, palms flat directly under the shoulders, only the palms and toes touching the floor, body one straight diagonal line from the heels to the head (hips NOT piked up, back NOT sagging, knees NOT on the floor).
 
-Draw the arm and leg on the far side of the body in a noticeably darker shade of the same color (darker skin tone, darker shorts, darker shoe) so near and far limbs are easy to tell apart.
+Draw the arm and leg on the far side of the body in a SLIGHTLY darker shade of the SAME color, only about 10% darker (skin a little deeper, shorts a little deeper red, shoe a little deeper blue), the same hue as the near side, never brown, grey or near-black, so near and far limbs can be told apart without looking dirty or shadowed.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -772,7 +777,7 @@ BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shad
 - Note: Jump and land with feet astride and arms raised sideways to slightly above shoulder height. Return with a jump to the starting position for count of one.
 - Note: Keep arms straight.
 
-**Kept:** Grok Imagine, first take, kept as made (4 figures, front view).
+**Status:** Grok Imagine, first take, kept as made (4 figures, front view).
 
 **Check before you keep a take:**
 
@@ -799,7 +804,7 @@ THE FOUR POSES (official exercise, follow exactly):
 3. LAND ASTRIDE: landed with the feet wide apart (astride), both feet flat on the floor, arms straight and raised sideways to slightly above shoulder height.
 4. JUMP BACK: in the air, both feet off the floor, legs coming back together, arms coming down toward his sides, arms straight.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -817,7 +822,7 @@ THE FOUR POSES (official exercise, follow exactly):
 3. LAND ASTRIDE: landed with the feet wide apart (astride), both feet flat on the floor, arms straight and raised sideways to slightly above shoulder height.
 4. JUMP BACK: in the air, both feet off the floor, legs coming back together, arms coming down toward his sides, arms straight.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -838,7 +843,7 @@ BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shad
 - Movement: Touch floor 6" outside left foot, again between feet and press once then 6" outside right foot, bend backward as far as possible, repeat, reverse direction after half the number of counts.
 - Note: Do not strain to keep knees straight, return to erect position.
 
-**Kept:** (not made yet)
+**Status:** (not made yet)
 
 **Check before you keep a take:**
 
@@ -869,7 +874,7 @@ THE FIVE POSES (official exercise, follow exactly):
 4. TOUCH RIGHT: bent forward in the same way, fingertips of both hands touching the floor about six inches OUTSIDE HIS RIGHT FOOT (his right foot is on the LEFT side of the picture), knees only slightly bent, head hanging down.
 5. BEND BACK: standing again, feet still wide apart, both arms stretched up and back, bending backward as far as he can, hips pushed forward, chest and face lifted toward the sky, knees straight.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -888,7 +893,7 @@ THE FIVE POSES (official exercise, follow exactly):
 4. TOUCH RIGHT: bent forward in the same way, fingertips of both hands touching the floor about six inches OUTSIDE HIS RIGHT FOOT (his right foot is on the LEFT side of the picture), knees only slightly bent, head hanging down.
 5. BEND BACK: standing again, feet still wide apart, both arms stretched up and back, bending backward as far as he can, hips pushed forward, chest and face lifted toward the sky, knees straight.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -902,7 +907,7 @@ BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shad
 - Starts: Back lying, feet 6" apart, arms clasped behind head. Allow knees to bend slightly.
 - Movement: Sit up to vertical position, keep feet on floor, hook feet under chair, etc., only if necessary.
 
-**Kept:** (not made yet)
+**Status:** (not made yet)
 
 **Check before you keep a take:**
 
@@ -927,9 +932,9 @@ THE THREE POSES (official exercise, follow exactly):
 2. RISING: halfway up, upper body lifted about 45 degrees off the floor, hands still clasped behind his head with the elbows wide, heels still on the floor, knees allowed to bend very slightly.
 3. TOP: sitting up to a vertical position, back straight and upright, hands still clasped behind his head with the elbows wide, FEET STAYING FLAT ON THE FLOOR, knees bent only slightly (hands NOT reaching forward, heels NOT lifted).
 
-Draw the arm and leg on the far side of the body in a noticeably darker shade of the same color (darker skin tone, darker shorts, darker shoe) so near and far limbs are easy to tell apart.
+Draw the arm and leg on the far side of the body in a SLIGHTLY darker shade of the SAME color, only about 10% darker (skin a little deeper, shorts a little deeper red, shoe a little deeper blue), the same hue as the near side, never brown, grey or near-black, so near and far limbs can be told apart without looking dirty or shadowed.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -946,9 +951,9 @@ THE THREE POSES (official exercise, follow exactly):
 2. RISING: halfway up, upper body lifted about 45 degrees off the floor, hands still clasped behind his head with the elbows wide, heels still on the floor, knees allowed to bend very slightly.
 3. TOP: sitting up to a vertical position, back straight and upright, hands still clasped behind his head with the elbows wide, FEET STAYING FLAT ON THE FLOOR, knees bent only slightly (hands NOT reaching forward, heels NOT lifted).
 
-Draw the arm and leg on the far side of the body in a noticeably darker shade of the same color (darker skin tone, darker shorts, darker shoe) so near and far limbs are easy to tell apart.
+Draw the arm and leg on the far side of the body in a SLIGHTLY darker shade of the SAME color, only about 10% darker (skin a little deeper, shorts a little deeper red, shoe a little deeper blue), the same hue as the near side, never brown, grey or near-black, so near and far limbs can be told apart without looking dirty or shadowed.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -963,7 +968,7 @@ BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shad
 - Movement: Lift head, shoulders, chest and both legs as high as possible.
 - Note: Keep legs straight, and raise chest and both thighs completely off floor.
 
-**Kept:** (not made yet)
+**Status:** (not made yet)
 
 **Check before you keep a take:**
 
@@ -990,9 +995,9 @@ THE THREE POSES (official exercise, follow exactly):
 2. LIFTING: head, shoulders, chest and both legs just beginning to lift off the floor together, legs straight, hands still interlocked behind the back.
 3. TOP: head, shoulders, chest AND BOTH THIGHS lifted completely off the floor, as high as he can, legs straight with the knees LOCKED, back strongly arched, looking forward, hands still interlocked behind the back; only his lower belly and hips stay on the floor.
 
-Draw the arm and leg on the far side of the body in a noticeably darker shade of the same color (darker skin tone, darker shorts, darker shoe) so near and far limbs are easy to tell apart.
+Draw the arm and leg on the far side of the body in a SLIGHTLY darker shade of the SAME color, only about 10% darker (skin a little deeper, shorts a little deeper red, shoe a little deeper blue), the same hue as the near side, never brown, grey or near-black, so near and far limbs can be told apart without looking dirty or shadowed.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -1011,9 +1016,9 @@ THE THREE POSES (official exercise, follow exactly):
 2. LIFTING: head, shoulders, chest and both legs just beginning to lift off the floor together, legs straight, hands still interlocked behind the back.
 3. TOP: head, shoulders, chest AND BOTH THIGHS lifted completely off the floor, as high as he can, legs straight with the knees LOCKED, back strongly arched, looking forward, hands still interlocked behind the back; only his lower belly and hips stay on the floor.
 
-Draw the arm and leg on the far side of the body in a noticeably darker shade of the same color (darker skin tone, darker shorts, darker shoe) so near and far limbs are easy to tell apart.
+Draw the arm and leg on the far side of the body in a SLIGHTLY darker shade of the SAME color, only about 10% darker (skin a little deeper, shorts a little deeper red, shoe a little deeper blue), the same hue as the near side, never brown, grey or near-black, so near and far limbs can be told apart without looking dirty or shadowed.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -1028,7 +1033,7 @@ BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shad
 - Movement: Touch chin to floor in front of hands - touch forehead to floor behind hands before returning to up position.
 - Note: There are three definite movements: chin, forehead, arms straightened. DO NOT do in one continuous movement.
 
-**Kept:** (not made yet)
+**Status:** (not made yet)
 
 **Check before you keep a take:**
 
@@ -1037,6 +1042,7 @@ BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shad
 - CHIN: body low and straight, the chin on the floor IN FRONT of the hands, the head ahead of the hands
 - FOREHEAD: hips high in an upside-down V (a pike), the forehead on the floor BEHIND the hands, hands ahead of the forehead
 - The three poses are clearly different at a glance
+- CHIN must touch the floor exactly; FOREHEAD may be a close approximation if the pike shape is right
 
 **My decisions to check [DRAFT]:**
 
@@ -1056,9 +1062,9 @@ THE THREE POSES (official exercise, follow exactly):
 2. CHIN: lowered until the CHIN touches the floor in front of the hands (the head pushed forward past the hands), elbows bent, palms still flat on the floor under the shoulders, only the palms, toes and chin touching the floor, the body one straight line.
 3. FOREHEAD (a PIKE, as in the booklet's drawing): the hips pushed UP HIGH so the body makes an upside-down V, the palms still flat on the floor where they were, the elbows bent, the head tucked down and back between the arms so the FOREHEAD touches the floor just BEHIND the hands (on the feet side of the hands), the toes on the floor. Only the palms, the toes and the forehead touch the floor. This pose is NOT a straight body: the hips are the highest point.
 
-Draw the arm and leg on the far side of the body in a noticeably darker shade of the same color (darker skin tone, darker shorts, darker shoe) so near and far limbs are easy to tell apart.
+Draw the arm and leg on the far side of the body in a SLIGHTLY darker shade of the SAME color, only about 10% darker (skin a little deeper, shorts a little deeper red, shoe a little deeper blue), the same hue as the near side, never brown, grey or near-black, so near and far limbs can be told apart without looking dirty or shadowed.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -1075,9 +1081,9 @@ THE THREE POSES (official exercise, follow exactly):
 2. CHIN: lowered until the CHIN touches the floor in front of the hands (the head pushed forward past the hands), elbows bent, palms still flat on the floor under the shoulders, only the palms, toes and chin touching the floor, the body one straight line.
 3. FOREHEAD (a PIKE, as in the booklet's drawing): the hips pushed UP HIGH so the body makes an upside-down V, the palms still flat on the floor where they were, the elbows bent, the head tucked down and back between the arms so the FOREHEAD touches the floor just BEHIND the hands (on the feet side of the hands), the toes on the floor. Only the palms, the toes and the forehead touch the floor. This pose is NOT a straight body: the hips are the highest point.
 
-Draw the arm and leg on the far side of the body in a noticeably darker shade of the same color (darker skin tone, darker shorts, darker shoe) so near and far limbs are easy to tell apart.
+Draw the arm and leg on the far side of the body in a SLIGHTLY darker shade of the SAME color, only about 10% darker (skin a little deeper, shorts a little deeper red, shoe a little deeper blue), the same hue as the near side, never brown, grey or near-black, so near and far limbs can be told apart without looking dirty or shadowed.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -1110,9 +1116,9 @@ THE THREE POSES (official exercise, follow exactly):
 2. CHIN: lowered until the CHIN touches the floor in front of the hands (the head pushed forward past the hands), elbows bent, palms still flat on the floor under the shoulders, only the palms, toes and chin touching the floor, the body one straight line.
 3. FOREHEAD: lowered until the chest is almost on the floor, the head tucked down and back so that the FOREHEAD touches the floor between the hands, level with the line of the hands or slightly behind it (the hands are visibly AHEAD of the forehead, in the direction he is facing), the elbows bent and flared out, the palms flat, only the palms, toes and forehead touching the floor, the body one straight line.
 
-Draw the arm and leg on the far side of the body in a noticeably darker shade of the same color (darker skin tone, darker shorts, darker shoe) so near and far limbs are easy to tell apart.
+Draw the arm and leg on the far side of the body in a SLIGHTLY darker shade of the SAME color, only about 10% darker (skin a little deeper, shorts a little deeper red, shoe a little deeper blue), the same hue as the near side, never brown, grey or near-black, so near and far limbs can be told apart without looking dirty or shadowed.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 
@@ -1122,6 +1128,7 @@ ALSO GIVE ME each figure as a separate transparent PNG at the original size, not
 **What went wrong, and the fix:**
 
 - Batch C (2026-11-20): our FOREHEAD wording (body straight, chest almost on the floor) contradicted the booklet. The booklet drawing (5BX figures/c3e4.png) shows the forehead pose as a pike: hips high, head tucked between the arms, which is how the forehead gets behind the hands. Rewritten to match; attach the booklet drawing.
+- Charles (2026-11-21): the CHIN touch is the target and must be exact. FOREHEAD-to-floor may be approximated by the pike reference pose (forehead close to the floor behind the hands, hips high); a near miss is accepted. Reference: the RCAF 1959 film stills (docs/reference/rcaf-1959-stills/) and the booklet drawing figures/c3e4.png.
 
 ---
 
@@ -1135,7 +1142,7 @@ ALSO GIVE ME each figure as a separate transparent PNG at the original size, not
 - Note: Straighten to upright position, raising heel off floor, return to starting position each time.
 - Note: Keep feet in contact with floor - the back upright and straight at all times.
 
-**Kept:** (not made yet)
+**Status:** (not made yet)
 
 **Check before you keep a take:**
 
@@ -1162,9 +1169,9 @@ THE THREE POSES (official exercise, follow exactly):
 2. HALF BEND: knees bent to an angle of about 110 degrees (a HALF bend, NOT a deep squat, knees NOT bent past a right angle), back upright and straight, hands on the hips, both feet flat on the floor, feet together.
 3. RISE: straightened to a fully upright position and raised UP ON THE TOES, the heels lifted off the floor and the toes still touching the floor, legs straight, back upright and straight, hands on the hips.
 
-Draw the arm and leg on the far side of the body in a noticeably darker shade of the same color (darker skin tone, darker shorts, darker shoe) so near and far limbs are easy to tell apart.
+Draw the arm and leg on the far side of the body in a SLIGHTLY darker shade of the SAME color, only about 10% darker (skin a little deeper, shorts a little deeper red, shoe a little deeper blue), the same hue as the near side, never brown, grey or near-black, so near and far limbs can be told apart without looking dirty or shadowed.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -1181,9 +1188,9 @@ THE THREE POSES (official exercise, follow exactly):
 2. HALF BEND: knees bent to an angle of about 110 degrees (a HALF bend, NOT a deep squat, knees NOT bent past a right angle), back upright and straight, hands on the hips, both feet flat on the floor, feet together.
 3. RISE: straightened to a fully upright position and raised UP ON THE TOES, the heels lifted off the floor and the toes still touching the floor, legs straight, back upright and straight, hands on the hips.
 
-Draw the arm and leg on the far side of the body in a noticeably darker shade of the same color (darker skin tone, darker shorts, darker shoe) so near and far limbs are easy to tell apart.
+Draw the arm and leg on the far side of the body in a SLIGHTLY darker shade of the SAME color, only about 10% darker (skin a little deeper, shorts a little deeper red, shoe a little deeper blue), the same hue as the near side, never brown, grey or near-black, so near and far limbs can be told apart without looking dirty or shadowed.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -1230,7 +1237,7 @@ THE SIX POSES (official exercise, follow exactly):
 5. LEAN RIGHT: standing up again out of the right-hand touch, feet still wide apart, both arms held straight up above the head with the upper arms touching the ears, the whole upper body leaning sideways toward HIS RIGHT (the left side of the picture) as part of a big circle.
 6. BEND BACK: standing, feet wide apart, both arms held straight up above the head with the upper arms touching the ears, bending backward past upright as far as he can, hips pushed forward, chest and face lifted toward the sky, knees straight.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -1250,7 +1257,7 @@ THE SIX POSES (official exercise, follow exactly):
 5. LEAN RIGHT: standing up again out of the right-hand touch, feet still wide apart, both arms held straight up above the head with the upper arms touching the ears, the whole upper body leaning sideways toward HIS RIGHT (the left side of the picture) as part of a big circle.
 6. BEND BACK: standing, feet wide apart, both arms held straight up above the head with the upper arms touching the ears, bending backward past upright as far as he can, hips pushed forward, chest and face lifted toward the sky, knees straight.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -1266,7 +1273,7 @@ BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shad
 - Note: Keep arms in contact with the sides of the head throughout the movement.
 - Note: Allow knees to bend slightly.
 
-**Kept:** (not made yet)
+**Status:** (not made yet)
 
 **Check before you keep a take:**
 
@@ -1291,9 +1298,9 @@ THE THREE POSES (official exercise, follow exactly):
 2. RISING: halfway up, upper body lifted about 45 degrees off the floor, both arms still straight above the head with the upper arms touching the sides of the head, legs straight, heels on the floor.
 3. TOUCH: sitting up and folded forward over the legs, both arms straight and still touching the sides of the head, the fingertips touching the toes, legs straight with the feet flat (knees bent only very slightly), heels on the floor.
 
-Draw the arm and leg on the far side of the body in a noticeably darker shade of the same color (darker skin tone, darker shorts, darker shoe) so near and far limbs are easy to tell apart.
+Draw the arm and leg on the far side of the body in a SLIGHTLY darker shade of the SAME color, only about 10% darker (skin a little deeper, shorts a little deeper red, shoe a little deeper blue), the same hue as the near side, never brown, grey or near-black, so near and far limbs can be told apart without looking dirty or shadowed.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -1310,9 +1317,9 @@ THE THREE POSES (official exercise, follow exactly):
 2. RISING: halfway up, upper body lifted about 45 degrees off the floor, both arms still straight above the head with the upper arms touching the sides of the head, legs straight, heels on the floor.
 3. TOUCH: sitting up and folded forward over the legs, both arms straight and still touching the sides of the head, the fingertips touching the toes, legs straight with the feet flat (knees bent only very slightly), heels on the floor.
 
-Draw the arm and leg on the far side of the body in a noticeably darker shade of the same color (darker skin tone, darker shorts, darker shoe) so near and far limbs are easy to tell apart.
+Draw the arm and leg on the far side of the body in a SLIGHTLY darker shade of the SAME color, only about 10% darker (skin a little deeper, shorts a little deeper red, shoe a little deeper blue), the same hue as the near side, never brown, grey or near-black, so near and far limbs can be told apart without looking dirty or shadowed.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -1340,9 +1347,9 @@ THE THREE POSES (official exercise, follow exactly):
 2. RISING: halfway up, upper body lifted about 45 degrees off the floor, both arms still straight above the head with the upper arms touching the sides of the head, legs straight, heels on the floor.
 3. TOUCH: sitting up and folded forward over the legs, both arms straight and still touching the sides of the head, the fingertips touching the toes, legs straight with the feet flat (knees bent only very slightly), heels on the floor.
 
-Draw the arm and leg on the far side of the body in a noticeably darker shade of the same color (darker skin tone, darker shorts, darker shoe) so near and far limbs are easy to tell apart.
+Draw the arm and leg on the far side of the body in a SLIGHTLY darker shade of the SAME color, only about 10% darker (skin a little deeper, shorts a little deeper red, shoe a little deeper blue), the same hue as the near side, never brown, grey or near-black, so near and far limbs can be told apart without looking dirty or shadowed.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 
@@ -1359,7 +1366,7 @@ ALSO GIVE ME each figure as a separate transparent PNG at the original size, not
 - Movement: Lift head, shoulders, arms, chest and both legs as high as possible.
 - Note: Keep legs straight, raise chest and both thighs completely off floor.
 
-**Kept:** ChatGPT retake 1, row 1 (front view). The side three-quarter row failed: the near arm trailed back along the body.
+**Status:** ChatGPT retake 1, row 1 (front view). The side three-quarter row failed: the near arm trailed back along the body.
 
 **Check before you keep a take:**
 
@@ -1387,9 +1394,9 @@ THE THREE POSES (official exercise, follow exactly):
 2. LIFTING: head, shoulders, arms, chest and both legs just beginning to lift off the floor together, legs straight, arms still stretched out sideways.
 3. TOP: head, shoulders, both ARMS, chest AND BOTH THIGHS lifted completely off the floor as high as he can, legs straight with the knees LOCKED, back strongly arched, looking forward, arms still stretched straight out sideways and raised; only his lower belly and hips stay on the floor.
 
-Draw the arm and leg on the far side of the body in a noticeably darker shade of the same color (darker skin tone, darker shorts, darker shoe) so near and far limbs are easy to tell apart.
+Draw the arm and leg on the far side of the body in a SLIGHTLY darker shade of the SAME color, only about 10% darker (skin a little deeper, shorts a little deeper red, shoe a little deeper blue), the same hue as the near side, never brown, grey or near-black, so near and far limbs can be told apart without looking dirty or shadowed.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -1408,9 +1415,9 @@ THE THREE POSES (official exercise, follow exactly):
 2. LIFTING: head, shoulders, arms, chest and both legs just beginning to lift off the floor together, legs straight, arms still stretched out sideways.
 3. TOP: head, shoulders, both ARMS, chest AND BOTH THIGHS lifted completely off the floor as high as he can, legs straight with the knees LOCKED, back strongly arched, looking forward, arms still stretched straight out sideways and raised; only his lower belly and hips stay on the floor.
 
-Draw the arm and leg on the far side of the body in a noticeably darker shade of the same color (darker skin tone, darker shorts, darker shoe) so near and far limbs are easy to tell apart.
+Draw the arm and leg on the far side of the body in a SLIGHTLY darker shade of the SAME color, only about 10% darker (skin a little deeper, shorts a little deeper red, shoe a little deeper blue), the same hue as the near side, never brown, grey or near-black, so near and far limbs can be told apart without looking dirty or shadowed.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -1448,9 +1455,9 @@ THE THREE POSES (official exercise, follow exactly):
 2. LIFTING: head, shoulders, arms, chest and both legs just beginning to lift off the floor together, legs straight, arms still stretched out sideways.
 3. TOP: head, shoulders, both ARMS, chest AND BOTH THIGHS lifted completely off the floor as high as he can, legs straight with the knees LOCKED, back strongly arched, looking forward, arms still stretched straight out sideways and raised; only his lower belly and hips stay on the floor.
 
-Draw the arm and leg on the far side of the body in a noticeably darker shade of the same color (darker skin tone, darker shorts, darker shoe) so near and far limbs are easy to tell apart.
+Draw the arm and leg on the far side of the body in a SLIGHTLY darker shade of the SAME color, only about 10% darker (skin a little deeper, shorts a little deeper red, shoe a little deeper blue), the same hue as the near side, never brown, grey or near-black, so near and far limbs can be told apart without looking dirty or shadowed.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 
@@ -1467,7 +1474,7 @@ ALSO GIVE ME each figure as a separate transparent PNG at the original size, not
 - Movement: Straighten arms to lift body.
 - Note: Chest must touch floor for each completed movement.
 
-**Kept:** (not made yet)
+**Status:** (not made yet)
 
 **Check before you keep a take:**
 
@@ -1493,7 +1500,7 @@ THE THREE POSES (official exercise, follow exactly):
 2. MIDDLE: halfway up, elbows bent about 90 degrees and pointing out to the sides, the palms flat on the floor about one foot out to each side of the head, chest a hand-width above the floor, only the palms and toes touching the floor, body one straight line.
 3. UP: arms fully straightened with the hands wide apart, palms flat on the floor about one foot out to each side of the head, only the palms and toes touching the floor, the body one straight line from the heels to the head (hips NOT piked up, back NOT sagging, knees NOT on the floor).
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -1510,7 +1517,7 @@ THE THREE POSES (official exercise, follow exactly):
 2. MIDDLE: halfway up, elbows bent about 90 degrees and pointing out to the sides, the palms flat on the floor about one foot out to each side of the head, chest a hand-width above the floor, only the palms and toes touching the floor, body one straight line.
 3. UP: arms fully straightened with the hands wide apart, palms flat on the floor about one foot out to each side of the head, only the palms and toes touching the floor, the body one straight line from the heels to the head (hips NOT piked up, back NOT sagging, knees NOT on the floor).
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -1526,7 +1533,7 @@ BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shad
 - Note: Semi-squat jumps - Drop to a half crouch position with hands on knees and arms straight, keep back as straight as possible, right foot slightly ahead of left.
 - Note: Jump to upright position with body straight and feet leaving floor. Reverse position of feet before landing. Return to half crouch position and repeat.
 
-**Kept:** (not made yet)
+**Status:** (not made yet)
 
 **Check before you keep a take:**
 
@@ -1554,9 +1561,9 @@ THE FOUR POSES (official exercise, follow exactly):
 3. FAR KNEE UP: the FAR (darker) knee lifted up to waist height so the thigh is horizontal and the shin hangs down; the NEAR (lighter) foot planted flat on the floor. Near arm bent and swinging forward, far arm bent and back. This pose must be clearly different from pose 1: the lifted knee is the darker leg.
 4. PASSING: both feet close to the floor, nearly upright, near arm forward and far arm back, both arms bent.
 
-Draw the arm and leg on the far side of the body in a noticeably darker shade of the same color (darker skin tone, darker shorts, darker shoe) so near and far limbs are easy to tell apart.
+Draw the arm and leg on the far side of the body in a SLIGHTLY darker shade of the SAME color, only about 10% darker (skin a little deeper, shorts a little deeper red, shoe a little deeper blue), the same hue as the near side, never brown, grey or near-black, so near and far limbs can be told apart without looking dirty or shadowed.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -1576,9 +1583,9 @@ THE FOUR POSES (official exercise, follow exactly):
 3. FAR KNEE UP: the FAR (darker) knee lifted up to waist height so the thigh is horizontal and the shin hangs down; the NEAR (lighter) foot planted flat on the floor. Near arm bent and swinging forward, far arm bent and back. This pose must be clearly different from pose 1: the lifted knee is the darker leg.
 4. PASSING: both feet close to the floor, nearly upright, near arm forward and far arm back, both arms bent.
 
-Draw the arm and leg on the far side of the body in a noticeably darker shade of the same color (darker skin tone, darker shorts, darker shoe) so near and far limbs are easy to tell apart.
+Draw the arm and leg on the far side of the body in a SLIGHTLY darker shade of the SAME color, only about 10% darker (skin a little deeper, shorts a little deeper red, shoe a little deeper blue), the same hue as the near side, never brown, grey or near-black, so near and far limbs can be told apart without looking dirty or shadowed.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -1594,7 +1601,7 @@ BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shad
 - Note: Semi-squat jumps - Drop to a half crouch position with hands on knees and arms straight, keep back as straight as possible, right foot slightly ahead of left.
 - Note: Jump to upright position with body straight and feet leaving floor. Reverse position of feet before landing. Return to half crouch position and repeat.
 
-**Kept:** (not made yet)
+**Status:** (not made yet)
 
 **Check before you keep a take:**
 
@@ -1621,9 +1628,9 @@ THE FOUR POSES (official exercise, follow exactly):
 3. CROUCH, FAR FOOT AHEAD: landed in the half crouch, the back straight and leaning forward about 45 degrees, the chest up, the head up and looking ahead, the hands resting on the knees with the arms straight, the FAR foot (his left, darker) one full shoe length ahead of the NEAR foot (his right, lighter), both feet flat on the floor.
 4. SECOND HOP: in the air after the jump from crouch 3, the same hop as the first hop but with the feet swapped back, so the NEAR foot (his right, lighter) is ahead of the far foot in the air: body upright and straight, knees slightly bent, feet a hand's width off the floor with the shoes mostly level, the arms swinging forward and a little up.
 
-Draw the arm and leg on the far side of the body in a noticeably darker shade of the same color (darker skin tone, darker shorts, darker shoe) so near and far limbs are easy to tell apart.
+Draw the arm and leg on the far side of the body in a SLIGHTLY darker shade of the SAME color, only about 10% darker (skin a little deeper, shorts a little deeper red, shoe a little deeper blue), the same hue as the near side, never brown, grey or near-black, so near and far limbs can be told apart without looking dirty or shadowed.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -1641,9 +1648,9 @@ THE FOUR POSES (official exercise, follow exactly):
 3. CROUCH, FAR FOOT AHEAD: landed in the half crouch, the back straight and leaning forward about 45 degrees, the chest up, the head up and looking ahead, the hands resting on the knees with the arms straight, the FAR foot (his left, darker) one full shoe length ahead of the NEAR foot (his right, lighter), both feet flat on the floor.
 4. SECOND HOP: in the air after the jump from crouch 3, the same hop as the first hop but with the feet swapped back, so the NEAR foot (his right, lighter) is ahead of the far foot in the air: body upright and straight, knees slightly bent, feet a hand's width off the floor with the shoes mostly level, the arms swinging forward and a little up.
 
-Draw the arm and leg on the far side of the body in a noticeably darker shade of the same color (darker skin tone, darker shorts, darker shoe) so near and far limbs are easy to tell apart.
+Draw the arm and leg on the far side of the body in a SLIGHTLY darker shade of the SAME color, only about 10% darker (skin a little deeper, shorts a little deeper red, shoe a little deeper blue), the same hue as the near side, never brown, grey or near-black, so near and far limbs can be told apart without looking dirty or shadowed.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -1675,9 +1682,9 @@ THE FOUR POSES (official exercise, follow exactly):
 3. CROUCH, FAR FOOT AHEAD: landed in the half crouch, the back straight and leaning forward about 45 degrees, the chest up, the head up and looking ahead, the hands resting on the knees with the arms straight, the FAR foot (his left, darker) one full shoe length ahead of the NEAR foot (his right, lighter), both feet flat on the floor.
 4. SECOND HOP: in the air after the jump from crouch 3, the same hop as the first hop but with the feet swapped back, so the NEAR foot (his right, lighter) is ahead of the far foot in the air: body upright and straight, knees slightly bent, feet a hand's width off the floor with the shoes mostly level, the arms swinging forward and a little up.
 
-Draw the arm and leg on the far side of the body in a noticeably darker shade of the same color (darker skin tone, darker shorts, darker shoe) so near and far limbs are easy to tell apart.
+Draw the arm and leg on the far side of the body in a SLIGHTLY darker shade of the SAME color, only about 10% darker (skin a little deeper, shorts a little deeper red, shoe a little deeper blue), the same hue as the near side, never brown, grey or near-black, so near and far limbs can be told apart without looking dirty or shadowed.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 
@@ -1727,7 +1734,7 @@ THE SIX POSES (official exercise, follow exactly):
 5. LEAN RIGHT: standing up again out of the right-hand touch, feet still wide apart, both arms held straight up above the head with the hands CLASPED together (fingers interlocked) and the arms straight and the upper arms touching the ears, the whole upper body leaning sideways toward HIS RIGHT (the left side of the picture) as part of a big circle.
 6. BEND BACK: standing, feet wide apart, both arms held straight up above the head with the hands CLASPED together (fingers interlocked) and the arms straight and the upper arms touching the ears, bending backward past upright as far as he can, hips pushed forward, chest and face lifted toward the sky, knees straight.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -1747,7 +1754,7 @@ THE SIX POSES (official exercise, follow exactly):
 5. LEAN RIGHT: standing up again out of the right-hand touch, feet still wide apart, both arms held straight up above the head with the hands CLASPED together (fingers interlocked) and the arms straight and the upper arms touching the ears, the whole upper body leaning sideways toward HIS RIGHT (the left side of the picture) as part of a big circle.
 6. BEND BACK: standing, feet wide apart, both arms held straight up above the head with the hands CLASPED together (fingers interlocked) and the arms straight and the upper arms touching the ears, bending backward past upright as far as he can, hips pushed forward, chest and face lifted toward the sky, knees straight.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -1788,7 +1795,7 @@ THE THREE POSES (official exercise, follow exactly):
 2. TWIST RIGHT: sitting up with the legs drawn up bent and the FEET OFF THE FLOOR, the upper body twisted so that his RIGHT ELBOW touches his LEFT KNEE, fingers still clasped behind the head.
 3. TWIST LEFT: the same, sitting up with the legs drawn up bent and the FEET OFF THE FLOOR, the upper body twisted the other way so that his LEFT ELBOW touches his RIGHT KNEE, fingers still clasped behind the head.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -1805,7 +1812,7 @@ THE THREE POSES (official exercise, follow exactly):
 2. TWIST RIGHT: sitting up with the legs drawn up bent and the FEET OFF THE FLOOR, the upper body twisted so that his RIGHT ELBOW touches his LEFT KNEE, fingers still clasped behind the head.
 3. TWIST LEFT: the same, sitting up with the legs drawn up bent and the FEET OFF THE FLOOR, the upper body twisted the other way so that his LEFT ELBOW touches his RIGHT KNEE, fingers still clasped behind the head.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -1845,9 +1852,9 @@ THE THREE POSES (official exercise, follow exactly):
 2. LIFTING: the arms, head, shoulders, chest and both legs just beginning to lift off the floor together, arms and legs straight.
 3. TOP: the arms, head, chest AND BOTH THIGHS lifted completely off the floor as high as he can, arms straight and stretched forward and slightly up beside the ears, legs straight with the knees LOCKED, back strongly arched, looking forward; only his lower belly and hips stay on the floor.
 
-Draw the arm and leg on the far side of the body in a noticeably darker shade of the same color (darker skin tone, darker shorts, darker shoe) so near and far limbs are easy to tell apart.
+Draw the arm and leg on the far side of the body in a SLIGHTLY darker shade of the SAME color, only about 10% darker (skin a little deeper, shorts a little deeper red, shoe a little deeper blue), the same hue as the near side, never brown, grey or near-black, so near and far limbs can be told apart without looking dirty or shadowed.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -1864,9 +1871,9 @@ THE THREE POSES (official exercise, follow exactly):
 2. LIFTING: the arms, head, shoulders, chest and both legs just beginning to lift off the floor together, arms and legs straight.
 3. TOP: the arms, head, chest AND BOTH THIGHS lifted completely off the floor as high as he can, arms straight and stretched forward and slightly up beside the ears, legs straight with the knees LOCKED, back strongly arched, looking forward; only his lower belly and hips stay on the floor.
 
-Draw the arm and leg on the far side of the body in a noticeably darker shade of the same color (darker skin tone, darker shorts, darker shoe) so near and far limbs are easy to tell apart.
+Draw the arm and leg on the far side of the body in a SLIGHTLY darker shade of the SAME color, only about 10% darker (skin a little deeper, shorts a little deeper red, shoe a little deeper blue), the same hue as the near side, never brown, grey or near-black, so near and far limbs can be told apart without looking dirty or shadowed.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -1907,7 +1914,7 @@ THE THREE POSES (official exercise, follow exactly):
 2. PUSH: arms straightened, the body one straight line from the heels to the head, only the palms and toes touching the floor (the top of a normal push-up).
 3. CLAP: pushed so hard that both HANDS ARE OFF THE FLOOR, the body still one straight line with only the toes touching the floor, both hands brought together in front of the chest as they CLAP.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -1924,7 +1931,7 @@ THE THREE POSES (official exercise, follow exactly):
 2. PUSH: arms straightened, the body one straight line from the heels to the head, only the palms and toes touching the floor (the top of a normal push-up).
 3. CLAP: pushed so hard that both HANDS ARE OFF THE FLOOR, the body still one straight line with only the toes touching the floor, both hands brought together in front of the chest as they CLAP.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -1967,7 +1974,7 @@ THE THREE POSES (official exercise, follow exactly):
 2. TAKE-OFF: just leaving the floor, the legs straightening with the feet together and both feet a little off the floor, the arms swinging up in front of him.
 3. SPREAD EAGLE: in mid-air, both feet well off the floor and spread astride at least shoulder width apart, both arms swung up overhead with the hands above head level.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -1984,7 +1991,7 @@ THE THREE POSES (official exercise, follow exactly):
 2. TAKE-OFF: just leaving the floor, the legs straightening with the feet together and both feet a little off the floor, the arms swinging up in front of him.
 3. SPREAD EAGLE: in mid-air, both feet well off the floor and spread astride at least shoulder width apart, both arms swung up overhead with the hands above head level.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -2032,7 +2039,7 @@ THE SIX POSES (official exercise, follow exactly):
 5. LEAN RIGHT: standing up again out of the right-hand touch, feet still wide apart, both arms held straight up above the head with the hands REVERSE CLASPED (fingers interlocked with the palms turned OUTWARD, away from the head) and the arms straight and the upper arms touching the ears, the whole upper body leaning sideways toward HIS RIGHT (the left side of the picture) as part of a big circle.
 6. BEND BACK: standing, feet wide apart, both arms held straight up above the head with the hands REVERSE CLASPED (fingers interlocked with the palms turned OUTWARD, away from the head) and the arms straight and the upper arms touching the ears, bending backward past upright as far as he can, hips pushed forward, chest and face lifted toward the sky, knees straight.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -2052,7 +2059,7 @@ THE SIX POSES (official exercise, follow exactly):
 5. LEAN RIGHT: standing up again out of the right-hand touch, feet still wide apart, both arms held straight up above the head with the hands REVERSE CLASPED (fingers interlocked with the palms turned OUTWARD, away from the head) and the arms straight and the upper arms touching the ears, the whole upper body leaning sideways toward HIS RIGHT (the left side of the picture) as part of a big circle.
 6. BEND BACK: standing, feet wide apart, both arms held straight up above the head with the hands REVERSE CLASPED (fingers interlocked with the palms turned OUTWARD, away from the head) and the arms straight and the upper arms touching the ears, bending backward past upright as far as he can, hips pushed forward, chest and face lifted toward the sky, knees straight.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -2092,9 +2099,9 @@ THE THREE POSES (official exercise, follow exactly):
 2. RISING: the upper body and BOTH straight legs lifting off the floor together about halfway, arms reaching forward toward the toes, feet together.
 3. PIKE: balanced on his seat in a V shape, the upper body AND both straight legs lifted clear of the floor, the arms straight and the fingertips touching the toes, feet together, legs and arms straight.
 
-Draw the arm and leg on the far side of the body in a noticeably darker shade of the same color (darker skin tone, darker shorts, darker shoe) so near and far limbs are easy to tell apart.
+Draw the arm and leg on the far side of the body in a SLIGHTLY darker shade of the SAME color, only about 10% darker (skin a little deeper, shorts a little deeper red, shoe a little deeper blue), the same hue as the near side, never brown, grey or near-black, so near and far limbs can be told apart without looking dirty or shadowed.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -2111,9 +2118,9 @@ THE THREE POSES (official exercise, follow exactly):
 2. RISING: the upper body and BOTH straight legs lifting off the floor together about halfway, arms reaching forward toward the toes, feet together.
 3. PIKE: balanced on his seat in a V shape, the upper body AND both straight legs lifted clear of the floor, the arms straight and the fingertips touching the toes, feet together, legs and arms straight.
 
-Draw the arm and leg on the far side of the body in a noticeably darker shade of the same color (darker skin tone, darker shorts, darker shoe) so near and far limbs are easy to tell apart.
+Draw the arm and leg on the far side of the body in a SLIGHTLY darker shade of the SAME color, only about 10% darker (skin a little deeper, shorts a little deeper red, shoe a little deeper blue), the same hue as the near side, never brown, grey or near-black, so near and far limbs can be told apart without looking dirty or shadowed.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -2153,9 +2160,9 @@ THE THREE POSES (official exercise, follow exactly):
 2. TOP: the arms, head, chest AND BOTH THIGHS lifted completely off the floor as high as he can, arms and legs straight, back strongly arched, looking forward.
 3. PRESS: from the top, one extra small push BACK and UP: the arms, chest and legs a little higher still, the back arched a little further, still with the arms and legs straight.
 
-Draw the arm and leg on the far side of the body in a noticeably darker shade of the same color (darker skin tone, darker shorts, darker shoe) so near and far limbs are easy to tell apart.
+Draw the arm and leg on the far side of the body in a SLIGHTLY darker shade of the SAME color, only about 10% darker (skin a little deeper, shorts a little deeper red, shoe a little deeper blue), the same hue as the near side, never brown, grey or near-black, so near and far limbs can be told apart without looking dirty or shadowed.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -2172,9 +2179,9 @@ THE THREE POSES (official exercise, follow exactly):
 2. TOP: the arms, head, chest AND BOTH THIGHS lifted completely off the floor as high as he can, arms and legs straight, back strongly arched, looking forward.
 3. PRESS: from the top, one extra small push BACK and UP: the arms, chest and legs a little higher still, the back arched a little further, still with the arms and legs straight.
 
-Draw the arm and leg on the far side of the body in a noticeably darker shade of the same color (darker skin tone, darker shorts, darker shoe) so near and far limbs are easy to tell apart.
+Draw the arm and leg on the far side of the body in a SLIGHTLY darker shade of the SAME color, only about 10% darker (skin a little deeper, shorts a little deeper red, shoe a little deeper blue), the same hue as the near side, never brown, grey or near-black, so near and far limbs can be told apart without looking dirty or shadowed.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -2215,7 +2222,7 @@ THE THREE POSES (official exercise, follow exactly):
 2. PUSH: arms straightened, the body one straight line from the heels to the head, only the palms and toes touching the floor (the top of a normal push-up).
 3. SLAP: pushed so hard that both HANDS ARE OFF THE FLOOR, the body still one straight line with only the toes touching the floor, both hands slapping flat against the CHEST.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -2232,7 +2239,7 @@ THE THREE POSES (official exercise, follow exactly):
 2. PUSH: arms straightened, the body one straight line from the heels to the head, only the palms and toes touching the floor (the top of a normal push-up).
 3. SLAP: pushed so hard that both HANDS ARE OFF THE FLOOR, the body still one straight line with only the toes touching the floor, both hands slapping flat against the CHEST.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -2275,9 +2282,9 @@ THE THREE POSES (official exercise, follow exactly):
 2. TAKE-OFF: just leaving the floor, the legs straightening and swinging up, feet together, the arms reaching forward.
 3. PIKE: in mid-air, both legs straight and raised to waist height in front of him, feet together, the body bent at the waist and the fingertips of both hands touching the toes.
 
-Draw the arm and leg on the far side of the body in a noticeably darker shade of the same color (darker skin tone, darker shorts, darker shoe) so near and far limbs are easy to tell apart.
+Draw the arm and leg on the far side of the body in a SLIGHTLY darker shade of the SAME color, only about 10% darker (skin a little deeper, shorts a little deeper red, shoe a little deeper blue), the same hue as the near side, never brown, grey or near-black, so near and far limbs can be told apart without looking dirty or shadowed.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```
@@ -2294,9 +2301,9 @@ THE THREE POSES (official exercise, follow exactly):
 2. TAKE-OFF: just leaving the floor, the legs straightening and swinging up, feet together, the arms reaching forward.
 3. PIKE: in mid-air, both legs straight and raised to waist height in front of him, feet together, the body bent at the waist and the fingertips of both hands touching the toes.
 
-Draw the arm and leg on the far side of the body in a noticeably darker shade of the same color (darker skin tone, darker shorts, darker shoe) so near and far limbs are easy to tell apart.
+Draw the arm and leg on the far side of the body in a SLIGHTLY darker shade of the SAME color, only about 10% darker (skin a little deeper, shorts a little deeper red, shoe a little deeper blue), the same hue as the near side, never brown, grey or near-black, so near and far limbs can be told apart without looking dirty or shadowed.
 
-BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer.
+BODY AND FACE RULES (every figure): exactly TWO arms and TWO legs, so count the limbs in every figure before you finish and never draw a third arm or leg; loose red athletic shorts that hang to mid-thigh with a wide leg opening, clearly shorts and not tights, leggings or briefs; a calm, friendly face with a small closed smile and level eyebrows, the eyes looking where he is going: no smirk, no big grin, no raised cheek; the back straight in standing and crouching poses; feet relaxed and natural, never pointed like a ballet dancer; PROPORTIONS LOCKED to the master character sheet: the same head size, head-to-body ratio, limb lengths, hand and shoe size and build in every figure and every strip, so a lying figure is the same boy as a standing one; NO cast shadow or ground shadow under or beside the figure (a contact shadow is added later, at composite time, on its own layer).
 
 BACKGROUND: perfectly flat solid magenta (#FF00FF), nothing else. No ground shadow, no floor line, no scenery, no gradient, no text, labels, numbers or arrows.
 ```

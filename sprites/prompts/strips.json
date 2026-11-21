@@ -5,7 +5,7 @@
     "aspect": "16:9",
     "resolution": "1K (about 1376x768)",
     "variations": 4,
-    "reference": "None for the first strip. After that, one pinned image of the character, and the words 'use only for appearance, ignore the poses'. Prone exercises: pin a standing strip, not a lying one.",
+    "reference": "Attach, as image references: (1) the master character sheet, for appearance and LOCKED proportions (until one is committed, the current character reference c4-run-knees-waist-high.png stands in), with the words 'use only for appearance and proportions, ignore the poses'; (2) for form, one or two stills from the 1959 RCAF 5BX film (docs/reference/rcaf-1959-stills/, added in PR #20) or the booklet drawing for that exercise, with the words 'use only for the body position'. Prone exercises: pin a standing character image, not a lying one. (Charles, 2026-11-21; earlier rule: none for the first strip, then one pinned character image.)",
     "credits_each": "about 1,218 without a reference, 1,827 with one (ElevenLabs, 2026-11-19)",
     "order": [
       "knee-push-up-c1 (pilot, no reference)",
@@ -14,7 +14,8 @@
       "stationary-run-c1",
       "scissor-jumps-c1",
       "alternate-leg-raise-c1"
-    ]
+    ],
+    "pacing": "The loop decides pacing, not the booklet's reps per minute (Charles, 2026-11-21). One loop is one clean cycle with pinned first and last frames."
   },
   "strips": {
     "toe-touch-c1": {
@@ -132,11 +133,12 @@
         "Stance A and stance B look almost the same in profile; only the shading differs. A front view would fix it.",
         "Stance B came out as a lunge with a bent back knee. An edit pass made it upright; see edits.json.",
         "Batch C (2026-11-20): two camera rows came back almost identical and stance B was still indistinguishable from A. A three-quarter front view was attempted but the model would not produce it.",
-        "Batch E (2026-11-21): one side-on row, near/far limb shading and an explicit light-shoe versus dark-shoe swap made both stances distinct; horizontal arms and clear airborne poses improved the result. Do not repeat the old multi-camera retake."
+        "Batch E (2026-11-21): one side-on row, near/far limb shading and an explicit light-shoe versus dark-shoe swap made both stances distinct; horizontal arms and clear airborne poses improved the result. Do not repeat the old multi-camera retake.",
+        "Charles (2026-11-21): jump frames use a 3/4 view. This SUPERSEDES the Batch E note above that kept one strict side-on row: in side view the two stances still read alike, and a 3/4 view separates the forward and back limbs. Keep the light-shoe versus dark-shoe swap and the horizontal arms from Batch E; do not bring back the two-camera retake."
       ],
       "chart": 1,
       "slot": "jump",
-      "view": "strict side view facing right",
+      "view": "three-quarter view: side-on body turned about 45 degrees toward the camera, facing right, so the forward and backward arms and legs separate clearly, with the SAME camera angle in every pose",
       "retake": {
         "attach": [
           "the previous sheet to fix: ex5-scissor-jumps.png",
@@ -220,15 +222,16 @@
       "layout": "In every pose he lies on his back with his HEAD ON THE LEFT and his FEET ON THE RIGHT, same scale, all on the same invisible floor line, wide empty gaps so the figures never touch. Draw only the boy: no chair, no objects.",
       "poses": [
         "START: lying flat on his back, legs straight on the floor with the feet about six inches apart, arms straight and resting at his sides.",
-        "RISING: halfway up, upper body lifted about 45 degrees off the floor, arms reaching forward, heels still on the floor, knees allowed to bend very slightly.",
-        "TOP: sitting up to a vertical position, back straight and upright, arms reaching forward toward the feet, FEET STAYING FLAT ON THE FLOOR, knees bent only slightly (hands NOT behind the head, heels NOT lifted)."
+        "RISING: halfway up, upper body lifted about 45 degrees off the floor, arms straight and reaching forward with the HANDS SLIDING ALONG THE TOPS OF THE THIGHS toward the knees (palms resting on the thighs, not floating above them), heels still on the floor, knees allowed to bend very slightly.",
+        "TOP: sitting up to a vertical position, back straight and upright, arms straight with the hands having slid along the thighs PAST THE KNEES toward the feet, FEET STAYING FLAT ON THE FLOOR, knees bent only slightly (hands NOT behind the head, heels NOT lifted)."
       ],
       "check": [
         "Three poses, head on the left, feet on the right",
         "Feet stay on the floor in every pose",
         "TOP is a vertical, upright torso (this is a full sit-up, not the partial one in chart 1)",
         "Knees at most slightly bent",
-        "Hands at the sides or reaching forward, not behind the head; no chair"
+        "Hands at the sides or reaching forward, not behind the head; no chair",
+        "The hands slide along the thighs toward the knees as he rises: on the thighs in RISING, at or past the knees at TOP"
       ],
       "draft": [
         "The booklet allows 'knees bend slightly' for this exercise. Chart 1's partial sit-up did not."
@@ -247,7 +250,8 @@
       },
       "learned": [
         "Right on the first try: lying flat, rising to about 45 degrees, then a vertical torso with the arms reaching and the feet staying on the floor.",
-        "Anchored by the feet (span-right): the shorts wander 46 px across the poses. Anchoring by the hips would be steadier still."
+        "Anchored by the feet (span-right): the shorts wander 46 px across the poses. Anchoring by the hips would be steadier still.",
+        "Charles (2026-11-21): the hands did not track the legs, so in the loop they appeared to float and then jump. RISING and TOP now say the hands slide along the tops of the thighs toward and past the knees. One prompt revision only; not a show-stopper."
       ]
     },
     "back-extension-c2": {
@@ -514,7 +518,8 @@
         "UP: arms straight, body one straight line, knees off the floor",
         "CHIN: body low and straight, the chin on the floor IN FRONT of the hands, the head ahead of the hands",
         "FOREHEAD: hips high in an upside-down V (a pike), the forehead on the floor BEHIND the hands, hands ahead of the forehead",
-        "The three poses are clearly different at a glance"
+        "The three poses are clearly different at a glance",
+        "CHIN must touch the floor exactly; FOREHEAD may be a close approximation if the pike shape is right"
       ],
       "draft": [
         "The booklet does not say whether this push-up is on the toes or the knees. I assumed palms and toes, continuing chart 2. If it should be the knees, tell me and I will change one phrase.",
@@ -555,7 +560,8 @@
         ]
       },
       "learned": [
-        "Batch C (2026-11-20): our FOREHEAD wording (body straight, chest almost on the floor) contradicted the booklet. The booklet drawing (5BX figures/c3e4.png) shows the forehead pose as a pike: hips high, head tucked between the arms, which is how the forehead gets behind the hands. Rewritten to match; attach the booklet drawing."
+        "Batch C (2026-11-20): our FOREHEAD wording (body straight, chest almost on the floor) contradicted the booklet. The booklet drawing (5BX figures/c3e4.png) shows the forehead pose as a pike: hips high, head tucked between the arms, which is how the forehead gets behind the hands. Rewritten to match; attach the booklet drawing.",
+        "Charles (2026-11-21): the CHIN touch is the target and must be exact. FOREHEAD-to-floor may be approximated by the pike reference pose (forehead close to the floor behind the hands, hips high); a near miss is accepted. Reference: the RCAF 1959 film stills (docs/reference/rcaf-1959-stills/) and the booklet drawing figures/c3e4.png."
       ],
       "remake": {
         "booklet": "BOOKLET-c3e4.png"

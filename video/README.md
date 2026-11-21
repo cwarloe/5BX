@@ -98,6 +98,11 @@ figure in any pose of the sheet, which is standing height for an upright
 movement and body length for a floor one. That one number goes to `F['body']`,
 so the person stays the same person throughout.
 
+> **Superseded (2026-11-21):** Charles approved the opposite: one camera, no
+> zoom, lying figures scaled up to 1.537548 x the standing scale, calibrated on
+> head landmarks rather than the bounding box, head never cropped. The spec is
+> `sprites/config/theme.json` (`stage`). The text below describes the old rule.
+
 `DEPTH` then stages the exercises front to back on purpose. Floor work sits at
 `.88`, slightly further from camera than standing work at `1.0`. That is partly
 taste and partly honesty: a kneeling push-up really is shorter than a man is

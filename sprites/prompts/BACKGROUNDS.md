@@ -32,6 +32,8 @@ DEPTH: objects shrink steadily with distance and every layer sits on the same ho
 
 COLOR RULE: do not use pink, magenta or saturated purple anywhere in the artwork (the magenta background is removed by software). Use blue-grey for haze and distance. All edges crisp: no glow, feathering, blur or airbrushed edges against the background.
 
+OVERLAY CONTRAST (subtle): white on-screen graphics (a ring timer in the top right corner and a name card in the top left) sit over the top corners of this scene, so the top-left and top-right areas must be slightly darker than white, about 10 to 20 percent below pure white in brightness, but never dark, grey or gloomy. Indoors, paint walls a slightly deeper cream, beige or other soft light color, not near-white. Outdoors, make the sky a true clear blue in the upper part of the image, not a very pale or washed-out blue. Keep the change gentle; the scene must still read as bright and cheerful.
+
 THE SEVEN PLANES, from the farthest to the nearest. Draw exactly these, each at its own depth, and nothing else:
 1. SKY: a smooth soft blue gradient, deeper blue at the top and pale near the horizon, with a gentle glow where the sun is. No clouds, no objects. It fills the whole image, edge to edge.
 2. CLOUDS: five to seven soft puffy cartoon clouds, white with one pale blue-grey shadow tone, mostly in the upper half, a few small ones lower; none near the horizon line and none in the lower half. Keep every cloud above the 56% line.
@@ -57,6 +59,8 @@ THIS LAYER: a smooth soft blue gradient, deeper blue at the top and pale near th
 POSITION: It fills the whole image, edge to edge.
 
 COLOR RULE: do not use pink, magenta or saturated purple anywhere in the artwork (the magenta background is removed by software). Use blue-grey for haze and distance. All edges crisp: no glow, feathering, blur or airbrushed edges against the background.
+
+OVERLAY CONTRAST (subtle): white on-screen graphics (a ring timer in the top right corner and a name card in the top left) sit over the top corners of this scene, so the top-left and top-right areas must be slightly darker than white, about 10 to 20 percent below pure white in brightness, but never dark, grey or gloomy. Indoors, paint walls a slightly deeper cream, beige or other soft light color, not near-white. Outdoors, make the sky a true clear blue in the upper part of the image, not a very pale or washed-out blue. Keep the change gentle; the scene must still read as bright and cheerful.
 ```
 
 ### Layer 2: Clouds  (save as `bg-forest-landscape-02-clouds.png`)
@@ -173,6 +177,8 @@ DEPTH: objects shrink steadily with distance and every layer sits on the same ho
 
 COLOR RULE: do not use pink, magenta or saturated purple anywhere in the artwork (the magenta background is removed by software). Use blue-grey for haze and distance. All edges crisp: no glow, feathering, blur or airbrushed edges against the background.
 
+OVERLAY CONTRAST (subtle): white on-screen graphics (a ring timer in the top right corner and a name card in the top left) sit over the top corners of this scene, so the top-left and top-right areas must be slightly darker than white, about 10 to 20 percent below pure white in brightness, but never dark, grey or gloomy. Indoors, paint walls a slightly deeper cream, beige or other soft light color, not near-white. Outdoors, make the sky a true clear blue in the upper part of the image, not a very pale or washed-out blue. Keep the change gentle; the scene must still read as bright and cheerful.
+
 THE SEVEN PLANES, from the farthest to the nearest. Draw exactly these, each at its own depth, and nothing else:
 1. SKY: a smooth gradient from clear turquoise-blue at the top to pale cream-blue near the horizon, with a gentle glow where the sun is. No clouds, no objects. It fills the whole image, edge to edge.
 2. CLOUDS: four to six small puffy tropical clouds with flat soft bottoms, white with one pale blue-grey shadow tone, in the upper half only. Keep every cloud above the 56% line.
@@ -198,6 +204,8 @@ THIS LAYER: a smooth gradient from clear turquoise-blue at the top to pale cream
 POSITION: It fills the whole image, edge to edge.
 
 COLOR RULE: do not use pink, magenta or saturated purple anywhere in the artwork (the magenta background is removed by software). Use blue-grey for haze and distance. All edges crisp: no glow, feathering, blur or airbrushed edges against the background.
+
+OVERLAY CONTRAST (subtle): white on-screen graphics (a ring timer in the top right corner and a name card in the top left) sit over the top corners of this scene, so the top-left and top-right areas must be slightly darker than white, about 10 to 20 percent below pure white in brightness, but never dark, grey or gloomy. Indoors, paint walls a slightly deeper cream, beige or other soft light color, not near-white. Outdoors, make the sky a true clear blue in the upper part of the image, not a very pale or washed-out blue. Keep the change gentle; the scene must still read as bright and cheerful.
 ```
 
 ### Layer 2: Clouds  (save as `bg-beach-landscape-02-clouds.png`)
@@ -314,6 +322,8 @@ DEPTH: objects shrink steadily with distance and every layer sits on the same ho
 
 COLOR RULE: do not use pink, magenta or saturated purple anywhere in the artwork (the magenta background is removed by software). Use blue-grey for haze and distance. All edges crisp: no glow, feathering, blur or airbrushed edges against the background.
 
+OVERLAY CONTRAST (subtle): white on-screen graphics (a ring timer in the top right corner and a name card in the top left) sit over the top corners of this scene, so the top-left and top-right areas must be slightly darker than white, about 10 to 20 percent below pure white in brightness, but never dark, grey or gloomy. Indoors, paint walls a slightly deeper cream, beige or other soft light color, not near-white. Outdoors, make the sky a true clear blue in the upper part of the image, not a very pale or washed-out blue. Keep the change gentle; the scene must still read as bright and cheerful.
+
 THE SEVEN PLANES, from the farthest to the nearest. Draw exactly these, each at its own depth, and nothing else:
 1. SKY: a smooth gradient from deep clear blue at the top to a pale peach-cream near the horizon, with a gentle glow where the sun is. No clouds, no objects. It fills the whole image, edge to edge.
 2. CLOUDS: three or four thin streaky white clouds in the upper half only, with one pale blue-grey shadow tone. Keep every cloud above the 56% line.
@@ -339,6 +349,8 @@ THIS LAYER: a smooth gradient from deep clear blue at the top to a pale peach-cr
 POSITION: It fills the whole image, edge to edge.
 
 COLOR RULE: do not use pink, magenta or saturated purple anywhere in the artwork (the magenta background is removed by software). Use blue-grey for haze and distance. All edges crisp: no glow, feathering, blur or airbrushed edges against the background.
+
+OVERLAY CONTRAST (subtle): white on-screen graphics (a ring timer in the top right corner and a name card in the top left) sit over the top corners of this scene, so the top-left and top-right areas must be slightly darker than white, about 10 to 20 percent below pure white in brightness, but never dark, grey or gloomy. Indoors, paint walls a slightly deeper cream, beige or other soft light color, not near-white. Outdoors, make the sky a true clear blue in the upper part of the image, not a very pale or washed-out blue. Keep the change gentle; the scene must still read as bright and cheerful.
 ```
 
 ### Layer 2: Clouds  (save as `bg-desert-landscape-02-clouds.png`)
@@ -455,8 +467,10 @@ DEPTH: objects shrink steadily with distance and every layer sits on the same ho
 
 COLOR RULE: do not use pink, magenta or saturated purple anywhere in the artwork (the magenta background is removed by software). Use blue-grey for haze and distance. All edges crisp: no glow, feathering, blur or airbrushed edges against the background.
 
+OVERLAY CONTRAST (subtle): white on-screen graphics (a ring timer in the top right corner and a name card in the top left) sit over the top corners of this scene, so the top-left and top-right areas must be slightly darker than white, about 10 to 20 percent below pure white in brightness, but never dark, grey or gloomy. Indoors, paint walls a slightly deeper cream, beige or other soft light color, not near-white. Outdoors, make the sky a true clear blue in the upper part of the image, not a very pale or washed-out blue. Keep the change gentle; the scene must still read as bright and cheerful.
+
 THE SEVEN PLANES, from the farthest to the nearest. Draw exactly these, each at its own depth, and nothing else:
-1. SKY: a smooth gradient from clear pale blue at the top to near-white blue near the horizon, with a gentle glow where the sun is. No clouds, no objects. It fills the whole image, edge to edge.
+1. SKY: a smooth gradient from clear true blue at the top to a soft light blue near the horizon (not near-white), with a gentle glow where the sun is. No clouds, no objects. It fills the whole image, edge to edge.
 2. CLOUDS: a few thin high wispy white clouds in the upper half only, with one pale blue-grey shadow tone. Keep every cloud above the 56% line.
 3. FAR LAYER: jagged snow-capped alpine peaks in blue-white with one soft blue-grey shadow tone, hazy and simple, about 24% of the image height; the base sits on the horizon. Use blue-grey for shadows, not purple. Its base sits on the horizon (56% down); extend its bottom down to 64% so nothing shows through when the ground is stacked on top.
 4. NEAR LAYER: lower rounded snowy slopes with a band of dark-green pine forest along the base, about 14% of the image height; the base sits on the horizon. Its base sits at 56% down; extend its bottom down to 64% so nothing shows through when the ground is stacked on top.
@@ -476,10 +490,12 @@ Using the attached scene image as the EXACT reference for style, colors, light, 
 - This layer is fully opaque and fills the whole image edge to edge (no magenta). Draw the sky completely, including the parts that were behind the clouds and the mountains in the reference.
 - No characters, no text, no frame, no shadows that belong to other layers.
 
-THIS LAYER: a smooth gradient from clear pale blue at the top to near-white blue near the horizon, with a gentle glow where the sun is. No clouds, no objects.
+THIS LAYER: a smooth gradient from clear true blue at the top to a soft light blue near the horizon (not near-white), with a gentle glow where the sun is. No clouds, no objects.
 POSITION: It fills the whole image, edge to edge.
 
 COLOR RULE: do not use pink, magenta or saturated purple anywhere in the artwork (the magenta background is removed by software). Use blue-grey for haze and distance. All edges crisp: no glow, feathering, blur or airbrushed edges against the background.
+
+OVERLAY CONTRAST (subtle): white on-screen graphics (a ring timer in the top right corner and a name card in the top left) sit over the top corners of this scene, so the top-left and top-right areas must be slightly darker than white, about 10 to 20 percent below pure white in brightness, but never dark, grey or gloomy. Indoors, paint walls a slightly deeper cream, beige or other soft light color, not near-white. Outdoors, make the sky a true clear blue in the upper part of the image, not a very pale or washed-out blue. Keep the change gentle; the scene must still read as bright and cheerful.
 ```
 
 ### Layer 2: Clouds  (save as `bg-snow-landscape-02-clouds.png`)
@@ -596,6 +612,8 @@ DEPTH: objects shrink steadily with distance and every layer sits on the same ho
 
 COLOR RULE: do not use pink, magenta or saturated purple anywhere in the artwork (the magenta background is removed by software). Use blue-grey for haze and distance. All edges crisp: no glow, feathering, blur or airbrushed edges against the background.
 
+OVERLAY CONTRAST (subtle): white on-screen graphics (a ring timer in the top right corner and a name card in the top left) sit over the top corners of this scene, so the top-left and top-right areas must be slightly darker than white, about 10 to 20 percent below pure white in brightness, but never dark, grey or gloomy. Indoors, paint walls a slightly deeper cream, beige or other soft light color, not near-white. Outdoors, make the sky a true clear blue in the upper part of the image, not a very pale or washed-out blue. Keep the change gentle; the scene must still read as bright and cheerful.
+
 THE SEVEN PLANES, from the farthest to the nearest. Draw exactly these, each at its own depth, and nothing else:
 1. SKY: a smooth soft blue gradient, deeper at the top and pale near the horizon, with a gentle glow where the sun is. No clouds, no objects. It fills the whole image, edge to edge.
 2. CLOUDS: five or six soft puffy cartoon clouds, white with one pale blue-grey shadow tone, in the upper half only. Keep every cloud above the 56% line.
@@ -621,6 +639,8 @@ THIS LAYER: a smooth soft blue gradient, deeper at the top and pale near the hor
 POSITION: It fills the whole image, edge to edge.
 
 COLOR RULE: do not use pink, magenta or saturated purple anywhere in the artwork (the magenta background is removed by software). Use blue-grey for haze and distance. All edges crisp: no glow, feathering, blur or airbrushed edges against the background.
+
+OVERLAY CONTRAST (subtle): white on-screen graphics (a ring timer in the top right corner and a name card in the top left) sit over the top corners of this scene, so the top-left and top-right areas must be slightly darker than white, about 10 to 20 percent below pure white in brightness, but never dark, grey or gloomy. Indoors, paint walls a slightly deeper cream, beige or other soft light color, not near-white. Outdoors, make the sky a true clear blue in the upper part of the image, not a very pale or washed-out blue. Keep the change gentle; the scene must still read as bright and cheerful.
 ```
 
 ### Layer 2: Clouds  (save as `bg-city-landscape-02-clouds.png`)
@@ -737,6 +757,8 @@ DEPTH: objects shrink steadily with distance and every layer sits on the same ho
 
 COLOR RULE: do not use pink, magenta or saturated purple anywhere in the artwork (the magenta background is removed by software). Use blue-grey for haze and distance. All edges crisp: no glow, feathering, blur or airbrushed edges against the background.
 
+OVERLAY CONTRAST (subtle): white on-screen graphics (a ring timer in the top right corner and a name card in the top left) sit over the top corners of this scene, so the top-left and top-right areas must be slightly darker than white, about 10 to 20 percent below pure white in brightness, but never dark, grey or gloomy. Indoors, paint walls a slightly deeper cream, beige or other soft light color, not near-white. Outdoors, make the sky a true clear blue in the upper part of the image, not a very pale or washed-out blue. Keep the change gentle; the scene must still read as bright and cheerful.
+
 THE SEVEN PLANES, from the farthest to the nearest. Draw exactly these, each at its own depth, and nothing else:
 1. SKY: the BACK WALL: a smooth light warm-grey wall with a very gentle top-to-bottom gradient, filling the whole image. No objects. It fills the whole image, edge to edge.
 2. CLOUDS: WINDOWS AND WALL FEATURES: three large tall windows showing a bright pale-blue sky, a round wall clock and a plain banner without any writing, all in the upper two thirds of the image, mostly in the left and right thirds. Keep every cloud above the 56% line.
@@ -762,6 +784,8 @@ THIS LAYER: the BACK WALL: a smooth light warm-grey wall with a very gentle top-
 POSITION: It fills the whole image, edge to edge.
 
 COLOR RULE: do not use pink, magenta or saturated purple anywhere in the artwork (the magenta background is removed by software). Use blue-grey for haze and distance. All edges crisp: no glow, feathering, blur or airbrushed edges against the background.
+
+OVERLAY CONTRAST (subtle): white on-screen graphics (a ring timer in the top right corner and a name card in the top left) sit over the top corners of this scene, so the top-left and top-right areas must be slightly darker than white, about 10 to 20 percent below pure white in brightness, but never dark, grey or gloomy. Indoors, paint walls a slightly deeper cream, beige or other soft light color, not near-white. Outdoors, make the sky a true clear blue in the upper part of the image, not a very pale or washed-out blue. Keep the change gentle; the scene must still read as bright and cheerful.
 ```
 
 ### Layer 2: Clouds  (save as `bg-gym-landscape-02-clouds.png`)
@@ -872,6 +896,8 @@ CHANGES:
 3. FLOOR: keep the mid-grey (about #707680) smooth rubber floor and its faint seams. Keep the strip from 73% to 86% down completely flat, smooth and empty, and keep the whole middle half of the floor empty. Do not add a mat.
 4. Do not move the wall-floor line (61% down).
 5. Do not use pink, magenta or saturated purple anywhere.
+
+OVERLAY CONTRAST (subtle): white on-screen graphics (a ring timer in the top right corner and a name card in the top left) sit over the top corners of this scene, so the top-left and top-right areas must be slightly darker than white, about 10 to 20 percent below pure white in brightness, but never dark, grey or gloomy. Indoors, paint walls a slightly deeper cream, beige or other soft light color, not near-white. Outdoors, make the sky a true clear blue in the upper part of the image, not a very pale or washed-out blue. Keep the change gentle; the scene must still read as bright and cheerful.
 ```
 
 ### Floor mat overlay, muted teal (attach the finished gym of this shape)  (save as `bg-gym-landscape-mat-teal.png`)

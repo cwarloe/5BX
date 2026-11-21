@@ -192,6 +192,10 @@ CYCLE_KIND = {'ex1': 'centre', 'ex2': 'pingpong', 'ex3': 'centre',
 
 # Staging, front to back. Floor work sits a little further from camera than
 # standing work so the figure does not swell when he lies down.
+# SUPERSEDED 2026-11-21: the approved stage scales lying figures UP
+# (1.537548 x the standing scale, head-landmark calibrated, one camera, no
+# zoom). See sprites/config/theme.json 'stage'. Values left as-is until this
+# builder is ported or retired.
 DEPTH = {'ex1': 1.0, 'ex2': .88, 'ex3': .88, 'ex4': .88, 'run': 1.0, 'jump': 1.0}
 
 def cycle_for(kind, n):

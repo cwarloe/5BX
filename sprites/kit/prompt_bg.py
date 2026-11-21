@@ -42,6 +42,7 @@ def master(theme, spec, fmt, envk, light):
     env = spec["environments"][envk]; n = numbers(theme, spec, fmt, env); n["light"] = spec["lights"][light]
     lines = [f"Create ONE complete {n['aspect']} ({n['W']}x{n['H']}) background scene for a cartoon fitness video: {env['setting']}. No characters, no people, no animals, no text, no frame, no border.", "",
              fill(spec["style"], n), "", fill(spec["camera"], n), "", fill(spec["stage"], n), "", fill(spec["light"], n), "", fill(spec["depth"], n), "", fill(spec["keying"], n), "",
+             *([spec["contrast"], ""] if spec.get("contrast") else []),
              "THE SEVEN PLANES, from the farthest to the nearest. Draw exactly these, each at its own depth, and nothing else:"]
     for i, pl in enumerate(spec["planes"], 1):
         n2 = dict(n, ext=n["ground_top"] + 8); txt = fill(env["planes"][pl], n2)
@@ -62,6 +63,7 @@ def layer(theme, spec, fmt, envk, light, plane):
              f"THIS LAYER: {fill(env['planes'][plane], n)}", f"POSITION: {fill(PLANE_BASE[plane], n)}"]
     if plane in ("back", "front"): lines.append(f"Keep the strip {n['strip_top']}% to {n['strip_bottom']}% down completely empty, and the middle of the image calm.")
     lines += ["", fill(spec["keying"], n)]
+    if plane == "sky" and spec.get("contrast"): lines += ["", spec["contrast"]]
     return "\n".join(lines)
 
 
@@ -72,6 +74,7 @@ def gym_keeper(theme, spec, fmt):
     items = []
     if fmt == "landscape": items.append({"plane": "finish", "title": "Finishing pass on the keeper (attach the grey-floor gym)", "file": f"bg-gym-{fmt}-final.png", "prompt": g["finish"].format(**n)})
     else: items.append({"plane": "portrait-room", "title": "Tall version of the room (attach the finished wide gym)", "file": f"bg-gym-{fmt}-final.png", "prompt": g["portrait_room"].format(**n)})
+    if spec.get("contrast"): items[0]["prompt"] += "\n\n" + spec["contrast"]
     for m in g["mats"]: items.append({"plane": "mat-" + m["id"], "title": f"Floor mat overlay, {m['name']} (attach the finished gym of this shape)", "file": f"bg-gym-{fmt}-mat-{m['id']}.png", "prompt": g["mat"].format(name=m["name"], hex=m["hex"], border=m["border"], edge=m["edge"], **n)})
     return {"title": g["title"], "numbers": {k: n[k] for k in ("W", "H", "floor", "strip_top", "strip_bottom")} | {"horizon": n["wall_floor"], "ground_top": n["wall_floor"], "boy_h": round(F["box"][1] / H * 100), "back": n["strip_top"], "front": n["strip_bottom"]}, "items": items}
 

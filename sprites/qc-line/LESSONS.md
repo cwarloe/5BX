@@ -142,7 +142,35 @@ the knee push-up. Image/video generation is paused while another bot adjusts
 art-generation instructions. The no-fade preference is not a blanket approval
 of the character's anatomical form.
 
+**Clarification (Charles, 2026-11-21):** the "other bot" revising the art
+instructions is the artwork bot itself (5BX Sprite Animator). It is exempt from
+this pause and is cleared to generate images and video.
+
 **Lean decision:** No new QC tool, paid model, or retake batch yet. Measure
 manual touch time and first-pass **form** approval once an actual human review
 has occurred; neither can be inferred from successful renders. Scissor jumps
 remain held for the additional reference material.
+
+## 11. Stage, motion, overlay and prompt decisions (2026-11-21)
+
+**Source:** Charles's review of the v3 layout mockups, the Chart 3 push-up sheet and the knee push-up pilot,
+2026-11-21. These are decisions and prompt fixes, not new measurements. No approved art was changed.
+
+| ID | Defect | Where seen | Cause | Countermeasure | Lives in |
+|----|--------|-----------|-------|----------------|----------|
+| D-15 | Far-side limbs too dark, reading as a dirty shadow | Several Chart 2 and Chart 3 takes | "Noticeably darker" was over-read by the generator | Ask for about 10% darker, same hue, never brown or near-black; fix existing sheets with a one-time recolor saved as a new asset version | `config/character.json` far_side, `R-NEAR-FAR` |
+| D-16 | Drawn ground shadow keyed out badly, so the boy looked like he was floating | Layout mockups | Generator draws a shadow; the keyer removes part of it | No shadows on sprites; add the contact shadow at composite time on its own layer | `config/character.json` body_rules, `R-NO-SHADOW`, `config/scene.json` contact-shadow |
+| D-17 | Lying figure too small next to the standing one (and, earlier, a giant when fitted to the box) | Old builder DEPTH 0.88, kit fit 0.72 to 0.78; v2 mockups | Scale chosen from the bounding box, then shrunk for floor work | One camera, no zoom; lying scale = 1.537548 x standing scale, calibrated on head landmarks; head never cropped | `config/theme.json` stage |
+| D-14 (decision) | Crossfade shows two bodies mid-fade | Knee push-up pilot | Blending full-body drawings | Crossfade retired as the default (`fade_max_seconds` 0); loops use pinned first and last frames | `config/theme.json` fade_note |
+| D-18 | Chart 2 sit-up hands float and then jump instead of sliding along the legs | sit-up-c2 loop | Pose text said only "arms reaching forward" | Hands slide along the tops of the thighs toward and past the knees; one revision only | `prompts/strips.json` sit-up-c2 |
+| D-19 | Scissor stances A and B still read alike in strict side view | scissor-jumps-c1 | Side view stacks the forward and back limbs | Jump frames use a 3/4 view, superseding the Batch E strict-side note | `prompts/strips.json` scissor-jumps-c1 |
+| D-20 | Proportions drift between strips (head and limb size) | Lying versus standing sheets | No fixed proportion reference | Lock proportions to the master character sheet; attach it plus RCAF 1959 film stills as references | `config/character.json`, `prompts/strips.json` _generation |
+| D-21 | White ring timer has little contrast over near-white walls and very pale skies | v3 and v4 layout mockups (cream gym wall) | Backgrounds were specified bright for the boy, with no thought for a white overlay | Every background option is subtly darker behind the top corners: about 10 to 20 percent below white, never dark; walls a deeper cream or soft light color, skies a true blue | `prompts/backgrounds.spec.json` contrast, `config/scene.json`, `config/theme.json` overlay.background_contrast |
+| Decision | Bottom-corner overlay tried and rejected | v4 mockup (`docs/reference/layout/`) | Card crowds the lying boy's head; timer sits over the floor | Keep the top corners (Charles, 2026-11-21: 'above is better') | `config/theme.json` overlay |
+| Note | Chart 3 forehead pose misses the floor slightly | chin-forehead-push-up-c3 | Physically awkward pose | Accepted by Charles: chin touch is the target; forehead may be approximated by the pike reference | `prompts/strips.json` chin-forehead-push-up-c3 |
+
+**Other decisions recorded:** the default render stays 1920x1080 at 30 fps; 1280x720 at 24 fps is an allowed test
+profile if it plays smoother. The overlay standard is Fraser-style (slanted name card plus one tip top left, minimal
+ring timer top right); a bottom-left and bottom-right variant was tried in mockup v4 and rejected. The loop decides pacing, not the
+booklet's reps per minute. The knee push-up pilot is a pilot, not a binding constraint, and Charles authorized
+trying pinned-frame loops on 2026-11-21. Human form review (Gate B) is still required before release.

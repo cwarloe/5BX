@@ -1,7 +1,48 @@
 {
   "_about": "Everything about how the video LOOKS and SAYS. No code changes needed for any of this.",
   "fps": 30,
-  "fade_max_seconds": 0.3,
+  "fps_note": "Default render profile: 1920x1080 at 30 fps (formats.landscape). Allowed test profile: 1280x720 at 24 fps, for small tests and if it plays smoother overall (Charles, 2026-11-21). See 'profiles'.",
+  "profiles": {
+    "default": {
+      "W": 1920,
+      "H": 1080,
+      "fps": 30
+    },
+    "test": {
+      "W": 1280,
+      "H": 720,
+      "fps": 24,
+      "_hint": "Allowed for small tests or if it comes out smoother. Stage pixel values scale by H/1080."
+    }
+  },
+  "fade_max_seconds": 0,
+  "fade_note": "Crossfade retired as the default (Charles, 2026-11-21: 'Crossfade is probably worse'). A crossfade between full-body drawings shows two bodies mid-fade (D-14). Loops are built with pinned first and last frames instead: keyframed compositing or interpolation from approved poses, or generated video pinned on the approved pose at both ends so the last frame matches the first. The old value was 0.3; the kit still honours a positive value if someone wants to compare.",
+  "stage": {
+    "_about": "The approved one-camera stage (Charles, 2026-11-21, mockup v3). One camera, no zoom, no camera move. Values are for the default 1920x1080 profile; for 1280x720 multiply by 2/3.",
+    "camera": "fixed: no zoom, no pan, no cut between exercises",
+    "frame": [
+      1920,
+      1080
+    ],
+    "floor_y": 975,
+    "foot_x": 960,
+    "standing_head_top_min": 45,
+    "lying_scale_multiplier": 1.537548,
+    "lying_scale_rule": "Lying and floor figures are scaled UP relative to the standing scale, by lying_scale_multiplier, so the boy looks comparable in size lying and standing. This replaces the old rule that made floor figures smaller (video/chart.py DEPTH 0.88 and the kit 'fit' 0.72 to 0.78 in config/strips.json). The value is the midpoint of the two lying scales compared in layout mockup v2: large enough to read clearly, without the earlier 'giant guy'.",
+    "calibration": "Measure scale on head landmarks (ear height, and hairline to chin), not the bounding box. A bounding box changes with the pose; the head does not.",
+    "head_crop": "The head is never cropped in any frame of any pose (YouTube MznqHWzCv8s is the counter-example).",
+    "fill": "The boy fills the frame as much as the head-never-cropped rule allows.",
+    "layers": "Keep background, character and overlay as separate layers so versions are fast to make.",
+    "calibrated_on": {
+      "profile": "1280x720",
+      "standing_scale": 0.936556,
+      "lying_scale": 1.44,
+      "floor_y": 650,
+      "foot_x": 640,
+      "source": "5bx-anim layout-mockups v3 stage.json"
+    },
+    "status": "Specification. The kit (kit/build.py) still sizes figures by box fit times 'fit'; porting this rule into the kit is open work."
+  },
   "key": {
     "lo": 28,
     "hi": 95
@@ -111,5 +152,53 @@
       }
     }
   },
-  "_chart_looks_hint": "A chart can have its own room and props. Charts without an entry use \"backdrop\" above (the original code-drawn forest, retired for new rooms as they arrive). Add \"scene\": \"config/scene.chartN.json\" to give a chart its own props (a mat overlay)."
+  "_chart_looks_hint": "A chart can have its own room and props. Charts without an entry use \"backdrop\" above (the original code-drawn forest, retired for new rooms as they arrive). Add \"scene\": \"config/scene.chartN.json\" to give a chart its own props (a mat overlay).",
+  "overlay": {
+    "_about": "Follow-along overlay in the style of Fraser Wilson's YouTube workouts (@FraserWilsonFit). Chosen by Charles 2026-11-21 over the old title, digital clock and bottom progress bar. Drawn on its own layer above the boy. Top corners chosen by Charles on 2026-11-21 after comparing them with bottom corners.",
+    "style": "fraser",
+    "name_card": {
+      "position": "top-left",
+      "shape": "slanted bar (parallelogram, about 12 degrees)",
+      "text": "the exercise name in capitals",
+      "tip": "ONE short form tip under the name, a few words",
+      "colors": {
+        "bar": "0xff9a3c",
+        "text": "white",
+        "tip": "0xfff2cf",
+        "outline": "0x101820@0.9"
+      }
+    },
+    "timer": {
+      "position": "top-right",
+      "shape": "minimal ring timer (mockup C): a thin ring that empties as the exercise time runs down, seconds left in the middle",
+      "colors": {
+        "ring": "0xff9a3c",
+        "track": "0x101820@0.55",
+        "text": "white"
+      }
+    },
+    "replaces": [
+      "title block",
+      "digital clock",
+      "bottom progress bar"
+    ],
+    "alternate": {
+      "id": "bottom-corners",
+      "status": "tried and rejected 2026-11-21",
+      "name_card": "bottom-left",
+      "timer": "bottom-right",
+      "reason": "Compared with the top corners in layout mockup v4 (docs/reference/layout/): the card crowds the lying boy's head and the timer sits over the floor, where the mat and the floor work are. Charles: 'above is better'."
+    },
+    "status": "Specification. The kit's Hud class still draws the legacy title, clock and bar from 'hud' and 'strings' above; those keys stay until the overlay is implemented.",
+    "chosen": "top-corners",
+    "background_contrast": {
+      "rule": "Every background option is subtly darker behind the top corners so the white ring timer and the card text have slight contrast.",
+      "target": "Background behind the timer about 10 to 20 percent below pure white in luminance, never dark.",
+      "examples": [
+        "Indoor wall: a slightly deeper cream or other soft light color, not near-white.",
+        "Outdoor or mountain scene: a true blue sky, not very light blue."
+      ],
+      "source": "Charles, 2026-11-21. Subtle only."
+    }
+  }
 }
