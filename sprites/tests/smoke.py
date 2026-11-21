@@ -85,7 +85,8 @@ with tempfile.TemporaryDirectory() as tmp:
                         "--work", os.path.join(tmp, "w2"), "--out", out], capture_output=True, text=True)
     check(r.returncode == 0 and os.path.exists(out), "one exercise renders and passes the decode check")
     if os.path.exists(out):
-        dur = float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", out], capture_output=True, text=True).stdout)
+        from builds import video_seconds             # ffprobe when present, else ffmpeg's Duration line
+        dur = float(video_seconds(out))
         check(abs(dur - 5.0) < 0.2, f"preview of one exercise is 5 s (got {dur:.1f})")
     else: print(r.stderr[-800:])
 
