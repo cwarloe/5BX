@@ -174,3 +174,18 @@ profile if it plays smoother. The overlay standard is Fraser-style (slanted name
 ring timer top right); a bottom-left and bottom-right variant was tried in mockup v4 and rejected. The loop decides pacing, not the
 booklet's reps per minute. The knee push-up pilot is a pilot, not a binding constraint, and Charles authorized
 trying pinned-frame loops on 2026-11-21. Human form review (Gate B) is still required before release.
+
+## 12. First render on the wired stage and overlay (2026-11-21)
+
+**Scope:** `kit/build.py --only ex1,ex2 --loop` on chart 1 (toe-touch-c1 standing, partial-sit-up-c1 lying), existing
+approved sheets, the grey-floor gym picture from mockup v3, at 1280x720/24 fps (`--profile test`) and 1920x1080/30 fps.
+One seamless loop per clip. No image or video generation. This tests staging, overlay and looping, **not** form.
+
+| Observation | Measured result | Action / decision |
+|---|---|---|
+| Stage scale | Standing 0.9323 (720p) and 1.3985 (1080p) frame px per sheet px, 0.5% below the v3 value because the keyed figure is 3 px taller and the head-room clamp applied; lying exactly 1.44 / 2.16 | Matches the approved v3 stage |
+| Head room | Highest pixel (fingertips) at y 30 (720p) and 45 (1080p), the configured minimum; head never cropped | Keep `standing_head_top_min` |
+| Overlay clearance | No pose pixel under the name card or ring timer in either clip or profile | Top corners confirmed |
+| Loop seam | First and last frame are the same source picture (pose 1). After H.264 the mean absolute difference is 0.15 to 0.24 levels of 255 (a pose cut is 6.6 to 7.8; a hold frame is about 0.002) | Seam is encoder noise only |
+| Lying poses drawn on different baselines | Sit-up poses 2 and 3 floated 7 to 10 px above the floor | Lying figures now rest every pose on the floor (`snap_floor`, default on for lying) |
+| Motion | Hold-and-cut: the pose snaps are clean (one body) but abrupt | Next experiment: interpolated or generated in-betweens pinned on the approved poses |

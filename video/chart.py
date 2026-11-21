@@ -9,6 +9,11 @@ from PIL import Image, ImageDraw
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DATA = json.load(open(os.path.join(HERE, '..', 'data', '5bx-charts.json')))
+# The one-camera stage and the Fraser overlay are shared with sprites/kit/build.py (sprites/kit/staging.py,
+# numbers in sprites/config/theme.json), so both builders stage and label the boy the same way.
+sys.path.insert(0, os.path.join(HERE, '..', 'sprites', 'kit'))
+import staging
+THEME = json.load(open(os.path.join(HERE, '..', 'sprites', 'config', 'theme.json')))
 FONT_B = '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf'
 FONT_M = '/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf'
 NAVY_TOP, NAVY_BOT, ORANGE, GRID = (8, 11, 16), (18, 24, 33), (255, 107, 53), (26, 34, 46)
@@ -73,31 +78,32 @@ def key_and_split(src):
                               min(im.size[0], x1 + 6), floor + 6)))
     return out
 
-def compose(sheet, outdir, F, depth=1.0):
-    """Render each pose of a sheet onto the backdrop at a consistent body size.
+def compose(sheet, outdir, F, strip=None):
+    """Render each pose of a sheet onto the backdrop on the approved one-camera stage.
 
-    Scale is set by how long the body is, not by how much of the box it fills.
-    Fitting the box makes the same person double in size when he lies down: a
-    prone figure is wide and short, so box-fitting stretches it to the box
-    width while a standing figure is only ever as tall as the box.
-
-    `depth` then stages the exercises front to back on purpose - floor work sits
-    slightly further from camera than standing work, which keeps the apparent
-    size steady without pretending a kneeling push-up is as long as a man is tall.
+    One fixed camera, no zoom: every standing exercise uses the same scale (frame pixels per sheet pixel), and a
+    lying exercise is scaled UP by the stage's lying_scale_multiplier so the boy reads at a comparable size on the
+    floor. Feet sit on floor_y, the figure is centred on foot_x, and the head is never cropped. All numbers come
+    from sprites/config/theme.json "stage". This replaces the old body-length fit with DEPTH 0.88 for floor work.
+    A tall format has no calibrated stage yet and keeps the old body-length fit.
     """
     os.makedirs(outdir, exist_ok=True)
     poses = key_and_split(sheet)
-    bg, (bw, bh) = backdrop(F), F['box']
-    gy = int(F['H'] * F['ground'])
-    # Longest extent of the body in any pose: standing height, or prone length.
-    reach = max(max(p.size) for p in poses)
-    s = F['body'] * depth / reach
-    # Never let a pose leave the box, whatever the depth asks for.
-    s = min(s, bw / max(p.size[0] for p in poses), bh / max(p.size[1] for p in poses))
+    sg = staging.stage_geom(THEME, F)
+    bg, (bw, bh) = backdrop(dict(F, ground=sg['floor_y'] / F['H']) if sg else F), F['box']   # the drawn floor line follows the stage floor
+    wmax, hmax = max(p.size[0] for p in poses), max(p.size[1] for p in poses)
+    if sg:
+        s, lying, notes = staging.stage_scale(sg, strip, wmax, hmax)
+        for n in notes: print(f'  {os.path.basename(sheet)}: {n}')
+        floor_y, cx = int(round(sg['floor_y'])), sg['foot_x']
+    else:
+        s = min(F['body'] / max(wmax, hmax), bw / wmax, bh / hmax)
+        floor_y, cx = int(F['H'] * F['ground']), F['W'] / 2
     for n, p in enumerate(poses, 1):
         w, h = (max(1, int(round(v * s))) for v in p.size)
         f = bg.copy()
-        f.alpha_composite(p.resize((w, h), Image.LANCZOS), (F['W'] // 2 - w // 2, gy - h + 2))
+        # key_and_split pads each pose by 6 sheet pixels below the shared floor
+        f.alpha_composite(p.resize((w, h), Image.LANCZOS), (int(round(cx - w / 2)), int(round(floor_y - h + 6 * s))))
         f.convert('RGB').save(os.path.join(outdir, f'p{n}.png'))
     return len(poses)
 
@@ -108,37 +114,28 @@ def run(cmd):
 def esc(t):
     return t.replace('\\', '\\\\').replace(':', r'\:').replace("'", r"\\\'")
 
-def overlay(F, n, name, target, allot, off=0.0):
-    """Title block, countdown and progress bar — all driven by the data file."""
-    W = F['W']; gy = int(F['H'] * F['ground'])
-    cy = gy + int((F['H'] - gy) * .18)
-    return (
-        f"drawtext=fontfile={FONT_B}:text='EXERCISE {n} OF 5':fontcolor=0x7d8a9c:"
-        f"fontsize={F['kicker']}:x=(w-tw)/2:y={int(F['H']*.035)},"
-        f"drawtext=fontfile={FONT_B}:text='{esc(name.upper())}':fontcolor=white:"
-        f"fontsize={F['title']}:x=(w-tw)/2:y={int(F['H']*.035)+F['kicker']+14},"
-        f"drawtext=fontfile={FONT_B}:text='{esc(target)}':fontcolor=0xff6b35:"
-        f"fontsize={F['target']}:x=(w-tw)/2:y={int(F['H']*.035)+F['kicker']+F['title']+26},"
-        f"drawtext=fontfile={FONT_M}:"
-        f"text='%{{eif\\:floor(({allot}-{off}-t)/60)\\:d}}\\:%{{eif\\:mod(floor({allot}-{off}-t)\\,60)\\:d\\:2}}':"
-        f"fontcolor=white:fontsize={F['clock']}:x=(w-tw)/2:y={cy},"
-        f"drawtext=fontfile={FONT_B}:text='LEFT':fontcolor=0x7d8a9c:"
-        f"fontsize={int(F['kicker']*.85)}:x=(w-tw)/2:y={cy+F['clock']+12},"
-        f"drawbox=x=0:y={F['H']-F['bar']}:w='{W}*(({off}+t)/{allot})':h={F['bar']}:color=0xff6b35@1:t=fill"
-    )
+def overlay(F, n, name, target, allot, off=0.0, tip=None):
+    """The Fraser overlay (sprites/config/theme.json "overlay"): name card plus one tip top left, ring timer top
+    right. Returned as a spec; segment() renders it as its own layer."""
+    return {'name': name, 'tip': tip or target, 'allot': allot, 'off': off}
 
-def segment(posedir, cycle, cycle_s, dur, F, ov, out, offset=0.0):
-    """One continuous stretch of a looping pose cycle, with overlays."""
-    per = cycle_s / len(cycle)
-    lst = out + '.txt'
-    with open(lst, 'w') as f:
-        for _ in range(math.ceil(dur / cycle_s) + 1):
-            for p in cycle:
-                f.write(f"file '{posedir}/p{p}.png'\nduration {per:.4f}\n")
-        f.write(f"file '{posedir}/p{cycle[0]}.png'\n")
-    vf = f"fps=30,{ov}" if offset == 0 else f"fps=30,{ov}"
-    run(['ffmpeg', '-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', lst,
-         '-t', f'{dur:.3f}', '-vf', vf, '-pix_fmt', 'yuv420p', '-r', '30', out + '.mp4'])
+def segment(posedir, cycle, cycle_s, dur, F, ov, out, offset=0.0, fps=30):
+    """One continuous stretch of a looping pose cycle, hold-and-cut (no crossfade), starting on cycle[0], with the
+    overlay laid over it as a separate layer (a card PNG plus one ring PNG per frame)."""
+    per = cycle_s / len(cycle); n = max(1, int(round(dur * fps)))
+    seq = out + '.frames'; shutil.rmtree(seq, ignore_errors=True); os.makedirs(seq)
+    for k in range(n):
+        p = cycle[int((k / fps) // per) % len(cycle)]
+        os.symlink(os.path.abspath(os.path.join(posedir, f'p{p}.png')), os.path.join(seq, f'f_{k:05d}.png'))
+    lay = out + '.overlay'; os.makedirs(lay, exist_ok=True)
+    card, _ = staging.card_layer(THEME, F, ov['name'], ov.get('tip', '')); card.save(os.path.join(lay, 'card.png'))
+    ring = staging.ring_frames(THEME, F, ov['allot'], ov.get('off', 0.0), n, fps, os.path.join(lay, 'ring'))
+    rx, ry, _ = staging.ring_box(THEME, F)
+    run(['ffmpeg', '-y', '-loglevel', 'error', '-framerate', str(fps), '-i', os.path.join(seq, 'f_%05d.png'),
+         '-loop', '1', '-framerate', str(fps), '-i', os.path.join(lay, 'card.png'), '-framerate', str(fps), '-i', ring,
+         '-filter_complex', f'[0:v][1:v]overlay=0:0[c];[c][2:v]overlay={rx}:{ry}[v]', '-map', '[v]',
+         '-frames:v', str(n), '-pix_fmt', 'yuv420p', '-r', str(fps), out + '.mp4'])
+    shutil.rmtree(seq, ignore_errors=True)
     return out + '.mp4'
 
 def breakcard(secs, nxt, F, out):
@@ -157,19 +154,7 @@ def breakcard(secs, nxt, F, out):
     return out + '.mp4'
 
 def jump_overlay(F, allot, off, count, name):
-    cy = int(F['H'] * F['ground']); cy += int((F['H'] - cy) * .18)
-    return (
-        f"drawtext=fontfile={FONT_B}:text='PAUSE THE RUN':fontcolor=0x7d8a9c:"
-        f"fontsize={F['kicker']}:x=(w-tw)/2:y={int(F['H']*.035)},"
-        f"drawtext=fontfile={FONT_B}:text='{count} {esc(name.upper())}':fontcolor=0xff6b35:"
-        f"fontsize={F['title']}:x=(w-tw)/2:y={int(F['H']*.035)+F['kicker']+14},"
-        f"drawtext=fontfile={FONT_M}:"
-        f"text='%{{eif\\:floor(({allot}-{off}-t)/60)\\:d}}\\:%{{eif\\:mod(floor({allot}-{off}-t)\\,60)\\:d\\:2}}':"
-        f"fontcolor=white:fontsize={F['clock']}:x=(w-tw)/2:y={cy},"
-        f"drawtext=fontfile={FONT_B}:text='LEFT':fontcolor=0x7d8a9c:"
-        f"fontsize={int(F['kicker']*.85)}:x=(w-tw)/2:y={cy+F['clock']+12},"
-        f"drawbox=x=0:y={F['H']-F['bar']}:w='{F['W']}*(({off}+t)/{allot})':h={F['bar']}:"
-        f"color=0xff6b35@1:t=fill")
+    return {'name': f'{count} {name}', 'tip': 'jump now', 'allot': allot, 'off': off}
 
 SLOTS = ('ex1', 'ex2', 'ex3', 'ex4', 'run', 'jump')
 
@@ -190,13 +175,8 @@ SHEETS = {
 CYCLE_KIND = {'ex1': 'centre', 'ex2': 'pingpong', 'ex3': 'centre',
               'ex4': 'pingpong', 'run': 'loop', 'jump': 'pingpong'}
 
-# Staging, front to back. Floor work sits a little further from camera than
-# standing work so the figure does not swell when he lies down.
-# SUPERSEDED 2026-11-21: the approved stage scales lying figures UP
-# (1.537548 x the standing scale, head-landmark calibrated, one camera, no
-# zoom). See sprites/config/theme.json 'stage'. Values left as-is until this
-# builder is ported or retired.
-DEPTH = {'ex1': 1.0, 'ex2': .88, 'ex3': .88, 'ex4': .88, 'run': 1.0, 'jump': 1.0}
+# Staging: the old DEPTH table (floor work at 0.88) is gone. Since 2026-11-21 one fixed camera stages every
+# exercise and lying figures are scaled UP (sprites/config/theme.json "stage", via compose()).
 
 def cycle_for(kind, n):
     """Build the pose order for a movement drawn in n poses."""
@@ -231,7 +211,7 @@ def main(fmt, chart_id, level, srcdir, workdir, out):
 
     cycles = {}
     for key, sheet in sheets_for(chart_id).items():
-        n = compose(os.path.join(srcdir, sheet), os.path.join(workdir, key), F, DEPTH[key])
+        n = compose(os.path.join(srcdir, sheet), os.path.join(workdir, key), F)
         cycles[key] = cycle_for(CYCLE_KIND[key], n)
         print(f'  {key}: {n} poses -> cycle {cycles[key]}')
 
@@ -241,7 +221,7 @@ def main(fmt, chart_id, level, srcdir, workdir, out):
         cyc = cycles[f'ex{i+1}']
         # ex1 and ex3 cover two reps per cycle (out-and-back, or one leg each)
         cycle_s = reps and allot / reps * (2 if i in (0, 2) else 1)
-        ov = overlay(F, i + 1, name, f'{reps} reps', allot)
+        ov = overlay(F, i + 1, name, f'{reps} reps', allot, tip=staging.tip_for(None, chart['exercises'][i]))
         parts.append(segment(os.path.join(workdir, f'ex{i+1}'), cyc, cycle_s, allot, F, ov,
                              os.path.join(workdir, f'seg{i+1}')))
         parts.append(breakcard(DATA['appDefaults']['transitionSeconds'],

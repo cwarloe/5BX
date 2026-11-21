@@ -27,6 +27,11 @@
     "floor_y": 975,
     "foot_x": 960,
     "standing_head_top_min": 45,
+    "standing_scale": 1.404834,
+    "_standing_scale_hint": "Frame pixels per sheet pixel at 1080p (0.936556 at 720p x 1.5), calibrated on toe-touch-c1 (1376x768 sheet) in mockup v3. Every standing exercise uses this one scale: one camera, no zoom.",
+    "reference_head_px": 74.6,
+    "_reference_head_hint": "Hairline to chin of toe-touch-c1 in sheet pixels (mockup v2 landmarks). A strip drawn at another size declares its own \"head_px\" in config/strips.json and is normalised to this.",
+    "side_margin": 40,
     "lying_scale_multiplier": 1.537548,
     "lying_scale_rule": "Lying and floor figures are scaled UP relative to the standing scale, by lying_scale_multiplier, so the boy looks comparable in size lying and standing. This replaces the old rule that made floor figures smaller (video/chart.py DEPTH 0.88 and the kit 'fit' 0.72 to 0.78 in config/strips.json). The value is the midpoint of the two lying scales compared in layout mockup v2: large enough to read clearly, without the earlier 'giant guy'.",
     "calibration": "Measure scale on head landmarks (ear height, and hairline to chin), not the bounding box. A bounding box changes with the pose; the head does not.",
@@ -41,7 +46,7 @@
       "foot_x": 640,
       "source": "5bx-anim layout-mockups v3 stage.json"
     },
-    "status": "Specification. The kit (kit/build.py) still sizes figures by box fit times 'fit'; porting this rule into the kit is open work."
+    "status": "Wired into kit/build.py and video/chart.py through kit/staging.py (2026-11-21). Applies to wide formats; the tall format keeps the old box fit until it is calibrated. The per-strip 'fit' values are ignored while the stage is on."
   },
   "key": {
     "lo": 28,
@@ -158,24 +163,32 @@
     "style": "fraser",
     "name_card": {
       "position": "top-left",
-      "shape": "slanted bar (parallelogram, about 12 degrees)",
+      "shape": "slanted bar (parallelogram), black, as in mockup v3",
       "text": "the exercise name in capitals",
       "tip": "ONE short form tip under the name, a few words",
       "colors": {
-        "bar": "0xff9a3c",
+        "bar": "0x000000@0.9",
         "text": "white",
-        "tip": "0xfff2cf",
-        "outline": "0x101820@0.9"
-      }
+        "tip": "0xe1e1e1"
+      },
+      "margin_px": 42,
+      "slant_px": 30,
+      "title_px": 69,
+      "tip_px": 34
     },
     "timer": {
       "position": "top-right",
       "shape": "minimal ring timer (mockup C): a thin ring that empties as the exercise time runs down, seconds left in the middle",
       "colors": {
-        "ring": "0xff9a3c",
-        "track": "0x101820@0.55",
+        "disc": "0x000000@0.59",
+        "track": "0xffffff@0.2",
+        "ring": "white",
         "text": "white"
-      }
+      },
+      "diameter_px": 192,
+      "margin_px": 42,
+      "track_px": 16,
+      "unit": "SEC"
     },
     "replaces": [
       "title block",
@@ -189,7 +202,7 @@
       "timer": "bottom-right",
       "reason": "Compared with the top corners in layout mockup v4 (docs/reference/layout/): the card crowds the lying boy's head and the timer sits over the floor, where the mat and the floor work are. Charles: 'above is better'."
     },
-    "status": "Specification. The kit's Hud class still draws the legacy title, clock and bar from 'hud' and 'strings' above; those keys stay until the overlay is implemented.",
+    "status": "Wired into kit/build.py and video/chart.py through kit/staging.py (2026-11-21). Exercise, run and jump segments use this overlay; break cards still use the 'hud' block above.",
     "chosen": "top-corners",
     "background_contrast": {
       "rule": "Every background option is subtly darker behind the top corners so the white ring timer and the card text have slight contrast.",
@@ -199,6 +212,12 @@
         "Outdoor or mountain scene: a true blue sky, not very light blue."
       ],
       "source": "Charles, 2026-11-21. Subtle only."
-    }
+    },
+    "fonts": {
+      "title": "assets/fonts/BarlowCondensed-BoldItalic.ttf",
+      "tip": "assets/fonts/BarlowCondensed-Medium.ttf",
+      "timer": "assets/fonts/BarlowCondensed-Bold.ttf"
+    },
+    "_px_hint": "Sizes are in 1080p pixels and scale with the frame height."
   }
 }
