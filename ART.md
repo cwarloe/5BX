@@ -7,8 +7,15 @@ that aren't shipped) lives in Google Drive, never in Git.
 **Drive folder:** [Sprite Art 5BX Workout](https://drive.google.com/drive/folders/1x7ZrBMan7-jSXgYnZeOZzmEc_of0sRzE)
 (owner: Charles; maintained by Claude; Charles does not edit it by hand).
 
-File names in Drive: `YYYY-MM-DD_<source>_<what-it-is>.<ext>`, where the date is
-when the art was made and `<source>` is the repo or tool it came from.
+**Browsable production inputs:** [Production Art](https://drive.google.com/drive/folders/17LK1ric6Y1tQ0adA-UkJuYNvaCffzDmN).
+The four indexed production-input ZIPs have also been extracted here as
+individual PNGs (124 files): `sheets/`, `assets/` and `library/images/`.
+Folders preserve the paths the sprite kit expects, so a file can be viewed or
+restored by itself. The original ZIPs remain in the parent folder as backups.
+
+For newly produced files, use the stable asset-ID naming rule below. Dated
+`YYYY-MM-DD_<source>_<what-it-is>.<ext>` names identify historical transfer
+bundles; keep the original names of extracted production assets unchanged.
 
 ## Name new assets consistently; keep the old ones working
 
@@ -31,20 +38,19 @@ A second avatar gets a new avatar ID, not a new exercise definition.
 
 **Do not bulk-rename legacy files or move the existing ZIPs.** Their exact
 paths are already referenced by the builder, library and archived batches.
-The ZIPs were convenient batch snapshots, not a required production format.
-Store **new working source art as individual Drive files**, and record their
-Drive IDs in `direct_files` in the recovery index; make an immutable ZIP only
-when a batch backup is useful. No deeper folder tree is needed yet. If the
-Drive folder later becomes crowded, separate working files and archive backups
-into two shallow folders rather than nesting every chart and revision.
-The `direct_files` list starts empty: existing art remains in its verified ZIPs.
-There is no reason to extract and re-upload that history just to populate it.
+ZIPs are optional snapshots, not a required production format. Store **working
+source art as individual Drive files**. Keep the preserved relative paths under
+`Production Art` for existing files; add new art in its appropriate folder and
+record its Drive ID in `direct_files` in the recovery index. Create a ZIP only
+when a batch backup or transfer actually calls for one. Do not add another
+packaging step to the normal artwork process.
 
 ### Find exactly what to restore
 
 The read-only recovery index at `sprites/config/art-archive-index.json` supports
-**direct Drive files first** (for new work) and records the verified contents,
-Drive IDs and SHA-256 of four historical source/baked-asset ZIPs as fallback.
+**direct Drive files first** (including the extracted production inputs) and
+records the verified contents, Drive IDs and SHA-256 of four historical
+source/baked-asset ZIPs as fallback.
 It is an index of **where files are**, not an approval record.
 For a clean clone, run:
 
