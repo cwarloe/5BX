@@ -44,7 +44,8 @@ Written before the kit's batch C review (`batches/2026-11-20-C/REVIEW.md`) was r
 Raw art does not live in Git (see `/ART.md`). The images that used to sit next to this code (strip sheets, the
 sprite library, baked assets, batch folders, exports and the demo) are in the Drive folder
 *Sprite Art 5BX Workout*; `ART.md` lists the file names. To build a video from a fresh clone, unzip the `sheets`,
-`library` and `assets` zips inside this folder. `kit/build.py --bake` redraws the sprite PNGs from `sheets/` if only
+`library`, `assets` and `sheets-batch-e` zips inside this folder (the last holds the two sheets that replaced the
+scissor jumps and the chart 2 back extension). `kit/build.py --bake` redraws the sprite PNGs from `sheets/` if only
 those are missing, but the imported backdrop pictures (`assets/backgrounds/`) are art and cannot be redrawn: the
 build stops with a message naming the `assets` zip if they are absent.
 

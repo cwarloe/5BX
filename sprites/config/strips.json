@@ -74,7 +74,7 @@
       "steps_per_cycle": 1
     },
     "scissor-jumps-c1": {
-      "file": "ex5-scissor-jumps.png",
+      "file": "e-scissor-jumps-c1.png",
       "poses": 4,
       "anchor": "shoes",
       "cycle": [
@@ -135,7 +135,7 @@
       "jumps_per_cycle": 1
     },
     "back-extension-c2": {
-      "file": "c2-ex3-back-extension.png",
+      "file": "e-back-extension-c2.png",
       "poses": 3,
       "anchor": "hips",
       "cycle": [
@@ -144,7 +144,11 @@
         3,
         2
       ],
-      "reps_per_cycle": 1
+      "reps_per_cycle": 1,
+      "fit": {
+        "landscape": 0.78,
+        "portrait": 1.0
+      }
     },
     "toe-touch-c3": {
       "file": "c3-ex1-toe-touching.png",

@@ -177,7 +177,7 @@
    "grades": {},
    "graded_by": "",
    "expert_reviewed": false,
-   "verdict": "chosen",
+   "verdict": "candidate",
    "wired": true,
    "notes": "wired into config/strips.json; not yet graded"
   },
@@ -327,7 +327,7 @@
    "grades": {},
    "graded_by": "",
    "expert_reviewed": false,
-   "verdict": "chosen",
+   "verdict": "candidate",
    "wired": true,
    "notes": "wired into config/strips.json; not yet graded"
   },
@@ -1068,6 +1068,68 @@
    "expert_reviewed": false,
    "verdict": "rejected",
    "notes": "retake sheet, row 2: side three-quarter from above; near arm trails back along the body, far arm forward (not a T) | near arm trails back along the body, far arm forward: a swimmer, not a T"
+  },
+  {
+   "id": "c1-jump-02",
+   "file": "library/images/c1-jump-02.png",
+   "chart": 1,
+   "slot": "jump",
+   "exercise": "SCISSOR JUMPS",
+   "strip": "scissor-jumps-c1",
+   "tool": "chatgpt",
+   "view": "side",
+   "poses": 4,
+   "added": "2026-11-20",
+   "prompt": "prompts/PROMPTS.md, 'SCISSOR JUMPS'",
+   "measured": {
+    "size": [
+     1672,
+     941
+    ],
+    "rows": null,
+    "row": null,
+    "figures": 4,
+    "fringe_pct": 1.43,
+    "green_pct": 0.0,
+    "real_transparency": false,
+    "sha": "7df72829dd98"
+   },
+   "grades": {},
+   "graded_by": "",
+   "expert_reviewed": false,
+   "verdict": "chosen",
+   "notes": "Batch E rewrite (2026-11-21), open hands. Light shoe forward in stance A, dark shoe forward in B; arms horizontal; jumps 14% of sheet height. Caveats: front knee bent more than slightly, jump arms hang diagonally."
+  },
+  {
+   "id": "c2-ex3-02",
+   "file": "library/images/c2-ex3-02.png",
+   "chart": 2,
+   "slot": "ex3",
+   "exercise": "a BACK EXTENSION",
+   "strip": "back-extension-c2",
+   "tool": "chatgpt",
+   "view": "side",
+   "poses": 3,
+   "added": "2026-11-20",
+   "prompt": "prompts/PROMPTS.md, 'a BACK EXTENSION'",
+   "measured": {
+    "size": [
+     1672,
+     941
+    ],
+    "rows": null,
+    "row": null,
+    "figures": 3,
+    "fringe_pct": 1.63,
+    "green_pct": 0.02,
+    "real_transparency": false,
+    "sha": "ec90acac8b78"
+   },
+   "grades": {},
+   "graded_by": "",
+   "expert_reviewed": false,
+   "verdict": "chosen",
+   "notes": "Batch E one-figure edit of the batch D alternate (2026-11-21): START flat, chin on floor; three clear heights; gap between thighs and hands in TOP."
   }
  ]
 }
