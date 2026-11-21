@@ -62,4 +62,11 @@ text = "Before finishing, count the limbs in every figure: exactly two arms and 
 id = "R-NEAR-FAR"
 defect = "D-10"
 when = "all"
-text = "Draw the arm and leg on the far side of the body in a noticeably darker shade of the same colors (darker skin tone, darker garment, darker shoe) so near and far limbs are easy to tell apart."
+text = "Draw the arm and leg on the far side of the body in a slightly darker shade of the same colors, only about 10% darker with the same hue (never brown, grey or near-black), so near and far limbs are easy to tell apart."
+# 2026-11-21 (D-15): "noticeably darker" overshot into a dark shadow on some takes; Charles asked for light far-side shading.
+
+[[rule]]
+id = "R-NO-SHADOW"
+defect = "D-16"
+when = "all"
+text = "Draw no cast shadow or ground shadow under or beside any figure. A contact shadow is added later, at composite time, on its own layer."

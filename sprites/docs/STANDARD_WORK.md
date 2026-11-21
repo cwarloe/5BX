@@ -70,7 +70,11 @@ before previewing. **User decision (2026-11-21): use `--no-fade` for this
 knee-push-up pilot**; it removes the double-body crossfade, but does **not**
 approve anatomy or cadence. Do not change the global fade setting for other
 exercises without testing them. New artwork/video generation is paused while
-another bot revises the art instructions. See `qc-line/LESSONS.md`.
+another bot revises the art instructions. (Clarification, Charles, 2026-11-21:
+that other bot is the artwork bot, 5BX Sprite Animator, which is exempt and
+cleared to generate.) Crossfade is now retired as the default and loops use
+pinned first and last frames; stage scale and overlay are in
+`config/theme.json` (`stage`, `overlay`). See `qc-line/LESSONS.md`, section 11.
 
 For deeper rationale and future work, see
 [`PRODUCTION_CONTROL_PLAN.md`](PRODUCTION_CONTROL_PLAN.md) and

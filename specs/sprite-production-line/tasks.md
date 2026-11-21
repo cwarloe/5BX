@@ -31,11 +31,16 @@ and exposed a backdrop-restore dependency and crossfade ghosting (D-14 in
 `sprites/qc-line/LESSONS.md`). Comparing `--no-fade` needs human playback/form
 review; an approved second avatar and new scissor references are still pending.
 Thus task 8 remains open. No new motion generation is authorized by this note.
+Update (Charles, 2026-11-21): he authorized trying pinned-frame loops (first and
+last frame pinned on an approved pose); the knee push-up pilot is a pilot, not a
+binding constraint, and crossfade is retired as the default. See LESSONS section 11.
 
 2026-11-21 workflow follow-up: `kit/line.py status/check` now flags an absent
 chart-specific image backdrop as an archive-restore warning (task 7 partial).
 Charles selected `--no-fade` for the knee push-up. Artwork/video generation is
 paused while another bot revises the generation instructions; do not duplicate
 that work. The wider archive recoverability audit remains open.
+Clarification (Charles, 2026-11-21): the "other bot" is the artwork bot itself
+(5BX Sprite Animator), which is exempt from the pause and cleared to generate.
 
 Tasks 6–9 are intentionally *not* being implemented in this first increment. This is a prioritized queue, not authorization for unattended paid media generation.
