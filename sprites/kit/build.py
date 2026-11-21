@@ -228,7 +228,7 @@ def anchors_of(p):
 def bake(name, strip, theme):
     """sheets/<file> -> assets/sprites/<name>/p1..pN.png + meta.json. Re-bakes only if the strip or the key changed."""
     src = os.path.join(ROOT, "sheets", strip["file"])
-    if not os.path.exists(src): sys.exit(f"missing strip sheet {src}: restore sprites/sheets from the Drive zips 2026-11-21_knowledge-harvest_sprite-kit-sheets.zip and 2026-11-21_sprite-kit-sheets-batch-e.zip")
+    if not os.path.exists(src): sys.exit(f"missing strip sheet {src}: restore sprites/sheets from the Drive zips 2026-11-21_knowledge-harvest_sprite-kit-sheets.zip, 2026-11-21_sprite-kit-sheets-batch-e.zip and 2026-11-21_sprite-kit-sheets-charts-4-6.zip")
     h = filehash(src); d = os.path.join(ASSETS, "sprites", name); mp = os.path.join(d, "meta.json")
     if os.path.exists(mp):
         m = jload(mp)
