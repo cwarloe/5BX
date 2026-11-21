@@ -1,0 +1,40 @@
+name: Sprite production preflight
+
+on:
+  pull_request:
+    paths:
+      - 'sprites/config/**'
+      - 'sprites/prompts/strips.json'
+      - 'sprites/library/index.json'
+      - 'sprites/kit/line.py'
+      - 'sprites/kit/prompt.py'
+      - 'sprites/tests/test_*.py'
+      - 'data/5bx-charts.json'
+      - '.github/workflows/sprite-preflight.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'sprites/config/**'
+      - 'sprites/prompts/strips.json'
+      - 'sprites/library/index.json'
+      - 'sprites/kit/line.py'
+      - 'sprites/kit/prompt.py'
+      - 'sprites/tests/test_*.py'
+      - 'data/5bx-charts.json'
+      - '.github/workflows/sprite-preflight.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  definitions:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check registry, recipes and movement cycles
+        run: python3 sprites/kit/line.py check
+      - name: Test the dependency-free production controls
+        run: python3 -m unittest discover -s sprites/tests -p 'test_*.py' -v

@@ -11,9 +11,36 @@ The character, view, far-side shading and background wording come from config/ch
 so changing the boy changes every future prompt. Pose lists are written by a person (or an agent
 and then checked): they are the part that decides whether the form is right.
 """
-import argparse, json, os, sys
+import argparse, json, os, re, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
+def avatar_words(text, character):
+    """Render legacy masculine movement prose for an explicitly configured avatar.
+
+    Leave Sprite Boy unchanged. The exercise definitions remain avatar-neutral
+    *in effect* without copying/hand-editing thirty sets of pose instructions.
+    Match whole words, so 'he' never changes 'the' or 'themselves'.
+    """
+    substitutions = character.get("pronouns") or {}
+    if not substitutions:
+        return text
+    words = {key.lower(): value for key, value in substitutions.items() if key and value}
+    if not words:
+        return text
+    pattern = re.compile(r"\b(" + "|".join(re.escape(w) for w in sorted(words, key=len, reverse=True)) + r")\b", re.I)
+
+    def replace(match):
+        original = match.group(0)
+        value = words[original.lower()]
+        if original.isupper():
+            return value.upper()
+        if original[0].isupper():
+            return value[0].upper() + value[1:]
+        return value
+
+    return pattern.sub(replace, text)
 
 
 def build(spec, ch, reference=True):
@@ -41,7 +68,7 @@ def build(spec, ch, reference=True):
     if spec.get("far_side", True): lines += ["", ch["far_side"]]
     if ch.get("body_rules"): lines += ["", ch["body_rules"]]
     lines += ["", "BACKGROUND: " + ch["background"]]
-    return "\n".join(lines)
+    return avatar_words("\n".join(lines), ch)
 
 
 def booklet_text(data, chart_id, slot):
@@ -73,7 +100,7 @@ def retake(spec, ch, individual=True):
     if ch.get("body_rules"): L += ["", ch["body_rules"]]
     L += ["", "BACKGROUND: " + ch["background"]]
     if individual: L += ["", "ALSO GIVE ME each figure as a separate transparent PNG at the original size, not resized, with a few pixels of empty margin, named by row and pose number."]
-    return "\n".join(L)
+    return avatar_words("\n".join(L), ch)
 
 
 def load_character(path=None):
@@ -101,8 +128,9 @@ def remake(spec, ch, attach, schematic_note=None):
     L = [f"Attach {names.get(len(attach), len(attach))} images, in this order: " + "; ".join(f"({i}) {f}" for i, (f, _) in enumerate(attach, 1)) + ".", ""]
     L += [f"Image {i} is {roles[r]}" if r != "character" else f"Use image {i} {roles[r]}" for i, (_, r) in enumerate(attach, 1)]
     L += ["", f"THE {N.upper()} (keep identical in every figure): {ch['description']}.", ""]
-    r = spec.get("retake") or {}
-    if r.get("problems"): L += ["EARLIER ATTEMPTS GOT THESE WRONG (avoid every one):"] + [f"- {x}" for x in r["problems"]] + [""]
+    r = spec.get("retake") or {}; current = spec.get("remake") or {}
+    problems = current.get("problems", r.get("problems", []))
+    if problems: L += ["EARLIER ATTEMPTS GOT THESE WRONG (avoid every one):"] + [f"- {x}" for x in problems] + [""]
     L += [f"Create a NEW wide {aspect} pose sheet of that same {N} doing {spec['exercise']}, shown {words} times left to right, {(spec.get('remake') or {}).get('view') or spec.get('view', ch['view'])}. {spec.get('layout', '')}".rstrip()]
     if spec.get("rule"): L += ["", spec["rule"]]
     L += ["", f"THE {words} POSES (official exercise, follow exactly):"] + [f"{i}. {x}" for i, x in enumerate(poses, 1)]
@@ -110,7 +138,7 @@ def remake(spec, ch, attach, schematic_note=None):
     if ch.get("body_rules"): L += ["", ch["body_rules"]]
     L += ["", UNIVERSAL, "", "BACKGROUND: " + ch["background"]]
     if spec.get("check"): L += ["", "BEFORE YOU FINISH, CHECK THE SHEET AGAINST THIS LIST and redraw any figure that fails:"] + [f"- {x}" for x in spec["check"]]
-    return "\n".join(L)
+    return avatar_words("\n".join(L), ch)
 
 
 def publish_all(data, out_md, out_json):
