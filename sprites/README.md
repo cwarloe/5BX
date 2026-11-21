@@ -21,8 +21,13 @@ These checks read the existing registry and library, not another spreadsheet or 
 Missing local sheets are warnings: large source art lives in Drive; see [`ART.md`](../ART.md).
 An accepted image is not automatically a human-reviewed exercise demonstration. Use the
 existing library grading workflow to record the form check before releasing a new video.
-Start the next production pilot with the Chart 1 knee push-up and scissor jumps, then validate
-the same instructions with a second approved character. The current process and priorities are
+When a chart is ready to publish, run `python3 sprites/kit/line.py release-check --chart N`
+after restoring its source sheets. This intentionally blocks incomplete/unreviewed artwork;
+the final rendered video still needs a viewing check. See the one-page
+[`STANDARD_WORK.md`](docs/STANDARD_WORK.md) for the seven stations and three gates.
+Start the next production dry run with the Chart 1 knee push-up; hold scissor-jump
+redesign until its additional references arrive. Then compare the approved movement
+instructions with a second approved character. The current process and priorities are
 in [`PRODUCTION_CONTROL_PLAN.md`](docs/PRODUCTION_CONTROL_PLAN.md).
 
 For a new image-generation job, make the prompt from the current

@@ -1,5 +1,6 @@
 """Pure production-line checks; no image assets or nonstandard packages needed."""
 
+import hashlib
 import sys
 import tempfile
 import unittest
@@ -30,6 +31,17 @@ class ProductionLineTest(unittest.TestCase):
 
     def report(self):
         return line.analyze(self.plan, self.registry, self.prompts, self.library, self.sheets)
+
+    def release(self, chart=None):
+        return line.release_readiness(self.report(), self.registry, self.library,
+                                      self.sheets, chart=chart)
+
+    def prepare_approved_art(self):
+        for entry in self.library["entries"]:
+            data = (entry["strip"] + " approved image").encode("utf-8")
+            (self.sheets / (entry["strip"] + ".png")).write_bytes(data)
+            entry["measured"] = {"sha": hashlib.sha1(data).hexdigest()[:12]}
+            entry["grades"] = {"form": 5}
 
     def test_valid_registry_needs_no_art_to_pass_structure(self):
         report = self.report()
@@ -75,6 +87,39 @@ class ProductionLineTest(unittest.TestCase):
     def test_duplicate_asset_identifiers_are_errors(self):
         self.library["entries"][1]["id"] = self.library["entries"][0]["id"]
         self.assertTrue(any("duplicate library asset ID" in e for e in self.report()["errors"]))
+
+    def test_release_requires_restored_source_and_explicit_form_grade(self):
+        blockers = self.release()[0]["blockers"]
+        self.assertTrue(any("not restored" in b for b in blockers))
+        self.assertTrue(any("passing form grade" in b for b in blockers))
+        self.prepare_approved_art()
+        self.assertEqual(self.release()[0]["blockers"], [])
+
+    def test_release_rejects_stale_selected_sheet_even_if_chosen(self):
+        self.prepare_approved_art()
+        (self.sheets / "ex1.png").write_bytes(b"an older unapproved take")
+        self.assertTrue(any("differs from chosen asset" in b for b in self.release()[0]["blockers"]))
+
+    def test_release_holds_missing_mapping_and_missing_chosen(self):
+        self.prepare_approved_art()
+        del self.registry["charts"]["1"]["jump"]
+        self.library["entries"][0]["verdict"] = "candidate"
+        blockers = self.release()[0]["blockers"]
+        self.assertTrue(any("jump: exercise not mapped" in b for b in blockers))
+        self.assertTrue(any("expected one chosen asset" in b for b in blockers))
+
+    def test_release_requires_positive_named_human_form_review(self):
+        self.prepare_approved_art()
+        self.library["entries"][0]["graded_by"] = ""
+        self.library["entries"][1]["grades"]["form"] = 3
+        blockers = self.release()[0]["blockers"]
+        self.assertTrue(any("lacks a named human" in b for b in blockers))
+        self.assertTrue(any("passing form grade" in b for b in blockers))
+
+    def test_release_supports_chart_selection_and_unknown_chart(self):
+        self.prepare_approved_art()
+        self.assertEqual([c["chart"] for c in self.release(chart=1)], [1])
+        self.assertTrue(self.release(chart=7)[0]["blockers"])
 
 
 if __name__ == "__main__":

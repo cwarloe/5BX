@@ -10,7 +10,13 @@ Rules: make small tested commits, update this list in the same commit that compl
 - [x] 2. Reconcile the two Batch E lessons in the canonical prompts without changing approved pose art (R1, R7)
 - [x] 3. Make new-avatar prompts grammatically reusable and regression-test them (R4)
 - [x] 4. Add unit tests, a lightweight CI check, and the one-command operator instructions (R1–R4, R7)
-- [ ] 5. Run what can be tested from a clean clone, record limitations accurately, and open a reviewed PR (all above)
+- [x] 5. Run what can be tested from a clean clone, record limitations accurately, and open a reviewed PR (#18 merged)
+
+## Increment 1.5 — release control without a new system
+
+- [x] Audit the seven stations against existing kit, QC, library, build records and old video builder
+- [x] Add a strict on-demand artwork release check: chosen revision hash, restored sheet, mapped slots, named human review and positive form grade
+- [x] Publish one-page operator standard work and regression tests; leave existing WIP assets untouched
 
 ## Later increments — only after the first proves useful
 
