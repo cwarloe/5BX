@@ -56,7 +56,7 @@ own history): cached sprite and backdrop records were trusted even when their PN
 composed frames hashed an image's path but not its contents; and exercise 5 reserved one jump window more than the
 plan emits, so it ran 12 s short (now 360 s of the 360 s allotted at chart 1, level A).
 
-## The Sprite Boy demo page
+## The 5BX Workout Mixer demo page
 
 Live at https://cwarloe.github.io/5BX/sprite-boy/ . It moved here from the `knowledge-harvest` repo's `gh-pages` branch.
 

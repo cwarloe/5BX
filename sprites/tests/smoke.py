@@ -115,7 +115,7 @@ with tempfile.TemporaryDirectory() as tmp:
             txt = "\n".join(p_.text for p_ in dd_.paragraphs) + "\n".join(c.text for t_ in dd_.tables for r_ in t_.rows for c in r_.cells)
             check(txt.count("PROMPT 1") == want_n and txt.count("PROMPT 2") == want_n and "charles" not in txt.lower(), f"{dn} holds {want_n} strips x 2 prompts and no personal names")
         check(not any(w in open(os.path.join(demo, "PROMPTS.md"), encoding="utf-8").read().lower() for w in ("charles", "@gmail")), "published prompts carry no personal names or addresses")
-        check(os.path.exists(os.path.join(demo, "index.html")) and "5BX Sprite Boy" in open(os.path.join(demo, "index.html"), encoding="utf-8").read(), "demo index.html written")
+        check(os.path.exists(os.path.join(demo, "index.html")) and "5BX Workout Mixer" in open(os.path.join(demo, "index.html"), encoding="utf-8").read(), "demo index.html written")
     else: print(r.stderr[-600:])
 
 for name, st in reg["strips"].items():
