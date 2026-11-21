@@ -7,6 +7,31 @@ First built for 5BX chart 1, level A+: 11:40 at 1080p, 49 MB.
 **Built for change.** Assume the look, the wording, the character, the format and the exercises
 will all change. Each of those is one small file, and a rebuild only redoes what changed.
 
+## Start here: one-minute production check
+
+From the **repository root**, before a new batch or a change to exercise definitions:
+
+```bash
+python3 sprites/kit/line.py status   # what's mapped, selected, or waiting for review?
+python3 sprites/kit/line.py check    # detailed findings; exits nonzero for broken references or cycles
+python3 -m unittest discover -s sprites/tests -p 'test_*.py'  # fast, no artwork required
+```
+
+These checks read the existing registry and library, not another spreadsheet or task system.
+Missing local sheets are warnings: large source art lives in Drive; see [`ART.md`](../ART.md).
+An accepted image is not automatically a human-reviewed exercise demonstration. Use the
+existing library grading workflow to record the form check before releasing a new video.
+Start the next production pilot with the Chart 1 knee push-up and scissor jumps, then validate
+the same instructions with a second approved character. The current process and priorities are
+in [`PRODUCTION_CONTROL_PLAN.md`](docs/PRODUCTION_CONTROL_PLAN.md).
+
+For a new image-generation job, make the prompt from the current
+`prompts/strips.json` using `kit/prompt.py --strip NAME`. The very large
+`prompts/PROMPTS.md` and `prompts/prompts.json` are **generated snapshots**;
+they may lag behind an approved correction. Regenerate both with
+`kit/prompt.py --all --data ../data/5bx-charts.json` **after restoring the Drive
+art**, so the generated availability labels are accurate.
+
 ## Run it
 
 ```bash

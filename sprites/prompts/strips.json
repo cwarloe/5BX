@@ -120,18 +120,19 @@
     },
     "scissor-jumps-c1": {
       "exercise": "SCISSOR JUMPS",
-      "kept": "take 1 of 4. Known weak spot: stance A and B look alike in profile; only shading differs",
+      "kept": "Batch E open-hands take chosen (2026-11-21): stance A has the light near shoe forward and stance B the dark far shoe forward; jumps clearly airborne. A human form check is still needed.",
       "layout": "Same scale, wide empty gaps. The two standing poses rest on the same invisible floor line; the two jumping poses are drawn clearly higher, with both feet well above that line.",
       "poses": [
-        "STANCE A, on the floor: the leg NEAREST the viewer extended forward and the other leg extended backward in a wide scissor stance, both feet on the floor; the arm FARTHEST from the viewer extended forward and the near arm extended backward, both arms straight at SHOULDER HEIGHT.",
-        "JUMP, in the air: jumped straight up, both feet well off the floor, legs and arms passing each other mid-switch (legs close together under the hips, arms crossing near the body), knees slightly bent.",
-        "STANCE B, on the floor: the mirror of stance A. The leg FARTHEST from the viewer is now forward and the near leg is back; the NEAR arm extended forward and the far arm backward, arms straight at shoulder height, both feet on the floor.",
+        "STANCE A, on the floor: wide stride, LIGHT (near) leg forward and DARK (far) leg back, DARK (far) arm forward and LIGHT (near) arm back, both arms straight and horizontal at shoulder height, both feet flat on the floor; not a lunge.",
+        "JUMP, in the air: jumped straight up, both feet clearly off the floor, legs close together under the hips, knees slightly bent, arms coming down toward the sides as they switch.",
+        "STANCE B, on the floor: the mirror of stance A, DARK (far) leg forward and LIGHT (near) leg back, LIGHT (near) arm forward and DARK (far) arm back, both arms straight and horizontal at shoulder height, both feet flat on the floor; not a lunge.",
         "JUMP, in the air: the same airborne switching pose as pose 2, both feet well above the floor line."
       ],
       "learned": [
         "Stance A and stance B look almost the same in profile; only the shading differs. A front view would fix it.",
         "Stance B came out as a lunge with a bent back knee. An edit pass made it upright; see edits.json.",
-        "Batch C (2026-11-20): two camera rows came back almost identical and stance B was still indistinguishable from A. Remake in a single three-quarter front view with a stance diagram attached."
+        "Batch C (2026-11-20): two camera rows came back almost identical and stance B was still indistinguishable from A. A three-quarter front view was attempted but the model would not produce it.",
+        "Batch E (2026-11-21): one side-on row, near/far limb shading and an explicit light-shoe versus dark-shoe swap made both stances distinct; horizontal arms and clear airborne poses improved the result. Do not repeat the old multi-camera retake."
       ],
       "chart": 1,
       "slot": "jump",
@@ -155,7 +156,7 @@
       },
       "check": [
         "Four poses: STANCE A, JUMP, STANCE B, JUMP",
-        "Stance A: right leg and left arm forward. Stance B: left leg and right arm forward. You can tell them apart without looking at shading",
+        "Stance A: LIGHT near leg and DARK far arm forward. Stance B: DARK far leg and LIGHT near arm forward; the shoes must clearly swap which is in front",
         "Back leg straight in both stances, no lunge",
         "Both jump poses clearly higher than the stances, both feet off the floor"
       ],
@@ -163,7 +164,12 @@
         "booklet": "BOOKLET-c1e5.png",
         "schematic": "REF-scissor-stances.png",
         "schematic_note": "a stick-figure diagram of the four poses seen from the side: which leg and which arm are forward in stance A and in stance B, and both feet off the floor in the jumps. Copy the positions only, never its style, colors or text.",
-        "view": "a THREE-QUARTER FRONT view: the body turned about 45 degrees toward the camera, facing right, so the viewer can see which leg and which arm are forward. The SAME angle in all four poses"
+        "problems": [
+          "Earlier models kept the same light leg forward in both stances. In this side-on view STANCE A has the LIGHT near shoe in front; STANCE B has the DARK far shoe in front. Use shading to make the mirror unmistakable.",
+          "One stance looked like a lunge and an arm drooped. Both stances need a straight back leg and both straight arms horizontal at shoulder height.",
+          "The two airborne switch poses must be clearly higher than the standing poses, with both shoes visibly off the floor."
+        ],
+        "view": "side-on body with the head and shoulders turned about 30 to 45 degrees toward the camera, facing right; identical camera angle in all four poses. Use dark far-side limbs to show which arm and leg switch forward"
       }
     },
     "toe-touch-c2": {
@@ -248,13 +254,13 @@
       "chart": 2,
       "slot": "ex3",
       "exercise": "a BACK EXTENSION",
-      "kept": "Grok Imagine, first take, kept as made (3 figures).",
+      "kept": "Batch E edited START pose chosen (2026-11-21): flat start, clear middle lift and raised top with thighs visibly off hands; human form check pending.",
       "layout": "In every pose he lies FACE DOWN, flat on his belly, with his HEAD ON THE RIGHT looking right and his FEET ON THE LEFT. Same scale, all on the same invisible floor line, wide empty gaps between figures.",
       "rule": "KEY BODY RULE FOR ALL THREE POSES: his arms are NOT pushing up and NOT planted in front of him. Both arms are STRAIGHT and stretched back along his sides, with the hands tucked flat, palms down, UNDER THE FRONT OF HIS THIGHS. Elbows straight.",
       "poses": [
-        "START: lying completely flat face down, legs straight and together, chin near the floor, arms straight back with palms under the thighs.",
-        "LIFTING: head, shoulders and both legs just beginning to lift off the floor together, legs straight, arms still straight back under the thighs.",
-        "TOP: head, shoulders AND BOTH LEGS raised off the floor at the same time, legs straight with the knees LOCKED, thighs clearly lifted off his hands, back gently arched, looking forward; only his belly stays on the floor."
+        "START (0 degrees): lying completely flat face down with chin, chest, thighs, shins and shoes on the floor, legs straight and together, arms straight back with palms under the front of the thighs.",
+        "LIFTING (about 15 degrees): head, shoulders and both straight legs visibly lifting together, hands still under the thighs and in the same place; a clear midpoint between START and TOP.",
+        "TOP (about 30 degrees): head, shoulders AND BOTH LEGS raised together, knees locked straight, thighs visibly CLEAR of the hands, gently arched back; the belly and palms remain on the floor."
       ],
       "check": [
         "Three poses, head on the right, feet on the left",
@@ -282,7 +288,8 @@
         "The leg raise is modest: the feet rise about 20 px more than at the start, so the thighs only just clear the hands. If a clearer raise is wanted, ask for 'legs raised high' or run an edit pass.",
         "The START pose already has the feet a few pixels off the floor.",
         "Both feet lift at the top, so a planted-foot anchor makes him slide 364 px. The new 'hips' anchor (the red shorts) holds him to 2 px. Use it for any exercise where he lies and the hips stay on the floor.",
-        "Batch C (2026-11-20): the lift improved but the hands moved forward to the hips, and START and LIFTING looked the same. Remake with the booklet drawing and a hands-and-thighs diagram attached."
+        "Batch C (2026-11-20): the lift improved but the hands moved forward to the hips, and START and LIFTING looked the same. Remake with the booklet drawing and a hands-and-thighs diagram attached.",
+        "Batch E (2026-11-21): specifying 0/15/30-degree lift stages and where the shoes rest made the differences visible. A one-figure START correction kept the other poses nearly unchanged by eye; review their anatomy again after every edit."
       ],
       "retake": {
         "attach": [

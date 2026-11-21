@@ -2,6 +2,13 @@
   "_about": "TEMPLATE for a new character. Copy to config/characters/<name>.json, fill every field, then follow docs/NEW-CHARACTER.md. Every exercise spec in prompts/strips.json works unchanged with any character: only this file differs.",
   "name": "<short name, e.g. 'coach rosa'>",
   "noun": "<one word the prompts use for the character: 'boy', 'girl', 'woman', 'man', 'robot'...>",
+  "pronouns": {
+    "he": "<she, they, he, etc.>",
+    "him": "<her, them, him, etc.>",
+    "his": "<her, their, his, etc.>",
+    "himself": "<herself, themselves, himself, etc.>",
+    "boy": "<girl, woman, man, robot, etc.>"
+  },
   "description": "<ONE sentence, in this order: age and type; hair; skin; face; build; each piece of clothing with its color; shoes; then the art style (outline weight, shading, color saturation). Be concrete: colors by name, not mood. This is pasted into every prompt.>",
   "locked": [
     "<decisions that must never drift, with the date: e.g. 'Green shoes, never white (2026-12-01)'>"
