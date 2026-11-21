@@ -32,4 +32,10 @@ and exposed a backdrop-restore dependency and crossfade ghosting (D-14 in
 review; an approved second avatar and new scissor references are still pending.
 Thus task 8 remains open. No new motion generation is authorized by this note.
 
+2026-11-21 workflow follow-up: `kit/line.py status/check` now flags an absent
+chart-specific image backdrop as an archive-restore warning (task 7 partial).
+Charles selected `--no-fade` for the knee push-up. Artwork/video generation is
+paused while another bot revises the generation instructions; do not duplicate
+that work. The wider archive recoverability audit remains open.
+
 Tasks 6–9 are intentionally *not* being implemented in this first increment. This is a prioritized queue, not authorization for unattended paid media generation.

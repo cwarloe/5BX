@@ -64,10 +64,13 @@ before building a whole chart. A new version needs a new review.
 
 **First pilot finding:** Chart 1's knee push-up requires the archived
 `sprites/assets/backgrounds/gym-keeper-landscape.png` as well as its chosen
-strip. Restore the existing asset from the `sprite-kit-assets` archive listed
-in `ART.md` before previewing. A/B testing the builder's existing `--no-fade`
-flag removed a visible double-body crossfade artifact, but did **not** approve
-the movement's anatomy or cadence. See `qc-line/LESSONS.md` for measurements.
+strip. `line.py status/check` now warns when any chart's image backdrop is
+absent; restore it from the `sprite-kit-assets` archive listed in `ART.md`
+before previewing. **User decision (2026-11-21): use `--no-fade` for this
+knee-push-up pilot**; it removes the double-body crossfade, but does **not**
+approve anatomy or cadence. Do not change the global fade setting for other
+exercises without testing them. New artwork/video generation is paused while
+another bot revises the art instructions. See `qc-line/LESSONS.md`.
 
 For deeper rationale and future work, see
 [`PRODUCTION_CONTROL_PLAN.md`](PRODUCTION_CONTROL_PLAN.md) and
