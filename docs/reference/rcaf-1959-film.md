@@ -24,7 +24,7 @@ The first 5 minutes 35 seconds are an introductory argument for fitness (office 
 | 07:12-07:28 | Ex5, Chart 2, run in place and astride jumps | Three-quarter front, three demonstrators | They stand from the push-up, run in place with a low foot lift, then do stride jumps with the arms raising sideways. The narrator then mentions an outdoor walk or run substitute; that substitute is not shown as field footage here. The Chart 2 set ends around 07:39. |
 | 08:00-08:20 | Ex4, Chart 1, knee push-up | High three-quarter | The same push-up pattern, but the knees stay on the floor. The up position has the arms straight and a line from the knees to the head. |
 | 08:21-08:25 | Ex4, Chart 2 | High three-quarter | A short reprise of the standard toe push-up. |
-| 08:26-08:38 | Ex4, Chart 3 | Side | The cycle is arms straight (a plank), lower until the chin is at the floor with the body still fairly straight, pike the hips so the forehead comes to the floor, then return to arms straight. The narrator's cue is "chin, forehead, arm straight, back straight." |
+| 08:26-08:38 | Ex4, Chart 3 | Side | The cycle has three distinct movements. From a straight-arm plank he lowers with the body nearly horizontal until the chin is at the floor in front of the hands. He then raises the hips into a pike and drops the head so the forehead comes to the floor at or behind the hands. He then lowers the hips and extends the arms back to a plank, and repeats. A scan at 0.1 second intervals from 08:31 to 08:39 found no frame in which the body stays straight and nearly horizontal with the forehead on the floor. The narrator's cue is "chin, forehead, arm straight, back straight." The booklet wording is the same sequence: chin in front of the hands, then forehead behind the hands, then arms straightened. |
 | 08:39-08:52 | Ex4, Chart 4 | High three-quarter | Push-ups with the hands in a widespread position. |
 | 08:53-09:02 | Ex4, Chart 5 | Front | Push-ups with a hand clap added at the top. |
 | 09:03-09:11 | Ex4, Chart 6 | Front | Push-ups with a chest slap. 09:12 cuts back to the narrator, who introduces the common-mistakes section. |
@@ -42,7 +42,7 @@ These points are stated by the narrator and visible in the footage.
 - In Charts 4 to 6, the knees are raised waist high.
 - The Chart 2 jump is a stride jump with the arms raising sideways.
 - The Chart 4 jump is a full squat with a straight back, and the feet alternate on each jump.
-- The Chart 3 push-up goes chin, then forehead, then arms straight, with the back kept straight.
+- The Chart 3 push-up has three distinct movements: chin, then forehead, then arms straight. In the film, the chin touch is a straight, nearly horizontal lower with the chin in front of the hands. The forehead touch is not another straight-body lower with the head tucked. After the chin he pikes the hips and brings the head down so the forehead comes to the floor at or behind the hands, then he returns to a straight-arm plank. That matches the booklet: "Touch chin to floor in front of hands - touch forehead to floor behind hands before returning to up position."
 - In Charts 4 to 6, Ex1 is a full circle: the hands sweep from the floor-touch and the body bends backward as far as possible on the circle.
 - The Chart 2 sit-up comes fully upright, and the back is kept straight throughout.
 - The Chart 4 sit-up keeps the arms straight and close against the ears, and carries them in a wide arc to touch the toes.
@@ -75,8 +75,8 @@ Each file is a 640-pixel-wide PNG, named with the exercise, the chart, the pose,
 | [ex3-c2-peak-06m43s6.png](rcaf-1959-stills/ex3-c2-peak-06m43s6.png) | Chart 2 back-extension peak: head, chest, and both legs lifted together. |
 | [ex5-c2-midair-07m26s4.png](rcaf-1959-stills/ex5-c2-midair-07m26s4.png) | Chart 2 stride jump, mid-air, arms out to the sides. There is motion blur on the arms. The middle demonstrator is clearly off the floor. |
 | [ex4-c1-up-08m09s0.png](rcaf-1959-stills/ex4-c1-up-08m09s0.png) | Chart 1 knee push-up, arms straight, knees on the floor. |
-| [ex4-c3-chin-08m30s6.png](rcaf-1959-stills/ex4-c3-chin-08m30s6.png) | Chart 3 chin-level position. The body is nearly horizontal and the chin is at or extremely close to the floor. A sliver of floor may still show under the face. |
-| [ex4-c3-forehead-08m35s8.png](rcaf-1959-stills/ex4-c3-forehead-08m35s8.png) | Chart 3 forehead touch, hips piked, head down to the floor. |
+| [ex4-c3-chin-08m30s6.png](rcaf-1959-stills/ex4-c3-chin-08m30s6.png) | Chart 3 chin-level position. The body is nearly horizontal and the chin is at or extremely close to the floor, in front of the hands. A sliver of floor may still show under the face. |
+| [ex4-c3-forehead-08m32s0.png](rcaf-1959-stills/ex4-c3-forehead-08m32s0.png) | Chart 3 forehead phase, at 08:32.0. After the chin touch he pikes the hips and brings the head down so the forehead is at or just behind the hands, very close to the floor. This is not a straight-body lower with the head tucked. No such straight, nearly horizontal forehead frame exists in this segment. The booklet wording is "touch forehead to floor behind hands." |
 | [ex5-c13-lowrun-09m27s2.png](rcaf-1959-stills/ex5-c13-lowrun-09m27s2.png) | Charts 1-3 run, close-up of a roughly 4-inch foot lift. |
 | [ex5-c46-highknees-09m39s8.png](rcaf-1959-stills/ex5-c46-highknees-09m39s8.png) | Charts 4-6 run, knee raised to about waist height. |
 | [ex5-c4-squat-bottom-09m49s0.png](rcaf-1959-stills/ex5-c4-squat-bottom-09m49s0.png) | Chart 4 squat-jump bottom, deep squat, feet in an offset stance. |
