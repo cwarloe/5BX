@@ -130,7 +130,9 @@ export function jumpActionForChart(chart: number): Action {
 }
 
 export function spriteSrc(action: Action, frame: number): string {
-  return `/sprites/${action}/${frame}.png`;
+  // BASE_URL is "/" on Grok/Vercel and "/5BX/game/" on GitHub Pages.
+  const base = import.meta.env.BASE_URL || "/";
+  return `${base}sprites/${action}/${frame}.png`;
 }
 
 export function formatRemain(seconds: number): string {

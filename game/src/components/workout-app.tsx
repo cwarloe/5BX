@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
 import {
   advance,
   beginIntro,
@@ -17,6 +17,7 @@ import {
   INTRO_SECONDS,
   JOG_SECONDS,
   LEVELS,
+  isLevelId,
   LEVEL_ORDER,
   OUTRO_SECONDS,
   RUN_CYCLE,
@@ -173,6 +174,21 @@ export function WorkoutApp() {
   const [voiceOn, setVoiceOn] = useState(true);
   const wakeRef = useRef<WakeLockSentinel | null>(null);
   const hooksRef = useRef<Hooks | null>(null);
+
+  // Phones can drop or delay the click after a tap; act on pointer-up and
+  // ignore the click that follows it, so each tap runs exactly once.
+  const pressStamp = useRef(0);
+  const press = (run: () => void) => ({
+    onPointerUp: (event: ReactPointerEvent<HTMLButtonElement>) => {
+      if (event.button !== 0) return;
+      pressStamp.current = performance.now();
+      run();
+    },
+    onClick: () => {
+      if (performance.now() - pressStamp.current < 700) return;
+      run();
+    },
+  });
   const apiRef = useRef({ start: () => {}, skip: () => {}, reset: () => {} });
 
   const acquireWake = useCallback(async () => {
@@ -483,39 +499,41 @@ export function WorkoutApp() {
             </option>
           ))}
         </select>
-        <button type="button" className={view.running ? undefined : "primary"} onClick={onStart}>
+        <button type="button" className={view.running ? undefined : "primary"} {...press(onStart)}>
           {view.running ? "Pause" : "Start"}
         </button>
-        <button type="button" onClick={onReset}>
+        <button type="button" {...press(onReset)}>
           Reset
         </button>
-        <button type="button" aria-label="Skip interval" onClick={onSkip}>
+        <button type="button" aria-label="Skip interval" {...press(onSkip)}>
           Skip
         </button>
         <button
           type="button"
           aria-pressed={sfxOn}
-          onClick={() => {
+          aria-label={sfxOn ? "Sound effects on" : "Sound effects off"}
+          {...press(() => {
             const next = !sfxOn;
             setSfxOn(next);
             setSfxEnabled(next);
             localStorage.setItem("5bx-sfx", next ? "1" : "0");
             if (next) unlockAudio();
-          }}
+          })}
         >
-          SFX: {sfxOn ? "ON" : "OFF"}
+          SFX {sfxOn ? "ON" : "OFF"}
         </button>
         <button
           type="button"
           aria-pressed={voiceOn}
-          onClick={() => {
+          aria-label={voiceOn ? "Voice on" : "Voice off"}
+          {...press(() => {
             const next = !voiceOn;
             setVoiceOn(next);
             setVoiceEnabled(next);
             localStorage.setItem("5bx-voice", next ? "1" : "0");
-          }}
+          })}
         >
-          Voice: {voiceOn ? "ON" : "OFF"}
+          Voice {voiceOn ? "ON" : "OFF"}
         </button>
       </nav>
     </main>

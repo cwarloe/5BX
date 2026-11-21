@@ -26,6 +26,7 @@
   html,
   body {
     height: 100%;
+    max-height: 100%;
     margin: 0;
     background: var(--color-ink);
     color: var(--color-ink);
@@ -39,7 +40,8 @@
 }
 
 .shell {
-  height: 100dvh;
+  height: 100%;
+  max-height: 100%;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -49,6 +51,7 @@
   background: var(--color-sky);
   overflow: hidden;
   user-select: none;
+  -webkit-user-select: none;
   transition: border-color 160ms linear;
 }
 
@@ -438,6 +441,9 @@
 }
 
 .controls {
+  position: relative;
+  z-index: 40;
+  flex-shrink: 0;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -446,7 +452,9 @@
   padding: 0.4rem 0.4rem calc(0.4rem + env(safe-area-inset-bottom));
   background: var(--color-ink);
   color: var(--color-cream);
-  z-index: 10;
+  pointer-events: auto;
+  user-select: auto;
+  -webkit-user-select: auto;
 }
 
 .controls button,
@@ -463,6 +471,8 @@
   border-radius: 0;
   padding: 0 0.65rem;
   touch-action: manipulation;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .controls select {
@@ -510,9 +520,37 @@
 .stage.shake { animation: hitshake 0.4s linear; }
 
 @media (max-width: 520px) {
+  .shell { border-width: 12px; }
   .tree-c { left: 15%; height: 20%; }
   .tree-f { right: 15%; height: 20%; }
   .note { padding-inline: 0.4rem; }
+  .controls {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 0.28rem;
+    padding: 0.35rem 0.35rem calc(0.35rem + env(safe-area-inset-bottom));
+  }
+  .controls select {
+    grid-column: 1 / -1;
+    max-width: none;
+    width: 100%;
+  }
+  .controls button:nth-of-type(1),
+  .controls button:nth-of-type(2),
+  .controls button:nth-of-type(3) {
+    grid-column: span 2;
+  }
+  .controls button:nth-of-type(4),
+  .controls button:nth-of-type(5) {
+    grid-column: span 3;
+  }
+  .controls button,
+  .controls select {
+    min-height: 44px;
+    font-size: 0.78rem;
+    letter-spacing: 0.03em;
+    padding-inline: 0.15rem;
+  }
 }
 
 @media (max-height: 520px) {
