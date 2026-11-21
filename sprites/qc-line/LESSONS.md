@@ -136,6 +136,12 @@ clips for user review; if the pose snap is unacceptable, test one targeted
 motion-improvement method rather than bulk generating more frames. A single
 reviewer has inspected sample frames only; motion and anatomy are not approved.
 
+**User review update (2026-11-21):** Charles selected the **no-fade** version
+for this pilot. Keep the source poses as-is; use `--no-fade` when previewing
+the knee push-up. Image/video generation is paused while another bot adjusts
+art-generation instructions. The no-fade preference is not a blanket approval
+of the character's anatomical form.
+
 **Lean decision:** No new QC tool, paid model, or retake batch yet. Measure
 manual touch time and first-pass **form** approval once an actual human review
 has occurred; neither can be inferred from successful renders. Scissor jumps

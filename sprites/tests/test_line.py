@@ -56,6 +56,23 @@ class ProductionLineTest(unittest.TestCase):
         self.assertEqual(report["errors"], [])
         self.assertEqual(report["charts"][0]["missing"], ["jump"])
 
+    def test_missing_chart_backdrop_is_reported_without_blocking(self):
+        theme = {"backdrop": {"style": "forest"},
+                 "chart_looks": {"1": {"backdrop": {"style": "image", "image": "assets/backgrounds/gym.png"}}}}
+        sprites = self.sheets / "sprites"
+        self.assertEqual(line.missing_backdrop_images(theme, sprites, [1, 2]),
+                         {1: "assets/backgrounds/gym.png"})
+        image = sprites / "assets" / "backgrounds" / "gym.png"
+        image.parent.mkdir(parents=True)
+        image.write_bytes(b"existing art")
+        self.assertEqual(line.missing_backdrop_images(theme, sprites, [1, 2]), {})
+
+    def test_missing_global_backdrop_picture_is_checked_for_each_chart(self):
+        theme = {"backdrop": {"style": "image", "image": "assets/backgrounds/default.png"},
+                 "chart_looks": {"1": {"backdrop": {"style": "forest"}}}}
+        self.assertEqual(line.missing_backdrop_images(theme, self.sheets, [1, 2]),
+                         {2: "assets/backgrounds/default.png"})
+
     def test_unknown_registered_strip_blocks_check(self):
         self.registry["charts"]["1"]["jump"] = "not-a-strip"
         self.assertTrue(any("unknown strip" in x for x in self.report()["errors"]))

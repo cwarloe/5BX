@@ -126,11 +126,33 @@ def analyze(plan, registry, prompt_data, library, sheets_dir):
 
 def repository_report(repo_root):
     sprites = repo_root / "sprites"
-    return analyze(read_json(repo_root / "data" / "5bx-charts.json"),
-                   read_json(sprites / "config" / "strips.json"),
-                   read_json(sprites / "prompts" / "strips.json"),
-                   read_json(sprites / "library" / "index.json"),
-                   sprites / "sheets")
+    report = analyze(read_json(repo_root / "data" / "5bx-charts.json"),
+                     read_json(sprites / "config" / "strips.json"),
+                     read_json(sprites / "prompts" / "strips.json"),
+                     read_json(sprites / "library" / "index.json"),
+                     sprites / "sheets")
+    missing = missing_backdrop_images(read_json(sprites / "config" / "theme.json"),
+                                      sprites, [c["chart"] for c in report["charts"]])
+    for chart in report["charts"]:
+        cid = chart["chart"]
+        chart["missing_backdrop"] = missing.get(cid)
+        if cid in missing:
+            report["warnings"].append(f"chart {cid}: backdrop picture {missing[cid]} unavailable locally; see ART.md")
+    return report
+
+
+def missing_backdrop_images(theme, sprites_dir, chart_ids):
+    """Flag archived image backdrops used by the builder; code-drawn rooms need no file."""
+    missing = {}
+    for cid in chart_ids:
+        look = theme.get("chart_looks", {}).get(str(cid), {})
+        backdrop = look.get("backdrop") or theme.get("backdrop", {})
+        if backdrop.get("style") != "image":
+            continue
+        source = backdrop.get("image")
+        if not source or not (sprites_dir / source).is_file():
+            missing[cid] = source or "(image path not configured)"
+    return missing
 
 
 def release_readiness(report, registry, library, sheets_dir, chart=None):
@@ -203,7 +225,8 @@ def show(report, detailed=False):
     for chart in report["charts"]:
         print(f"  Chart {chart['chart']}: {chart['mapped']}/{chart['total']} slots mapped; "
               f"{chart['chosen']} chosen; {len(chart['needs_review'])} need human form review; "
-              f"{len(chart['absent_art'])} sheets not local")
+              f"{len(chart['absent_art'])} sheets not local" +
+              ("; backdrop picture not local" if chart.get("missing_backdrop") else ""))
         if chart["missing"]:
             print(f"    unmapped: {', '.join(chart['missing'])}")
     print(f"Structural errors: {len(report['errors'])}; follow-up warnings: {len(report['warnings'])}")
