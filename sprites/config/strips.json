@@ -232,7 +232,7 @@
       "jumps_per_cycle": 1
     },
     "sit-up-toe-touch-c4": {
-      "file": "c4-ex2-sit-up-toe-touch.png",
+      "file": "ov-sit-up-toe-touch-c4.png",
       "poses": 3,
       "anchor": "shoes",
       "cycle": [
@@ -241,7 +241,11 @@
         3,
         2
       ],
-      "reps_per_cycle": 1
+      "reps_per_cycle": 1,
+      "fit": {
+        "landscape": 0.78,
+        "portrait": 1.0
+      }
     },
     "back-extension-arms-sideways-c4": {
       "file": "c4-ex3-back-extension-arms-sideways.png",
@@ -255,7 +259,11 @@
       ],
       "reps_per_cycle": 1,
       "rows": 2,
-      "row": 0
+      "row": 0,
+      "fit": {
+        "landscape": 0.78,
+        "portrait": 1.0
+      }
     },
     "wide-hand-push-up-c4": {
       "file": "c4-ex4-wide-hand-push-up.png",
@@ -300,6 +308,114 @@
         4
       ],
       "jumps_per_cycle": 2
+    },
+    "sit-up-twist-c5": {
+      "file": "ov-sit-up-twist-c5.png",
+      "poses": 3,
+      "anchor": "hips",
+      "cycle": [
+        1,
+        2,
+        1,
+        3
+      ],
+      "reps_per_cycle": 2
+    },
+    "back-extension-arms-overhead-c5": {
+      "file": "ov-back-extension-arms-overhead-c5.png",
+      "poses": 3,
+      "anchor": "hips",
+      "cycle": [
+        3,
+        2,
+        1,
+        2
+      ],
+      "reps_per_cycle": 1,
+      "fit": {
+        "landscape": 0.78,
+        "portrait": 1.0
+      }
+    },
+    "clap-push-up-c5": {
+      "file": "ov-clap-push-up-c5.png",
+      "poses": 3,
+      "anchor": "shoes",
+      "cycle": [
+        1,
+        2,
+        3,
+        2
+      ],
+      "reps_per_cycle": 1
+    },
+    "semi-spread-eagle-jumps-c5": {
+      "file": "ov-semi-spread-eagle-jumps-c5.png",
+      "poses": 3,
+      "anchor": "shoes",
+      "cycle": [
+        1,
+        2,
+        3,
+        2
+      ],
+      "jumps_per_cycle": 1
+    },
+    "pike-sit-up-c6": {
+      "file": "ov-pike-sit-up-c6.png",
+      "poses": 3,
+      "anchor": "hips",
+      "cycle": [
+        1,
+        2,
+        3,
+        2
+      ],
+      "reps_per_cycle": 1,
+      "fit": {
+        "landscape": 0.78,
+        "portrait": 1.0
+      }
+    },
+    "back-extension-press-c6": {
+      "file": "ov-back-extension-press-c6.png",
+      "poses": 3,
+      "anchor": "hips",
+      "cycle": [
+        3,
+        2,
+        1,
+        2
+      ],
+      "reps_per_cycle": 1,
+      "fit": {
+        "landscape": 0.78,
+        "portrait": 1.0
+      }
+    },
+    "chest-slap-push-up-c6": {
+      "file": "ov-chest-slap-push-up-c6.png",
+      "poses": 3,
+      "anchor": "shoes",
+      "cycle": [
+        1,
+        2,
+        3,
+        2
+      ],
+      "reps_per_cycle": 1
+    },
+    "jack-jumps-c6": {
+      "file": "ov-jack-jumps-c6.png",
+      "poses": 3,
+      "anchor": "shoes",
+      "cycle": [
+        1,
+        2,
+        3,
+        2
+      ],
+      "jumps_per_cycle": 1
     }
   },
   "charts": {
@@ -334,10 +450,18 @@
       "ex3": "back-extension-arms-sideways-c4"
     },
     "5": {
-      "run": "high-knee-run-c4"
+      "run": "high-knee-run-c4",
+      "ex2": "sit-up-twist-c5",
+      "ex3": "back-extension-arms-overhead-c5",
+      "ex4": "clap-push-up-c5",
+      "jump": "semi-spread-eagle-jumps-c5"
     },
     "6": {
-      "run": "high-knee-run-c4"
+      "run": "high-knee-run-c4",
+      "ex2": "pike-sit-up-c6",
+      "ex3": "back-extension-press-c6",
+      "ex4": "chest-slap-push-up-c6",
+      "jump": "jack-jumps-c6"
     }
   }
 }

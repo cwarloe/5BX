@@ -44,8 +44,8 @@ Written before the kit's batch C review (`batches/2026-11-20-C/REVIEW.md`) was r
 Raw art does not live in Git (see `/ART.md`). The images that used to sit next to this code (strip sheets, the
 sprite library, baked assets, batch folders, exports and the demo) are in the Drive folder
 *Sprite Art 5BX Workout*; `ART.md` lists the file names. To build a video from a fresh clone, unzip the `sheets`,
-`library`, `assets` and `sheets-batch-e` zips inside this folder (the last holds the two sheets that replaced the
-scissor jumps and the chart 2 back extension). `kit/build.py --bake` redraws the sprite PNGs from `sheets/` if only
+`library`, `assets`, `sheets-batch-e` and `sheets-charts-4-6` zips inside this folder (the last two hold the sheets that
+replaced the scissor jumps and the chart 2 back extension, and the reviewed sheets for charts 4 to 6). `kit/build.py --bake` redraws the sprite PNGs from `sheets/` if only
 those are missing, but the imported backdrop pictures (`assets/backgrounds/`) are art and cannot be redrawn: the
 build stops with a message naming the `assets` zip if they are absent.
 
@@ -55,3 +55,21 @@ Review of the move found three bugs in the kit's `build.py` (all fixed here, and
 own history): cached sprite and backdrop records were trusted even when their PNGs were absent; the cache key for
 composed frames hashed an image's path but not its contents; and exercise 5 reserved one jump window more than the
 plan emits, so it ran 12 s short (now 360 s of the 360 s allotted at chart 1, level A).
+
+## The Sprite Boy demo page
+
+Live at https://cwarloe.github.io/5BX/sprite-boy/ . It moved here from the `knowledge-harvest` repo's `gh-pages` branch.
+
+The demo is about 57 MB of generated pictures and clips, so it is **not on `main`**. It lives on its own branch,
+`sprite-boy-demo`, which the Pages workflow (`.github/workflows/pages.yml`) copies into the site at `/sprite-boy/`
+on every deploy. To refresh it:
+
+1. Restore the art zips into `sprites/` (see above) and run, from `sprites/`:
+   `python kit/make_demo.py --data ../data/5bx-charts.json --out ../_demo --reel`
+2. Copy your clips into `_demo/clips/` (`chart4-exercises.mp4`, `chart5-exercises.mp4`, `chart6-exercises.mp4`; made with
+   `kit/build.py ... --chart N --only ... --preview`).
+3. Commit the contents of `_demo/` as a single new commit on the `sprite-boy-demo` branch (an orphan branch: replace its
+   history, do not stack 57 MB per refresh) and push it, then run the Pages workflow.
+
+The full chart 1 video is a GitHub release asset (`sprite-boy-videos-2026-11-21`), linked from the page; videos are not in Git.
+
