@@ -14,9 +14,9 @@ FONT_M = '/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf'
 NAVY_TOP, NAVY_BOT, ORANGE, GRID = (8, 11, 16), (18, 24, 33), (255, 107, 53), (26, 34, 46)
 
 FORMATS = {
-    'landscape': dict(W=1920, H=1080, ground=.845, box=(1250, 660),
+    'landscape': dict(W=1920, H=1080, ground=.845, box=(1250, 660), body=660,
                       kicker=24, title=50, target=40, clock=74, bar=14),
-    'portrait':  dict(W=1080, H=1920, ground=.78, box=(950, 1000),
+    'portrait':  dict(W=1080, H=1920, ground=.78, box=(950, 1000), body=1000,
                       kicker=34, title=74, target=62, clock=118, bar=20),
 }
 
@@ -73,14 +73,27 @@ def key_and_split(src):
                               min(im.size[0], x1 + 6), floor + 6)))
     return out
 
-def compose(sheet, outdir, F):
+def compose(sheet, outdir, F, depth=1.0):
+    """Render each pose of a sheet onto the backdrop at a consistent body size.
+
+    Scale is set by how long the body is, not by how much of the box it fills.
+    Fitting the box makes the same person double in size when he lies down: a
+    prone figure is wide and short, so box-fitting stretches it to the box
+    width while a standing figure is only ever as tall as the box.
+
+    `depth` then stages the exercises front to back on purpose - floor work sits
+    slightly further from camera than standing work, which keeps the apparent
+    size steady without pretending a kneeling push-up is as long as a man is tall.
+    """
     os.makedirs(outdir, exist_ok=True)
     poses = key_and_split(sheet)
     bg, (bw, bh) = backdrop(F), F['box']
     gy = int(F['H'] * F['ground'])
-    # One scale for all poses, satisfying both dimensions: the widest and the
-    # tallest pose of a movement are rarely the same pose.
-    s = min(bw / max(p.size[0] for p in poses), bh / max(p.size[1] for p in poses))
+    # Longest extent of the body in any pose: standing height, or prone length.
+    reach = max(max(p.size) for p in poses)
+    s = F['body'] * depth / reach
+    # Never let a pose leave the box, whatever the depth asks for.
+    s = min(s, bw / max(p.size[0] for p in poses), bh / max(p.size[1] for p in poses))
     for n, p in enumerate(poses, 1):
         w, h = (max(1, int(round(v * s))) for v in p.size)
         f = bg.copy()
@@ -158,11 +171,52 @@ def jump_overlay(F, allot, off, count, name):
         f"drawbox=x=0:y={F['H']-F['bar']}:w='{F['W']}*(({off}+t)/{allot})':h={F['bar']}:"
         f"color=0xff6b35@1:t=fill")
 
-SHEETS = {'ex1': 'ex1-toe-touching.png',      'ex2': 'ex2-partial-sit-up.png',
-          'ex3': 'ex3-alternate-leg-raise.png', 'ex4': 'ex4-knee-push-up.png',
-          'run': 'ex5-stationary-run.png',      'jump': 'ex5-scissor-jumps.png'}
-CYCLES = {'ex1': [1, 2, 1, 3], 'ex2': [1, 2, 3, 2], 'ex3': [1, 2, 1, 3],
-          'ex4': [1, 2, 3, 2], 'run': [1, 2, 3, 4], 'jump': [1, 2, 3, 2]}
+SLOTS = ('ex1', 'ex2', 'ex3', 'ex4', 'run', 'jump')
+
+# Pose sheets per chart. The exercises change from chart to chart - chart 1's
+# knee push-up becomes a chin-forehead push-up by chart 3 - so a sheet is only
+# ever valid for the chart it was drawn for. A chart with no entry here cannot
+# be rendered, and says so rather than borrowing another chart's figures.
+SHEETS = {
+    1: {'ex1': 'ex1-toe-touching.png',       'ex2': 'ex2-partial-sit-up.png',
+        'ex3': 'ex3-alternate-leg-raise.png', 'ex4': 'ex4-knee-push-up.png',
+        'run': 'ex5-stationary-run.png',      'jump': 'ex5-scissor-jumps.png'},
+}
+
+# How a movement reads as a loop, independent of how many poses it was drawn in.
+#   pingpong  a there-and-back rep:  1 2 3 4 3 2
+#   centre    pose 1 is the neutral the body returns through: 1 2 1 3 1 4
+#   loop      a continuous gait that wraps:  1 2 3 4
+CYCLE_KIND = {'ex1': 'centre', 'ex2': 'pingpong', 'ex3': 'centre',
+              'ex4': 'pingpong', 'run': 'loop', 'jump': 'pingpong'}
+
+# Staging, front to back. Floor work sits a little further from camera than
+# standing work so the figure does not swell when he lies down.
+DEPTH = {'ex1': 1.0, 'ex2': .88, 'ex3': .88, 'ex4': .88, 'run': 1.0, 'jump': 1.0}
+
+def cycle_for(kind, n):
+    """Build the pose order for a movement drawn in n poses."""
+    if n < 2:
+        raise SystemExit(f'a movement needs at least 2 poses, got {n}')
+    if kind == 'loop':
+        return list(range(1, n + 1))
+    if kind == 'pingpong':
+        return list(range(1, n + 1)) + list(range(n - 1, 1, -1))
+    if kind == 'centre':
+        out = []
+        for i in range(2, n + 1):
+            out += [1, i]
+        return out
+    raise SystemExit(f'unknown cycle kind {kind!r}')
+
+def sheets_for(chart_id):
+    if chart_id not in SHEETS:
+        have = ', '.join(str(c) for c in sorted(SHEETS))
+        raise SystemExit(
+            f'no pose sheets drawn for chart {chart_id} - only chart(s) {have} can be '
+            f'rendered.\nChart {chart_id} prescribes different movements, so another '
+            f'chart\'s figures would show the wrong exercise.')
+    return SHEETS[chart_id]
 
 def main(fmt, chart_id, level, srcdir, workdir, out):
     F = FORMATS[fmt]
@@ -171,14 +225,16 @@ def main(fmt, chart_id, level, srcdir, workdir, out):
     ex5 = chart['exercises'][4]
     os.makedirs(workdir, exist_ok=True)
 
-    for key, sheet in SHEETS.items():
-        n = compose(os.path.join(srcdir, sheet), os.path.join(workdir, key), F)
-        print(f'  {key}: {n} poses')
+    cycles = {}
+    for key, sheet in sheets_for(chart_id).items():
+        n = compose(os.path.join(srcdir, sheet), os.path.join(workdir, key), F, DEPTH[key])
+        cycles[key] = cycle_for(CYCLE_KIND[key], n)
+        print(f'  {key}: {n} poses -> cycle {cycles[key]}')
 
     parts = []
     for i in range(4):                                  # exercises 1-4
         name, allot, reps = chart['exercises'][i]['name'], timing[i], lv['reps'][i]
-        cyc = CYCLES[f'ex{i+1}']
+        cyc = cycles[f'ex{i+1}']
         # ex1 and ex3 cover two reps per cycle (out-and-back, or one leg each)
         cycle_s = reps and allot / reps * (2 if i in (0, 2) else 1)
         ov = overlay(F, i + 1, name, f'{reps} reps', allot)
@@ -200,12 +256,12 @@ def main(fmt, chart_id, level, srcdir, workdir, out):
     while done < steps:
         block = min(every, steps - done)
         dur = block * step_s
-        parts.append(segment(os.path.join(workdir, 'run'), CYCLES['run'], 2 * step_s * 2, dur, F,
+        parts.append(segment(os.path.join(workdir, 'run'), cycles['run'], 2 * step_s * 2, dur, F,
                              overlay(F, 5, ex5['name'], f'{steps} steps', allot, off),
                              os.path.join(workdir, f'run{k}'), off))
         off += dur; done += block
         if done < steps:
-            parts.append(segment(os.path.join(workdir, 'jump'), CYCLES['jump'],
+            parts.append(segment(os.path.join(workdir, 'jump'), cycles['jump'],
                                  window / (jcount / 2), window, F,
                                  jump_overlay(F, allot, off, jcount, ex5['jumpName']),
                                  os.path.join(workdir, f'jmp{k}'), off))
@@ -220,10 +276,14 @@ def main(fmt, chart_id, level, srcdir, workdir, out):
     print('wrote', out)
 
 if __name__ == '__main__':
-    if len(sys.argv) < 4:
+    argv, chart_id = sys.argv[1:], 1
+    if '--chart' in argv:
+        i = argv.index('--chart')
+        chart_id = int(argv[i + 1]); del argv[i:i + 2]
+    if len(argv) < 3:
         raise SystemExit('usage: chart.py <landscape|portrait> <level> <out.mp4> '
-                         '[sheets_dir] [work_dir]')
-    fmt, level, out = sys.argv[1], sys.argv[2], sys.argv[3]
-    sheets = sys.argv[4] if len(sys.argv) > 4 else os.path.join(HERE, 'sheets')
-    work = sys.argv[5] if len(sys.argv) > 5 else os.path.join(HERE, '.work')
-    main(fmt, 1, level, sheets, work, out)
+                         '[sheets_dir] [work_dir] [--chart N]')
+    fmt, level, out = argv[0], argv[1], argv[2]
+    sheets = argv[3] if len(argv) > 3 else os.path.join(HERE, 'sheets')
+    work = argv[4] if len(argv) > 4 else os.path.join(HERE, '.work')
+    main(fmt, chart_id, level, sheets, work, out)
