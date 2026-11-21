@@ -154,7 +154,7 @@
   },
   "_chart_looks_hint": "A chart can have its own room and props. Charts without an entry use \"backdrop\" above (the original code-drawn forest, retired for new rooms as they arrive). Add \"scene\": \"config/scene.chartN.json\" to give a chart its own props (a mat overlay).",
   "overlay": {
-    "_about": "Follow-along overlay in the style of Fraser Wilson's YouTube workouts (@FraserWilsonFit). Chosen by Charles 2026-11-21 over the old title, digital clock and bottom progress bar. Drawn on its own layer above the boy.",
+    "_about": "Follow-along overlay in the style of Fraser Wilson's YouTube workouts (@FraserWilsonFit). Chosen by Charles 2026-11-21 over the old title, digital clock and bottom progress bar. Drawn on its own layer above the boy. Top corners chosen by Charles on 2026-11-21 after comparing them with bottom corners.",
     "style": "fraser",
     "name_card": {
       "position": "top-left",
@@ -184,11 +184,21 @@
     ],
     "alternate": {
       "id": "bottom-corners",
-      "experimental": true,
+      "status": "tried and rejected 2026-11-21",
       "name_card": "bottom-left",
       "timer": "bottom-right",
-      "_hint": "Charles, 2026-11-21: 'We could try the bottom right and left'. Not approved; compare against the top layout before using."
+      "reason": "Compared with the top corners in layout mockup v4 (docs/reference/layout/): the card crowds the lying boy's head and the timer sits over the floor, where the mat and the floor work are. Charles: 'above is better'."
     },
-    "status": "Specification. The kit's Hud class still draws the legacy title, clock and bar from 'hud' and 'strings' above; those keys stay until the overlay is implemented."
+    "status": "Specification. The kit's Hud class still draws the legacy title, clock and bar from 'hud' and 'strings' above; those keys stay until the overlay is implemented.",
+    "chosen": "top-corners",
+    "background_contrast": {
+      "rule": "Every background option is subtly darker behind the top corners so the white ring timer and the card text have slight contrast.",
+      "target": "Background behind the timer about 10 to 20 percent below pure white in luminance, never dark.",
+      "examples": [
+        "Indoor wall: a slightly deeper cream or other soft light color, not near-white.",
+        "Outdoor or mountain scene: a true blue sky, not very light blue."
+      ],
+      "source": "Charles, 2026-11-21. Subtle only."
+    }
   }
 }

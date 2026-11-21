@@ -1,5 +1,6 @@
 {
   "_about": "What sits between the backdrop and the boy (z: behind) or in front of him (z: front). Layer order, bottom to top: backdrop layers, props behind, the boy, props in front, then the on-screen text. Props are OFF in the default look; switch one on with \"enabled\": true, or try a scene without editing this file: --scene my-scene.json.",
+  "background_contrast": "Every backdrop used under the overlay must be subtly darker behind the top corners (about 10 to 20 percent below white, never dark) so the white ring timer reads. Indoor walls a slightly deeper cream or soft light color; outdoor skies a true blue, not very light blue (Charles, 2026-11-21). Prompts: prompts/backgrounds.spec.json 'contrast'.",
   "props": [
     {"id": "mat", "kind": "mat", "enabled": false, "slots": ["ex2", "ex3", "ex4"], "z": "behind",
      "color": "#2f6fb5", "edge": "#1f4c80", "pad": 0.12, "thickness": 30,

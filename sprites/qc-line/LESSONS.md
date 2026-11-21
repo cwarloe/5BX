@@ -165,10 +165,12 @@ remain held for the additional reference material.
 | D-18 | Chart 2 sit-up hands float and then jump instead of sliding along the legs | sit-up-c2 loop | Pose text said only "arms reaching forward" | Hands slide along the tops of the thighs toward and past the knees; one revision only | `prompts/strips.json` sit-up-c2 |
 | D-19 | Scissor stances A and B still read alike in strict side view | scissor-jumps-c1 | Side view stacks the forward and back limbs | Jump frames use a 3/4 view, superseding the Batch E strict-side note | `prompts/strips.json` scissor-jumps-c1 |
 | D-20 | Proportions drift between strips (head and limb size) | Lying versus standing sheets | No fixed proportion reference | Lock proportions to the master character sheet; attach it plus RCAF 1959 film stills as references | `config/character.json`, `prompts/strips.json` _generation |
+| D-21 | White ring timer has little contrast over near-white walls and very pale skies | v3 and v4 layout mockups (cream gym wall) | Backgrounds were specified bright for the boy, with no thought for a white overlay | Every background option is subtly darker behind the top corners: about 10 to 20 percent below white, never dark; walls a deeper cream or soft light color, skies a true blue | `prompts/backgrounds.spec.json` contrast, `config/scene.json`, `config/theme.json` overlay.background_contrast |
+| Decision | Bottom-corner overlay tried and rejected | v4 mockup (`docs/reference/layout/`) | Card crowds the lying boy's head; timer sits over the floor | Keep the top corners (Charles, 2026-11-21: 'above is better') | `config/theme.json` overlay |
 | Note | Chart 3 forehead pose misses the floor slightly | chin-forehead-push-up-c3 | Physically awkward pose | Accepted by Charles: chin touch is the target; forehead may be approximated by the pike reference | `prompts/strips.json` chin-forehead-push-up-c3 |
 
 **Other decisions recorded:** the default render stays 1920x1080 at 30 fps; 1280x720 at 24 fps is an allowed test
 profile if it plays smoother. The overlay standard is Fraser-style (slanted name card plus one tip top left, minimal
-ring timer top right); a bottom-left and bottom-right variant is experimental. The loop decides pacing, not the
+ring timer top right); a bottom-left and bottom-right variant was tried in mockup v4 and rejected. The loop decides pacing, not the
 booklet's reps per minute. The knee push-up pilot is a pilot, not a binding constraint, and Charles authorized
 trying pinned-frame loops on 2026-11-21. Human form review (Gate B) is still required before release.
