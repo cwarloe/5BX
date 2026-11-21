@@ -1,0 +1,1942 @@
+{
+ "frame": [
+  1280,
+  720
+ ],
+ "scale": 0.6666666666666666,
+ "ground": 576.0,
+ "floor": 582.67,
+ "layers": [
+  {
+   "name": "picture",
+   "file": "backdrop/00-picture.png"
+  }
+ ],
+ "charts": {
+  "1": {
+   "label": "Chart 1",
+   "status": "built",
+   "all": [
+    {
+     "slot": "ex1",
+     "name": "Toe touching",
+     "built": true
+    },
+    {
+     "slot": "ex2",
+     "name": "Partial sit-up",
+     "built": true
+    },
+    {
+     "slot": "ex3",
+     "name": "Alternate leg raise",
+     "built": true
+    },
+    {
+     "slot": "ex4",
+     "name": "Knee push-up",
+     "built": true
+    },
+    {
+     "slot": "run",
+     "name": "Stationary run",
+     "built": true
+    },
+    {
+     "slot": "jump",
+     "name": "scissor jumps",
+     "built": true
+    }
+   ],
+   "slots": {
+    "ex1": {
+     "strip": "toe-touch-c1",
+     "cycle": [
+      1,
+      2,
+      1,
+      3
+     ],
+     "cycle_s": 12.0,
+     "allot": 120,
+     "poses": [
+      {
+       "file": "sprites/c1/toe-touch-c1/p1.png",
+       "x": 591.39,
+       "y": 62.67,
+       "w": 102,
+       "h": 520
+      },
+      {
+       "file": "sprites/c1/toe-touch-c1/p2.png",
+       "x": 560.57,
+       "y": 303.51,
+       "w": 248,
+       "h": 278
+      },
+      {
+       "file": "sprites/c1/toe-touch-c1/p3.png",
+       "x": 471.55,
+       "y": 120.53,
+       "w": 243,
+       "h": 462
+      }
+     ],
+     "union": [
+      471.55,
+      808.45
+     ],
+     "kicker": "EXERCISE 1 OF 5",
+     "title": "Toe touching",
+     "target": "20 reps",
+     "hud": {
+      "side": "left",
+      "box_h": 780,
+      "clock": "opposite"
+     }
+    },
+    "ex2": {
+     "strip": "partial-sit-up-c1",
+     "cycle": [
+      1,
+      2,
+      3,
+      2
+     ],
+     "cycle_s": 3.3333,
+     "allot": 60,
+     "poses": [
+      {
+       "file": "sprites/c1/partial-sit-up-c1/p1.png",
+       "x": 322.61,
+       "y": 424.59,
+       "w": 634,
+       "h": 158
+      },
+      {
+       "file": "sprites/c1/partial-sit-up-c1/p2.png",
+       "x": 367.25,
+       "y": 308.67,
+       "w": 590,
+       "h": 263
+      },
+      {
+       "file": "sprites/c1/partial-sit-up-c1/p3.png",
+       "x": 457.07,
+       "y": 251.47,
+       "w": 500,
+       "h": 324
+      }
+     ],
+     "union": [
+      322.61,
+      957.39
+     ],
+     "kicker": "EXERCISE 2 OF 5",
+     "title": "Partial sit-up",
+     "target": "18 reps",
+     "hud": {
+      "side": "left",
+      "box_h": 690,
+      "clock": "opposite"
+     }
+    },
+    "ex3": {
+     "strip": "alternate-leg-raise-c1",
+     "cycle": [
+      1,
+      2,
+      1,
+      3
+     ],
+     "cycle_s": 6.6667,
+     "allot": 60,
+     "poses": [
+      {
+       "file": "sprites/c1/alternate-leg-raise-c1/p1.png",
+       "x": 251.78,
+       "y": 368.97,
+       "w": 778,
+       "h": 208
+      },
+      {
+       "file": "sprites/c1/alternate-leg-raise-c1/p2.png",
+       "x": 250.0,
+       "y": 262.12,
+       "w": 739,
+       "h": 321
+      },
+      {
+       "file": "sprites/c1/alternate-leg-raise-c1/p3.png",
+       "x": 250.0,
+       "y": 262.12,
+       "w": 741,
+       "h": 321
+      }
+     ],
+     "union": [
+      250.0,
+      1030.0
+     ],
+     "kicker": "EXERCISE 3 OF 5",
+     "title": "Alternate leg raise",
+     "target": "18 reps",
+     "hud": {
+      "side": "left",
+      "box_h": 690,
+      "clock": "opposite"
+     }
+    },
+    "ex4": {
+     "strip": "knee-push-up-c1",
+     "cycle": [
+      1,
+      2,
+      3,
+      2
+     ],
+     "cycle_s": 4.6154,
+     "allot": 60,
+     "poses": [
+      {
+       "file": "sprites/c1/knee-push-up-c1/p1.png",
+       "x": 387.04,
+       "y": 402.27,
+       "w": 507,
+       "h": 180
+      },
+      {
+       "file": "sprites/c1/knee-push-up-c1/p2.png",
+       "x": 386.46,
+       "y": 304.19,
+       "w": 460,
+       "h": 278
+      },
+      {
+       "file": "sprites/c1/knee-push-up-c1/p3.png",
+       "x": 385.61,
+       "y": 237.67,
+       "w": 424,
+       "h": 345
+      }
+     ],
+     "union": [
+      385.61,
+      894.39
+     ],
+     "kicker": "EXERCISE 4 OF 5",
+     "title": "Knee push-up",
+     "target": "13 reps",
+     "hud": {
+      "side": "left",
+      "box_h": 690,
+      "clock": "opposite"
+     }
+    },
+    "jump": {
+     "strip": "scissor-jumps-c1",
+     "cycle": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "cycle_s": 2.4,
+     "allot": 360,
+     "poses": [
+      {
+       "file": "sprites/c1/scissor-jumps-c1/p1.png",
+       "x": 424.07,
+       "y": 197.25,
+       "w": 264,
+       "h": 384
+      },
+      {
+       "file": "sprites/c1/scissor-jumps-c1/p2.png",
+       "x": 569.1,
+       "y": 128.0,
+       "w": 166,
+       "h": 375
+      },
+      {
+       "file": "sprites/c1/scissor-jumps-c1/p3.png",
+       "x": 592.76,
+       "y": 197.25,
+       "w": 263,
+       "h": 385
+      },
+      {
+       "file": "sprites/c1/scissor-jumps-c1/p4.png",
+       "x": 575.88,
+       "y": 128.0,
+       "w": 155,
+       "h": 375
+      }
+     ],
+     "union": [
+      424.07,
+      855.93
+     ],
+     "kicker": "PAUSE THE RUN",
+     "title": "10 scissor jumps",
+     "target": "jump now",
+     "hud": {
+      "side": "left",
+      "box_h": 682,
+      "clock": "opposite"
+     }
+    },
+    "run": {
+     "strip": "stationary-run-c1",
+     "cycle": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "cycle_s": 0.75,
+     "allot": 360,
+     "poses": [
+      {
+       "file": "sprites/c1/stationary-run-c1/p1.png",
+       "x": 527.87,
+       "y": 62.67,
+       "w": 233,
+       "h": 512
+      },
+      {
+       "file": "sprites/c1/stationary-run-c1/p2.png",
+       "x": 556.81,
+       "y": 63.52,
+       "w": 180,
+       "h": 519
+      },
+      {
+       "file": "sprites/c1/stationary-run-c1/p3.png",
+       "x": 558.51,
+       "y": 65.22,
+       "w": 196,
+       "h": 516
+      },
+      {
+       "file": "sprites/c1/stationary-run-c1/p4.png",
+       "x": 518.94,
+       "y": 66.07,
+       "w": 228,
+       "h": 514
+      }
+     ],
+     "union": [
+      518.94,
+      761.06
+     ],
+     "kicker": "EXERCISE 5 OF 5",
+     "title": "Stationary run",
+     "target": "400 steps",
+     "hud": {
+      "side": "left",
+      "box_h": 780,
+      "clock": "opposite"
+     }
+    }
+   },
+   "order": [
+    "ex1",
+    "ex2",
+    "ex3",
+    "ex4",
+    "run",
+    "jump"
+   ],
+   "prompts_ready": true
+  },
+  "2": {
+   "label": "Chart 2",
+   "status": "built",
+   "all": [
+    {
+     "slot": "ex1",
+     "name": "Toe touching",
+     "built": true
+    },
+    {
+     "slot": "ex2",
+     "name": "Sit-up",
+     "built": true
+    },
+    {
+     "slot": "ex3",
+     "name": "Back extension",
+     "built": true
+    },
+    {
+     "slot": "ex4",
+     "name": "Push-up",
+     "built": true
+    },
+    {
+     "slot": "run",
+     "name": "Stationary run",
+     "built": true
+    },
+    {
+     "slot": "jump",
+     "name": "astride jumps",
+     "built": true
+    }
+   ],
+   "slots": {
+    "ex1": {
+     "strip": "toe-touch-c2",
+     "cycle": [
+      1,
+      2,
+      4,
+      3,
+      5
+     ],
+     "cycle_s": 4.0,
+     "allot": 120,
+     "poses": [
+      {
+       "file": "sprites/c2/toe-touch-c2/p1.png",
+       "x": 576.25,
+       "y": 62.67,
+       "w": 141,
+       "h": 520
+      },
+      {
+       "file": "sprites/c2/toe-touch-c2/p2.png",
+       "x": 568.22,
+       "y": 326.68,
+       "w": 203,
+       "h": 249
+      },
+      {
+       "file": "sprites/c2/toe-touch-c2/p3.png",
+       "x": 570.23,
+       "y": 329.69,
+       "w": 193,
+       "h": 245
+      },
+      {
+       "file": "sprites/c2/toe-touch-c2/p4.png",
+       "x": 562.2,
+       "y": 357.8,
+       "w": 197,
+       "h": 218
+      },
+      {
+       "file": "sprites/c2/toe-touch-c2/p5.png",
+       "x": 509.0,
+       "y": 94.79,
+       "w": 190,
+       "h": 486
+      }
+     ],
+     "union": [
+      509.0,
+      771.0
+     ],
+     "kicker": "EXERCISE 1 OF 5",
+     "title": "Toe touching",
+     "target": "30 reps",
+     "hud": {
+      "side": "left",
+      "box_h": 780,
+      "clock": "opposite"
+     }
+    },
+    "ex2": {
+     "strip": "sit-up-c2",
+     "cycle": [
+      1,
+      2,
+      3,
+      2
+     ],
+     "cycle_s": 2.6087,
+     "allot": 60,
+     "poses": [
+      {
+       "file": "sprites/c2/sit-up-c2/p1.png",
+       "x": 260.51,
+       "y": 411.5,
+       "w": 758,
+       "h": 171
+      },
+      {
+       "file": "sprites/c2/sit-up-c2/p2.png",
+       "x": 382.44,
+       "y": 181.5,
+       "w": 637,
+       "h": 396
+      },
+      {
+       "file": "sprites/c2/sit-up-c2/p3.png",
+       "x": 511.35,
+       "y": 122.67,
+       "w": 508,
+       "h": 456
+      }
+     ],
+     "union": [
+      260.51,
+      1019.49
+     ],
+     "kicker": "EXERCISE 2 OF 5",
+     "title": "Sit-up",
+     "target": "23 reps",
+     "hud": {
+      "side": "left",
+      "box_h": 690,
+      "clock": "opposite"
+     }
+    },
+    "ex3": {
+     "strip": "back-extension-c2",
+     "cycle": [
+      1,
+      2,
+      3,
+      2
+     ],
+     "cycle_s": 1.8182,
+     "allot": 60,
+     "poses": [
+      {
+       "file": "sprites/c2/back-extension-c2/p1.png",
+       "x": 256.62,
+       "y": 400.35,
+       "w": 773,
+       "h": 182
+      },
+      {
+       "file": "sprites/c2/back-extension-c2/p2.png",
+       "x": 266.97,
+       "y": 294.49,
+       "w": 712,
+       "h": 276
+      },
+      {
+       "file": "sprites/c2/back-extension-c2/p3.png",
+       "x": 250.0,
+       "y": 229.79,
+       "w": 734,
+       "h": 340
+      }
+     ],
+     "union": [
+      250.0,
+      1030.0
+     ],
+     "kicker": "EXERCISE 3 OF 5",
+     "title": "Back extension",
+     "target": "33 reps",
+     "hud": {
+      "side": "left",
+      "box_h": 690,
+      "clock": "opposite"
+     }
+    },
+    "ex4": {
+     "strip": "push-up-c2",
+     "cycle": [
+      1,
+      2,
+      3,
+      2
+     ],
+     "cycle_s": 3.0,
+     "allot": 60,
+     "poses": [
+      {
+       "file": "sprites/c2/push-up-c2/p1.png",
+       "x": 278.42,
+       "y": 359.69,
+       "w": 727,
+       "h": 223
+      },
+      {
+       "file": "sprites/c2/push-up-c2/p2.png",
+       "x": 280.16,
+       "y": 285.95,
+       "w": 681,
+       "h": 297
+      },
+      {
+       "file": "sprites/c2/push-up-c2/p3.png",
+       "x": 274.71,
+       "y": 122.67,
+       "w": 623,
+       "h": 458
+      }
+     ],
+     "union": [
+      274.71,
+      1005.29
+     ],
+     "kicker": "EXERCISE 4 OF 5",
+     "title": "Push-up",
+     "target": "20 reps",
+     "hud": {
+      "side": "left",
+      "box_h": 690,
+      "clock": "opposite"
+     }
+    },
+    "jump": {
+     "strip": "astride-jumps-c2",
+     "cycle": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "cycle_s": 1.2,
+     "allot": 360,
+     "poses": [
+      {
+       "file": "sprites/c2/astride-jumps-c2/p1.png",
+       "x": 579.44,
+       "y": 151.69,
+       "w": 112,
+       "h": 430
+      },
+      {
+       "file": "sprites/c2/astride-jumps-c2/p2.png",
+       "x": 470.54,
+       "y": 94.03,
+       "w": 339,
+       "h": 399
+      },
+      {
+       "file": "sprites/c2/astride-jumps-c2/p3.png",
+       "x": 475.06,
+       "y": 186.09,
+       "w": 325,
+       "h": 397
+      },
+      {
+       "file": "sprites/c2/astride-jumps-c2/p4.png",
+       "x": 580.26,
+       "y": 62.67,
+       "w": 109,
+       "h": 431
+      }
+     ],
+     "union": [
+      470.54,
+      809.46
+     ],
+     "kicker": "PAUSE THE RUN",
+     "title": "10 astride jumps",
+     "target": "jump now",
+     "hud": {
+      "side": "left",
+      "box_h": 780,
+      "clock": "opposite"
+     }
+    },
+    "run": {
+     "strip": "stationary-run-c1",
+     "cycle": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "cycle_s": 0.576,
+     "allot": 360,
+     "poses": [
+      {
+       "file": "sprites/c2/stationary-run-c1/p1.png",
+       "x": 527.87,
+       "y": 62.67,
+       "w": 233,
+       "h": 512
+      },
+      {
+       "file": "sprites/c2/stationary-run-c1/p2.png",
+       "x": 556.81,
+       "y": 63.52,
+       "w": 180,
+       "h": 519
+      },
+      {
+       "file": "sprites/c2/stationary-run-c1/p3.png",
+       "x": 558.51,
+       "y": 65.22,
+       "w": 196,
+       "h": 516
+      },
+      {
+       "file": "sprites/c2/stationary-run-c1/p4.png",
+       "x": 518.94,
+       "y": 66.07,
+       "w": 228,
+       "h": 514
+      }
+     ],
+     "union": [
+      518.94,
+      761.06
+     ],
+     "kicker": "EXERCISE 5 OF 5",
+     "title": "Stationary run",
+     "target": "500 steps",
+     "hud": {
+      "side": "left",
+      "box_h": 780,
+      "clock": "opposite"
+     }
+    }
+   },
+   "order": [
+    "ex1",
+    "ex2",
+    "ex3",
+    "ex4",
+    "run",
+    "jump"
+   ],
+   "prompts_ready": true
+  },
+  "3": {
+   "label": "Chart 3",
+   "status": "built",
+   "all": [
+    {
+     "slot": "ex1",
+     "name": "Toe touching",
+     "built": true
+    },
+    {
+     "slot": "ex2",
+     "name": "Sit-up, hands behind head",
+     "built": true
+    },
+    {
+     "slot": "ex3",
+     "name": "Back extension, hands behind back",
+     "built": true
+    },
+    {
+     "slot": "ex4",
+     "name": "Chin-forehead push-up",
+     "built": true
+    },
+    {
+     "slot": "run",
+     "name": "Stationary run",
+     "built": true
+    },
+    {
+     "slot": "jump",
+     "name": "half knee bends",
+     "built": true
+    }
+   ],
+   "slots": {
+    "ex1": {
+     "strip": "toe-touch-c3",
+     "cycle": [
+      1,
+      2,
+      3,
+      4,
+      5
+     ],
+     "cycle_reverse": [
+      1,
+      4,
+      3,
+      2,
+      5
+     ],
+     "cycle_s": 4.0,
+     "allot": 120,
+     "poses": [
+      {
+       "file": "sprites/c3/toe-touch-c3/p1.png",
+       "x": 526.75,
+       "y": 62.67,
+       "w": 234,
+       "h": 520
+      },
+      {
+       "file": "sprites/c3/toe-touch-c3/p2.png",
+       "x": 526.75,
+       "y": 294.08,
+       "w": 264,
+       "h": 289
+      },
+      {
+       "file": "sprites/c3/toe-touch-c3/p3.png",
+       "x": 526.75,
+       "y": 294.97,
+       "w": 264,
+       "h": 288
+      },
+      {
+       "file": "sprites/c3/toe-touch-c3/p4.png",
+       "x": 489.67,
+       "y": 295.86,
+       "w": 269,
+       "h": 287
+      },
+      {
+       "file": "sprites/c3/toe-touch-c3/p5.png",
+       "x": 513.35,
+       "y": 115.38,
+       "w": 246,
+       "h": 467
+      }
+     ],
+     "union": [
+      489.67,
+      790.33
+     ],
+     "kicker": "EXERCISE 1 OF 5",
+     "title": "Toe touching",
+     "target": "30 reps",
+     "hud": {
+      "side": "left",
+      "box_h": 780,
+      "clock": "opposite"
+     }
+    },
+    "ex2": {
+     "strip": "sit-up-hands-behind-head-c3",
+     "cycle": [
+      1,
+      2,
+      3,
+      2
+     ],
+     "cycle_s": 1.875,
+     "allot": 60,
+     "poses": [
+      {
+       "file": "sprites/c3/sit-up-hands-behind-head-c3/p1.png",
+       "x": 265.82,
+       "y": 310.36,
+       "w": 746,
+       "h": 271
+      },
+      {
+       "file": "sprites/c3/sit-up-hands-behind-head-c3/p2.png",
+       "x": 280.99,
+       "y": 182.67,
+       "w": 731,
+       "h": 400
+      },
+      {
+       "file": "sprites/c3/sit-up-hands-behind-head-c3/p3.png",
+       "x": 352.64,
+       "y": 122.67,
+       "w": 662,
+       "h": 460
+      }
+     ],
+     "union": [
+      265.82,
+      1014.18
+     ],
+     "kicker": "EXERCISE 2 OF 5",
+     "title": "Sit-up, hands behind head",
+     "target": "32 reps",
+     "hud": {
+      "side": "left",
+      "box_h": 690,
+      "clock": "opposite"
+     }
+    },
+    "ex3": {
+     "strip": "back-extension-hands-behind-back-c3",
+     "cycle": [
+      1,
+      2,
+      3,
+      2
+     ],
+     "cycle_s": 1.2766,
+     "allot": 60,
+     "poses": [
+      {
+       "file": "sprites/c3/back-extension-hands-behind-back-c3/p1.png",
+       "x": 206.39,
+       "y": 349.8,
+       "w": 914,
+       "h": 233
+      },
+      {
+       "file": "sprites/c3/back-extension-hands-behind-back-c3/p2.png",
+       "x": 196.87,
+       "y": 263.91,
+       "w": 870,
+       "h": 315
+      },
+      {
+       "file": "sprites/c3/back-extension-hands-behind-back-c3/p3.png",
+       "x": 159.33,
+       "y": 122.67,
+       "w": 893,
+       "h": 450
+      }
+     ],
+     "union": [
+      159.33,
+      1120.67
+     ],
+     "kicker": "EXERCISE 3 OF 5",
+     "title": "Back extension, hands behind back",
+     "target": "47 reps",
+     "hud": {
+      "side": "left",
+      "box_h": 690,
+      "clock": "opposite"
+     }
+    },
+    "ex4": {
+     "strip": "chin-forehead-push-up-c3",
+     "cycle": [
+      1,
+      2,
+      3
+     ],
+     "cycle_s": 2.5,
+     "allot": 60,
+     "poses": [
+      {
+       "file": "sprites/c3/chin-forehead-push-up-c3/p1.png",
+       "x": 193.22,
+       "y": 122.67,
+       "w": 808,
+       "h": 458
+      },
+      {
+       "file": "sprites/c3/chin-forehead-push-up-c3/p2.png",
+       "x": 192.02,
+       "y": 220.54,
+       "w": 897,
+       "h": 362
+      },
+      {
+       "file": "sprites/c3/chin-forehead-push-up-c3/p3.png",
+       "x": 191.47,
+       "y": 365.39,
+       "w": 893,
+       "h": 215
+      }
+     ],
+     "union": [
+      191.47,
+      1088.53
+     ],
+     "kicker": "EXERCISE 4 OF 5",
+     "title": "Chin-forehead push-up",
+     "target": "24 reps",
+     "hud": {
+      "side": "left",
+      "box_h": 690,
+      "clock": "opposite"
+     }
+    },
+    "jump": {
+     "strip": "half-knee-bends-c3",
+     "cycle": [
+      1,
+      2,
+      3
+     ],
+     "cycle_s": 1.2,
+     "allot": 360,
+     "poses": [
+      {
+       "file": "sprites/c3/half-knee-bends-c3/p1.png",
+       "x": 553.16,
+       "y": 85.41,
+       "w": 149,
+       "h": 497
+      },
+      {
+       "file": "sprites/c3/half-knee-bends-c3/p2.png",
+       "x": 560.26,
+       "y": 139.5,
+       "w": 167,
+       "h": 443
+      },
+      {
+       "file": "sprites/c3/half-knee-bends-c3/p3.png",
+       "x": 578.2,
+       "y": 62.67,
+       "w": 135,
+       "h": 519
+      }
+     ],
+     "union": [
+      553.16,
+      726.84
+     ],
+     "kicker": "PAUSE THE RUN",
+     "title": "10 half knee bends",
+     "target": "jump now",
+     "hud": {
+      "side": "left",
+      "box_h": 780,
+      "clock": "opposite"
+     }
+    },
+    "run": {
+     "strip": "stationary-run-c1",
+     "cycle": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "cycle_s": 0.5018,
+     "allot": 360,
+     "poses": [
+      {
+       "file": "sprites/c3/stationary-run-c1/p1.png",
+       "x": 527.87,
+       "y": 62.67,
+       "w": 233,
+       "h": 512
+      },
+      {
+       "file": "sprites/c3/stationary-run-c1/p2.png",
+       "x": 556.81,
+       "y": 63.52,
+       "w": 180,
+       "h": 519
+      },
+      {
+       "file": "sprites/c3/stationary-run-c1/p3.png",
+       "x": 558.51,
+       "y": 65.22,
+       "w": 196,
+       "h": 516
+      },
+      {
+       "file": "sprites/c3/stationary-run-c1/p4.png",
+       "x": 518.94,
+       "y": 66.07,
+       "w": 228,
+       "h": 514
+      }
+     ],
+     "union": [
+      518.94,
+      761.06
+     ],
+     "kicker": "EXERCISE 5 OF 5",
+     "title": "Stationary run",
+     "target": "550 steps",
+     "hud": {
+      "side": "left",
+      "box_h": 780,
+      "clock": "opposite"
+     }
+    }
+   },
+   "order": [
+    "ex1",
+    "ex2",
+    "ex3",
+    "ex4",
+    "run",
+    "jump"
+   ],
+   "prompts_ready": true
+  },
+  "4": {
+   "label": "Chart 4",
+   "status": "partial",
+   "all": [
+    {
+     "slot": "ex1",
+     "name": "Toe touching, circle bend",
+     "built": false
+    },
+    {
+     "slot": "ex2",
+     "name": "Sit-up, toe touch",
+     "built": true
+    },
+    {
+     "slot": "ex3",
+     "name": "Back extension, arms sideways",
+     "built": true
+    },
+    {
+     "slot": "ex4",
+     "name": "Wide-hand push-up",
+     "built": true
+    },
+    {
+     "slot": "run",
+     "name": "Stationary run",
+     "built": true
+    },
+    {
+     "slot": "jump",
+     "name": "semi-squat jumps",
+     "built": false
+    }
+   ],
+   "slots": {
+    "ex2": {
+     "strip": "sit-up-toe-touch-c4",
+     "cycle": [
+      1,
+      2,
+      3,
+      2
+     ],
+     "cycle_s": 2.7273,
+     "allot": 60,
+     "poses": [
+      {
+       "file": "sprites/c4/sit-up-toe-touch-c4/p1.png",
+       "x": 321.55,
+       "y": 376.9,
+       "w": 635,
+       "h": 206
+      },
+      {
+       "file": "sprites/c4/sit-up-toe-touch-c4/p2.png",
+       "x": 417.67,
+       "y": 223.87,
+       "w": 541,
+       "h": 359
+      },
+      {
+       "file": "sprites/c4/sit-up-toe-touch-c4/p3.png",
+       "x": 585.15,
+       "y": 290.04,
+       "w": 372,
+       "h": 293
+      }
+     ],
+     "union": [
+      321.55,
+      958.45
+     ],
+     "kicker": "EXERCISE 2 OF 5",
+     "title": "Sit-up, toe touch",
+     "target": "22 reps",
+     "hud": {
+      "side": "left",
+      "box_h": 690,
+      "clock": "opposite"
+     }
+    },
+    "ex3": {
+     "strip": "back-extension-arms-sideways-c4",
+     "cycle": [
+      1,
+      2,
+      3,
+      2
+     ],
+     "cycle_s": 1.2,
+     "allot": 60,
+     "poses": [
+      {
+       "file": "sprites/c4/back-extension-arms-sideways-c4/p1.png",
+       "x": 270.18,
+       "y": 277.37,
+       "w": 740,
+       "h": 305
+      },
+      {
+       "file": "sprites/c4/back-extension-arms-sideways-c4/p2.png",
+       "x": 278.05,
+       "y": 263.21,
+       "w": 721,
+       "h": 308
+      },
+      {
+       "file": "sprites/c4/back-extension-arms-sideways-c4/p3.png",
+       "x": 276.48,
+       "y": 223.87,
+       "w": 727,
+       "h": 348
+      }
+     ],
+     "union": [
+      270.18,
+      1009.82
+     ],
+     "kicker": "EXERCISE 3 OF 5",
+     "title": "Back extension, arms sideways",
+     "target": "50 reps",
+     "hud": {
+      "side": "left",
+      "box_h": 690,
+      "clock": "opposite"
+     }
+    },
+    "ex4": {
+     "strip": "wide-hand-push-up-c4",
+     "cycle": [
+      1,
+      2,
+      3,
+      2
+     ],
+     "cycle_s": 1.4286,
+     "allot": 60,
+     "poses": [
+      {
+       "file": "sprites/c4/wide-hand-push-up-c4/p1.png",
+       "x": 313.09,
+       "y": 347.5,
+       "w": 654,
+       "h": 235
+      },
+      {
+       "file": "sprites/c4/wide-hand-push-up-c4/p2.png",
+       "x": 313.5,
+       "y": 231.21,
+       "w": 633,
+       "h": 346
+      },
+      {
+       "file": "sprites/c4/wide-hand-push-up-c4/p3.png",
+       "x": 314.22,
+       "y": 122.67,
+       "w": 633,
+       "h": 454
+      }
+     ],
+     "union": [
+      313.09,
+      966.91
+     ],
+     "kicker": "EXERCISE 4 OF 5",
+     "title": "Wide-hand push-up",
+     "target": "42 reps",
+     "hud": {
+      "side": "left",
+      "box_h": 690,
+      "clock": "opposite"
+     }
+    },
+    "run": {
+     "strip": "high-knee-run-c4",
+     "cycle": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "cycle_s": 0.7125,
+     "allot": 360,
+     "poses": [
+      {
+       "file": "sprites/c4/high-knee-run-c4/p1.png",
+       "x": 492.41,
+       "y": 62.67,
+       "w": 210,
+       "h": 518
+      },
+      {
+       "file": "sprites/c4/high-knee-run-c4/p2.png",
+       "x": 595.8,
+       "y": 62.67,
+       "w": 188,
+       "h": 520
+      },
+      {
+       "file": "sprites/c4/high-knee-run-c4/p3.png",
+       "x": 569.6,
+       "y": 62.67,
+       "w": 218,
+       "h": 520
+      },
+      {
+       "file": "sprites/c4/high-knee-run-c4/p4.png",
+       "x": 596.14,
+       "y": 62.67,
+       "w": 177,
+       "h": 520
+      }
+     ],
+     "union": [
+      492.41,
+      787.59
+     ],
+     "kicker": "EXERCISE 5 OF 5",
+     "title": "Stationary run",
+     "target": "400 steps",
+     "hud": {
+      "side": "left",
+      "box_h": 780,
+      "clock": "opposite"
+     }
+    }
+   },
+   "order": [
+    "ex2",
+    "ex3",
+    "ex4",
+    "run"
+   ],
+   "prompts_ready": true
+  },
+  "5": {
+   "label": "Chart 5",
+   "status": "partial",
+   "all": [
+    {
+     "slot": "ex1",
+     "name": "Toe touching, hands clasped",
+     "built": false
+    },
+    {
+     "slot": "ex2",
+     "name": "Sit-up with twist",
+     "built": true
+    },
+    {
+     "slot": "ex3",
+     "name": "Back extension, arms overhead",
+     "built": true
+    },
+    {
+     "slot": "ex4",
+     "name": "Clap push-up",
+     "built": true
+    },
+    {
+     "slot": "run",
+     "name": "Stationary run",
+     "built": true
+    },
+    {
+     "slot": "jump",
+     "name": "semi-spread eagle jumps",
+     "built": true
+    }
+   ],
+   "slots": {
+    "ex2": {
+     "strip": "sit-up-twist-c5",
+     "cycle": [
+      1,
+      2,
+      1,
+      3
+     ],
+     "cycle_s": 3.0,
+     "allot": 60,
+     "poses": [
+      {
+       "file": "sprites/c5/sit-up-twist-c5/p1.png",
+       "x": 485.65,
+       "y": 75.2,
+       "w": 279,
+       "h": 507
+      },
+      {
+       "file": "sprites/c5/sit-up-twist-c5/p2.png",
+       "x": 484.88,
+       "y": 68.15,
+       "w": 295,
+       "h": 452
+      },
+      {
+       "file": "sprites/c5/sit-up-twist-c5/p3.png",
+       "x": 502.22,
+       "y": 62.67,
+       "w": 293,
+       "h": 457
+      }
+     ],
+     "union": [
+      484.88,
+      795.12
+     ],
+     "kicker": "EXERCISE 2 OF 5",
+     "title": "Sit-up with twist",
+     "target": "40 reps",
+     "hud": {
+      "side": "left",
+      "box_h": 780,
+      "clock": "opposite"
+     }
+    },
+    "ex3": {
+     "strip": "back-extension-arms-overhead-c5",
+     "cycle": [
+      3,
+      2,
+      1,
+      2
+     ],
+     "cycle_s": 1.2,
+     "allot": 60,
+     "poses": [
+      {
+       "file": "sprites/c5/back-extension-arms-overhead-c5/p1.png",
+       "x": 250.0,
+       "y": 281.32,
+       "w": 742,
+       "h": 285
+      },
+      {
+       "file": "sprites/c5/back-extension-arms-overhead-c5/p2.png",
+       "x": 257.97,
+       "y": 334.24,
+       "w": 764,
+       "h": 229
+      },
+      {
+       "file": "sprites/c5/back-extension-arms-overhead-c5/p3.png",
+       "x": 262.66,
+       "y": 410.68,
+       "w": 767,
+       "h": 172
+      }
+     ],
+     "union": [
+      250.0,
+      1030.0
+     ],
+     "kicker": "EXERCISE 3 OF 5",
+     "title": "Back extension, arms overhead",
+     "target": "50 reps",
+     "hud": {
+      "side": "left",
+      "box_h": 690,
+      "clock": "opposite"
+     }
+    },
+    "ex4": {
+     "strip": "clap-push-up-c5",
+     "cycle": [
+      1,
+      2,
+      3,
+      2
+     ],
+     "cycle_s": 1.3636,
+     "allot": 60,
+     "poses": [
+      {
+       "file": "sprites/c5/clap-push-up-c5/p1.png",
+       "x": 347.4,
+       "y": 290.02,
+       "w": 590,
+       "h": 293
+      },
+      {
+       "file": "sprites/c5/clap-push-up-c5/p2.png",
+       "x": 349.91,
+       "y": 131.46,
+       "w": 568,
+       "h": 451
+      },
+      {
+       "file": "sprites/c5/clap-push-up-c5/p3.png",
+       "x": 342.65,
+       "y": 62.67,
+       "w": 484,
+       "h": 459
+      }
+     ],
+     "union": [
+      342.65,
+      937.35
+     ],
+     "kicker": "EXERCISE 4 OF 5",
+     "title": "Clap push-up",
+     "target": "44 reps",
+     "hud": {
+      "side": "left",
+      "box_h": 780,
+      "clock": "opposite"
+     }
+    },
+    "jump": {
+     "strip": "semi-spread-eagle-jumps-c5",
+     "cycle": [
+      1,
+      2,
+      3,
+      2
+     ],
+     "cycle_s": 1.5,
+     "allot": 360,
+     "poses": [
+      {
+       "file": "sprites/c5/semi-spread-eagle-jumps-c5/p1.png",
+       "x": 592.09,
+       "y": 244.78,
+       "w": 98,
+       "h": 338
+      },
+      {
+       "file": "sprites/c5/semi-spread-eagle-jumps-c5/p2.png",
+       "x": 569.6,
+       "y": 163.15,
+       "w": 142,
+       "h": 395
+      },
+      {
+       "file": "sprites/c5/semi-spread-eagle-jumps-c5/p3.png",
+       "x": 511.03,
+       "y": 128.0,
+       "w": 258,
+       "h": 378
+      }
+     ],
+     "union": [
+      511.03,
+      768.97
+     ],
+     "kicker": "PAUSE THE RUN",
+     "title": "10 semi-spread eagle jumps",
+     "target": "jump now",
+     "hud": {
+      "side": "left",
+      "box_h": 682,
+      "clock": "opposite"
+     }
+    },
+    "run": {
+     "strip": "high-knee-run-c4",
+     "cycle": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "cycle_s": 0.54,
+     "allot": 360,
+     "poses": [
+      {
+       "file": "sprites/c5/high-knee-run-c4/p1.png",
+       "x": 492.41,
+       "y": 62.67,
+       "w": 210,
+       "h": 518
+      },
+      {
+       "file": "sprites/c5/high-knee-run-c4/p2.png",
+       "x": 595.8,
+       "y": 62.67,
+       "w": 188,
+       "h": 520
+      },
+      {
+       "file": "sprites/c5/high-knee-run-c4/p3.png",
+       "x": 569.6,
+       "y": 62.67,
+       "w": 218,
+       "h": 520
+      },
+      {
+       "file": "sprites/c5/high-knee-run-c4/p4.png",
+       "x": 596.14,
+       "y": 62.67,
+       "w": 177,
+       "h": 520
+      }
+     ],
+     "union": [
+      492.41,
+      787.59
+     ],
+     "kicker": "EXERCISE 5 OF 5",
+     "title": "Stationary run",
+     "target": "500 steps",
+     "hud": {
+      "side": "left",
+      "box_h": 780,
+      "clock": "opposite"
+     }
+    }
+   },
+   "order": [
+    "ex2",
+    "ex3",
+    "ex4",
+    "run",
+    "jump"
+   ],
+   "prompts_ready": true
+  },
+  "6": {
+   "label": "Chart 6",
+   "status": "partial",
+   "all": [
+    {
+     "slot": "ex1",
+     "name": "Toe touching, reverse clasp",
+     "built": false
+    },
+    {
+     "slot": "ex2",
+     "name": "Pike sit-up",
+     "built": true
+    },
+    {
+     "slot": "ex3",
+     "name": "Back extension with press",
+     "built": true
+    },
+    {
+     "slot": "ex4",
+     "name": "Chest-slap push-up",
+     "built": true
+    },
+    {
+     "slot": "run",
+     "name": "Stationary run",
+     "built": true
+    },
+    {
+     "slot": "jump",
+     "name": "jack jumps",
+     "built": true
+    }
+   ],
+   "slots": {
+    "ex2": {
+     "strip": "pike-sit-up-c6",
+     "cycle": [
+      1,
+      2,
+      3,
+      2
+     ],
+     "cycle_s": 1.2,
+     "allot": 60,
+     "poses": [
+      {
+       "file": "sprites/c6/pike-sit-up-c6/p1.png",
+       "x": 309.33,
+       "y": 434.05,
+       "w": 661,
+       "h": 137
+      },
+      {
+       "file": "sprites/c6/pike-sit-up-c6/p2.png",
+       "x": 458.77,
+       "y": 289.68,
+       "w": 505,
+       "h": 286
+      },
+      {
+       "file": "sprites/c6/pike-sit-up-c6/p3.png",
+       "x": 529.09,
+       "y": 223.87,
+       "w": 393,
+       "h": 359
+      }
+     ],
+     "union": [
+      309.33,
+      970.67
+     ],
+     "kicker": "EXERCISE 2 OF 5",
+     "title": "Pike sit-up",
+     "target": "50 reps",
+     "hud": {
+      "side": "left",
+      "box_h": 690,
+      "clock": "opposite"
+     }
+    },
+    "ex3": {
+     "strip": "back-extension-press-c6",
+     "cycle": [
+      3,
+      2,
+      1,
+      2
+     ],
+     "cycle_s": 1.5,
+     "allot": 60,
+     "poses": [
+      {
+       "file": "sprites/c6/back-extension-press-c6/p1.png",
+       "x": 250.94,
+       "y": 286.5,
+       "w": 730,
+       "h": 283
+      },
+      {
+       "file": "sprites/c6/back-extension-press-c6/p2.png",
+       "x": 252.0,
+       "y": 308.49,
+       "w": 739,
+       "h": 264
+      },
+      {
+       "file": "sprites/c6/back-extension-press-c6/p3.png",
+       "x": 250.0,
+       "y": 414.06,
+       "w": 780,
+       "h": 169
+      }
+     ],
+     "union": [
+      250.0,
+      1030.0
+     ],
+     "kicker": "EXERCISE 3 OF 5",
+     "title": "Back extension with press",
+     "target": "40 reps",
+     "hud": {
+      "side": "left",
+      "box_h": 690,
+      "clock": "opposite"
+     }
+    },
+    "ex4": {
+     "strip": "chest-slap-push-up-c6",
+     "cycle": [
+      1,
+      2,
+      3,
+      2
+     ],
+     "cycle_s": 1.5,
+     "allot": 60,
+     "poses": [
+      {
+       "file": "sprites/c6/chest-slap-push-up-c6/p1.png",
+       "x": 395.26,
+       "y": 357.82,
+       "w": 489,
+       "h": 225
+      },
+      {
+       "file": "sprites/c6/chest-slap-push-up-c6/p2.png",
+       "x": 395.4,
+       "y": 178.74,
+       "w": 473,
+       "h": 401
+      },
+      {
+       "file": "sprites/c6/chest-slap-push-up-c6/p3.png",
+       "x": 396.49,
+       "y": 128.0,
+       "w": 425,
+       "h": 420
+      }
+     ],
+     "union": [
+      395.26,
+      884.74
+     ],
+     "kicker": "EXERCISE 4 OF 5",
+     "title": "Chest-slap push-up",
+     "target": "40 reps",
+     "hud": {
+      "side": "left",
+      "box_h": 682,
+      "clock": "opposite"
+     }
+    },
+    "jump": {
+     "strip": "jack-jumps-c6",
+     "cycle": [
+      1,
+      2,
+      3,
+      2
+     ],
+     "cycle_s": 1.5,
+     "allot": 360,
+     "poses": [
+      {
+       "file": "sprites/c6/jack-jumps-c6/p1.png",
+       "x": 587.71,
+       "y": 228.52,
+       "w": 194,
+       "h": 354
+      },
+      {
+       "file": "sprites/c6/jack-jumps-c6/p2.png",
+       "x": 596.72,
+       "y": 62.67,
+       "w": 292,
+       "h": 504
+      },
+      {
+       "file": "sprites/c6/jack-jumps-c6/p3.png",
+       "x": 390.99,
+       "y": 65.39,
+       "w": 300,
+       "h": 292
+      }
+     ],
+     "union": [
+      390.99,
+      889.01
+     ],
+     "kicker": "PAUSE THE RUN",
+     "title": "10 jack jumps",
+     "target": "jump now",
+     "hud": {
+      "side": "left",
+      "box_h": 780,
+      "clock": "opposite"
+     }
+    },
+    "run": {
+     "strip": "high-knee-run-c4",
+     "cycle": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "cycle_s": 0.425,
+     "allot": 360,
+     "poses": [
+      {
+       "file": "sprites/c6/high-knee-run-c4/p1.png",
+       "x": 492.41,
+       "y": 62.67,
+       "w": 210,
+       "h": 518
+      },
+      {
+       "file": "sprites/c6/high-knee-run-c4/p2.png",
+       "x": 595.8,
+       "y": 62.67,
+       "w": 188,
+       "h": 520
+      },
+      {
+       "file": "sprites/c6/high-knee-run-c4/p3.png",
+       "x": 569.6,
+       "y": 62.67,
+       "w": 218,
+       "h": 520
+      },
+      {
+       "file": "sprites/c6/high-knee-run-c4/p4.png",
+       "x": 596.14,
+       "y": 62.67,
+       "w": 177,
+       "h": 520
+      }
+     ],
+     "union": [
+      492.41,
+      787.59
+     ],
+     "kicker": "EXERCISE 5 OF 5",
+     "title": "Stationary run",
+     "target": "600 steps",
+     "hud": {
+      "side": "left",
+      "box_h": 780,
+      "clock": "opposite"
+     }
+    }
+   },
+   "order": [
+    "ex2",
+    "ex3",
+    "ex4",
+    "run",
+    "jump"
+   ],
+   "prompts_ready": true
+  }
+ },
+ "default_chart": "1",
+ "hud": {
+  "kicker": 26,
+  "title": 50,
+  "target": 38,
+  "clock": 84,
+  "margin": 44
+ },
+ "props": [
+  {
+   "id": "mat",
+   "kind": "mat",
+   "enabled": true,
+   "slots": [
+    "ex2",
+    "ex3",
+    "ex4"
+   ],
+   "z": "behind",
+   "color": "#2f6fb5",
+   "edge": "#1f4c80",
+   "pad": 0.12,
+   "thickness": 30
+  },
+  {
+   "id": "contact-shadow",
+   "kind": "shadow",
+   "enabled": true,
+   "slots": "*",
+   "z": "behind",
+   "opacity": 0.28,
+   "width": 0.95,
+   "height": 26,
+   "blur": 10
+  },
+  {
+   "id": "water-bottle",
+   "kind": "image",
+   "enabled": true,
+   "file": "props/water-bottle.png",
+   "slots": "*",
+   "z": "front",
+   "x": 0.14,
+   "scale": 0.045,
+   "lift": 0
+  }
+ ],
+ "strings": {
+  "kicker": "EXERCISE {n} OF 5",
+  "reps": "{reps} reps",
+  "steps": "{steps} steps",
+  "left": "LEFT",
+  "break": "BREAK",
+  "next": "NEXT",
+  "jump_kicker": "PAUSE THE RUN",
+  "jump_title": "{count} {name}",
+  "jump_target": "jump now"
+ },
+ "regions": {
+  "shorts": {
+   "h": [
+    345,
+    15
+   ],
+   "smin": 0.45,
+   "vmin": 0.25
+  },
+  "shoes": {
+   "h": [
+    212,
+    255
+   ],
+   "smin": 0.4,
+   "vmin": 0.15
+  },
+  "tank": {
+   "h": [
+    170,
+    208
+   ],
+   "smin": 0.45,
+   "vmin": 0.3
+  }
+ }
+}
