@@ -65,6 +65,25 @@ class LoopTests(unittest.TestCase):
         frames = staging.pinned_loop([1, 2, 3, 2], 4.0, 1, 24)
         self.assertEqual(frames.count(3), 24)
 
+    def test_tween_loop_starts_and_ends_on_a_held_pose_one(self):
+        tl = staging.tween_timeline([1, 2, 1, 3], 8.0, 1, 24)
+        self.assertEqual(len(tl), 192)
+        self.assertEqual(tl[0], (1, 1, 0.0))
+        self.assertEqual(tl[-1], (1, 1, 0.0))
+        self.assertEqual(tl[1], (1, 1, 0.0))                     # the seam sits inside a hold, not mid-move
+
+    def test_tween_moves_ease_in_and_out_and_visit_every_pose(self):
+        tl = staging.tween_timeline([1, 2, 3, 2], 4.0, 1, 24, hold=0.25)
+        held = {a for a, b, s in tl if s == 0.0}
+        self.assertEqual(held, {1, 2, 3})
+        move = [s for a, b, s in tl if (a, b) == (1, 2)]
+        self.assertTrue(all(0 < s < 1 for s in move))
+        self.assertEqual(move, sorted(move))
+        steps = [b - a for a, b in zip([0.0] + move, move + [1.0])]
+        self.assertLess(steps[0], steps[len(steps) // 2])        # slow out of the pose, fastest mid-move
+        self.assertLess(steps[-1], steps[len(steps) // 2])       # slow into the next one
+        self.assertIn(sum(1 for a, b, s in tl if (a, b, s) == (3, 3, 0.0)), (6, 7))            # a quarter of the step, plus the zero-progress frame
+
     def test_loop_length_lands_in_the_window(self):
         for cycle_s in (1.7, 3.3333, 6.0, 12.0, 30.0):
             n, cs = staging.choose_loop(cycle_s)

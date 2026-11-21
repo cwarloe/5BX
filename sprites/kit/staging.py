@@ -151,6 +151,24 @@ def pinned_loop(cycle, cycle_s, n_cycles, fps):
     return out
 
 
+def tween_timeline(cycle, cycle_s, n_cycles, fps, hold=0.25):
+    """Frame-by-frame (a, b, s) list for a seamless loop that MOVES between key poses instead of cutting.
+    Each step of the cycle holds key pose a for `hold` of its time, then eases (slow out, slow in) to the next
+    pose b; s is the eased progress, 0 = pose a exactly. (a, a, 0.0) is a held key pose.
+    The timeline starts in the middle of pose 1's hold, so the first and last frames are both pose 1 and the
+    seam falls inside one unbroken hold."""
+    n = max(1, int(round(cycle_s * n_cycles * fps))); L = len(cycle); per = n / (L * n_cycles); hh = hold * per
+    out = []
+    for i in range(n):
+        t = (i + hh / 2) % n
+        k = int(t // per); u = t - k * per; a, b = cycle[k % L], cycle[(k + 1) % L]
+        if u < hh or a == b: out.append((a, a, 0.0)); continue
+        x = (u - hh) / (per - hh); e = round(x * x * (3 - 2 * x), 4)
+        out.append((a, a, 0.0) if e <= 0 else (b, b, 0.0) if e >= 1 else (a, b, e))
+    out[-1] = (cycle[0], cycle[0], 0.0)                     # pin (a no-op unless the hold is under 2 frames)
+    return out
+
+
 def choose_loop(cycle_s, lo=6.0, hi=10.0, target=8.0):
     """How many whole cycles make a loop of lo..hi seconds, and the cycle length to use. The loop decides the pace: if no
     whole number of cycles at the booklet pace lands in the window, the cycle is stretched or squeezed to the target."""

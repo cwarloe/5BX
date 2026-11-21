@@ -16,6 +16,8 @@ Useful flags
     --profile test     the 1280x720, 24 fps test profile from theme.json "profiles" (default: 1920x1080, 30 fps)
     --loop             with --only: render ONE seamless loop (6 to 10 s) per slot, pinned on pose 1, as
                        OUT-<slot>.mp4 (with the overlay) and OUT-<slot>-clean.mp4 (no overlay, for the join script)
+    --tween            with --loop: eased moves with in-between frames made at render time (kit/tween.py), short
+                       holds on the key poses, a soft floor contact shadow; cached in --work (needs opencv-python)
     --theme FILE       try another look without editing the default
     --format portrait  1080x1920
     --list             show what each chart slot uses, and what is missing
@@ -534,14 +536,37 @@ def segment(args, work, posedir, cycle, cycle_s, dur, ov, fps, fade_max, label, 
     os.replace(tmp, out); print(f"  {label}: rendered"); return out
 
 
-def loop_clip(posedir, cycle, cycle_s, fps, out_base, theme, F, ov, work):
-    """ONE seamless loop of 6 to 10 s, hold-and-cut, pinned on pose 1 at both ends (kit/staging.py pinned_loop).
+def tween_frames(posedir, timeline, work, shadow=True):
+    """Finished frames for a tween timeline (kit/staging.py tween_timeline): key poses and in-betweens, each with the
+    floor contact shadow as its own layer. Cached under WORK/tween/, keyed by the SHA of each key pose's layer, the
+    backdrop and props, and tween.py itself; an in-between's file name is its eased progress, so a loop with a
+    different frame count makes new in-betweens and an unchanged re-render makes none."""
+    import tween                                                        # numpy + opencv: renderer only
+    base = [filehash(os.path.join(HERE, "tween.py")), str(shadow), filehash(os.path.join(posedir, "backdrop.png"))]
+    base += [filehash(os.path.join(posedir, f)) for f in ("props_behind.png", "props_front.png") if os.path.exists(os.path.join(posedir, f))]
+    def cache(*ks): return os.path.join(work, "tween", sha(*base, *[filehash(os.path.join(posedir, f"layer_p{k}.png")) for k in ks]))
+    need = {}
+    for a, b, s in timeline:
+        if s: need.setdefault((a, b), set()).add(s)
+    made = {}
+    for (a, b), ss in sorted(need.items()):
+        ss = sorted(ss); made.update({(a, b, s): f for s, f in zip(ss, tween.inbetweens(posedir, a, b, ss, cache(a, b), shadow))})
+    return [made[(a, b, s)] if s else tween.pose_frame(posedir, a, cache(a), shadow) for a, b, s in timeline]
+
+
+def loop_clip(posedir, cycle, cycle_s, fps, out_base, theme, F, ov, work, tween=False, shadow=True):
+    """ONE seamless loop of 6 to 10 s, pinned on pose 1 at both ends. Hold-and-cut (kit/staging.py pinned_loop), or with
+    tween=True eased moves between the key poses with in-between frames (staging.tween_timeline, kit/tween.py).
     Writes OUT-clean.mp4 (no overlay: the piece the join script repeats) and OUT.mp4 (with the overlay, to review)."""
     n, cs = staging.choose_loop(cycle_s)
-    poses = staging.pinned_loop(cycle, cs, n, fps); files = [f"{posedir}/p{p}.png" for p in poses]
+    if tween:
+        tl = staging.tween_timeline(cycle, cs, n, fps); files = tween_frames(posedir, tl, work, shadow); first, last = tl[0][0], tl[-1][0]
+    else:
+        poses = staging.pinned_loop(cycle, cs, n, fps); files = [f"{posedir}/p{p}.png" for p in poses]; first, last = poses[0], poses[-1]
     render_frames(files, out_base + "-clean.mp4", fps, theme, F, None, work)
     render_frames(files, out_base + ".mp4", fps, theme, F, ov, work)
-    return {"cycles": n, "cycle_seconds": round(cs, 4), "frames": len(files), "seconds": round(len(files) / fps, 3), "first_pose": poses[0], "last_pose": poses[-1]}
+    return {"cycles": n, "cycle_seconds": round(cs, 4), "frames": len(files), "seconds": round(len(files) / fps, 3), "first_pose": first, "last_pose": last,
+            "in_betweens": sum(1 for f in files if os.path.basename(f).startswith("tw-"))}
 
 
 def breakcard(args, work, theme, F, hud, secs, nxt, fmt):
@@ -624,6 +649,8 @@ def main():
     ap.add_argument("--preview", action="store_true"); ap.add_argument("--no-fade", action="store_true")
     ap.add_argument("--profile", default="default", help="a theme.json 'profiles' entry: default (1920x1080, 30 fps) or test (1280x720, 24 fps)")
     ap.add_argument("--loop", action="store_true", help="with --only: one seamless 6 to 10 s loop per slot, pinned on pose 1 (OUT-<slot>.mp4 and OUT-<slot>-clean.mp4)")
+    ap.add_argument("--tween", action="store_true", help="with --loop: move between the key poses with in-between frames (eased, short holds) instead of hold-and-cut; needs opencv-python")
+    ap.add_argument("--no-shadow", action="store_true", help="with --tween: leave out the floor contact shadow layer")
     ap.add_argument("--only", default="", help="comma list of slots: ex1,ex2,ex3,ex4,run,jump")
     ap.add_argument("--tag", default="", help="name a variant (a different scene or look); becomes part of the build id")
     ap.add_argument("--no-record", action="store_true", help="do not write builds/<id>.json")
@@ -696,7 +723,7 @@ def main():
         if args.loop:
             if p["slot"] in looped: continue
             looped.add(p["slot"]); base = os.path.splitext(args.out)[0] + f"-{p['slot']}"
-            info = loop_clip(frames(p["slot"]), st["cycle"], p["cycle_s"], fps, base, theme, F, ov(), args.work)
+            info = loop_clip(frames(p["slot"]), st["cycle"], p["cycle_s"], fps, base, theme, F, ov(), args.work, args.tween, not args.no_shadow)
             print(f"  {p['slot']}: loop {info['seconds']} s ({info['cycles']} cycle(s) of {info['cycle_seconds']} s), {info['frames']} frames, first/last pose {info['first_pose']}/{info['last_pose']} -> {base}.mp4, {base}-clean.mp4")
             continue
         rev = st.get("cycle_reverse") if p["kind"] == "exercise" else None
