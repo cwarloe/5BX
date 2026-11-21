@@ -13,6 +13,8 @@ material into another one.
 | `tests/` | End-to-end tests for the workout app (`npm test`) |
 | `video/` | Chart video builder (`video/chart.py`) |
 | `game/` | The arcade game (TanStack/Vite). Its own instructions: `game/AGENTS.project.md` |
+| `sprites/` | The sprite kit: builds the exercise video from pose strips, makes the ChatGPT/Grok prompts and batches, keys sheets, checks backgrounds. Start at `sprites/OVERVIEW.md` |
+| `sprites/qc-line/` | A second, smaller pipeline (sheet QC, cut-out manifest, he/she prompt tokens, mats drawn in code). To be ported into the kit, then deleted |
 | `specs/` | Feature specs (see below) |
 | `.github/workflows/pages.yml` | Publishes the app at `/5BX/` and the game at `/5BX/game/` |
 

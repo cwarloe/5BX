@@ -1,0 +1,339 @@
+{
+  "_about": "The registry. A strip is one image of one exercise (all its poses). A chart maps each slot to a strip. To add an exercise: drop the PNG in sheets/, add it under 'strips', point a chart slot at it. Nothing else.",
+  "strips": {
+    "toe-touch-c1": {
+      "file": "ex1-toe-touching.png",
+      "poses": 3,
+      "anchor": "shoes",
+      "cycle": [
+        1,
+        2,
+        1,
+        3
+      ],
+      "reps_per_cycle": 2
+    },
+    "partial-sit-up-c1": {
+      "file": "ex2-partial-sit-up.png",
+      "poses": 3,
+      "anchor": "shoes",
+      "cycle": [
+        1,
+        2,
+        3,
+        2
+      ],
+      "reps_per_cycle": 1,
+      "fit": {
+        "landscape": 0.72,
+        "portrait": 1.0
+      }
+    },
+    "alternate-leg-raise-c1": {
+      "file": "ex3-alternate-leg-raise.png",
+      "poses": 3,
+      "anchor": "span-left",
+      "cycle": [
+        1,
+        2,
+        1,
+        3
+      ],
+      "reps_per_cycle": 2,
+      "fit": {
+        "landscape": 0.78,
+        "portrait": 1.0
+      }
+    },
+    "knee-push-up-c1": {
+      "file": "ex4-knee-push-up.png",
+      "poses": 3,
+      "anchor": "shoes",
+      "cycle": [
+        1,
+        2,
+        3,
+        2
+      ],
+      "reps_per_cycle": 1,
+      "fit": {
+        "landscape": 0.75,
+        "portrait": 1.0
+      }
+    },
+    "stationary-run-c1": {
+      "file": "ex5-stationary-run.png",
+      "poses": 4,
+      "anchor": "head",
+      "cycle": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "steps_per_cycle": 1
+    },
+    "scissor-jumps-c1": {
+      "file": "ex5-scissor-jumps.png",
+      "poses": 4,
+      "anchor": "shoes",
+      "cycle": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "jumps_per_cycle": 2
+    },
+    "toe-touch-c2": {
+      "file": "c2-ex1-toe-touching.png",
+      "poses": 5,
+      "anchor": "shoe-left",
+      "cycle": [
+        1,
+        2,
+        4,
+        3,
+        5
+      ],
+      "reps_per_cycle": 1
+    },
+    "push-up-c2": {
+      "file": "c2-ex4-push-up.png",
+      "poses": 3,
+      "anchor": "shoes",
+      "cycle": [
+        1,
+        2,
+        3,
+        2
+      ],
+      "reps_per_cycle": 1
+    },
+    "sit-up-c2": {
+      "file": "c2-ex2-sit-up.png",
+      "poses": 3,
+      "anchor": "shoes",
+      "cycle": [
+        1,
+        2,
+        3,
+        2
+      ],
+      "reps_per_cycle": 1
+    },
+    "astride-jumps-c2": {
+      "file": "c2-jump-astride-jumps.png",
+      "poses": 4,
+      "anchor": "shoes",
+      "cycle": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "jumps_per_cycle": 1
+    },
+    "back-extension-c2": {
+      "file": "c2-ex3-back-extension.png",
+      "poses": 3,
+      "anchor": "hips",
+      "cycle": [
+        1,
+        2,
+        3,
+        2
+      ],
+      "reps_per_cycle": 1
+    },
+    "toe-touch-c3": {
+      "file": "c3-ex1-toe-touching.png",
+      "poses": 5,
+      "anchor": "shoe-left",
+      "cycle": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "cycle_reverse": [
+        1,
+        4,
+        3,
+        2,
+        5
+      ],
+      "reps_per_cycle": 1,
+      "anchor_pose": {
+        "4": "shoe-right"
+      },
+      "nudge": {
+        "4": [
+          249.5,
+          0
+        ]
+      }
+    },
+    "sit-up-hands-behind-head-c3": {
+      "file": "c3-ex234-sit-back-push.png",
+      "rows": 3,
+      "row": 0,
+      "poses": 3,
+      "anchor": "shoes",
+      "cycle": [
+        1,
+        2,
+        3,
+        2
+      ],
+      "reps_per_cycle": 1
+    },
+    "back-extension-hands-behind-back-c3": {
+      "file": "c3-ex234-sit-back-push.png",
+      "rows": 3,
+      "row": 1,
+      "poses": 3,
+      "anchor": "hips",
+      "cycle": [
+        1,
+        2,
+        3,
+        2
+      ],
+      "reps_per_cycle": 1
+    },
+    "chin-forehead-push-up-c3": {
+      "file": "c3-ex234-sit-back-push.png",
+      "rows": 3,
+      "row": 2,
+      "poses": 3,
+      "anchor": "shoes",
+      "cycle": [
+        1,
+        2,
+        3
+      ],
+      "reps_per_cycle": 1
+    },
+    "half-knee-bends-c3": {
+      "file": "c3-jump-half-knee-bends.png",
+      "poses": 3,
+      "anchor": "shoes",
+      "cycle": [
+        1,
+        2,
+        3
+      ],
+      "jumps_per_cycle": 1
+    },
+    "sit-up-toe-touch-c4": {
+      "file": "c4-ex2-sit-up-toe-touch.png",
+      "poses": 3,
+      "anchor": "shoes",
+      "cycle": [
+        1,
+        2,
+        3,
+        2
+      ],
+      "reps_per_cycle": 1
+    },
+    "back-extension-arms-sideways-c4": {
+      "file": "c4-ex3-back-extension-arms-sideways.png",
+      "poses": 3,
+      "anchor": "span-center",
+      "cycle": [
+        1,
+        2,
+        3,
+        2
+      ],
+      "reps_per_cycle": 1,
+      "rows": 2,
+      "row": 0
+    },
+    "wide-hand-push-up-c4": {
+      "file": "c4-ex4-wide-hand-push-up.png",
+      "poses": 3,
+      "anchor": "shoes",
+      "cycle": [
+        1,
+        2,
+        3,
+        2
+      ],
+      "reps_per_cycle": 1,
+      "erase": [
+        [
+          171,
+          505,
+          198,
+          516
+        ]
+      ]
+    },
+    "high-knee-run-c4": {
+      "file": "c4-run-knees-waist-high.png",
+      "poses": 4,
+      "anchor": "shoes",
+      "cycle": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "steps_per_cycle": 1
+    },
+    "semi-squat-jumps-c4": {
+      "file": "c4-jump-semi-squat-jumps.png",
+      "poses": 4,
+      "anchor": "shoes",
+      "cycle": [
+        3,
+        2,
+        1,
+        4
+      ],
+      "jumps_per_cycle": 2
+    }
+  },
+  "charts": {
+    "1": {
+      "ex1": "toe-touch-c1",
+      "ex2": "partial-sit-up-c1",
+      "ex3": "alternate-leg-raise-c1",
+      "ex4": "knee-push-up-c1",
+      "run": "stationary-run-c1",
+      "jump": "scissor-jumps-c1"
+    },
+    "2": {
+      "ex1": "toe-touch-c2",
+      "run": "stationary-run-c1",
+      "ex4": "push-up-c2",
+      "ex2": "sit-up-c2",
+      "jump": "astride-jumps-c2",
+      "ex3": "back-extension-c2"
+    },
+    "3": {
+      "ex1": "toe-touch-c3",
+      "ex2": "sit-up-hands-behind-head-c3",
+      "ex3": "back-extension-hands-behind-back-c3",
+      "ex4": "chin-forehead-push-up-c3",
+      "run": "stationary-run-c1",
+      "jump": "half-knee-bends-c3"
+    },
+    "4": {
+      "ex2": "sit-up-toe-touch-c4",
+      "ex4": "wide-hand-push-up-c4",
+      "run": "high-knee-run-c4",
+      "ex3": "back-extension-arms-sideways-c4"
+    },
+    "5": {
+      "run": "high-knee-run-c4"
+    },
+    "6": {
+      "run": "high-knee-run-c4"
+    }
+  }
+}
