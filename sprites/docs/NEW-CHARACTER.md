@@ -54,6 +54,9 @@ pick. Raw takes and rejects go to the Google Drive folder *Sprite Art 5BX Workou
 - **Hands, feet and head placement relative to the body** (outside the foot, under the thigh, behind the
   hands) is where every tool struggles. Draw a diagram for it rather than adding more words.
 - **Strict side views hide left/right differences** (scissor stance A vs B). Use a three-quarter front
-  view when the difference between poses is which side is forward.
+  view when the difference between poses is which side is forward. In batch E the tools never produced that view; stating
+  the difference through shade (near side normal, far side darker; which shoe is in front) worked instead.
+- **Give lift heights as angles** (0, about 15, about 30 degrees) and say where the shoes rest in START.
+  "Lying flat" alone left the feet in the air twice.
 - **Tools grade themselves with invented rules** (ChatGPT failed its own sheets on an "8% gap" no prompt
   asked for). The prompts now say the figures only need to not touch.
