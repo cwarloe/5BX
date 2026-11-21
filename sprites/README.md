@@ -19,6 +19,43 @@ python3 -m unittest discover -s sprites/tests -p 'test_*.py'  # fast, no artwork
 
 These checks read the existing registry and library, not another spreadsheet or task system.
 Missing local sheets are warnings: large source art lives in Drive; see [`ART.md`](../ART.md).
+
+### Review grid + incoming image inspection
+
+The read-only visual traveler shows one card per exercise: original booklet
+reference, the **actual registered render sheet**, selected library ID, Drive
+links, version-hash match, technical QC findings, and human-review backlog.
+All twelve levels of a chart use the same selected images; only counts/timing
+vary with level. Chart 2 is the initial non-scissor pilot.
+
+```bash
+# From the repo root; still works without local art (shows Drive links, QC NOT_RUN):
+python3 sprites/kit/review_board.py --chart 2 --out review-chart2.html
+
+# With the 5BX Drive production images restored into a working folder:
+python3 sprites/kit/review_board.py --chart 2 --art-root /path/to/sprites --out review-chart2.html
+```
+
+Open the resulting HTML in a browser. The grid is self-contained: local images
+are reduced and embedded into the file, so no image folder or web server is
+needed to review/share it. It neither changes art nor grants approval.
+
+Image screening reuses the kit's own keyer/segmentation, with selected checks
+ported from `qc-line`: readable format, background, figure count/clearance,
+edge margins, optional grounded/airborne geometry, and the character palette.
+The first optional geometry profiles live **on the relevant strips** in
+`config/strips.json`; the Sprite Boy palette is in `config/character.json`.
+`NOT_RUN` means no local image, missing dependency or no exercise-specific rule.
+These thresholds identify items to inspect; they do **not** judge correct form.
+
+When Charles has actually reviewed a selected sheet, record that decision with
+the existing library tool (example, not an automatic approval):
+
+```bash
+cd sprites
+python3 kit/library.py grade c2-ex4-w1 --form 4 --by Charles --expert
+```
+
 An accepted image is not automatically a human-reviewed exercise demonstration. Use the
 existing library grading workflow to record the form check before releasing a new video.
 When a chart is ready to publish, run `python3 sprites/kit/line.py release-check --chart N`

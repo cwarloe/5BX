@@ -7,6 +7,8 @@ on:
       - 'sprites/prompts/strips.json'
       - 'sprites/library/index.json'
       - 'sprites/kit/line.py'
+      - 'sprites/kit/qc_sheet.py'
+      - 'sprites/kit/review_board.py'
       - 'sprites/kit/build.py'
       - 'sprites/kit/prompt.py'
       - 'sprites/tests/test_*.py'
@@ -19,6 +21,8 @@ on:
       - 'sprites/prompts/strips.json'
       - 'sprites/library/index.json'
       - 'sprites/kit/line.py'
+      - 'sprites/kit/qc_sheet.py'
+      - 'sprites/kit/review_board.py'
       - 'sprites/kit/build.py'
       - 'sprites/kit/prompt.py'
       - 'sprites/tests/test_*.py'
@@ -42,3 +46,19 @@ jobs:
         run: python3 -m unittest discover -s sprites/tests -p 'test_*.py' -v
       - name: Check renderer syntax without media dependencies
         run: python3 -m py_compile sprites/kit/build.py
+
+  image-review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install the existing kit's image dependencies
+        run: python3 -m pip install pillow numpy
+      - name: Test technical image inspection and review grid
+        run: |
+          python3 -m unittest discover -s sprites/tests -p 'test_qc_sheet.py' -v
+          python3 -m unittest discover -s sprites/tests -p 'test_review_board.py' -v
+      - name: Produce a no-art Chart 2 review grid
+        run: python3 sprites/kit/review_board.py --chart 2 --out "$RUNNER_TEMP/chart2-review.html"

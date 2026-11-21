@@ -26,6 +26,21 @@ Rules: make small tested commits, update this list in the same commit that compl
 - [ ] 9. Test controlled intermediate motion only if the existing pose-cycle animation fails the agreed clarity bar (R3, R5)
 - [ ] 10. Make generated `PROMPTS.md`/`prompts.json` snapshots reproducible from a clean clone without misleading art-availability labels (R1, R6)
 
+## Increment 2 — Chart 2 read-only visual traveler + incoming QC
+
+- [x] Generate a six-card chart review HTML directly from the existing registry,
+  library, original booklet references and Drive recovery index (no new ledger).
+- [x] Display selection IDs, selected-vs-render source, immutable hash matches,
+  named human form review status, and incomplete/missing artwork honestly.
+- [x] Integrate the kit's own keyer/segmenter into technical intake checks:
+  source format, magenta/transparency, figure count and spacing, edge margin,
+  configurable floor/airborne geometry and character palette.
+- [x] Pilot Chart 2 with restored sheets; retain the source art and approval data
+  unchanged. Add isolated synthetic tests and CI for the image-dependent checks.
+- [ ] Finish task 6's cut-out pivot/lift manifest comparison and parity tests
+  before deleting or retiring any of `qc-line/`. The new QC explicitly adapts
+  the overly strict old magenta threshold to the production keyer's tolerance.
+
 2026-11-21 pilot note: the Chart 1 knee-push-up one-exercise previews rendered
 and exposed a backdrop-restore dependency and crossfade ghosting (D-14 in
 `sprites/qc-line/LESSONS.md`). Comparing `--no-fade` needs human playback/form

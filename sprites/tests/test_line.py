@@ -130,6 +130,12 @@ class ProductionLineTest(unittest.TestCase):
         self.registry["strips"]["jump"]["cycle"] = [1, 4]
         self.assertTrue(any("invalid cycle pose" in x for x in self.report()["errors"]))
 
+    def test_bad_qc_pose_profile_blocks_check(self):
+        self.registry["strips"]["jump"]["qc"] = {
+            "floor_check": True, "grounded": [0, 3], "airborne": {"4": 0.06}}
+        self.assertTrue(any("QC grounded pose index" in x for x in self.report()["errors"]))
+        self.assertTrue(any("QC airborne pose index" in x for x in self.report()["errors"]))
+
     def test_mirrored_pose_needs_declaration(self):
         self.registry["strips"]["jump"]["cycle"] = [1, "2m", 3]
         self.assertTrue(any("not declared" in x for x in self.report()["errors"]))
