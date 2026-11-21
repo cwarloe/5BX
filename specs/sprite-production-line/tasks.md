@@ -26,4 +26,10 @@ Rules: make small tested commits, update this list in the same commit that compl
 - [ ] 9. Test controlled intermediate motion only if the existing pose-cycle animation fails the agreed clarity bar (R3, R5)
 - [ ] 10. Make generated `PROMPTS.md`/`prompts.json` snapshots reproducible from a clean clone without misleading art-availability labels (R1, R6)
 
+2026-11-21 pilot note: the Chart 1 knee-push-up one-exercise previews rendered
+and exposed a backdrop-restore dependency and crossfade ghosting (D-14 in
+`sprites/qc-line/LESSONS.md`). Comparing `--no-fade` needs human playback/form
+review; an approved second avatar and new scissor references are still pending.
+Thus task 8 remains open. No new motion generation is authorized by this note.
+
 Tasks 6–9 are intentionally *not* being implemented in this first increment. This is a prioritized queue, not authorization for unattended paid media generation.
