@@ -72,13 +72,6 @@ approve anatomy or cadence. Do not change the global fade setting for other
 exercises without testing them. New artwork/video generation is paused while
 another bot revises the art instructions. See `qc-line/LESSONS.md`.
 
-**Cache hygiene (automated):** `build.py --preview` and `--only` now put any
-new baked sprites/backdrops in the existing `--work/asset-cache` directory.
-They can still read valid imported production art, but do not rewrite tracked
-`sprites/assets/` metadata during a trial. No extra operator command is needed.
-Use explicit `--bake` only when updating production art; full video renders
-and recorded builds retain their previous behavior.
-
 For deeper rationale and future work, see
 [`PRODUCTION_CONTROL_PLAN.md`](PRODUCTION_CONTROL_PLAN.md) and
 [`specs/sprite-production-line/tasks.md`](../../specs/sprite-production-line/tasks.md).

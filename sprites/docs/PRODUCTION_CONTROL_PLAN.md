@@ -88,6 +88,23 @@ Historical baseline (one small overnight sample, **not** process capability): ne
 
 After each batch, review the highest-frequency form defects and the longest wait/touch step. Make the smallest change that prevents a repeat, attach a regression test or named review check, and record the next batch's results. Do not generate a lengthy report unless the data changes a decision.
 
+### Measured countermeasure: trial-render cache isolation (2026-11-21)
+
+The first Chart 1 knee-push-up preview changed two tracked baked-art manifests
+while rebuilding temporary sprites/backgrounds. To remove this avoidable
+cleanup and merge-conflict risk, `build.py --preview` and `--only` now write
+new baked-art caches under the **existing** `--work/asset-cache` directory.
+They still reuse valid production sprite caches and imported backdrop images
+read-only. The explicit `--bake` command and normal full renders are unchanged.
+No extra command, tracker, image generation, or format change is required.
+
+On the same Chart 1/A+ no-fade five-second preview, the isolated render had
+pixel-identical decoded frames versus the baseline (FFmpeg PSNR infinite), no
+tracked `sprites/assets/` edits, and a ~1-second repeat from a warm cache.
+These are single-machine observations, not general performance guarantees.
+Two optional local cache integration tests protect reuse of existing art;
+the lightweight CI checks renderer syntax without requiring media libraries.
+
 ## Current integration risks to close before scaling
 
 1. **Two processing implementations:** `sprites/kit/` is primary; the `qc-line/` checks, anchor/lift export, pronoun tokens and metrics need parity tests and selective porting before retirement.
