@@ -4,13 +4,16 @@
 From the repository root:
   python3 sprites/kit/line.py status   # what is ready, missing or needs review?
   python3 sprites/kit/line.py check    # validate structure; nonzero only for real data errors
+  python3 sprites/kit/line.py release-check --chart 2  # strict artwork gate before publishing
 
 No images, paid calls, network, image libraries or extra database required.
 Raw art is intentionally stored outside Git; absence from a clean clone is a
-warning, not a corrupted project. See ART.md for restoration.
+warning for status/check, not a corrupted project. The separate release-check
+requires restored sheets and named form review. See ART.md for restoration.
 """
 
 import argparse
+import hashlib
 import json
 from pathlib import Path
 
@@ -130,6 +133,70 @@ def repository_report(repo_root):
                    sprites / "sheets")
 
 
+def release_readiness(report, registry, library, sheets_dir, chart=None):
+    """Strict artwork gate: verify selected bytes and a positive human form grade.
+
+    The normal preflight allows work in progress. This command intentionally
+    fails on incomplete charts or art that is only stored in Drive. It does not
+    replace final-video playback or mechanical pose QC.
+    """
+    candidates = [c for c in report["charts"] if chart is None or c["chart"] == chart]
+    if not candidates:
+        return [{"chart": chart, "blockers": [f"chart {chart}: not found in the 5BX plan"]}]
+    strips = registry.get("strips", {})
+    entries = library.get("entries", [])
+    results = []
+    for item in candidates:
+        cid = item["chart"]
+        mapped = registry.get("charts", {}).get(str(cid), {})
+        blockers = []
+        for slot in SLOTS:
+            name = mapped.get(slot)
+            if not name:
+                blockers.append(f"{slot}: exercise not mapped")
+                continue
+            spec = strips.get(name)
+            if not spec:
+                blockers.append(f"{slot}: unknown strip {name}")
+                continue
+            sheet = sheets_dir / spec["file"]
+            if not sheet.is_file():
+                blockers.append(f"{slot}: source sheet {spec['file']} not restored (see ART.md)")
+            chosen = [e for e in entries if e.get("strip") == name and e.get("verdict") == "chosen"]
+            if len(chosen) != 1:
+                blockers.append(f"{slot}: expected one chosen asset for {name}, found {len(chosen)}")
+                continue
+            selected = chosen[0]
+            asset_id = selected.get("id", "unknown")
+            if not reviewed_by_human(selected):
+                blockers.append(f"{slot}: {asset_id} lacks a named human form review")
+            else:
+                form = selected.get("grades", {}).get("form")
+                if type(form) is not int or form < 4:
+                    blockers.append(f"{slot}: {asset_id} needs a passing form grade (4 or 5)")
+            recorded = selected.get("measured", {}).get("sha")
+            if not recorded:
+                blockers.append(f"{slot}: {asset_id} has no recorded source-image hash")
+            elif sheet.is_file():
+                actual = hashlib.sha1(sheet.read_bytes()).hexdigest()[:len(recorded)]
+                if actual != recorded:
+                    blockers.append(f"{slot}: {spec['file']} differs from chosen asset {asset_id}; inspect version before release")
+        results.append({"chart": cid, "blockers": blockers})
+    return results
+
+
+def show_release(report, results):
+    print("5BX artwork release gate — not a substitute for final-video review")
+    for item in results:
+        blockers = item["blockers"]
+        print(f"  Chart {item['chart']}: " + (f"HOLD ({len(blockers)} item(s))" if blockers else "ART READY"))
+        for issue in blockers:
+            print(f"    HOLD: {issue}")
+    for error in report["errors"]:
+        print(f"  ERROR: {error}")
+    print("Final video still requires playback, timing and mobile-legibility review.")
+
+
 def show(report, detailed=False):
     print("5BX production line — read-only readiness")
     print(f"{report['registered']} registered strips, {report['prompted']} prompt recipes, {report['library_entries']} library records")
@@ -151,7 +218,8 @@ def show(report, detailed=False):
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("command", choices=("status", "check"))
+    parser.add_argument("command", choices=("status", "check", "release-check"))
+    parser.add_argument("--chart", type=int, help="for release-check, validate just this chart")
     parser.add_argument("--repo-root", type=Path, default=Path(__file__).resolve().parents[2],
                         help="override repository root for tests")
     args = parser.parse_args(argv)
@@ -159,6 +227,15 @@ def main(argv=None):
         report = repository_report(args.repo_root)
     except (OSError, ValueError, KeyError) as exc:
         parser.exit(1, f"unable to inspect production inputs: {exc}\n")
+    if args.command == "release-check":
+        sprites = args.repo_root / "sprites"
+        results = release_readiness(report, read_json(sprites / "config" / "strips.json"),
+                                    read_json(sprites / "library" / "index.json"),
+                                    sprites / "sheets", chart=args.chart)
+        show_release(report, results)
+        return 1 if report["errors"] or any(c["blockers"] for c in results) else 0
+    if args.chart is not None:
+        parser.error("--chart is only for release-check")
     show(report, detailed=args.command == "check")
     return 1 if report["errors"] else 0
 
