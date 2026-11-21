@@ -56,10 +56,22 @@ def ffmpeg_version():
     r = subprocess.run(["ffmpeg", "-version"], capture_output=True, text=True); return (r.stdout.splitlines() or [""])[0]
 
 
+def video_seconds(path):
+    """Length of a video in seconds as text. Uses ffprobe; when only ffmpeg is installed (common on Windows)
+    reads the Duration line ffmpeg prints instead, so a missing ffprobe no longer breaks the build record."""
+    try:
+        return subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", path], capture_output=True, text=True).stdout.strip()
+    except FileNotFoundError:
+        import re
+        err = subprocess.run(["ffmpeg", "-hide_banner", "-i", path], capture_output=True, text=True).stderr
+        m = re.search(r"Duration:\s*(\d+):(\d+):(\d+(?:\.\d+)?)", err)
+        return str(int(m.group(1)) * 3600 + int(m.group(2)) * 60 + float(m.group(3))) if m else ""
+
+
 def record(args, theme_path, scene_path, chart, slots, reg, theme, code_version, out_path):
     """Called by build.py after a full render has passed its decode check."""
     tag = getattr(args, "tag", "") or ""; bid = build_id(chart, args.level, args.format, tag); inp = inputs_now(args.data, theme_path, scene_path, chart, slots, reg, theme, code_version)
-    dur = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", out_path], capture_output=True, text=True).stdout.strip()
+    dur = video_seconds(out_path)
     path = os.path.join(BUILDS, bid + ".json"); os.makedirs(BUILDS, exist_ok=True)
     old = jload(path) if os.path.exists(path) else {}
     rec = {"id": bid, "chart": chart, "level": args.level, "format": args.format, "tag": tag, "created": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
