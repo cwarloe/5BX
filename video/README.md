@@ -75,6 +75,45 @@ and crush the figure's colours entirely.
 produce plausible-but-wrong form, and exercise form is the one place in this
 project where being wrong can hurt someone.
 
+## Scale and staging
+
+Each pose sheet is generated on its own, so the figures arrive at unrelated
+sizes and nothing in the art says how big the person is. The scale therefore
+has to be decided here, and the obvious way is wrong.
+
+**Do not fit the figure to the box.** A standing figure is tall and narrow, a
+prone one is long and flat, so box-fitting pins each to a different edge: the
+standing figure is limited by the box height and the prone figure by its width.
+On chart 1 that made the same man 660px tall standing and 1250px long lying
+down - he almost doubled in size every time he got on the floor.
+
+Scale is set instead by **how long the body is**: the longest extent of the
+figure in any pose of the sheet, which is standing height for an upright
+movement and body length for a floor one. That one number goes to `F['body']`,
+so the person stays the same person throughout.
+
+`DEPTH` then stages the exercises front to back on purpose. Floor work sits at
+`.88`, slightly further from camera than standing work at `1.0`. That is partly
+taste and partly honesty: a kneeling push-up really is shorter than a man is
+tall, so holding floor work at full body length would oversize it.
+
+A pose can never leave the box - the box fit still applies as a ceiling, it is
+just no longer what chooses the scale.
+
+## Pose sheets are per chart
+
+`SHEETS` is keyed by chart id, because the exercises change between charts:
+chart 1's knee push-up is a chin-forehead push-up by chart 3 and a chest-slap
+push-up by chart 6. A chart with no sheets raises rather than borrowing another
+chart's figures, which would demonstrate the wrong movement.
+
+Only chart 1 is drawn. `chart.py ... --chart 4` fails with a message saying so.
+
+`CYCLE_KIND` says how a movement loops, and the pose order is derived from
+however many poses the sheet actually holds - sheets are not required to have
+three. The kinds are `pingpong` (there and back), `centre` (pose 1 is the
+neutral the body returns through) and `loop` (a continuous gait that wraps).
+
 ## Known weak spots
 
 - **Alternate leg raise** — in strict side profile, "near leg" and "far leg"
