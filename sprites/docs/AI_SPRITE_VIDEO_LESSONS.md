@@ -1,4 +1,4 @@
-﻿# AI-Generated Exercise Video (5BX Sprite Boy): Lessons Learned
+﻿# AI-Generated Exercise Video (5BX Workout Mixer): Lessons Learned
 
 **Date:** November 19, 2026
 **Project:** A full 5BX workout video starring a cartoon "sprite boy"
