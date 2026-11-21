@@ -12,7 +12,7 @@ same pose pixels).
 | 2. Generate | Pin the character reference; make a *small* named set of poses/takes. Save raw and rejected art in the Drive archive from `ART.md`, not Git. | Keep the original source and the reason for each rejection. |
 | 3. Mechanical QC | Inspect pose count, separation, transparency/key, floor contacts and jump/lift. Existing `qc-line/pipeline/sprite.py qc` can help; it is not anatomy review. | **Gate A:** fix a failed sheet before cutting or animating. |
 | 4. Human form review | Compare *every pose* with the booklet and movement specification. Grade the exact asset in the existing sprite library. | **Gate B:** named human reviewer, form grade **4 or 5**, selected revision recorded. “Chosen” alone is insufficient. |
-| 5. Cut and animate | Key and cut transparent sprites; use the primary `sprites/kit/build.py` to preview **only that exercise/cycle** at its actual timing. | **Hold** for sliding, ghosting, limb changes, cropping or cadence errors. |
+| 5. Cut and animate | Restore the selected sheet **and chart-specific backdrop** from the art archive. Key and cut transparent sprites; use `sprites/kit/build.py` to preview **only that exercise/cycle** at its actual timing. | **Hold** for missing inputs, sliding, ghosting, limb changes, cropping or cadence errors. |
 | 6. Assemble | Reuse approved strips, timing, theme and avatar settings for chart/level/format variants. Full render writes its input-hash build record. | Run `release-check` before a candidate is called ready for publication. |
 | 7. Publish and learn | Watch the **full** video (including on a phone), confirm exercise labels, duration and movement, then publish. Log the defect type and one correction. | **Gate C:** final human playback and decode check; not covered by the artwork check alone. |
 
@@ -61,6 +61,13 @@ before building a whole chart. A new version needs a new review.
   Work on at most two pilot exercises at once. For each batch record just
   **first-pass approvals / new attempts**, **manual minutes per approved
   exercise**, and the **recurring defect reason** in the existing lessons log.
+
+**First pilot finding:** Chart 1's knee push-up requires the archived
+`sprites/assets/backgrounds/gym-keeper-landscape.png` as well as its chosen
+strip. Restore the existing asset from the `sprite-kit-assets` archive listed
+in `ART.md` before previewing. A/B testing the builder's existing `--no-fade`
+flag removed a visible double-body crossfade artifact, but did **not** approve
+the movement's anatomy or cadence. See `qc-line/LESSONS.md` for measurements.
 
 For deeper rationale and future work, see
 [`PRODUCTION_CONTROL_PLAN.md`](PRODUCTION_CONTROL_PLAN.md) and

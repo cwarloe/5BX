@@ -111,3 +111,32 @@ more, so the two steps are both needed.
 - Only the boy has real reference art. The girl character file proves the prompts swap cleanly, not that the
   drawings will be good.
 - Jobs 24-26 and 28 could not be compared with their source images, which were not available.
+
+## 10. Chart 1 knee push-up: one-exercise motion pilot (2026-11-21)
+
+**Scope:** Chart 1 / A+ / exercise 4, existing Sprite Boy strip
+`c1-ex4-w1` (`ex4-knee-push-up.png`), 5-second preview at 1920x1080/30 fps.
+No image or video generation was purchased and no poses were regenerated.
+This tests the render process, **not** exercise-form correctness or release.
+
+| Observation | Measured result | Action / decision |
+|---|---|---|
+| Preview inputs incomplete in a clean worktree | First attempt stopped in ~0.5 s: chart-specific gym picture absent, despite having the strip | Restore existing `sprites/assets/backgrounds/gym-keeper-landscape.png` from the assets archive; add it to station 5's input check, no new tracking system |
+| First successful render | 16.8 s wall time, 5.0 s MP4, 321 KiB | Baseline for this single machine and sample only |
+| Repeated cached renders | 1.06 s (crossfade), 0.89 s (`--no-fade`); indicative single runs | Keep a stable work cache for comparisons; do **not** attribute the initial speed difference to the transition setting |
+| Crossfade motion | Visible duplicate/ghost body on an in-between frame (at ~4.5 s) | D-14: compare `--no-fade` using the **same** source poses before generating intermediate artwork |
+| No-fade motion | Sampled 4.5 s frame has one clean figure; pose changes may be abrupt | Candidate for human motion review; do not promote automatically |
+| Human form gate | No named form-grade 4+ approval recorded for selected strip | **Hold** release; a clean render does not establish form accuracy |
+| Second-avatar comparison | Only Sprite Boy has a real reference; other character config is an example, not approved art | **Not yet tested**: wait for a genuinely approved second avatar, then use the same movement spec/scene/timing |
+
+**D-14 — transition ghosting:** The pose-cycle builder uses crossfade between
+full-body drawings, briefly displaying two bodies instead of one moving body.
+Switching off fade removes that overlap without any new art. Retain both short
+clips for user review; if the pose snap is unacceptable, test one targeted
+motion-improvement method rather than bulk generating more frames. A single
+reviewer has inspected sample frames only; motion and anatomy are not approved.
+
+**Lean decision:** No new QC tool, paid model, or retake batch yet. Measure
+manual touch time and first-pass **form** approval once an actual human review
+has occurred; neither can be inferred from successful renders. Scissor jumps
+remain held for the additional reference material.
