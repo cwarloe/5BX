@@ -12,7 +12,12 @@ Everything that is likely to change lives in config/, not here:
 Useful flags
     --preview          5 s per exercise, 2 s breaks; uses private baked-art cache in --work
     --only ex3,run     render just those slots, no breaks; also uses the private cache
-    --no-fade          pure hold-and-cut instead of a short crossfade
+    --no-fade          pure hold-and-cut (the default since 2026-11-21: theme fade_max_seconds is 0)
+    --profile test     the 1280x720, 24 fps test profile from theme.json "profiles" (default: 1920x1080, 30 fps)
+    --loop             with --only: render ONE seamless loop (6 to 10 s) per slot, pinned on pose 1, as
+                       OUT-<slot>.mp4 (with the overlay) and OUT-<slot>-clean.mp4 (no overlay, for the join script)
+    --tween            with --loop: eased moves with in-between frames made at render time (kit/tween.py), short
+                       holds on the key poses, a soft floor contact shadow; cached in --work (needs opencv-python)
     --theme FILE       try another look without editing the default
     --format portrait  1080x1920
     --list             show what each chart slot uses, and what is missing
@@ -33,6 +38,7 @@ BAKE_VERSION = "4"                              # bump when the cut-out or backd
 sys.path.insert(0, HERE)
 from keyer import key as chroma_key
 from recolor import recolor, REGIONS
+import staging
 
 SLOTS = ["ex1", "ex2", "ex3", "ex4"]
 
@@ -63,7 +69,7 @@ def referenced_images_hash(*objs):
 def rgb(hexstr): return tuple(int(hexstr.lstrip("#")[i:i + 2], 16) for i in (0, 2, 4))
 
 CODE_VERSION = sha(open(__file__, "rb").read(), open(os.path.join(HERE, "keyer.py"), "rb").read(),
-                   open(os.path.join(HERE, "recolor.py"), "rb").read())   # editing code never serves a stale cache
+                   open(os.path.join(HERE, "recolor.py"), "rb").read(), open(os.path.join(HERE, "staging.py"), "rb").read())   # editing code never serves a stale cache
 
 
 # ---------- backdrop: several layers, each its own file ----------
@@ -392,8 +398,16 @@ def compose(name, strip, theme, scene, F, fmt, work, slot, plan=None):
     floor, top = meta["floor"], meta["top"]; anchors = [pose_anchor(strip, k, m) for k, m in enumerate(meta["poses"], 1)]
     mir = [(k, meta["poses"][k - 1]["size"][0], mirror_anchor(strip, k, meta["poses"][k - 1])) for k in strip.get("mirror", [])]      # flipped copies of some poses
     L = max(anchors + [a for _, _, a in mir]); R = max([p.size[0] - a for p, a in zip(poses, anchors)] + [w - a for _, w, a in mir])
-    bw, bh = F["box"]; bh = (plan or {}).get("box_h", bh); fit = fit_of(strip, fmt); s = fit * min(bw / (L + R), bh / (floor - top));      # "fit" < 1 shrinks this exercise inside the stage box (lying exercises fill the width and look huge next to standing ones)
-    gy = int(F["H"] * F["ground"]); X0 = F["W"] / 2 + (L - R) * s / 2
+    sg = staging.stage_geom(theme, F)
+    if sg:                                                         # the approved one-camera stage: one scale, lying figures scaled up, feet on floor_y
+        s, lying, notes = staging.stage_scale(sg, strip, L + R, floor - top)
+        snap = lying and strip.get("snap_floor", True)              # a lying figure is never airborne: rest every pose on the floor (sheets draw them a few px apart)
+        for n in notes: print(f"  {name}: {n}")
+        gy = int(round(sg["floor_y"])) - 10; X0 = sg["foot_x"] + (L - R) * s / 2
+    else:                                                          # no stage block (or a tall format): the old box fit
+        snap = False
+        bw, bh = F["box"]; bh = (plan or {}).get("box_h", bh); fit = fit_of(strip, fmt); s = fit * min(bw / (L + R), bh / (floor - top))
+        gy = int(F["H"] * F["ground"]); X0 = F["W"] / 2 + (L - R) * s / 2
     geom = dict(gy=gy, X0=X0, s=s, L=L, R=R)
     bg = flatten(blayers, (F["W"], F["H"])); bg.save(os.path.join(out, "backdrop.png"))
     behind, front = render_props(scene, slot, geom, F, "behind"), render_props(scene, slot, geom, F, "front")
@@ -402,7 +416,7 @@ def compose(name, strip, theme, scene, F, fmt, work, slot, plan=None):
     for k, (p, m, ax) in enumerate(zip(poses, meta["poses"], anchors), 1):
         w, h = max(1, round(p.size[0] * s)), max(1, round(p.size[1] * s))
         layer = Image.new("RGBA", (F["W"], F["H"]), (0, 0, 0, 0))
-        px, py = pose_xy(strip, k, m, X0, gy, floor, s)
+        px, py = pose_xy(strip, k, m, X0, gy, (m["offset"][1] + m["size"][1]) if snap else floor, s)
         layer.alpha_composite(p.resize((w, h), Image.LANCZOS), (round(px), round(py)))
         layer.save(os.path.join(out, f"layer_p{k}.png"))
         f = bg.copy()
@@ -412,7 +426,7 @@ def compose(name, strip, theme, scene, F, fmt, work, slot, plan=None):
         f.convert("RGB").save(os.path.join(out, f"p{k}.png"))
     for k, w0, ax in mir:                                          # the flipped copies: layer_pKm.png and the finished pKm.png
         p, m = poses[k - 1], meta["poses"][k - 1]; fl = p.transpose(Image.FLIP_LEFT_RIGHT); w, h = max(1, round(fl.size[0] * s)), max(1, round(fl.size[1] * s))
-        dy = (strip.get("nudge") or {}).get(str(k), (0, 0))[1]; py = gy + 10 - (floor - m["offset"][1]) * s + dy * s
+        dy = (strip.get("nudge") or {}).get(str(k), (0, 0))[1]; py = gy + 10 - (((m["offset"][1] + m["size"][1]) if snap else floor) - m["offset"][1]) * s + dy * s
         layer = Image.new("RGBA", (F["W"], F["H"]), (0, 0, 0, 0)); layer.alpha_composite(fl.resize((w, h), Image.LANCZOS), (round(X0 - ax * s), round(py))); layer.save(os.path.join(out, f"layer_p{k}m.png"))
         f = bg.copy()
         if behind: f.alpha_composite(behind)
@@ -482,26 +496,77 @@ def blend_frames(d, a, b, nf):
     return outs
 
 
-def segment(args, work, posedir, cycle, cycle_s, dur, ov, fps, fade_max, label):
-    """One continuous stretch of a looping pose cycle with the HUD. Cached by everything it depends on."""
+def cycle_frames(posedir, cycle, cycle_s, nframes, fps, fade_max):
+    """Frame-by-frame file list for a looping pose cycle: hold-and-cut, or (only if fade_max > 0) a short eased crossfade."""
+    per = cycle_s / len(cycle); nf = int(min(fade_max, .45 * per) * fps) if fade_max > 0 else 0; out = []; t = 0.0; i = 0
+    while len(out) < nframes:
+        p = cycle[i % len(cycle)]; nxt = cycle[(i + 1) % len(cycle)]; t += per
+        while len(out) < nframes and len(out) < round((t - nf / fps) * fps): out.append(f"{posedir}/p{p}.png")
+        if nf and nxt != p: out += blend_frames(posedir, p, nxt, nf)
+        else: out += [f"{posedir}/p{p}.png"] * nf
+        i += 1
+    return out[:nframes]
+
+
+def render_frames(files, out, fps, theme, F, ov, work):
+    """Encode a frame list. ov: None, or {"name", "tip", "allot", "off"}: the Fraser overlay as its own layer
+    (a transparent card PNG and one ring PNG per frame), composited over the frames by ffmpeg."""
+    seq = out + ".frames"; shutil.rmtree(seq, ignore_errors=True); os.makedirs(seq)
+    for k, fn in enumerate(files): os.symlink(os.path.abspath(fn), os.path.join(seq, f"f_{k:05d}.png"))
+    cmd = ["ffmpeg", "-y", "-loglevel", "error", "-framerate", str(fps), "-i", os.path.join(seq, "f_%05d.png")]
+    if ov:
+        lay = os.path.join(work, "overlay", sha(json.dumps(ov, sort_keys=True), F["W"], F["H"], fps, len(files), CODE_VERSION, json.dumps(theme.get("overlay"), sort_keys=True)))
+        os.makedirs(lay, exist_ok=True); card, _ = staging.card_layer(theme, F, ov["name"], ov.get("tip", "")); card.save(os.path.join(lay, "card.png"))
+        ring = staging.ring_frames(theme, F, ov["allot"], ov.get("off", 0.0), len(files), fps, os.path.join(lay, "ring"))
+        rx, ry, _ = staging.ring_box(theme, F)
+        cmd += ["-loop", "1", "-framerate", str(fps), "-i", os.path.join(lay, "card.png"), "-framerate", str(fps), "-i", ring,
+                "-filter_complex", f"[0:v][1:v]overlay=0:0[c];[c][2:v]overlay={rx}:{ry}[v]", "-map", "[v]"]
+    cmd += ["-frames:v", str(len(files)), "-pix_fmt", "yuv420p", "-r", str(fps), out]
+    run(cmd); shutil.rmtree(seq, ignore_errors=True)
+
+
+def segment(args, work, posedir, cycle, cycle_s, dur, ov, fps, fade_max, label, theme=None, F=None):
+    """One continuous stretch of a looping pose cycle with the overlay. Cached by everything it depends on."""
     if args.preview: dur = min(dur, 5.0)
     cache = os.path.join(work, "cache"); os.makedirs(cache, exist_ok=True)
-    out = os.path.join(cache, sha(posedir, cycle, round(cycle_s, 4), round(dur, 3), ov, fps, fade_max, CODE_VERSION) + ".mp4")
+    out = os.path.join(cache, sha(posedir, cycle, round(cycle_s, 4), round(dur, 3), json.dumps(ov, sort_keys=True), fps, fade_max, CODE_VERSION) + ".mp4")
     if os.path.exists(out): print(f"  {label}: cached"); return out
-    per = cycle_s / len(cycle); nf = int(min(fade_max, .45 * per) * fps) if fade_max > 0 else 0; hold = per - nf / fps
-    lst = out + ".txt"
-    with open(lst, "w") as f:
-        for _ in range(math.ceil(dur / cycle_s) + 1):
-            for i, p in enumerate(cycle):
-                nxt = cycle[(i + 1) % len(cycle)]; f.write(f"file '{posedir}/p{p}.png'\nduration {hold:.4f}\n")
-                if nf and nxt != p:
-                    for fn in blend_frames(posedir, p, nxt, nf): f.write(f"file '{fn}'\nduration {1 / fps:.5f}\n")
-                elif nf: f.write(f"file '{posedir}/p{p}.png'\nduration {nf / fps:.5f}\n")
-        f.write(f"file '{posedir}/p{cycle[0]}.png'\n")
-    tmp = out + ".part.mp4"
-    run(["ffmpeg", "-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", lst, "-t", f"{dur:.3f}",
-         "-vf", f"fps={fps},{ov}", "-pix_fmt", "yuv420p", "-r", str(fps), tmp])
+    files = cycle_frames(posedir, cycle, cycle_s, max(1, int(round(dur * fps))), fps, fade_max)
+    tmp = out + ".part.mp4"; render_frames(files, tmp, fps, theme, F, ov, work)
     os.replace(tmp, out); print(f"  {label}: rendered"); return out
+
+
+def tween_frames(posedir, timeline, work, shadow=True):
+    """Finished frames for a tween timeline (kit/staging.py tween_timeline): key poses and in-betweens, each with the
+    floor contact shadow as its own layer. Cached under WORK/tween/, keyed by the SHA of each key pose's layer, the
+    backdrop and props, and tween.py itself; an in-between's file name is its eased progress, so a loop with a
+    different frame count makes new in-betweens and an unchanged re-render makes none."""
+    import tween                                                        # numpy + opencv: renderer only
+    base = [filehash(os.path.join(HERE, "tween.py")), str(shadow), filehash(os.path.join(posedir, "backdrop.png"))]
+    base += [filehash(os.path.join(posedir, f)) for f in ("props_behind.png", "props_front.png") if os.path.exists(os.path.join(posedir, f))]
+    def cache(*ks): return os.path.join(work, "tween", sha(*base, *[filehash(os.path.join(posedir, f"layer_p{k}.png")) for k in ks]))
+    need = {}
+    for a, b, s in timeline:
+        if s: need.setdefault((a, b), set()).add(s)
+    made = {}
+    for (a, b), ss in sorted(need.items()):
+        ss = sorted(ss); made.update({(a, b, s): f for s, f in zip(ss, tween.inbetweens(posedir, a, b, ss, cache(a, b), shadow))})
+    return [made[(a, b, s)] if s else tween.pose_frame(posedir, a, cache(a), shadow) for a, b, s in timeline]
+
+
+def loop_clip(posedir, cycle, cycle_s, fps, out_base, theme, F, ov, work, tween=False, shadow=True):
+    """ONE seamless loop of 6 to 10 s, pinned on pose 1 at both ends. Hold-and-cut (kit/staging.py pinned_loop), or with
+    tween=True eased moves between the key poses with in-between frames (staging.tween_timeline, kit/tween.py).
+    Writes OUT-clean.mp4 (no overlay: the piece the join script repeats) and OUT.mp4 (with the overlay, to review)."""
+    n, cs = staging.choose_loop(cycle_s)
+    if tween:
+        tl = staging.tween_timeline(cycle, cs, n, fps); files = tween_frames(posedir, tl, work, shadow); first, last = tl[0][0], tl[-1][0]
+    else:
+        poses = staging.pinned_loop(cycle, cs, n, fps); files = [f"{posedir}/p{p}.png" for p in poses]; first, last = poses[0], poses[-1]
+    render_frames(files, out_base + "-clean.mp4", fps, theme, F, None, work)
+    render_frames(files, out_base + ".mp4", fps, theme, F, ov, work)
+    return {"cycles": n, "cycle_seconds": round(cs, 4), "frames": len(files), "seconds": round(len(files) / fps, 3), "first_pose": first, "last_pose": last,
+            "in_betweens": sum(1 for f in files if os.path.basename(f).startswith("tw-"))}
 
 
 def breakcard(args, work, theme, F, hud, secs, nxt, fmt):
@@ -582,6 +647,10 @@ def main():
     ap.add_argument("--out", default="out.mp4"); ap.add_argument("--work", default=os.path.join(ROOT, ".work"))
     ap.add_argument("--theme", default=os.path.join(ROOT, "config", "theme.json")); ap.add_argument("--scene", default=os.path.join(ROOT, "config", "scene.json"))
     ap.add_argument("--preview", action="store_true"); ap.add_argument("--no-fade", action="store_true")
+    ap.add_argument("--profile", default="default", help="a theme.json 'profiles' entry: default (1920x1080, 30 fps) or test (1280x720, 24 fps)")
+    ap.add_argument("--loop", action="store_true", help="with --only: one seamless 6 to 10 s loop per slot, pinned on pose 1 (OUT-<slot>.mp4 and OUT-<slot>-clean.mp4)")
+    ap.add_argument("--tween", action="store_true", help="with --loop: move between the key poses with in-between frames (eased, short holds) instead of hold-and-cut; needs opencv-python")
+    ap.add_argument("--no-shadow", action="store_true", help="with --tween: leave out the floor contact shadow layer")
     ap.add_argument("--only", default="", help="comma list of slots: ex1,ex2,ex3,ex4,run,jump")
     ap.add_argument("--tag", default="", help="name a variant (a different scene or look); becomes part of the build id")
     ap.add_argument("--no-record", action="store_true", help="do not write builds/<id>.json")
@@ -590,6 +659,7 @@ def main():
     ap.add_argument("--with-composites", action="store_true", help="with --export: also write the finished frames (redundant; the layers recreate them)")
     args = ap.parse_args()
 
+    args.work = os.path.abspath(args.work)                            # ffmpeg concat lists resolve relative paths against the list file
     theme = jload(args.theme); reg = jload(os.path.join(ROOT, "config", "strips.json"))
     theme, scene_path = apply_look(theme, args.chart, args.scene); scene = jload(scene_path)
     if args.bake:
@@ -620,6 +690,9 @@ def main():
     if args.preview or only:
         ASSETS = os.path.join(args.work, "asset-cache")
     F = theme["formats"][args.format]; fps = theme["fps"]; fade_max = 0 if args.no_fade else theme["fade_max_seconds"]
+    F, fps = staging.apply_profile(theme, F, fps, args.profile)
+    theme = dict(theme, fps=fps)
+    if args.loop and not only: raise SystemExit("--loop needs --only (the slots to make loops for)")
     plan, ex5 = make_plan(data, chart, args.level, only); os.makedirs(args.work, exist_ok=True); hud = Hud(theme, F); S = theme["strings"]
     lv = chart["levels"][args.level]; sstep = lambda sl: reg["strips"][slots[sl]]
     stage = {}
@@ -627,8 +700,9 @@ def main():
         if p["kind"] == "exercise": return S["kicker"].format(n=p["n"]), p["name"], S["reps"].format(reps=p["reps"])
         if p["kind"] == "run": return S["kicker"].format(n=5), p["name"], S["steps"].format(steps=p["steps"])
         return S["jump_kicker"], S["jump_title"].format(count=p["count"], name=p["name"]), S["jump_target"]
-    for p in plan:                                                     # where the title goes and how big the figure may be, per exercise
-        if p.get("slot") and p["slot"] not in stage: stg = sstep(p["slot"]); stage[p["slot"]] = stage_plan(stg, bake(slots[p["slot"]], stg, theme), theme, F, args.format, seg_texts(p))
+    use_stage = staging.stage_geom(theme, F) is not None
+    for p in plan:                                                     # old layout only: where the title goes and how big the figure may be, per exercise
+        if not use_stage and p.get("slot") and p["slot"] not in stage: stg = sstep(p["slot"]); stage[p["slot"]] = stage_plan(stg, bake(slots[p["slot"]], stg, theme), theme, F, args.format, seg_texts(p))
     def frames(slot): return compose(slots[slot], sstep(slot), theme, scene, F, args.format, args.work, slot, stage.get(slot))
     for p in plan:                                                     # cycle length per segment, from the data
         if p["kind"] == "exercise": p["cycle_s"] = p["allot"] / p["reps"] * sstep(p["slot"])["reps_per_cycle"]
@@ -638,19 +712,27 @@ def main():
         root = export_layers(args.export, plan, theme, scene, reg, slots, F, args.format, args.work, args.chart, args.level, args.data, args.with_composites, stage)
         print("wrote layer pack:", root); return
 
-    parts = []
+    parts = []; looped = set()
     for p in plan:
         if p["kind"] == "break": parts.append(breakcard(args, args.work, theme, F, hud, p["secs"], p["next"], args.format)); continue
         st = sstep(p["slot"])
-        if p["kind"] == "exercise": ov = lambda off=0.0, p=p: hud.exercise(S["kicker"].format(n=p["n"]), p["name"], S["reps"].format(reps=p["reps"]), p["allot"], off, stage.get(p["slot"])); label = p["name"]
-        elif p["kind"] == "run": ov = lambda off=0.0, p=p: hud.exercise(S["kicker"].format(n=5), p["name"], S["steps"].format(steps=p["steps"]), p["allot"], p["off"] + off, stage.get(p["slot"])); label = p["label"]
-        else: ov = lambda off=0.0, p=p: hud.exercise(S["jump_kicker"], S["jump_title"].format(count=p["count"], name=p["name"]), S["jump_target"], p["allot"], p["off"] + off, stage.get(p["slot"])); label = p["label"]
+        if p["kind"] == "exercise":                                    # the Fraser overlay: name card plus one tip, ring timer
+            ov = lambda off=0.0, p=p, st=st: {"name": p["name"], "tip": staging.tip_for(st, chart["exercises"][p["n"] - 1]) or S["reps"].format(reps=p["reps"]), "allot": p["allot"], "off": off}; label = p["name"]
+        elif p["kind"] == "run": ov = lambda off=0.0, p=p: {"name": p["name"], "tip": S["steps"].format(steps=p["steps"]), "allot": p["allot"], "off": p["off"] + off}; label = p["label"]
+        else: ov = lambda off=0.0, p=p: {"name": S["jump_title"].format(count=p["count"], name=p["name"]), "tip": S["jump_target"], "allot": p["allot"], "off": p["off"] + off}; label = p["label"]
+        if args.loop:
+            if p["slot"] in looped: continue
+            looped.add(p["slot"]); base = os.path.splitext(args.out)[0] + f"-{p['slot']}"
+            info = loop_clip(frames(p["slot"]), st["cycle"], p["cycle_s"], fps, base, theme, F, ov(), args.work, args.tween, not args.no_shadow)
+            print(f"  {p['slot']}: loop {info['seconds']} s ({info['cycles']} cycle(s) of {info['cycle_seconds']} s), {info['frames']} frames, first/last pose {info['first_pose']}/{info['last_pose']} -> {base}.mp4, {base}-clean.mp4")
+            continue
         rev = st.get("cycle_reverse") if p["kind"] == "exercise" else None
         if rev:                                                        # "reverse direction after half the number of counts": whole cycles first, then the reversed order
             first = math.floor(p["reps"] / 2 / st["reps_per_cycle"] + 0.5) * p["cycle_s"]
-            parts.append(segment(args, args.work, frames(p["slot"]), st["cycle"], p["cycle_s"], first, ov(0.0), fps, fade_max, label + " (first half)"))
-            parts.append(segment(args, args.work, frames(p["slot"]), rev, p["cycle_s"], p["dur"] - first, ov(first), fps, fade_max, label + " (reversed)"))
-        else: parts.append(segment(args, args.work, frames(p["slot"]), st["cycle"], p["cycle_s"], p["dur"], ov(), fps, fade_max, label))
+            parts.append(segment(args, args.work, frames(p["slot"]), st["cycle"], p["cycle_s"], first, ov(0.0), fps, fade_max, label + " (first half)", theme, F))
+            parts.append(segment(args, args.work, frames(p["slot"]), rev, p["cycle_s"], p["dur"] - first, ov(first), fps, fade_max, label + " (reversed)", theme, F))
+        else: parts.append(segment(args, args.work, frames(p["slot"]), st["cycle"], p["cycle_s"], p["dur"], ov(), fps, fade_max, label, theme, F))
+    if args.loop: return
     steps = lv["steps"]
     if not only or "run" in only: print(f"  ex5: {steps} steps, {60 / [x for x in plan if x['kind'] == 'run'][0]['step_s']:.0f} steps/min")
     lst = os.path.join(args.work, "all.txt")
