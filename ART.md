@@ -108,3 +108,13 @@ Large uploads: Claude can send at most ~3 MB per file to Drive; anything bigger 
 | Drive file | Status / permitted use | Drive ID |
 |---|---|---|
 | [`2026-11-24_near-trailing-leg-running-reference-4poses.png`](https://drive.google.com/file/d/1lSzvp-SjsNDOClhmQquGk7tqUAmb1HAh/view) | User-confirmed **foreground-trailing-leg hip occlusion** for a right-facing running figure. Illustrative source/QA reference only; **not** accepted scissor-jump form, canonical character replacement, or shipping art. See [portable rule](sprites/docs/FOREGROUND_TRAILING_LEG_RULE.md). | `1lSzvp-SjsNDOClhmQquGk7tqUAmb1HAh` |
+
+## Scissor-jump inverse endpoint experiments (2026-11-24; reference only)
+
+All files below are **unapproved working reference art** in the existing *Sprite Art 5BX Workout* Drive folder. None replaces an entry in the sprite library or constitutes 5BX exercise-form approval.
+
+| File | Experiment and disposition | Drive ID |
+|---|---|---|
+| [`2026-11-24_scissor-near-leading_6pose-experiment.png`](https://drive.google.com/file/d/1kHIR9Lg5R2MCPpcFmj96fHW-zn9W5_Aw/view) | Six separate right-facing **near-leg-leading** variations; candidate inverse hip occlusions; not human approved | `1kHIR9Lg5R2MCPpcFmj96fHW-zn9W5_Aw` |
+| [`2026-11-24_scissor-paired-depth_same-overlap-failure.png`](https://drive.google.com/file/d/1tRxbi4nNx94FmKJnIUpmPP8kG_owggQW/view) | Six-pose paired A/B request **failed**: both columns have near-identical hip/shorts topology despite explicit inversion instruction; keep for failure diagnosis | `1tRxbi4nNx94FmKJnIUpmPP8kG_owggQW` |
+| [`2026-11-24_scissor-near-trailing_6pose-experiment.png`](https://drive.google.com/file/d/10-yl-i3xjLPJulv7tImmCAW4QP_-DJJ3/view) | Six separate right-facing **near-leg-trailing** variations using approved running overlap as appearance/geometry reference; candidate only | `10-yl-i3xjLPJulv7tImmCAW4QP_-DJJ3` |
