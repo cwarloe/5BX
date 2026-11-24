@@ -6,6 +6,9 @@
 
 **Short version:** Image-to-video clips look great and get the form wrong. One generated *strip per exercise*, checked against the booklet and assembled by a data-driven script, gets the form right and keeps the character identical. Total image spend for the working set was about 56,000 ElevenLabs credits (about $10).
 
+
+**Follow-up (2026-11-24):** fixing poses by compositing, the Chart 1 scissor jump tries and the knee push-up loop are in `POSE_FIX_LESSONS.md`.
+
 ---
 
 ## Character spec (locked by Charles, 2026-11-19)
