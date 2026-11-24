@@ -76,3 +76,9 @@ orphan branch, `sprite-boy-demo`, as a store; Cloudflare is not connected to it,
    57 MB per refresh) and push it, so the branch matches what is live.
 
 The full chart 1 video is a GitHub release asset (`sprite-boy-videos-2026-11-21`), linked from the page; videos are not in Git.
+
+## Motion diagnostics and research (2026-11-24)
+
+The current Chart 1 scissor-jump proof of concept has a [source-grounded diagnostic record](docs/SCISSOR_JUMP_DIAGNOSTIC_RECORD.md) covering original multi-angle video, character transfer, failed anatomical shoe marking, wrong pose order, motion interpolation, confirmed successes, and unresolved tracking/depth questions. Read it before commissioning another scissor-jump take or changing the motion pipeline. The [user-supplied pose/depth research guide](docs/research/limb-swap-depth-fix-guide.md) is preserved with [applicability cautions](docs/research/README.md); sample scripts and parameter values have not been validated against 5BX.
+
+This is documentation only. Raw recordings and rejected media still belong in Drive, and the proposed source-identity gate does not replace the pending approvals in the [production requirements](../specs/sprite-production-line/requirements.md).
