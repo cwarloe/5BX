@@ -66,6 +66,9 @@ class PromptTest(unittest.TestCase):
         self.assertIn("near TRAILING thigh", scissors)
         self.assertIn("near leading thigh", scissors)
         self.assertIn("identical camera angle", scissors.lower())
+        retake = prompt.retake(specs["scissor-jumps-c1"], boy, individual=False)
+        self.assertNotIn("ROW 1:", retake)
+        self.assertIn("ONE consistent mild three-quarter SIDE camera", retake)
 
         squat = prompt.build(specs["semi-squat-jumps-c4"], boy)
         self.assertIn("DEPTH LOCK", squat)
