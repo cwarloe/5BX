@@ -104,3 +104,11 @@ Cost-cutters that do not depend on the tool: derive a harder variant of an exerc
 ## Always
 
 A person who knows the exercises looks at every finished strip and the finished video before it is shared as instruction.
+
+## When the camera-near leg trails behind the camera-far leading leg (2026-11-24)
+
+First consult [the complete six-chart depth audit](FOREGROUND_TRAILING_EXERCISE_AUDIT.md) and [conditional hip-occlusion rule](FOREGROUND_TRAILING_LEG_RULE.md). The portable source `prompts/strips.json` has targeted updates for only four relevant recipes: Chart 1 `scissor-jumps-c1` stance B (priority), Chart 4 `semi-squat-jumps-c4` far-foot-ahead crouch/hop (priority), `stationary-run-c1` far-foot-up (conditional), and `high-knee-run-c4` far-knee-up (conditional). Runs are reused across chart groups. Do not append a global leading/trailing stride rule to toe touches, sideways jumps, fixed-leg floor exercises, or the four-inch stationary run.
+
+- The [Charles-accepted near-trailing six-pose sheet](https://drive.google.com/file/d/10-yl-i3xjLPJulv7tImmCAW4QP_-DJJ3/view) is a **hip-overlap reference** only: near trailing thigh occludes far leading thigh at shorts. This sheet depicts the curly-haired runner, **not** the canonical black-spiky-haired Sprite Boy.
+- The [near-leading six-pose sheet](https://drive.google.com/file/d/1kHIR9Lg5R2MCPpcFmj96fHW-zn9W5_Aw/view) is an unapproved inverse candidate. The [mixed A/B sheet](https://drive.google.com/file/d/1tRxbi4nNx94FmKJnIUpmPP8kG_owggQW/view) failed because the generated opposing columns repeated their shorts/hip geometry. Preserve that failure as a regression check.
+- Generate and review near-trailing and near-leading **endpoints independently**, keeping form from the booklet and appearance from the canonical character reference. Then verify a full physical-leg cycle before interpolation. A successful isolated drawing is not human-approved exercise motion.
