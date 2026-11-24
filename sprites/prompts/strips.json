@@ -96,7 +96,7 @@
       "poses": [
         "NEAR FOOT LIFTED: the NEAR (lighter) foot lifted a few inches off the floor with the knee slightly bent; the FAR (darker) foot flat on the floor. Near arm bent and swinging forward, far arm bent and back.",
         "PASSING: both feet close to the floor under the hips, standing nearly upright, near arm back and far arm forward, both arms bent.",
-        "FAR FOOT LIFTED: the FAR (darker) foot lifted a few inches off the floor with the knee slightly bent; the NEAR (lighter) foot planted flat. Far arm bent and forward, near arm bent and back. Clearly different from pose 1: the lifted foot is the darker one.",
+        "FAR FOOT LIFTED: the FAR (darker) foot lifted a few inches off the floor with the knee slightly bent; the NEAR (lighter) foot planted flat. Far arm bent and forward, near arm bent and back. Clearly different from pose 1: the lifted foot is the darker one. DEPTH CONDITIONAL ONLY: if the lifted FAR foot is drawn a little forward on screen-right, the planted NEAR leg may visually trail and must remain in the foreground at the hip/shorts overlap; never force a forward stride, because this run is in place with only a 4-inch lift.",
         "PASSING: both feet close to the floor, nearly upright, near arm forward and far arm back, both arms bent."
       ],
       "learned": [
@@ -122,11 +122,11 @@
     "scissor-jumps-c1": {
       "exercise": "SCISSOR JUMPS",
       "kept": "Batch E open-hands take chosen (2026-11-21): stance A has the light near shoe forward and stance B the dark far shoe forward; jumps clearly airborne. A human form check is still needed.",
-      "layout": "Same scale, wide empty gaps. The two standing poses rest on the same invisible floor line; the two jumping poses are drawn clearly higher, with both feet well above that line.",
+      "layout": "Same scale, wide empty gaps. The two standing poses rest on the same invisible floor line; the two jumping poses show a clear but LOW warm-up hop with both feet visibly off the floor; avoid a sprint stride or ballet leap.",
       "poses": [
-        "STANCE A, on the floor: wide stride, LIGHT (near) leg forward and DARK (far) leg back, DARK (far) arm forward and LIGHT (near) arm back, both arms straight and horizontal at shoulder height, both feet flat on the floor; not a lunge.",
+        "STANCE A, on the floor: modest warm-up scissor split, LIGHT (near) leg forward and DARK (far) leg back, DARK (far) arm forward and LIGHT (near) arm back, both arms straight and horizontal at shoulder height, both feet flat on the floor; not a lunge. DEPTH: the camera-NEAR LIGHT leading thigh extends toward screen-right and must overlap IN FRONT OF the camera-FAR DARK trailing thigh at the hip/shorts seam. Keep two distinct thighs, not a lunge.",
         "JUMP, in the air: jumped straight up, both feet clearly off the floor, legs close together under the hips, knees slightly bent, arms coming down toward the sides as they switch.",
-        "STANCE B, on the floor: the mirror of stance A, DARK (far) leg forward and LIGHT (near) leg back, LIGHT (near) arm forward and DARK (far) arm back, both arms straight and horizontal at shoulder height, both feet flat on the floor; not a lunge.",
+        "STANCE B, on the floor: the opposite physical-leg arrangement from stance A, DARK (far) leg forward and LIGHT (near) leg back, LIGHT (near) arm forward and DARK (far) arm back, both arms straight and horizontal at shoulder height, both feet flat on the floor; modest warm-up scissor split, not a lunge. DEPTH LOCK (critical): facing screen-right, camera-NEAR LIGHT trailing thigh extends toward screen-LEFT yet sits IN FRONT at the viewer-facing hip, clearly covering the camera-FAR DARK leading thigh at the red-shorts/crotch intersection. The screen-RIGHT leading thigh originates from the far hip and is partly hidden behind. Do not put the leading far leg in the foreground. Compare the approved six-pose near-trailing depth reference, Drive ID 10-yl-i3xjLPJulv7tImmCAW4QP_-DJJ3, for overlap only, never copy its curly-haired avatar or running stride.",
         "JUMP, in the air: the same airborne switching pose as pose 2, both feet well above the floor line."
       ],
       "learned": [
@@ -145,7 +145,7 @@
           "the character reference: c4-run-knees-waist-high.png"
         ],
         "problems": [
-          "Stance A and stance B looked almost the same. They are mirror images: in stance A his RIGHT leg and LEFT arm are forward; in stance B his LEFT leg and RIGHT arm are forward. In a strict side view this is hard to see, so draw a three-quarter front view where the forward leg is clearly the one nearer the camera in A and the one farther from the camera in B.",
+          "Stance A and stance B looked almost the same. They are mirror images: in stance A his RIGHT leg and LEFT arm are forward; in stance B his LEFT leg and RIGHT arm are forward. In a strict side view this is hard to see, so draw a three-quarter front view where the forward leg is clearly the one nearer the camera in A and the one farther from the camera in B. At the shorts, stance B must show the near LIGHT trailing thigh IN FRONT of the far DARK leading thigh, the exact opposite foreground/leading relationship from stance A. Do not equate rightmost foot with foreground; compare the archived near-trailing reference.",
           "One stance came out as a lunge. In both stances the front knee is only slightly bent, the back leg is STRAIGHT, the body upright, both arms straight at shoulder height (one forward, one back).",
           "In the two jump poses both feet are clearly off the floor, the legs passing each other under the hips."
         ],
@@ -158,7 +158,7 @@
       },
       "check": [
         "Four poses: STANCE A, JUMP, STANCE B, JUMP",
-        "Stance A: LIGHT near leg and DARK far arm forward. Stance B: DARK far leg and LIGHT near arm forward; the shoes must clearly swap which is in front",
+        "Stance A: LIGHT near leg and DARK far arm forward. Stance B: DARK far leg and LIGHT near arm forward; the shoes must clearly swap which is in front Hip-overlap MUST also swap: in stance A the LIGHT near leading thigh overlaps in front; in stance B the LIGHT near TRAILING thigh overlaps in front while the DARK far leading thigh remains behind at the pelvis. Both stances must have visibly different shorts/crotch geometry; an A/B duplicate fails.",
         "Back leg straight in both stances, no lunge",
         "Both jump poses clearly higher than the stances, both feet off the floor"
       ],
@@ -167,7 +167,7 @@
         "schematic": "REF-scissor-stances.png",
         "schematic_note": "a stick-figure diagram of the four poses seen from the side: which leg and which arm are forward in stance A and in stance B, and both feet off the floor in the jumps. Copy the positions only, never its style, colors or text.",
         "problems": [
-          "Earlier models kept the same light leg forward in both stances. In this side-on view STANCE A has the LIGHT near shoe in front; STANCE B has the DARK far shoe in front. Use shading to make the mirror unmistakable.",
+          "Earlier models kept the same light leg forward in both stances. In this side-on view STANCE A has the LIGHT near shoe in front; STANCE B has the DARK far shoe in front. Use shading to make the mirror unmistakable. Also check the HIP OCCLUSION: in stance B the LIGHT camera-near LEG TRAILS toward screen-left but its thigh overlaps IN FRONT of the DARK far leg leading screen-right. Leading on screen does NOT mean foreground in depth. See docs/FOREGROUND_TRAILING_LEG_RULE.md and the archived six-pose exemplar.",
           "One stance looked like a lunge and an arm drooped. Both stances need a straight back leg and both straight arms horizontal at shoulder height.",
           "The two airborne switch poses must be clearly higher than the standing poses, with both shoes visibly off the floor."
         ],
@@ -795,13 +795,13 @@
       "poses": [
         "NEAR KNEE UP: the NEAR (lighter) knee lifted up to waist height so the thigh is horizontal and the shin hangs down, that foot off the floor; the FAR (darker) leg straight with its foot flat on the floor. Far arm bent and swinging forward, near arm bent and back.",
         "PASSING: both feet close to the floor under the hips, standing nearly upright, near arm back and far arm forward, both arms bent.",
-        "FAR KNEE UP: the FAR (darker) knee lifted up to waist height so the thigh is horizontal and the shin hangs down; the NEAR (lighter) foot planted flat on the floor. Near arm bent and swinging forward, far arm bent and back. This pose must be clearly different from pose 1: the lifted knee is the darker leg.",
+        "FAR KNEE UP: the FAR (darker) knee lifted up to waist height so the thigh is horizontal and the shin hangs down; the NEAR (lighter) foot planted flat on the floor. Near arm bent and swinging forward, far arm bent and back. This pose must be clearly different from pose 1: the lifted knee is the darker leg. DEPTH: if the lifted FAR knee is shown leading toward screen-right while the supporting NEAR leg is farther back, the near trailing/support thigh must overlap IN FRONT at the camera-facing hip, and the raised far thigh must remain behind there. Do not make the far leading knee camera-near just because it is forward on the screen. Maintain waist-high knee lift, not a long running stride.",
         "PASSING: both feet close to the floor, nearly upright, near arm forward and far arm back, both arms bent."
       ],
       "check": [
         "Four poses",
         "The lifted knee reaches waist height (thigh about horizontal), NOT a low step",
-        "The two knee lifts are different legs (near/lighter in pose 1, far/darker in pose 3)",
+        "The two knee lifts are different legs (near/lighter in pose 1, far/darker in pose 3) When the FAR knee is raised forward and the NEAR support leg visually trails, the foreground near thigh must retain the near-over-far hip overlap without changing which physical knee is lifted.",
         "He stays in place: no long stride, upright body, arms bent about 90 degrees"
       ],
       "draft": [
@@ -828,14 +828,14 @@
       "layout": "Same scale, wide empty gaps so the figures never touch. The two crouching poses rest on the same invisible floor line; the two jumping poses are drawn clearly higher, with both feet well above that line.",
       "poses": [
         "CROUCH, NEAR FOOT AHEAD: a half crouch with the knees bent about halfway, the back straight and leaning forward about 45 degrees, the chest up, the head up and looking ahead, the hands resting on the knees with the arms straight, the NEAR foot (his right foot, lighter) one full shoe length ahead of the FAR foot (his left foot, darker), both feet flat on the floor.",
-        "FIRST HOP: in the air after the jump from crouch 1, the body upright and straight, both knees slightly bent, both feet about a hand's width off the floor with the shoes mostly level (toes NOT pointed), the feet already swapped so the FAR foot (his left, darker) is ahead of the near foot, the arms swinging forward and a little up for balance, the elbows slightly bent, the fists relaxed.",
-        "CROUCH, FAR FOOT AHEAD: landed in the half crouch, the back straight and leaning forward about 45 degrees, the chest up, the head up and looking ahead, the hands resting on the knees with the arms straight, the FAR foot (his left, darker) one full shoe length ahead of the NEAR foot (his right, lighter), both feet flat on the floor.",
+        "FIRST HOP: in the air after the jump from crouch 1, the body upright and straight, both knees slightly bent, both feet about a hand's width off the floor with the shoes mostly level (toes NOT pointed), the feet already swapped so the FAR foot (his left, darker) is ahead of the near foot, the arms swinging forward and a little up for balance, the elbows slightly bent, the fists relaxed. DEPTH while feet are swapped: when the FAR darker foot is ahead toward screen-right, the camera-NEAR lighter leg is the rear/trailing leg toward screen-left and stays IN FRONT at any visible hip/shorts overlap; preserve a small athletic hop.",
+        "CROUCH, FAR FOOT AHEAD: landed in the half crouch, the back straight and leaning forward about 45 degrees, the chest up, the head up and looking ahead, the hands resting on the knees with the arms straight, the FAR foot (his left, darker) one full shoe length ahead of the NEAR foot (his right, lighter), both feet flat on the floor. DEPTH LOCK: facing screen-right, the FAR DARK leading thigh reaches toward screen-right but stays BEHIND at the pelvis; the NEAR LIGHT trailing thigh stretches toward screen-left yet overlaps IN FRONT at the viewer-facing hip/shorts seam. Do not let the forward/right foot automatically become the foreground thigh.",
         "SECOND HOP: in the air after the jump from crouch 3, the same hop as the first hop but with the feet swapped back, so the NEAR foot (his right, lighter) is ahead of the far foot in the air: body upright and straight, knees slightly bent, feet a hand's width off the floor with the shoes mostly level, the arms swinging forward and a little up."
       ],
       "check": [
         "Four poses, same boy, same angle",
         "Crouch: knees bent about halfway (a HALF crouch), hands on the knees, arms straight, back as straight as possible",
-        "Pose 1 and pose 3 have DIFFERENT feet ahead (near foot ahead, then far foot ahead)",
+        "Pose 1 and pose 3 have DIFFERENT feet ahead (near foot ahead, then far foot ahead) For FAR-foot-ahead crouch 3 and first hop 2, the near trailing thigh must be FOREGROUND at the shorts, overlapping the far leading thigh. For near-foot-ahead crouch 1 and second hop 4 the near leading thigh remains foreground. Check both configurations, not just toe order.",
         "The two jump poses are upright and clearly higher than the crouches"
       ],
       "draft": [
@@ -862,7 +862,7 @@
         ],
         "problems": [
           "The two hop poses look like ballet: toes pointed straight down, the legs stiff, the arms hanging limp and curved. Make it an athletic hop: both knees slightly bent, the feet only about a hand's width off the floor, the shoes mostly level (toes NOT pointed), and the arms swinging forward and a little up for balance with the elbows slightly bent and the fists relaxed.",
-          "The two crouches do not clearly show the feet swapping. In crouch 1 the NEAR foot (his right, the lighter one) is ahead of the FAR foot (his left, the darker one) by one FULL shoe length, measured toe to toe. In crouch 3 it is the other way round: the FAR foot is one full shoe length ahead of the near foot. Use the schematic (image 3) for exactly where the feet go.",
+          "The two crouches do not clearly show the feet swapping. In crouch 1 the NEAR foot (his right, the lighter one) is ahead of the FAR foot (his left, the darker one) by one FULL shoe length, measured toe to toe. In crouch 3 it is the other way round: the FAR foot is one full shoe length ahead of the near foot. Use the schematic (image 3) for exactly where the feet go. Foreground depth is NOT the same as leading direction: in crouch 3, the near LIGHT leg trails to screen-left but its thigh must overlap IN FRONT of the far DARK rightward-leading thigh at the shorts.",
           "The two hop poses look too similar. They must be different: in pose 2 (the first hop) the feet have ALREADY swapped, so the FAR (left, darker) foot is ahead of the near foot in the air, ready to land that way; in pose 4 (the second hop) the NEAR (right, lighter) foot is ahead of the far foot in the air.",
           "The face has a smirk. Use a calm, focused, friendly face: a small closed smile, the eyes looking straight ahead (not up), the eyebrows level.",
           "The shorts look like tights. Use loose red athletic shorts with a wide leg opening that hang to mid-thigh and clearly stand away from the leg.",
@@ -871,8 +871,8 @@
         "keep": "the boy's look, line weight and colors, four poses in the same order, the same scale, and the two crouches resting on one floor line with the two jump poses clearly higher.",
         "poses": [
           "CROUCH, NEAR FOOT AHEAD: a half crouch with the knees bent about halfway, the back straight and leaning forward about 45 degrees, the chest up, the head up and looking ahead, the hands resting on the knees with the arms straight, the NEAR foot (his right foot, lighter) one full shoe length ahead of the FAR foot (his left foot, darker), both feet flat on the floor.",
-          "FIRST HOP: in the air after the jump from crouch 1, the body upright and straight, both knees slightly bent, both feet about a hand's width off the floor with the shoes mostly level (toes NOT pointed), the feet already swapped so the FAR foot (his left, darker) is ahead of the near foot, the arms swinging forward and a little up for balance, the elbows slightly bent, the fists relaxed.",
-          "CROUCH, FAR FOOT AHEAD: landed in the half crouch, the back straight and leaning forward about 45 degrees, the chest up, the head up and looking ahead, the hands resting on the knees with the arms straight, the FAR foot (his left, darker) one full shoe length ahead of the NEAR foot (his right, lighter), both feet flat on the floor.",
+          "FIRST HOP: in the air after the jump from crouch 1, the body upright and straight, both knees slightly bent, both feet about a hand's width off the floor with the shoes mostly level (toes NOT pointed), the feet already swapped so the FAR foot (his left, darker) is ahead of the near foot, the arms swinging forward and a little up for balance, the elbows slightly bent, the fists relaxed. DEPTH while feet are swapped: when the FAR darker foot is ahead toward screen-right, the camera-NEAR lighter leg is the rear/trailing leg toward screen-left and stays IN FRONT at any visible hip/shorts overlap; preserve a small athletic hop.",
+          "CROUCH, FAR FOOT AHEAD: landed in the half crouch, the back straight and leaning forward about 45 degrees, the chest up, the head up and looking ahead, the hands resting on the knees with the arms straight, the FAR foot (his left, darker) one full shoe length ahead of the NEAR foot (his right, lighter), both feet flat on the floor. DEPTH LOCK: facing screen-right, the FAR DARK leading thigh reaches toward screen-right but stays BEHIND at the pelvis; the NEAR LIGHT trailing thigh stretches toward screen-left yet overlaps IN FRONT at the viewer-facing hip/shorts seam. Do not let the forward/right foot automatically become the foreground thigh.",
           "SECOND HOP: in the air after the jump from crouch 3, the same hop as the first hop but with the feet swapped back, so the NEAR foot (his right, lighter) is ahead of the far foot in the air: body upright and straight, knees slightly bent, feet a hand's width off the floor with the shoes mostly level, the arms swinging forward and a little up."
         ],
         "schematic": "a schematic of WHERE the feet are in the four poses (stick figures, side view). Copy the foot positions only; do NOT copy its drawing style or any of its text."
