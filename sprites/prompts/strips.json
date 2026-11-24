@@ -145,20 +145,17 @@
           "the character reference: c4-run-knees-waist-high.png"
         ],
         "problems": [
-          "Stance A and stance B looked almost the same. They are mirror images: in stance A his RIGHT leg and LEFT arm are forward; in stance B his LEFT leg and RIGHT arm are forward. In a strict side view this is hard to see, so draw a three-quarter front view where the forward leg is clearly the one nearer the camera in A and the one farther from the camera in B. At the shorts, stance B must show the near LIGHT trailing thigh IN FRONT of the far DARK leading thigh, the exact opposite foreground/leading relationship from stance A. Do not equate rightmost foot with foreground; compare the archived near-trailing reference.",
+          "Stance A and stance B looked almost the same. They are mirror images: in stance A his RIGHT leg and LEFT arm are forward; in stance B his LEFT leg and RIGHT arm are forward. Use ONE consistent mild three-quarter SIDE camera facing screen-right, about 30 to 45 degrees toward the viewer, in every figure. In A the near LIGHT leg leads; in B the far DARK leg leads. At the shorts, stance B must show the near LIGHT trailing thigh IN FRONT of the far DARK leading thigh, the exact opposite foreground/leading relationship from stance A. Do not equate rightmost foot with foreground; compare the archived near-trailing reference.",
           "One stance came out as a lunge. In both stances the front knee is only slightly bent, the back leg is STRAIGHT, the body upright, both arms straight at shoulder height (one forward, one back).",
           "In the two jump poses both feet are clearly off the floor, the legs passing each other under the hips."
         ],
         "keep": "the boy's look, line weight and colors, four poses in the same order, the same scale, and the stances resting on one floor line with the jump poses clearly higher.",
-        "rows": [
-          "three-quarter FRONT view, from the front and a little from the left, so that the forward and backward legs and arms can be told apart",
-          "SIDE view facing right with a clearly darker shade on the far arm and far leg"
-        ],
-        "why_rows": "Scissor stances are hard to tell apart from the side, so this asks for two cameras; send me the whole image and I will pick the row that reads best."
+        "rows": null,
+        "why_rows": "Historical: multi-camera rows were an unsuccessful early retake. Use one moderate three-quarter side view; preserve the depth reversal at the shorts across stance A/B."
       },
       "check": [
         "Four poses: STANCE A, JUMP, STANCE B, JUMP",
-        "Stance A: LIGHT near leg and DARK far arm forward. Stance B: DARK far leg and LIGHT near arm forward; the shoes must clearly swap which is in front Hip-overlap MUST also swap: in stance A the LIGHT near leading thigh overlaps in front; in stance B the LIGHT near TRAILING thigh overlaps in front while the DARK far leading thigh remains behind at the pelvis. Both stances must have visibly different shorts/crotch geometry; an A/B duplicate fails.",
+        "Stance A: LIGHT near leg and DARK far arm forward. Stance B: DARK far leg and LIGHT near arm forward; the shoes must clearly swap which is in front. Hip-overlap MUST also swap: in stance A the LIGHT near leading thigh overlaps in front; in stance B the LIGHT near TRAILING thigh overlaps in front while the DARK far leading thigh remains behind at the pelvis. Both stances must have visibly different shorts/crotch geometry; an A/B duplicate fails.",
         "Back leg straight in both stances, no lunge",
         "Both jump poses clearly higher than the stances, both feet off the floor"
       ],
@@ -801,7 +798,7 @@
       "check": [
         "Four poses",
         "The lifted knee reaches waist height (thigh about horizontal), NOT a low step",
-        "The two knee lifts are different legs (near/lighter in pose 1, far/darker in pose 3) When the FAR knee is raised forward and the NEAR support leg visually trails, the foreground near thigh must retain the near-over-far hip overlap without changing which physical knee is lifted.",
+        "The two knee lifts are different legs (near/lighter in pose 1, far/darker in pose 3). When the FAR knee is raised forward and the NEAR support leg visually trails, the foreground near thigh must retain the near-over-far hip overlap without changing which physical knee is lifted.",
         "He stays in place: no long stride, upright body, arms bent about 90 degrees"
       ],
       "draft": [
@@ -835,7 +832,7 @@
       "check": [
         "Four poses, same boy, same angle",
         "Crouch: knees bent about halfway (a HALF crouch), hands on the knees, arms straight, back as straight as possible",
-        "Pose 1 and pose 3 have DIFFERENT feet ahead (near foot ahead, then far foot ahead) For FAR-foot-ahead crouch 3 and first hop 2, the near trailing thigh must be FOREGROUND at the shorts, overlapping the far leading thigh. For near-foot-ahead crouch 1 and second hop 4 the near leading thigh remains foreground. Check both configurations, not just toe order.",
+        "Pose 1 and pose 3 have DIFFERENT feet ahead (near foot ahead, then far foot ahead). For FAR-foot-ahead crouch 3 and first hop 2, the near trailing thigh must be FOREGROUND at the shorts, overlapping the far leading thigh. For near-foot-ahead crouch 1 and second hop 4 the near leading thigh remains foreground. Check both configurations, not just toe order.",
         "The two jump poses are upright and clearly higher than the crouches"
       ],
       "draft": [
