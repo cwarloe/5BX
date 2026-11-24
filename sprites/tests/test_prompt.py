@@ -69,7 +69,7 @@ class PromptTest(unittest.TestCase):
 
         squat = prompt.build(specs["semi-squat-jumps-c4"], boy)
         self.assertIn("DEPTH LOCK", squat)
-        self.assertIn("FOREGROUND", squat)
+        self.assertIn("NEAR LIGHT trailing thigh", squat)
         self.assertIn("FAR DARK leading thigh", squat)
 
         low_run = prompt.build(specs["stationary-run-c1"], boy)
