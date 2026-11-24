@@ -102,3 +102,9 @@ Each zip unpacks inside `sprites/` to put the files back where the kit expects t
 | `2026-11-21_sprite-kit-sheets-charts-4-6.zip` | `sprites/sheets/` | The nine reviewed overnight sheets now wired into `config/strips.json` for charts 4 to 6 (`ov-*.png`; the two back-extension sheets are flipped so the boy faces right) | `1-jniVN3VE17GI4P5tJTwzzJCKld1N_uV` |
 
 Large uploads: Claude can send at most ~3 MB per file to Drive; anything bigger is handed to Charles to drag in, then checked here by file size.
+
+## Reference-only art: accepted running depth depiction (2026-11-24)
+
+| Drive file | Status / permitted use | Drive ID |
+|---|---|---|
+| [`2026-11-24_near-trailing-leg-running-reference-4poses.png`](https://drive.google.com/file/d/1lSzvp-SjsNDOClhmQquGk7tqUAmb1HAh/view) | User-confirmed **foreground-trailing-leg hip occlusion** for a right-facing running figure. Illustrative source/QA reference only; **not** accepted scissor-jump form, canonical character replacement, or shipping art. See [portable rule](sprites/docs/FOREGROUND_TRAILING_LEG_RULE.md). | `1lSzvp-SjsNDOClhmQquGk7tqUAmb1HAh` |
