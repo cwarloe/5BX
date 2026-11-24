@@ -55,5 +55,40 @@ class PromptTest(unittest.TestCase):
             self.assertIn(cue, rendered)
 
 
+    def test_near_trailing_depth_is_conditional_and_both_endpoints_distinct(self):
+        boy, specs = fixture()
+
+        scissors = prompt.remake(specs["scissor-jumps-c1"], boy,
+                                [("boy.png", "character"), ("booklet.png", "booklet"),
+                                 ("diagram.png", "schematic")])
+        self.assertIn("DEPTH LOCK", scissors)
+        self.assertIn("screen-LEFT", scissors)
+        self.assertIn("near TRAILING thigh", scissors)
+        self.assertIn("near leading thigh", scissors)
+        self.assertIn("identical camera angle", scissors.lower())
+        retake = prompt.retake(specs["scissor-jumps-c1"], boy, individual=False)
+        self.assertNotIn("ROW 1:", retake)
+        self.assertIn("ONE consistent mild three-quarter SIDE camera", retake)
+
+        squat = prompt.build(specs["semi-squat-jumps-c4"], boy)
+        self.assertIn("DEPTH LOCK", squat)
+        self.assertIn("NEAR LIGHT trailing thigh", squat)
+        self.assertIn("FAR DARK leading thigh", squat)
+
+        low_run = prompt.build(specs["stationary-run-c1"], boy)
+        high_run = prompt.build(specs["high-knee-run-c4"], boy)
+        self.assertIn("DEPTH CONDITIONAL ONLY", low_run)
+        self.assertIn("4-inch lift", low_run)
+        self.assertIn("DEPTH:", high_run)
+        self.assertIn("Maintain waist-high knee lift", high_run)
+
+        # A blanket rule would corrupt lateral jumps and fixed-leg exercises.
+        for key in ("astride-jumps-c2", "half-knee-bends-c3",
+                    "semi-spread-eagle-jumps-c5", "jack-jumps-c6",
+                    "knee-push-up-c1"):
+            with self.subTest(exercise=key):
+                self.assertNotIn("DEPTH LOCK", prompt.build(specs[key], boy))
+
+
 if __name__ == "__main__":
     unittest.main()

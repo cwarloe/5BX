@@ -86,3 +86,7 @@ This is documentation only. Raw recordings and rejected media still belong in Dr
 ## Approved conditional near-trailing-leg reference (2026-11-24)
 
 Charles approved the near/far **hip-overlap depiction** in a [four-pose running card](https://drive.google.com/file/d/1lSzvp-SjsNDOClhmQquGk7tqUAmb1HAh/view): when the camera-near leg trails to screen-left while the character faces right, that trailing thigh must overlap **in front of** the camera-far leading thigh at the shorts. See [the portable foreground-trailing-leg prompt and QA rule](docs/FOREGROUND_TRAILING_LEG_RULE.md). Apply it conditionally to other exercises/poses with the same depth assignment; this is **not** acceptance of a scissor-jump animation or a new default rule for every frame.
+
+## All-chart foreground-leg audit and research (2026-11-24)
+
+The [exercise-by-exercise depth applicability audit](docs/FOREGROUND_TRAILING_EXERCISE_AUDIT.md) checks all six charts and identifies four reusable affected prompt recipes. Required inverse sagittal foot-switches occur in Chart 1 scissor jumps and Chart 4 semi-squat jumps; low stationary runs (Charts 1–3) and high-knee runs (Charts 4–6) need depth checks **only when the camera-far limb actually leads**. Their source prompts now state this conditional rule. No production sprites or timing changed. The [research index](docs/research/README.md) now points to the user-supplied limb/depth guide, the two read-only animation Repo Scout reports (in one archival source), and the earlier observed failure brief, with implementation/verification caveats.

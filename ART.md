@@ -111,10 +111,10 @@ Large uploads: Claude can send at most ~3 MB per file to Drive; anything bigger 
 
 ## Scissor-jump inverse endpoint experiments (2026-11-24; reference only)
 
-All files below are **unapproved working reference art** in the existing *Sprite Art 5BX Workout* Drive folder. None replaces an entry in the sprite library or constitutes 5BX exercise-form approval.
+All files below remain **unapproved as exercise-form or released art** in the existing *Sprite Art 5BX Workout* Drive folder. On 2026-11-24 Charles accepted the **near-trailing six-pose sheet for depth/silhouette only**; that is not a completed exercise or animation approval. None replaces an entry in the sprite library.
 
 | File | Experiment and disposition | Drive ID |
 |---|---|---|
 | [`2026-11-24_scissor-near-leading_6pose-experiment.png`](https://drive.google.com/file/d/1kHIR9Lg5R2MCPpcFmj96fHW-zn9W5_Aw/view) | Six separate right-facing **near-leg-leading** variations; candidate inverse hip occlusions; not human approved | `1kHIR9Lg5R2MCPpcFmj96fHW-zn9W5_Aw` |
 | [`2026-11-24_scissor-paired-depth_same-overlap-failure.png`](https://drive.google.com/file/d/1tRxbi4nNx94FmKJnIUpmPP8kG_owggQW/view) | Six-pose paired A/B request **failed**: both columns have near-identical hip/shorts topology despite explicit inversion instruction; keep for failure diagnosis | `1tRxbi4nNx94FmKJnIUpmPP8kG_owggQW` |
-| [`2026-11-24_scissor-near-trailing_6pose-experiment.png`](https://drive.google.com/file/d/10-yl-i3xjLPJulv7tImmCAW4QP_-DJJ3/view) | Six separate right-facing **near-leg-trailing** variations using approved running overlap as appearance/geometry reference; candidate only | `10-yl-i3xjLPJulv7tImmCAW4QP_-DJJ3` |
+| [`2026-11-24_scissor-near-trailing_6pose-experiment.png`](https://drive.google.com/file/d/10-yl-i3xjLPJulv7tImmCAW4QP_-DJJ3/view) | Six right-facing **near-leg-trailing** variations. **Charles approved the foreground-trailing hip overlap only** (2026-11-24); form, anatomical leg continuity, avatar replacement and released art remain unapproved | `10-yl-i3xjLPJulv7tImmCAW4QP_-DJJ3` |
