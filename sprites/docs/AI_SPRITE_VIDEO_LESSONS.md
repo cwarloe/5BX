@@ -165,3 +165,30 @@ Model: `gemini-3-pro-image`, 16:9, 1K (1376×768), 4 variations. Cost: 1,218 cre
 - [ ] Contact sheet of every composed pose before the full render
 - [ ] Render to a temp file, full-decode check, then move into place
 - [ ] A person who knows the exercises reviews the final video
+
+---
+
+## Addendum: source-grounded scissor-jump motion and identity (2026-11-24)
+
+Read the full [Chart 1 scissor-jump diagnostic record](SCISSOR_JUMP_DIAGNOSTIC_RECORD.md) before generating more scissor-jump art. It preserves what worked, what failed, evidence grades, source media, and a proposed one-cycle test. The [attached research guide](research/limb-swap-depth-fix-guide.md) is archived for reference, **not** an implemented or verified control pipeline.
+
+### What this round proved
+
+- The four-angle human recording (90.13 s original; four roughly 8.5 s, 720p/60-fps excerpts) is helpful for actual movement reference, but sampled frames omit or overlap feet and neither physical shoe is marked. An anatomical left/right assignment cannot be assumed from the view alone.
+- Six generated cyan-shirt/red-shorts poses broadly preserved the preferred character appearance. They remain **unapproved form candidates**, with inferred/missing foot details and some fringe/outline defects. A reference image can preserve style without enforcing actual movement.
+- The white/blue shoe test improved visual separation **but failed to measure anatomical identity**: the white color was assigned to the *screen-left/rear* shoe **after** generating independent drawings. It could follow a different anatomical foot when the legs change position. The correction is source-grounded persistent IDs, not another screen-position recolor.
+- The nine-second shoe flipbook was only six static drawings at **4 fps**, not continuous motion transfer. The FFmpeg posterized clip preserved source motion without producing Sprite Boy. These are different techniques and must never receive the same QA verdict.
+- No pose estimator or temporal left/right tracking ran in this experiment. Pose-label swaps and depth-order inversions remain **possible but unmeasured** failure layers; do not claim the guide's sample script diagnosed or repaired this MP4.
+- Earlier sequence reviews found repeated same-lead-leg stances and incorrectly ordered extension/tuck/landing poses. Rendered images must pass an ordered right-forward -> left-forward -> right-forward cycle check before animation.
+- Earlier short crossfades sometimes made slideshow playback feel smoother, **but the later 2026-11-21 knee-push-up pilot demonstrated doubled bodies/ghosting and Charles selected no fade**. Treat the older crossfade advice above as historical, not the current setting. Similarly, optical-flow in-betweens caused doubled faces/limbs. Smooth motion remains a separate unapproved experiment.
+- Use the approved cyan tank/red shorts/**blue shoes** character reference. Green-shoe cadet images, ballet-thin legs, changed frontal faces and unrelated generated character poses are rejected identity/form drift, not a reason to alter the canonical character.
+
+### New standard-work proposal (pending quality-gate approval)
+
+1. Prove source-frame visibility and preserve a physical leg marker; a three-quarter, locked-camera take with both feet visible is the next clean capture if current footage fails inspection.
+2. Extract/inspect right and left hip/knee/ankle/toe/heel tracks **before** stylization. Diagnose pose-label continuity separately from camera-relative near/far occlusion and from generated output morphing.
+3. Preserve one motion track, one approved character reference, one camera and one true repetition during a test. Compare source -> tracking -> cartoon poses -> animation stage by stage. Reject ambiguous frames rather than silently correcting them.
+4. Use the existing no-fade one-cycle preview as the animation baseline. Never let a smooth-looking transition override exercise form, leg identity, or named human review.
+5. Record exact input/output IDs, prompt, tool/model, timestamps, reject reason, credit/time when known, and what measurable defect a new rule addresses. Stop repeating prompt variations when the missing control is geometric or temporal.
+
+**Approval boundary:** These are findings and proposed controls, not approval of a new production pipeline, second avatar, final reviewer, source-art restore method, or smooth-tween acceptance target. See [production requirements](../../specs/sprite-production-line/requirements.md).

@@ -121,3 +121,21 @@ the lightweight CI checks renderer syntax without requiring media libraries.
 - **Version control:** keep existing working outputs and build manifests; use reviewed PRs and acceptance evidence for changes.
 
 Next action after approval: write the spec's `design.md`, then `tasks.md`; deliver the integration in small tested commits. No pipeline deletion, paid generation, or deployment is authorized by this documentation plan.
+
+## Proposed upstream motion-identity gate (diagnostic addition, 2026-11-24)
+
+**Status:** Proposed refinement to stages 0, 2, 4 and 6 above; **not implemented or approved**. Evidence and historical lessons: [Chart 1 scissor-jump diagnostic record](SCISSOR_JUMP_DIAGNOSTIC_RECORD.md). Research inventory: [limb-swap/depth guide](research/limb-swap-depth-fix-guide.md).
+
+Before spending generation credits on an exercise with alternating, crossed, or occluded limbs:
+
+| Check | Required evidence before downstream testing | Failure route |
+|---|---|---|
+| Source capture quality | Complete feet, hands, and contacts visible at critical moments; one static camera, usable shutter/contrast. Physically tag one left/right foot when identity is disputed. | Reshoot a short reference, choose a clearer angle, or mark that segment unusable; never infer hidden geometry as verified. |
+| Persistent anatomical IDs | Left/right hip, knee, ankle and foot tracks through one complete exchange, with explicit missing/uncertain frames and known joint index convention. | If source is sound but tracker labels swap, repair the *pose data* temporally and re-inspect; do not recolor generated shoes by screen position. |
+| Depth and occlusion | Correct overlapping near/far outlines relative to the camera, while anatomical left/right labels remain unchanged. | If needed, test depth or per-body-part/3D control separately. Near/far must not be equated with anatomical right/left. |
+| Character transfer | Same master avatar profile and body proportions, correct labeled limbs, no extra/fused limbs or shoe-ID migration. | Stop at image-generator transfer and repair or replace that stage; do not compensate by changing exercise timing. |
+| One-cycle animation | Verified contact/airborne ordering, opposite-leg landing, return to start, no fade/ghost, stable scale, human form review. | Retain clean keyframes as baseline; reject optical-flow ghosts even if nominal FPS is higher. |
+
+**Sequence:** source capture -> pose/identity trace -> depth/occlusion check -> character transfer -> no-fade cycle -> optional smoother animation -> human form approval -> release. Each pass/fail must name the artifact version and layer. The guide's Python example requires pre-extracted COCO-18 JSON and is **not** an MP4 diagnostic or a depth fix; hosted prompt-only tools may not expose the guide's ControlNet settings.
+
+**Change-control note:** The current source-art restore, named form-reviewer, second-avatar, movement-gate thresholds, and smooth-tween adoption decisions remain open. This proposal adds diagnostic evidence to the existing draft plan; it does not resolve those approvals or alter shipped assets.
