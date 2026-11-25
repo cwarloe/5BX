@@ -1,14 +1,36 @@
 """Reel caption filters must not re-interpret punctuation as FFmpeg syntax."""
 
+import ast
+import json
 import os
 import sys
 import tempfile
+import types
 import unittest
 from pathlib import Path
-from unittest import mock
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "kit"))
-import make_demo  # noqa: E402
+
+def isolated_reel_function(work, recorder):
+    """Execute the real function without importing optional Pillow/FFmpeg kit deps.
+
+    The repository's definition/preflight job intentionally has no image
+    packages installed; a caption-only regression must remain dependency-free.
+    """
+    path = Path(__file__).resolve().parents[1] / "kit" / "make_demo.py"
+    tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
+    fn = next(node for node in tree.body if isinstance(node, ast.FunctionDef) and node.name == "build_reel")
+    scope = {
+        "os": os,
+        "sys": sys,
+        "json": json,
+        "tempfile": types.SimpleNamespace(mkdtemp=lambda: str(work)),
+        "HERE": str(path.parent),
+        "ROOT": str(path.parents[1]),
+        "jload": lambda src: json.loads(Path(src).read_text(encoding="utf-8")),
+        "sh": recorder,
+    }
+    exec(compile(ast.Module(body=[fn], type_ignores=[]), str(path), "exec"), scope)
+    return scope["build_reel"]
 
 
 class ReelCaptionTest(unittest.TestCase):
@@ -26,10 +48,8 @@ class ReelCaptionTest(unittest.TestCase):
                 if command and command[-1] == str(output / "reel.part.mp4"):
                     (output / "reel.part.mp4").write_bytes(b"test-reel")
 
-            with mock.patch.object(make_demo, "sh", side_effect=record_only), mock.patch.object(
-                make_demo.tempfile, "mkdtemp", return_value=str(work)
-            ):
-                make_demo.build_reel("fixture-chart-data.json", str(output))
+            build_reel = isolated_reel_function(work, record_only)
+            build_reel("fixture-chart-data.json", str(output))
 
             filters = [command[command.index("-vf") + 1] for command in calls if "-vf" in command]
             self.assertEqual(len(filters), 5)
