@@ -118,3 +118,23 @@ All files below remain **unapproved as exercise-form or released art** in the ex
 | [`2026-11-24_scissor-near-leading_6pose-experiment.png`](https://drive.google.com/file/d/1kHIR9Lg5R2MCPpcFmj96fHW-zn9W5_Aw/view) | Six separate right-facing **near-leg-leading** variations; candidate inverse hip occlusions; not human approved | `1kHIR9Lg5R2MCPpcFmj96fHW-zn9W5_Aw` |
 | [`2026-11-24_scissor-paired-depth_same-overlap-failure.png`](https://drive.google.com/file/d/1tRxbi4nNx94FmKJnIUpmPP8kG_owggQW/view) | Six-pose paired A/B request **failed**: both columns have near-identical hip/shorts topology despite explicit inversion instruction; keep for failure diagnosis | `1tRxbi4nNx94FmKJnIUpmPP8kG_owggQW` |
 | [`2026-11-24_scissor-near-trailing_6pose-experiment.png`](https://drive.google.com/file/d/10-yl-i3xjLPJulv7tImmCAW4QP_-DJJ3/view) | Six right-facing **near-leg-trailing** variations. **Charles approved the foreground-trailing hip overlap only** (2026-11-24); form, anatomical leg continuity, avatar replacement and released art remain unapproved | `10-yl-i3xjLPJulv7tImmCAW4QP_-DJJ3` |
+
+
+## 1959 RCAF film-to-sprite reference test (2026-11-24)
+
+All **10 files** below are verified in the user's existing [Sprite Art 5BX Workout / 2026-11-24 film-to-sprite experiment folder](https://drive.google.com/drive/folders/1_xuq2ZA8rGe1d750EDxP8pcPPg8ejgJO). The 1959 film's original stills already have their own committed reference copy in [`docs/reference/rcaf-1959-stills/`](docs/reference/rcaf-1959-stills/). This new batch is supplementary user-supplied comparison art, two **unapproved** candidate generations, two supplied test videos, and the dated lessons log. Experimental data stays in Drive; do **not** add it to the shipping sprite library or direct-file production restore index merely because it is listed here.
+
+| Asset in Drive | Role | Direct Drive ID |
+|---|---|---|
+| [`reference-existing-sprite-pushup-and-pike-row.webp`](https://drive.google.com/file/d/1qxOM1cRtwtNhM4OMG7s-ltyC5omrxmWx/view) | Previously generated cyan/red push-up and pike row | `1qxOM1cRtwtNhM4OMG7s-ltyC5omrxmWx` |
+| [`reference-1959-forehead-chin-comparison.webp`](https://drive.google.com/file/d/18zROV44S5Lxz1yMmVWqHXn0SoIANh-bY/view) | Historic film compared with an earlier sprite row | `18zROV44S5Lxz1yMmVWqHXn0SoIANh-bY` |
+| [`reference-existing-pike-farside-shading.webp`](https://drive.google.com/file/d/1fiQVgpDgfIZCDlaAWOezqWUvBkDrZ8U5/view) | Existing pike with about 10% darker far-side shading | `1fiQVgpDgfIZCDlaAWOezqWUvBkDrZ8U5` |
+| [`reference-1959-film-montage-forehead-0832.webp`](https://drive.google.com/file/d/1-Lh2Kb8aDa_d0S_4R6rei8_MGjcoUOx6/view) | 1959 RCAF film reference frame montage | `1-Lh2Kb8aDa_d0S_4R6rei8_MGjcoUOx6` |
+| [`reference-1959-film-montage-forehead-0835.webp`](https://drive.google.com/file/d/1YE1C4NJmB9UDfnlv2cFkuFGR5JjmVFwY/view) | Alternate forehead frame montage | `1YE1C4NJmB9UDfnlv2cFkuFGR5JjmVFwY` |
+| [`candidate-forehead-pike-photo-guided-v2.png`](https://drive.google.com/file/d/1-DpynvTovobEC2AMwO-Fhrp4nNAO-P6M/view) | Film-guided individual forehead-pike **candidate**, exact contact unverified | `1-DpynvTovobEC2AMwO-Fhrp4nNAO-P6M` |
+| [`candidate-ninepose-1959-film-to-sprite.png`](https://drive.google.com/file/d/18V_VlUk-iu7tYh6tSFKcj5zVZUdcwtWa/view) | Film-guided nine-pose **candidate**; not approved for animation | `18V_VlUk-iu7tYh6tSFKcj5zVZUdcwtWa` |
+| [`reference-test-transition-closeup-v2.mp4`](https://drive.google.com/file/d/1_6Vea5SP8Ieaw5mjALgh1aPk3uRF_Smb/view) | User-supplied 13.33 s / 24 fps test clip; motion not reviewed here | `1_6Vea5SP8Ieaw5mjALgh1aPk3uRF_Smb` |
+| [`reference-test-transition-stitch.mp4`](https://drive.google.com/file/d/1k0SrnP9RpDbt2wpM_hM-sdKOYuNqdaMI/view) | User-supplied 123.92 s / 24 fps test clip; motion not reviewed here | `1k0SrnP9RpDbt2wpM_hM-sdKOYuNqdaMI` |
+| [`5BX-film-to-sprite-pose-transfer-lessons-2026-11-24.md`](https://drive.google.com/file/d/1LiWokOiRDVpwJ7A6suD0guwcKe2xCeBs/view) | Archived process notes; canonical proposed repo copy at [`sprites/docs/FILM_TO_SPRITE_POSE_TRANSFER_2026-11-24.md`](sprites/docs/FILM_TO_SPRITE_POSE_TRANSFER_2026-11-24.md) | `1LiWokOiRDVpwJ7A6suD0guwcKe2xCeBs` |
+
+The [lesson record](sprites/docs/FILM_TO_SPRITE_POSE_TRANSFER_2026-11-24.md) specifies source-film authority, what worked, failure modes, no-ballet-foot and camera-angle rules, high-detail → posterize → cartoonize as an **untested** comparison, a proposed realistic-posterized avatar A/B test, and required human form review.
