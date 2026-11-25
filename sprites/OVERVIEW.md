@@ -77,6 +77,17 @@ orphan branch, `sprite-boy-demo`, as a store; Cloudflare is not connected to it,
 
 The full chart 1 video is a GitHub release asset (`sprite-boy-videos-2026-11-21`), linked from the page; videos are not in Git.
 
+The November 25 draft Mixer preview was rebuilt locally from all **29
+registered** source sprite strips without changing approved art. Its inventory
+has Charts 1–3 at 6/6, Chart 4 at 4/6, and Charts 5–6 at 5/6; the four
+remaining exercise slots have **no registered strip**, not missing download
+files. The reel now writes FFmpeg `drawtext` captions via temporary UTF-8
+`textfile=` arguments, because colons and commas in a caption can be parsed
+as FFmpeg filter syntax. `tests/test_make_demo_reel.py` guards that
+behavior. The isolated build's 40-second reel and three Chart 4–6 preview
+MP4s (45/45/50 s) were decoded end-to-end successfully. The build was **not**
+deployed; it is a local review artifact.
+
 ### Photographic review panel (prototype; not deployed)
 
 The source page at `kit/demo/page.html` now includes a **Photographic exercise
@@ -98,7 +109,10 @@ Sprite Boy animation and its clothing hue controls:
 See `specs/bright-boy-workbench/` for scope and tests. Quick checks:
 `node --test sprites/tests/test_photo_review_unit.cjs` (dependency-free
 preview logic) and `node --test sprites/tests/test_photo_review.cjs` (full
-Chromium checks when a browser is installed). Current source builds do **not**
+Chromium checks when a browser is installed). The dedicated
+`.github/workflows/mixer-photo-preview-qa.yml` runs the browser suite on a
+GitHub Actions runner and keeps desktop/mobile fixture screenshots as review
+artifacts; a green run is required before release. Current source builds do **not**
 embed the 2026-11-25 photographic cards or videos: use the linked review
 archive or local file picker. Production source art must still be restored for
 `kit/make_demo.py`; source changes do not update the Cloudflare site.

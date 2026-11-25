@@ -24,6 +24,12 @@ Status: **In progress — approved first increment, 2026-11-25**
       numbered cards and four video QA observations, publish a sanitized
       status-only repository index, and label private Drive sources accurately
       without broadening their sharing permissions.
+- [ ] **T7: CI browser visual gate.** Run existing Playwright tests on a
+      GitHub-hosted Chromium runner and capture desktop/mobile fixture
+      screenshots. This is pending until the PR Actions job reports success.
+- [x] **T8: Real-build reel repair.** Rebuild the demo with registered sprites,
+      fix FFmpeg caption escaping, verify a complete reel and chart clips,
+      and record exact unregistered movement gaps.
 
 The 54-card dated archive and the two alpha candidates remain outside Git.
 No task may mark experimental photographic art production-approved.

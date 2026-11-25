@@ -14,7 +14,9 @@ HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.dirname(HERE);
 from recolor import REGIONS
 import build
 
-def jload(p): return json.load(open(p))
+def jload(p):
+    with open(p, encoding="utf-8") as source:
+        return json.load(source)
 def sh(cmd): 
     r = subprocess.run(cmd, capture_output=True, text=True)
     if r.returncode: sys.exit(f"failed: {' '.join(cmd[:8])}...\n{r.stderr[-1200:]}")
@@ -122,7 +124,8 @@ def build_reel(data_path, out):
     """Short highlight video, 720p, each clip captioned. Uses the kit's own preview builds."""
     work = tempfile.mkdtemp(); font = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"; b = os.path.join(HERE, "build.py")
     theme_alt = jload(os.path.join(ROOT, "config", "theme.json")); theme_alt["recolor"].update(shoes=2, shorts=215)
-    json.dump(theme_alt, open(os.path.join(work, "theme_alt.json"), "w"))
+    with open(os.path.join(work, "theme_alt.json"), "w", encoding="utf-8") as theme_file:
+        json.dump(theme_alt, theme_file)
     base = [sys.executable, b, "--data", data_path, "--preview"]
     sh(base + ["--only", "ex1,ex2,ex3,ex4", "--out", os.path.join(work, "a.mp4")]); sh(base + ["--only", "run", "--out", os.path.join(work, "run.mp4")])
     sh(base + ["--only", "jump", "--out", os.path.join(work, "jump.mp4")]); sh(base + ["--only", "ex1", "--theme", os.path.join(work, "theme_alt.json"), "--out", os.path.join(work, "recolor.mp4")])
@@ -133,11 +136,19 @@ def build_reel(data_path, out):
     lst = []
     for i, (n, dur, cap) in enumerate(clips):
         o = os.path.join(work, f"p{i}.mp4")
+        # Exercise captions include punctuation such as ':' and ',' that FFmpeg
+        # misreads as option/filter separators when embedded in drawtext=text.
+        # Use textfile so the exact caption reaches the filter unchanged.
+        caption_file = os.path.join(work, f"caption-{i}.txt")
+        with open(caption_file, "w", encoding="utf-8") as caption_out:
+            caption_out.write(cap)
         sh(["ffmpeg", "-v", "error", "-y", "-t", str(dur), "-i", os.path.join(work, n + ".mp4"), "-f", "lavfi", "-t", str(dur), "-i", "anullsrc=r=44100:cl=stereo",
-            "-vf", f"scale=1280:720,drawtext=fontfile={font}:text='{cap}':fontcolor=white:fontsize=24:borderw=4:bordercolor=0x101820@0.9:x=24:y=h-52",
+            "-vf", f"scale=1280:720,drawtext=fontfile={font}:textfile={caption_file}:fontcolor=white:fontsize=24:borderw=4:bordercolor=0x101820@0.9:x=24:y=h-52",
             "-map", "0:v", "-map", "1:a", "-c:v", "libx264", "-preset", "medium", "-crf", "23", "-profile:v", "main", "-pix_fmt", "yuv420p", "-r", "30",
             "-c:a", "aac", "-b:a", "48k", "-shortest", o]); lst.append(o)
-    open(os.path.join(work, "list.txt"), "w").write("".join(f"file '{p}'\n" for p in lst)); tmp = os.path.join(out, "reel.part.mp4")
+    with open(os.path.join(work, "list.txt"), "w", encoding="utf-8") as list_file:
+        list_file.write("".join(f"file '{p}'\n" for p in lst))
+    tmp = os.path.join(out, "reel.part.mp4")
     sh(["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", os.path.join(work, "list.txt"), "-c", "copy", "-movflags", "+faststart", tmp])
     sh(["ffmpeg", "-v", "error", "-i", tmp, "-f", "null", "-"]); os.replace(tmp, os.path.join(out, "reel.mp4"))
 

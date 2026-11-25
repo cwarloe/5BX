@@ -1,0 +1,39 @@
+name: Workout Mixer photographic preview QA
+
+on:
+  pull_request:
+    paths:
+      - 'sprites/kit/demo/page.html'
+      - 'sprites/tests/test_photo_review*.cjs'
+      - '.github/workflows/mixer-photo-preview-qa.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  photo-preview-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install test dependencies
+        run: npm ci
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Exercise preview logic and responsive browser tests
+        env:
+          MIXER_QA_SCREENSHOT_DIR: artifacts/mixer-qa
+        run: node --test sprites/tests/test_photo_review_unit.cjs sprites/tests/test_photo_review.cjs
+      - name: Preserve desktop and mobile screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mixer-photo-preview-screenshots
+          path: artifacts/mixer-qa
+          if-no-files-found: ignore
+          retention-days: 7

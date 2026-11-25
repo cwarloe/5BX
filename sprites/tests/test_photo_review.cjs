@@ -95,6 +95,12 @@ async function openPage(viewport) {
   await page.locator('#photo-exercise option').first().waitFor();
   return { page, writes };
 }
+async function captureReview(page, fileName) {
+  const folder = process.env.MIXER_QA_SCREENSHOT_DIR;
+  if (!folder) return;
+  fs.mkdirSync(folder, { recursive: true });
+  await page.screenshot({ path: path.join(folder, fileName), fullPage: true });
+}
 
 test('chart inventory and existing Mixer controls remain available', async (t) => {
   if (!browser) return t.skip('Chromium unavailable: ' + browserError);
@@ -108,6 +114,7 @@ test('chart inventory and existing Mixer controls remain available', async (t) =
     assert.equal(await page.locator('#chart option').count(), 2);
     assert.equal(await page.locator('#hues input[type="range"]').count(), 3);
     assert.equal(await page.locator('#presets button').count(), 4);
+    await captureReview(page, 'desktop-workout-mixer.png');
     await page.locator('#play').click();
     assert.equal(await page.locator('#play').textContent(), 'Play');
     assert.deepEqual(writes, []);
@@ -154,6 +161,7 @@ test('video stays in browser, filenames are treated as text, and layout fits a p
     assert.equal(await page.locator('#photo-media-list button').count(), 2);
     assert.equal(await page.locator('#photo-media-list img').count(), 0);
     assert.match(await page.locator('#photo-media-list').textContent(), /<img src=x/);
+    await captureReview(page, 'mobile-photographic-review.png');
     const sizes = await page.evaluate(() => ({
       document: document.documentElement.scrollWidth,
       viewport: document.documentElement.clientWidth,
