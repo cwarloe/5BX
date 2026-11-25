@@ -6,7 +6,7 @@ pose strips at the plan's real pace with a timer, rep count and break cards. Its
 first operational prototype uses a cartoon boy (Chart 1 A+, 11:40 at 1080p),
 which remains available for regression tests and UI controls **only**. New character
 and movement generation should follow the [photographic-avatar direction](docs/PHOTOREALISTIC_AVATAR_DIRECTION_2026-11-25.md);
-experimental photographic assets are not yet registered for production.
+experimental photographic assets are not yet registered for production. For repeatable 35 mm pose-card, motion prompt and QA steps, see the [photographic pilot playbook](docs/PHOTO_VIDEO_PILOT_PLAYBOOK.md).
 
 **Built for change.** Assume the look, the wording, the character, the format and the exercises
 will all change. Each of those is one small file, and a rebuild only redoes what changed.
