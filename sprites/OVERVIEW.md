@@ -77,6 +77,32 @@ orphan branch, `sprite-boy-demo`, as a store; Cloudflare is not connected to it,
 
 The full chart 1 video is a GitHub release asset (`sprite-boy-videos-2026-11-21`), linked from the page; videos are not in Git.
 
+### Photographic review panel (prototype; not deployed)
+
+The source page at `kit/demo/page.html` now includes a **Photographic exercise
+review** section. It is intentionally separate from the original cartoon
+Sprite Boy animation and its clothing hue controls:
+
+1. Pick the chart and exercise; the options come from the generated
+   `data.json` inventory.
+2. Choose local PNG/JPG/WebP stills or MP4/WebM videos. Multiple files selected
+   for the same movement appear as an ordered, clickable media list, so a
+   three- or four-position card can be reviewed without rebuilding the site.
+3. A cutout PNG with true alpha can be shown over the track-color, light-studio,
+   or dark-stage backgrounds. Opaque photos/videos keep their own original
+   scenery. The feedback says which state was detected.
+4. Files are never uploaded; selections persist only for the current browser
+   session. Importing an image does **not** register or approve it as production
+   art, and changing a background does **not** edit the source file.
+
+See `specs/bright-boy-workbench/` for scope and tests. Quick checks:
+`node --test sprites/tests/test_photo_review_unit.cjs` (dependency-free
+preview logic) and `node --test sprites/tests/test_photo_review.cjs` (full
+Chromium checks when a browser is installed). Current source builds do **not**
+embed the 2026-11-25 photographic cards or videos: use the linked review
+archive or local file picker. Production source art must still be restored for
+`kit/make_demo.py`; source changes do not update the Cloudflare site.
+
 ## Motion diagnostics and research (2026-11-24)
 
 The current Chart 1 scissor-jump proof of concept has a [source-grounded diagnostic record](docs/SCISSOR_JUMP_DIAGNOSTIC_RECORD.md) covering original multi-angle video, character transfer, failed anatomical shoe marking, wrong pose order, motion interpolation, confirmed successes, and unresolved tracking/depth questions. Read it before commissioning another scissor-jump take or changing the motion pipeline. The [user-supplied pose/depth research guide](docs/research/limb-swap-depth-fix-guide.md) is preserved with [applicability cautions](docs/research/README.md); sample scripts and parameter values have not been validated against 5BX.

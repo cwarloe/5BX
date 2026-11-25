@@ -63,6 +63,18 @@ figcaption { color: var(--muted); font-size: .92rem; max-width: 62ch; }
 @media (min-width: 880px) { .pair { grid-template-columns: 1fr 1fr; } }
 ul.plain { margin: 0; padding-left: 1.2rem; display: grid; gap: 6px; max-width: 62ch; }
 .warn { border-left: 4px solid var(--accent); padding: 8px 12px; background: var(--surface); border-radius: 0 6px 6px 0; max-width: 62ch; }
+.photo-stage { position: relative; display: grid; place-items: center; aspect-ratio: 16 / 9; min-height: 240px; overflow: hidden; border-radius: 8px; background: #1b2430; }
+.photo-stage[data-scene="track"] { background: linear-gradient(to bottom, #bdd4cf 0%, #a6b894 43%, #587240 44%, #a1b379 60%, #ae543d 61%, #c4664a 100%); }
+.photo-stage[data-scene="studio"] { background: radial-gradient(ellipse at 50% 30%, #fffefa 0%, #f1f1e9 53%, #d4dbde 100%); }
+.photo-stage[data-scene="dark"] { background: radial-gradient(ellipse at 50% 35%, #425b70 0%, #152332 68%, #0c1520 100%); }
+.photo-stage img, .photo-stage video { display: block; max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; border-radius: 0; background: transparent; }
+.photo-stage img[hidden], .photo-stage video[hidden], .photo-stage p[hidden] { display: none; }
+.photo-stage p { max-width: 35ch; text-align: center; padding: 24px; color: #edf4f9; }
+.photo-file { max-width: 100%; font: inherit; }
+.photo-controls { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); }
+.photo-media-list { display: flex; gap: 8px; flex-wrap: wrap; }
+.photo-media-list button { border-radius: 6px; text-align: left; overflow-wrap: anywhere; max-width: 100%; }
+.photo-media-list button[aria-pressed="true"] { background: var(--accent); border-color: transparent; }
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
 </style>
 
@@ -87,6 +99,50 @@ ul.plain { margin: 0; padding-left: 1.2rem; display: grid; gap: 6px; max-width: 
       <figure><video controls playsinline preload="metadata" src="clips/chart4-exercises.mp4" aria-label="Chart 4 exercise previews"></video><figcaption><b>Chart 4.</b> Sit-up toe touch, back extension with arms sideways, wide-hand push-up, run.</figcaption></figure>
       <figure><video controls playsinline preload="metadata" src="clips/chart5-exercises.mp4" aria-label="Chart 5 exercise previews"></video><figcaption><b>Chart 5.</b> Sit-up with a twist, back extension with arms overhead, clap push-up, semi-spread eagle jumps.</figcaption></figure>
       <figure><video controls playsinline preload="metadata" src="clips/chart6-exercises.mp4" aria-label="Chart 6 exercise previews"></video><figcaption><b>Chart 6.</b> Pike sit-up, back extension with a press, chest-slap push-up, jack jumps.</figcaption></figure>
+    </div>
+  </section>
+
+  <section id="photographic-review" aria-labelledby="photo-heading">
+    <h2 id="photo-heading">Photographic exercise review</h2>
+    <p class="note">A separate workspace for our newer middle-school runner tests. These images and videos are experiments, not automatically approved production sprites. Files you select stay on this device and are not uploaded.</p>
+    <div class="photo-controls">
+      <div class="pick"><label for="photo-chart">Chart</label><select id="photo-chart" aria-label="Photographic review chart"></select></div>
+      <div class="pick"><label for="photo-exercise">Exercise</label><select id="photo-exercise" aria-label="Photographic review exercise"></select></div>
+    </div>
+    <div class="viewer">
+      <div style="display:grid; gap:10px; min-width:0">
+        <div class="photo-stage" id="photo-stage" aria-label="Selected photographic test preview">
+          <p id="photo-empty">Choose an image or video for this exercise to preview it here.</p>
+          <img id="photo-image" alt="" hidden>
+          <video id="photo-video" controls playsinline preload="metadata" aria-label="Imported exercise video" hidden></video>
+        </div>
+        <div class="photo-media-list" id="photo-media-list" role="group" aria-label="Imported exercise media"></div>
+        <p class="status" id="photo-status" role="status">Loading exercise inventory…</p>
+      </div>
+      <div class="panel">
+        <div class="pick">
+          <label for="photo-background">Try a background</label>
+          <select id="photo-background">
+            <option value="track">Track colors</option>
+            <option value="studio">Light studio</option>
+            <option value="dark">Dark stage</option>
+          </select>
+          <p class="note">Transparent PNGs show the selected background through the cutout. An ordinary photograph or video retains its original scenery.</p>
+        </div>
+        <div class="pick">
+          <label for="photo-files">Add photos or video for selected exercise</label>
+          <input class="photo-file" id="photo-files" type="file" accept="image/png,image/jpeg,image/webp,video/mp4,video/webm" multiple>
+        </div>
+        <p class="note">You can select several positions at once to inspect them as a complete card set. Switching exercises retains your selections for this browser session only. Nothing is uploaded or saved to the production registry.</p>
+        <div>
+          <h3>Review references</h3>
+          <ul class="plain">
+            <li><a href="https://chatgpt.com/library?file_id=libfile_b79880d8ab7c8191a1877a6e08196532&amp;account_id=personal" target="_blank" rel="noopener noreferrer">54-card numbered photo review</a></li>
+            <li><a href="https://drive.google.com/drive/folders/1YBinWrduQDdMDyCKTI_7FyyxkpFP1Cfo" target="_blank" rel="noopener noreferrer">Original photographic tests and prompts</a></li>
+            <li><a href="https://chatgpt.com/library?file_id=libfile_f390ece729dc81919499c1dc81cc6bc4&amp;account_id=personal" target="_blank" rel="noopener noreferrer">Video QA and Google Flow prompts</a></li>
+          </ul>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -287,5 +343,126 @@ ul.plain { margin: 0; padding-left: 1.2rem; display: grid; gap: 6px; max-width: 
 
     requestAnimationFrame(tick);
   } catch (e) { fail(e); }
+})();
+</script>
+<script>
+/* Browser-local photo/video review: separate from the production sprite pipeline. */
+(async function () {
+  const $ = (id) => document.getElementById(id);
+  const chart = $('photo-chart'), exercise = $('photo-exercise'), input = $('photo-files');
+  const stage = $('photo-stage'), still = $('photo-image'), video = $('photo-video');
+  const empty = $('photo-empty'), mediaList = $('photo-media-list'), status = $('photo-status'), background = $('photo-background');
+  const library = new Map(); // chart:slot -> imported File URL records, never uploaded
+  let selected = null;
+  const key = () => chart.value + ':' + exercise.value;
+  const records = () => library.get(key()) || [];
+  const statusText = (message) => { status.textContent = message; };
+  const description = (item) => {
+    if (!item) return 'No photographic media imported for this movement yet. Choose one or more files above.';
+    if (item.kind === 'video') return item.name + ' · video preview (embedded scenery is not removed). Experimental, not production-approved.';
+    if (item.alpha === true) return item.name + ' · transparent pixels verified. Try another backdrop; edge quality and anatomy still need review.';
+    if (item.alpha === false) return item.name + ' · opaque photograph. The image has its own background; scene changes appear only around it.';
+    if (item.alpha === 'unknown') return item.name + ' · transparency could not be verified; inspect the edges manually.';
+    return item.name + ' · checking transparency…';
+  };
+  const inspectAlpha = (item) => {
+    try {
+      const c = document.createElement('canvas');
+      const scale = Math.min(1, 256 / still.naturalWidth, 256 / still.naturalHeight);
+      c.width = Math.max(1, Math.round(still.naturalWidth * scale));
+      c.height = Math.max(1, Math.round(still.naturalHeight * scale));
+      const x = c.getContext('2d', { willReadFrequently: true });
+      x.drawImage(still, 0, 0, c.width, c.height);
+      const pixels = x.getImageData(0, 0, c.width, c.height).data;
+      item.alpha = false;
+      for (let i = 3; i < pixels.length; i += 4) {
+        if (pixels[i] < 254) { item.alpha = true; break; }
+      }
+    } catch (_) {
+      item.alpha = 'unknown'; // do not claim transparency if checking failed
+    }
+    if (selected === item) statusText(description(item));
+  };
+  const hideMedia = () => {
+    video.pause(); video.removeAttribute('src'); video.load(); video.hidden = true;
+    still.removeAttribute('src'); still.hidden = true; empty.hidden = false;
+  };
+  const display = (item) => {
+    selected = item || null;
+    hideMedia();
+    if (!item) { statusText(description(item)); return; }
+    empty.hidden = true;
+    if (item.kind === 'video') {
+      video.onerror = () => { if (selected === item) statusText('Could not play ' + item.name + '. Check its format and try another file.'); };
+      video.src = item.url; video.hidden = false;
+    }
+    else {
+      still.alt = item.name + ', experimental exercise photo';
+      still.onload = () => inspectAlpha(item);
+      still.onerror = () => { if (selected === item) statusText('Could not decode ' + item.name); };
+      still.src = item.url; still.hidden = false;
+    }
+    statusText(description(item));
+  };
+  const showList = (preferred) => {
+    const items = records();
+    mediaList.replaceChildren();
+    for (const item of items) {
+      const button = document.createElement('button');
+      button.type = 'button'; button.textContent = item.name;
+      button.setAttribute('aria-pressed', String(item === preferred));
+      button.addEventListener('click', () => showList(item));
+      mediaList.append(button);
+    }
+    const active = items.includes(preferred) ? preferred : items[0] || null;
+    [...mediaList.children].forEach((button, i) => button.setAttribute('aria-pressed', String(items[i] === active)));
+    display(active);
+  };
+  const showExercises = (D) => {
+    const C = D.charts[chart.value];
+    exercise.replaceChildren();
+    for (const item of C.all) {
+      const opt = document.createElement('option');
+      opt.value = item.slot; opt.textContent = item.name || item.slot;
+      exercise.append(opt);
+    }
+    showList();
+  };
+  input.addEventListener('change', () => {
+    if (!chart.value || !exercise.value) return;
+    const list = records().slice(), rejected = [];
+    for (const file of input.files || []) {
+      const kind = /^image\/(png|jpeg|webp)$/.test(file.type) ? 'image' : /^video\/(mp4|webm)$/.test(file.type) ? 'video' : null;
+      if (!kind) { rejected.push(file.name); continue; }
+      list.push({ name: file.name, kind, url: URL.createObjectURL(file), alpha: null });
+    }
+    library.set(key(), list);
+    input.value = ''; // selecting the same file again is allowed
+    showList(list[list.length - 1]);
+    if (rejected.length) statusText('Skipped unsupported file(s): ' + rejected.join(', '));
+  });
+  window.addEventListener('beforeunload', () => {
+    for (const items of library.values()) for (const item of items) URL.revokeObjectURL(item.url);
+  });
+  stage.dataset.scene = background.value;
+  background.addEventListener('change', () => { stage.dataset.scene = background.value; statusText(description(selected)); });
+  try {
+    const response = await fetch('data.json');
+    if (!response.ok) throw new Error('exercise inventory unavailable');
+    const D = await response.json();
+    for (const [cid, C] of Object.entries(D.charts)) {
+      const opt = document.createElement('option');
+      opt.value = cid; opt.textContent = C.label;
+      chart.append(opt);
+    }
+    if (!chart.options.length) throw new Error('no charts in inventory');
+    chart.value = D.default_chart || chart.options[0].value;
+    chart.addEventListener('change', () => showExercises(D));
+    exercise.addEventListener('change', () => showList());
+    showExercises(D);
+  } catch (err) {
+    statusText('Exercise inventory unavailable: ' + err.message + '. The source links above still work.');
+    chart.disabled = true; exercise.disabled = true; input.disabled = true;
+  }
 })();
 </script>
