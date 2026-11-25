@@ -3,15 +3,23 @@ import sys
 import unittest
 from pathlib import Path
 
-import numpy as np
-from PIL import Image
+try:
+    import numpy as np
+    from PIL import Image
+except ImportError:  # Dependency-free production preflight intentionally omits image packages.
+    np = None
+    Image = None
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "kit"))
-import posefix  # noqa: E402
+if np is not None and Image is not None:
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "kit"))
+    import posefix  # noqa: E402
+else:
+    posefix = None
 
 BG = (221, 5, 196)   # the textured pink-magenta a generated video came back with
 
 
+@unittest.skipUnless(np is not None and Image is not None, "Pose-fix media tests require Pillow and NumPy")
 class PoseFixTests(unittest.TestCase):
     def test_unmix_removes_background_and_recovers_edge_colour(self):
         a = np.zeros((200, 200, 3), float) + BG
