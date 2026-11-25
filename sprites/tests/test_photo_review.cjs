@@ -167,6 +167,10 @@ test('video stays in browser, filenames are treated as text, and layout fits a p
     const sizes = await page.evaluate(() => ({
       document: document.documentElement.scrollWidth,
       viewport: document.documentElement.clientWidth,
+      overflowing: [...document.querySelectorAll('body *')].filter((node) => node.getBoundingClientRect().right > document.documentElement.clientWidth + 1).slice(0, 8).map((node) => ({
+        element: node.tagName.toLowerCase(), id: node.id, class: node.className?.baseVal ?? node.className,
+        right: Math.round(node.getBoundingClientRect().right),
+      })),
     }));
     assert.ok(sizes.document <= sizes.viewport + 1, JSON.stringify(sizes));
     assert.deepEqual(writes, []);
