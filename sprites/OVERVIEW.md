@@ -103,6 +103,12 @@ embed the 2026-11-25 photographic cards or videos: use the linked review
 archive or local file picker. Production source art must still be restored for
 `kit/make_demo.py`; source changes do not update the Cloudflare site.
 
+The [public 2026-11-25 experimental review index](docs/PHOTO_EXPERIMENT_REVIEW_2026-11-25.md)
+summarizes 54 numbered photo cards and four video QA observations without
+embedding private photos or Drive identifiers. The original dated Drive art
+archive and video QA are owner-only, so their links in the Mixer are explicitly
+labeled **private**; personal ChatGPT Library links are not used as public feeds.
+
 ## Motion diagnostics and research (2026-11-24)
 
 The current Chart 1 scissor-jump proof of concept has a [source-grounded diagnostic record](docs/SCISSOR_JUMP_DIAGNOSTIC_RECORD.md) covering original multi-angle video, character transfer, failed anatomical shoe marking, wrong pose order, motion interpolation, confirmed successes, and unresolved tracking/depth questions. Read it before commissioning another scissor-jump take or changing the motion pipeline. The [user-supplied pose/depth research guide](docs/research/limb-swap-depth-fix-guide.md) is preserved with [applicability cautions](docs/research/README.md); sample scripts and parameter values have not been validated against 5BX.

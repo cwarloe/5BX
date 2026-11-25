@@ -20,6 +20,10 @@ Status: **In progress — approved first increment, 2026-11-25**
 - [x] **T5: Independent review fixes.** Improve blank-stage contrast, guard
       asynchronous image/video status, add per-exercise clear with URL cleanup,
       and identify imported videos accessibly; re-review and regression passes.
+- [x] **T6: Dated review index and private-link hygiene.** Reconcile all 54
+      numbered cards and four video QA observations, publish a sanitized
+      status-only repository index, and label private Drive sources accurately
+      without broadening their sharing permissions.
 
 The 54-card dated archive and the two alpha candidates remain outside Git.
 No task may mark experimental photographic art production-approved.
