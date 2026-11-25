@@ -133,6 +133,9 @@ test('transparent and opaque image imports are distinguished and scoped by movem
     assert.equal(await page.locator('#photo-media-list button').count(), 0);
     await page.locator('#photo-exercise').selectOption('ex1');
     assert.equal(await page.locator('#photo-media-list button').count(), 2);
+    await page.locator('#photo-clear').click();
+    assert.equal(await page.locator('#photo-media-list button').count(), 0);
+    assert.equal(await page.locator('#photo-clear').isDisabled(), true);
     assert.deepEqual(writes, []);
   } finally { await page.close(); }
 });

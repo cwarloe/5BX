@@ -17,6 +17,9 @@ Status: **In progress — approved first increment, 2026-11-25**
       a host with Playwright Chromium before declaring full visual acceptance.
 - [x] **T4: Review handoff.** Run existing tests, document demo/build limits,
       push to draft PR, and leave merge/deploy for Charles's approval.
+- [x] **T5: Independent review fixes.** Improve blank-stage contrast, guard
+      asynchronous image/video status, add per-exercise clear with URL cleanup,
+      and identify imported videos accessibly; re-review and regression passes.
 
 The 54-card dated archive and the two alpha candidates remain outside Git.
 No task may mark experimental photographic art production-approved.

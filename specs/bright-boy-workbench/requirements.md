@@ -1,6 +1,6 @@
 # Requirements: 5BX Workout Mixer photographic preview prototype
 
-Status: **Revised draft — awaiting Charles's approval before implementation**
+Status: **Approved for prototype implementation by Charles, 2026-11-25**
 Owner: Charles
 Last updated: 2026-11-25
 
@@ -119,8 +119,9 @@ and experimental pose cards/videos are separate and are not production assets.
   track-color fringe around the outline. Treat as a *cutout candidate*, not
   a pixel-perfect, approved production sprite.
 
-## Approval request
+## Approval record
 
-Charles: please approve this narrowed first increment before design/tasks and
-repository code edits. The only choices left open are cosmetic labels and
-background colors; they do not affect exercise content or approval status.
+Charles approved this narrowed prototype increment on 2026-11-25. This
+authorized design/tasks, implementation, and draft-PR review. It did **not**
+authorize production art replacement, PR merge, or deployment to the existing
+Cloudflare site; those remain separate review decisions.

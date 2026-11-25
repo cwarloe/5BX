@@ -57,7 +57,7 @@ function harness(fetchFails = false) {
   const ids = [
     'photo-chart', 'photo-exercise', 'photo-files', 'photo-stage',
     'photo-image', 'photo-video', 'photo-empty', 'photo-media-list',
-    'photo-status', 'photo-background',
+    'photo-status', 'photo-background', 'photo-clear',
   ];
   const elements = Object.fromEntries(ids.map((id) => [id, new Element('div', id)]));
   elements['photo-chart'].tag = 'select';
@@ -138,6 +138,12 @@ test('alpha PNG and opaque still are distinguished, and backgrounds switch witho
   const e = h.elements['photo-exercise'];
   e.value = 'ex2'; e.fire('change'); assert.equal(list.children.length, 0);
   e.value = 'ex1'; e.fire('change'); assert.equal(list.children.length, 2);
+  const clear = h.elements['photo-clear'];
+  assert.equal(clear.disabled, false);
+  clear.fire('click');
+  assert.equal(list.children.length, 0);
+  assert.equal(clear.disabled, true);
+  assert.equal(h.revoked.length, 2);
   assert.equal(h.writes, 0);
   h.listeners.beforeunload();
   assert.equal(h.revoked.length, 2);
@@ -150,6 +156,7 @@ test('videos are not recolored or uploaded, and untrusted filenames stay plain t
   f.fire('change');
   assert.equal(h.elements['photo-video'].hidden, false);
   assert.match(h.elements['photo-video'].src, /^blob:/);
+  assert.match(h.elements['photo-video'].getAttribute('aria-label'), /motion\.mp4/);
   assert.match(h.elements['photo-status'].textContent, /embedded scenery is not removed/);
   f.files = [{ name: '<img onerror=alert(1)>.png', type: 'image/png', testAlpha: true }];
   f.fire('change'); await h.ready();
