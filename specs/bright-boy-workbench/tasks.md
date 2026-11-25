@@ -15,7 +15,7 @@ Status: **In progress — approved first increment, 2026-11-25**
       the actual page, phone layout, and legacy controls, but this environment
       has no usable Chromium executable; download is blocked (403). Run it on
       a host with Playwright Chromium before declaring full visual acceptance.
-- [ ] **T4: Review handoff.** Run existing tests, document demo/build limits,
+- [x] **T4: Review handoff.** Run existing tests, document demo/build limits,
       push to draft PR, and leave merge/deploy for Charles's approval.
 
 The 54-card dated archive and the two alpha candidates remain outside Git.
