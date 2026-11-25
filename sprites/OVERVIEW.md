@@ -90,3 +90,10 @@ Charles approved the near/far **hip-overlap depiction** in a [four-pose running 
 ## All-chart foreground-leg audit and research (2026-11-24)
 
 The [exercise-by-exercise depth applicability audit](docs/FOREGROUND_TRAILING_EXERCISE_AUDIT.md) checks all six charts and identifies four reusable affected prompt recipes. Required inverse sagittal foot-switches occur in Chart 1 scissor jumps and Chart 4 semi-squat jumps; low stationary runs (Charts 1–3) and high-knee runs (Charts 4–6) need depth checks **only when the camera-far limb actually leads**. Their source prompts now state this conditional rule. No production sprites or timing changed. The [research index](docs/research/README.md) now points to the user-supplied limb/depth guide, the two read-only animation Repo Scout reports (in one archival source), and the earlier observed failure brief, with implementation/verification caveats.
+
+
+## Historical film-to-sprite pose transfer (2026-11-24)
+
+The [1959 RCAF film-to-sprite experiment and lessons](docs/FILM_TO_SPRITE_POSE_TRANSFER_2026-11-24.md) records source-grounded reference prompts, a failed straight-body instruction for Chart 3's forehead-contact **pike**, promising corrections using film frames for body geometry and Sprite Boy only for appearance, toe-pointing/ballet failures in jumps, exercise-specific camera choices, and what remains unverified. It includes a pass/fail evidence table, prompt template, film timestamps, follow-up comparison plan, and links to the archived experimental images and supplied videos.
+
+**No production changes:** these are reference candidates, not approved exercise form, sprite library replacements, timing changes, or an animation release. Experimental images and videos stay in the [Drive art archive](https://drive.google.com/drive/folders/1_xuq2ZA8rGe1d750EDxP8pcPPg8ejgJO), indexed in [ART.md](../ART.md), under the existing raw-art policy. Recheck every difficult pose against the 5BX booklet and historical film with named human review before making video.
