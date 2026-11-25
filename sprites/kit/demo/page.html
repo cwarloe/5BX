@@ -63,7 +63,7 @@ figcaption { color: var(--muted); font-size: .92rem; max-width: 62ch; }
 @media (min-width: 880px) { .pair { grid-template-columns: 1fr 1fr; } }
 ul.plain { margin: 0; padding-left: 1.2rem; display: grid; gap: 6px; max-width: 62ch; }
 .warn { border-left: 4px solid var(--accent); padding: 8px 12px; background: var(--surface); border-radius: 0 6px 6px 0; max-width: 62ch; }
-.photo-stage { position: relative; display: grid; place-items: center; aspect-ratio: 16 / 9; min-height: 240px; overflow: hidden; border-radius: 8px; background: #1b2430; }
+.photo-stage { position: relative; display: grid; place-items: center; aspect-ratio: 16 / 9; min-width: 0; width: 100%; min-height: clamp(180px, 50vw, 240px); overflow: hidden; border-radius: 8px; background: #1b2430; }
 .photo-stage[data-scene="track"] { background: linear-gradient(to bottom, #bdd4cf 0%, #a6b894 43%, #587240 44%, #a1b379 60%, #ae543d 61%, #c4664a 100%); }
 .photo-stage[data-scene="studio"] { background: radial-gradient(ellipse at 50% 30%, #fffefa 0%, #f1f1e9 53%, #d4dbde 100%); }
 .photo-stage[data-scene="dark"] { background: radial-gradient(ellipse at 50% 35%, #425b70 0%, #152332 68%, #0c1520 100%); }
