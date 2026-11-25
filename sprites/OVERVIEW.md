@@ -1,5 +1,12 @@
 # Sprites: what is here
 
+> **Creative direction, 2026-11-25:** The 5BX exercise-video character is moving
+> to a **photorealistic middle-school runner**. The original cartoon Sprite Boy
+> production pipeline, current Mixer stage, and cyan/red art are **legacy
+> infrastructure**, preserved while photographic movement sets are developed
+> and reviewed. New art should not default back to cartoon. Read
+> [the canonical visual direction and current release gates](docs/PHOTOREALISTIC_AVATAR_DIRECTION_2026-11-25.md).
+
 Two toolkits for the 5BX exercise sprites and stage backgrounds, moved here from `cwarloe/knowledge-harvest`
 so everything 5BX lives in one repo.
 
