@@ -67,7 +67,7 @@ ul.plain { margin: 0; padding-left: 1.2rem; display: grid; gap: 6px; max-width: 
 .photo-stage[data-scene="track"] { background: linear-gradient(to bottom, #bdd4cf 0%, #a6b894 43%, #587240 44%, #a1b379 60%, #ae543d 61%, #c4664a 100%); }
 .photo-stage[data-scene="studio"] { background: radial-gradient(ellipse at 50% 30%, #fffefa 0%, #f1f1e9 53%, #d4dbde 100%); }
 .photo-stage[data-scene="dark"] { background: radial-gradient(ellipse at 50% 35%, #425b70 0%, #152332 68%, #0c1520 100%); }
-.photo-stage img, .photo-stage video { display: block; max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; border-radius: 0; background: transparent; }
+.photo-stage img, .photo-stage video { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: contain; border-radius: 0; background: transparent; }
 .photo-stage img[hidden], .photo-stage video[hidden], .photo-stage p[hidden] { display: none; }
 .photo-stage p { max-width: 35ch; text-align: center; padding: 24px; color: #edf4f9; }
 .photo-file { max-width: 100%; font: inherit; }
