@@ -37,13 +37,17 @@ and experimental pose cards/videos are separate and are not production assets.
 2. It SHALL support browser-local preview of selected PNG/JPG/WebP images and
    MP4/WebM videos, without uploading or altering the imported files. Images
    remain visible at full aspect ratio; videos retain native pause/scrub.
-3. The panel SHALL expose a review index and source links for the numbered
+3. Its exercise inventory SHALL show the movements by chart/exercise and let
+   Charles inspect the current stills, complete multi-pose cards, and videos
+   where they exist. Missing media SHALL say **not yet available**, not imply
+   that all movements have already been generated or verified.
+4. The panel SHALL expose a review index and source links for the numbered
    photographic cards and video QA, as available. A link to private Drive
    content is not necessarily an embeddable media URL.
-4. An image/video SHALL never be labeled approved solely because it was opened
+5. An image/video SHALL never be labeled approved solely because it was opened
    in the viewer. Where the catalog has diagnostic or rejected takes, the
    text SHALL reflect that status.
-5. When no local media is chosen, the panel SHALL offer a clear import action
+6. When no local media is chosen, the panel SHALL offer a clear import action
    and review-index links—not a broken or fabricated thumbnail.
 
 ### R3. Test a genuinely transparent photographic sprite
