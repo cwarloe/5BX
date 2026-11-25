@@ -92,7 +92,9 @@ async function openPage(viewport) {
     else route.abort();
   });
   await page.goto(base);
-  await page.locator('#photo-exercise option').first().waitFor();
+  // Native <option> elements exist in the DOM but are not considered "visible"
+  // by Playwright until the select popup is open.
+  await page.locator('#photo-exercise option').first().waitFor({ state: 'attached' });
   return { page, writes };
 }
 async function captureReview(page, fileName) {
