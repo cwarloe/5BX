@@ -44,7 +44,7 @@ input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--link); }
 .hue span.sw { width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--ink); }
 input[type="range"] { width: 100%; height: 28px; accent-color: var(--link); }
 .status { color: var(--muted); font-size: .9rem; min-height: 1.3em; }
-.pick { display: grid; gap: 6px; max-width: 520px; }
+.pick { display: grid; gap: 6px; min-width: 0; max-width: min(520px, 100%); }
 .pick label { font-family: var(--font-display); text-transform: uppercase; letter-spacing: .06em; font-size: .85rem; color: var(--muted); }
 select { font: 500 1rem var(--font-body); color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; min-height: 44px; width: 100%; }
 select:focus-visible { outline: 3px solid var(--link); outline-offset: 2px; }
@@ -75,6 +75,7 @@ ul.plain { margin: 0; padding-left: 1.2rem; display: grid; gap: 6px; max-width: 
 .photo-media-list { display: flex; gap: 8px; flex-wrap: wrap; }
 .photo-media-list button { border-radius: 6px; text-align: left; overflow-wrap: anywhere; max-width: 100%; }
 .photo-media-list button[aria-pressed="true"] { background: var(--accent); border-color: transparent; }
+.panel > button { max-width: 100%; white-space: normal; overflow-wrap: anywhere; }
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
 </style>
 
