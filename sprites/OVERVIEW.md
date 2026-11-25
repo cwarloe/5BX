@@ -1,5 +1,12 @@
 # Sprites: what is here
 
+> **Creative direction, 2026-11-25:** The 5BX exercise-video character is moving
+> to a **photorealistic middle-school runner**. The original cartoon Sprite Boy
+> production pipeline, current Mixer stage, and cyan/red art are **legacy
+> infrastructure**, preserved while photographic movement sets are developed
+> and reviewed. New art should not default back to cartoon. Read
+> [the canonical visual direction and current release gates](docs/PHOTOREALISTIC_AVATAR_DIRECTION_2026-11-25.md).
+
 Two toolkits for the 5BX exercise sprites and stage backgrounds, moved here from `cwarloe/knowledge-harvest`
 so everything 5BX lives in one repo.
 
@@ -76,6 +83,52 @@ orphan branch, `sprite-boy-demo`, as a store; Cloudflare is not connected to it,
    57 MB per refresh) and push it, so the branch matches what is live.
 
 The full chart 1 video is a GitHub release asset (`sprite-boy-videos-2026-11-21`), linked from the page; videos are not in Git.
+
+The November 25 draft Mixer preview was rebuilt locally from all **29
+registered** source sprite strips without changing approved art. Its inventory
+has Charts 1–3 at 6/6, Chart 4 at 4/6, and Charts 5–6 at 5/6; the four
+remaining exercise slots have **no registered strip**, not missing download
+files. The reel now writes FFmpeg `drawtext` captions via temporary UTF-8
+`textfile=` arguments, because colons and commas in a caption can be parsed
+as FFmpeg filter syntax. `tests/test_make_demo_reel.py` guards that
+behavior. The isolated build's 40-second reel and three Chart 4–6 preview
+MP4s (45/45/50 s) were decoded end-to-end successfully. The build was **not**
+deployed; it is a local review artifact.
+
+### Photographic review panel (prototype; not deployed)
+
+The source page at `kit/demo/page.html` now includes a **Photographic exercise
+review** section. It is intentionally separate from the original cartoon
+Sprite Boy animation and its clothing hue controls:
+
+1. Pick the chart and exercise; the options come from the generated
+   `data.json` inventory.
+2. Choose local PNG/JPG/WebP stills or MP4/WebM videos. Multiple files selected
+   for the same movement appear as an ordered, clickable media list, so a
+   three- or four-position card can be reviewed without rebuilding the site.
+3. A cutout PNG with true alpha can be shown over the track-color, light-studio,
+   or dark-stage backgrounds. Opaque photos/videos keep their own original
+   scenery. The feedback says which state was detected.
+4. Files are never uploaded; selections persist only for the current browser
+   session. Importing an image does **not** register or approve it as production
+   art, and changing a background does **not** edit the source file.
+
+See `specs/bright-boy-workbench/` for scope and tests. Quick checks:
+`node --test sprites/tests/test_photo_review_unit.cjs` (dependency-free
+preview logic) and `node --test sprites/tests/test_photo_review.cjs` (full
+Chromium checks when a browser is installed). The dedicated
+`.github/workflows/mixer-photo-preview-qa.yml` runs the browser suite on a
+GitHub Actions runner and keeps desktop/mobile fixture screenshots as review
+artifacts; a green run is required before release. Current source builds do **not**
+embed the 2026-11-25 photographic cards or videos: use the linked review
+archive or local file picker. Production source art must still be restored for
+`kit/make_demo.py`; source changes do not update the Cloudflare site.
+
+The [public 2026-11-25 experimental review index](docs/PHOTO_EXPERIMENT_REVIEW_2026-11-25.md)
+summarizes 54 numbered photo cards and four video QA observations without
+embedding private photos or Drive identifiers. The original dated Drive art
+archive and video QA are owner-only, so their links in the Mixer are explicitly
+labeled **private**; personal ChatGPT Library links are not used as public feeds.
 
 ## Motion diagnostics and research (2026-11-24)
 
