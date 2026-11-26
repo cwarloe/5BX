@@ -29,3 +29,14 @@ VIDEO PROMPT READY FOR GOOGLE FLOW (single START frame only, do not attach all f
 Generate one continuous 6-second 35mm documentary PHOTO VIDEO from the attached SINGLE image, which is the exact starting frame. Keep the SAME real-looking 13-year-old middle-school boy, his pale skin, messy short dark brown hair, natural soft undeveloped arms and shoulders, blue sleeveless athletic tank, charcoal loose running shorts, dark socks, gray/yellow sneakers and black wristband. Keep the same red school track, green field, tree line, lighting, and fully locked 90-degree right-facing side camera. One strict KNEELING PUSH-UP, not a toe push-up: 0–1 sec hold UP with both elbows extended; 1–3 sec bend BOTH elbows together and lower chest and shoulders naturally until near the track while maintaining a straight shoulder–hip–knee line; 3–6 sec smoothly push back UP, finish with posture identical to opening frame. BOTH kneecaps and BOTH palms remain on the SAME exact track marks for the whole shot. Feet remain bent behind him with shoes elevated, not planted on toes. One continuous exercise without reversing horizontal direction, cutting, cloning arms, growing muscles, changing the boy's age, changing outfits, drifting background, jumping, dissolving between static poses, text, voices or music. Smooth anatomically achievable motion, no unnatural 99th percentile flexibility.
 
 Status: 09 photo-card candidate — READY FOR NEXT FLOW TEST / HUMAN REVIEW.
+
+
+## In-Flow identity transfer: newly verified procedure (video #10 in progress)
+
+1. Open the successful sit-up video 08 in Flow; seek ~2.10 seconds, when the boy's face and outfit are clearly visible.
+2. Select **Save frame** in the video player. Flow creates a native image asset in the same project.
+3. Edit this saved still using Nano Banana 2.1 to change **only the posture** to a true kneeling push-up UP position. Preserve the blue tank, charcoal shorts, hair, face, normal youth build, shoes, track and camera. A native edited still was successfully generated (Flow stated 0 credits).
+4. In the project chat, **Add ingredient → image**, choose the edited native asset, and verify that the attachment thumbnail visibly shows the boy in the kneeling-UP pose.
+5. Ask for one Omni 1.2 Flash 6-second UP→DOWN→UP push-up video. Flow quoted 18 credits; a one-time approval was given. **Video #10 render in progress; movement and identity not yet QA-approved.**
+
+**Critical lesson:** Flow's agent cannot turn a Google Drive URL pasted in chat into an actual attached frame, and the cloud browser's file picker could not access our local/Drive asset. Saving a frame from a video *inside Flow* and transforming that native image bypasses the transfer barrier. Keep the newer four-frame external card separately as pose QA, not as the rendered video's source. 
