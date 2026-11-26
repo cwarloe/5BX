@@ -1,4 +1,6 @@
-# 5BX photorealistic Chart 1 parallel test batch
+# 5BX photorealistic Charts 1–2 parallel test batch
+
+**Mobile review starts here:** [`MOBILE_REVIEW_INDEX.md`](MOBILE_REVIEW_INDEX.md) for two direct Google Drive contact sheets, tests 15–25 and Flow video 20. Technical inventories: [`REVIEW_INVENTORY.md`](REVIEW_INVENTORY.md) for Chart 1, [`CHART2_PILOT_INVENTORY.md`](CHART2_PILOT_INVENTORY.md) for Chart 2. The independent checks and [color-marker pose-control playbook](COLOR_MARKER_POSE_CONTROL_PLAYBOOK.md) record both successes and failed experiments.
 
 **Owner instruction:** Generate/evaluate autonomously; bring back only decisions requiring Charles's human judgment. This batch is experimental; no asset is publicly approved merely because image generation succeeded.
 
@@ -30,6 +32,10 @@
 3. **Identity:** Check all frames against master face, apparent age, hair, softness, proportions and same outfit/color. Note any subtle drift separately from mechanism errors.
 4. **Photographic clarity:** Detail of face, hair, cloth, shoe; real textures; stable horizon; entire figure visible. The wider static camera is intentional for running/jump; do not mark it alone as a defect.
 5. **Video, if present:** True motion rather than crossfade, start/end pose registration, no loop seam, camera lock, no ghosting, no clothes/person change; require exercise form separately from smooth animation.
+
+## Follow-on Chart 2 tests
+
+IDs **21–25** cover (in production numbering) back extension, astride jumps, full sit-up, standard push-up, and the one-press toe touch. Each exercise's current preferred image is **conditional/provisional still only**. Separate exact prompts and QA are archived in `chart2_ex3/`, `chart2_astride/`, `chart2_ex2/`, `chart2_ex4/`, and `chart2_ex1/`. `CHART2_INDEPENDENT_QA.md` provides a second skeptical check against original booklet movement; among the hardest residuals are far-elbow/leg occlusion in strict side views, an invisible extra bounce, and arm height during astride jumps. All five retain static camera and same blue/charcoal identity; no Chart 2 video has yet been produced.
 
 ## Record per experiment
 
