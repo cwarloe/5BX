@@ -374,7 +374,27 @@ def _validate_request(request):
         clean_assets.append({"role": role, "locator": locator, "sha256": actual or expected,
                              "verification": "rehashed_from_local_bytes" if actual else "declared_unverified"})
     source_preflight = None
-    if request["exercise_id"] == "chart1-scissor-jump":
+    entry = request.get("source_preflight")
+    if isinstance(entry, dict) and entry.get("authority") == "V9_DIRECT_A_OR_C_OUTPAINT_IMAGE_EDIT":
+        # A new, zero-credit still-image experiment. Its *input* is a directly
+        # authenticated V7 A or C PNG. A generated outpaint is never promoted
+        # into a V7/V8 motion input or an accepted identity master here.
+        from .preflight_v9_outpaint import verify_source, OutpaintPreflightError, IMAGE_EDIT_SETTINGS
+        if request["exercise_id"] != "chart1-scissor-jump" or set(entry) != {
+                "authority", "source_png", "source_pose"}:
+            raise ExperimentError("V9 outpaint requires Chart 1 scissor and exact source_png/source_pose fields")
+        try:
+            source_preflight = verify_source(spec, entry["source_png"], source_pose=entry["source_pose"])
+        except (OutpaintPreflightError, OSError, ValueError, TypeError) as exc:
+            raise ExperimentError(f"V9 source outpaint preflight failed: {exc}") from exc
+        if (len(clean_assets) != 1 or clean_assets[0]["role"] != "source-photo"
+                or clean_assets[0]["verification"] != "rehashed_from_local_bytes"
+                or clean_assets[0]["sha256"] != source_preflight["source_png_sha256"]):
+            raise ExperimentError("V9 requires exactly one locally rehashed original A or C source-photo PNG")
+        if (request["provider"] != "Google Flow" or request["model"] != "Nano Banana 2.1"
+                or request["settings"] != IMAGE_EDIT_SETTINGS or Decimal(estimate) != 0):
+            raise ExperimentError("V9 requires the exact observed Nano Banana 2.1 image-edit settings, one requested output and live zero-credit quote")
+    elif request["exercise_id"] == "chart1-scissor-jump":
         # For V6/V7 diagnostics, an unbound JSON spec or
         # unverified remote image is not adequate to spend provider credits.
         # This is a content check, not authorization or an exercise approval.

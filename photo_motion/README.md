@@ -167,6 +167,11 @@ The separately versioned [V8 Frames-to-Video endpoint pilot](V8_FRAMES_SEGMENTS.
 binds two 3-second segment requests to the same V7-authenticated exact A/C
 source bytes without weakening the six-second, two-flight V7 cycle contract.
 
+The distinct [V9 zero-credit image-outpaint pilot](V9_OUTPAINT_SOURCE.md)
+authenticates only an **original A or C photographic PNG** before a single
+experimental Flow image edit. Its generated stills are unreviewed derived
+images, not verified V7/V8 motion sources or approved exercise videos.
+
 The first actual-video engineering smoke run is documented in [`diagnostics/video10-kneeling-pushup-2026-11-26.md`](diagnostics/video10-kneeling-pushup-2026-11-26.md). It checked the original blue-shirt Flow video 10 and found a contact/loop registration issue worth measuring before any approval. The raw private MP4 and extracted frames are not committed here.
 
 ## Additional real-video diagnostics
