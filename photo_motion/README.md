@@ -13,6 +13,13 @@ The tool takes a stricter approach to reproducibility:
 
 The JSON contracts and CLI are development controls, **not a second Kanban board, traveler or approval database**. The process advisor's existing review records remain the status authority.
 
+**Photographic player-media admission:** the read-only
+[`player_media_gate.py`](PLAYER_MEDIA_ADMISSION.md) cross-checks a proposed
+private MP4's exact bytes, metadata, active-player slot timing and canonical
+QA `DONE` evidence. It **never** authenticates an owner from static JSON,
+emits a nonempty playback registry or authorizes release. The six-second
+scissor pilot cannot silently fit a five-second runtime slot.
+
 **Agent work/owner handoff is now executable:** read the repository's
 [`AGENTS.md`](../AGENTS.md), maintain a `5bx-production` comment inside the
 **existing detailed photographic QA note**, and run
