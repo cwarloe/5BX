@@ -95,7 +95,7 @@ class V6PreflightTests(unittest.TestCase):
             preflight_v6.verify(self.spec, self.source, self.prepared)
 
     def test_paid_run_reservation_requires_exact_local_start_frame_binding(self):
-        experiments.initialize(self.ledger, provider="Google Flow", credit_limit="200")
+        experiments.initialize(self.ledger, provider="Google Flow", credit_limit="200", opening_spent_credits="0")
         req = self.request()
         without = copy.deepcopy(req)
         without.pop("source_preflight")

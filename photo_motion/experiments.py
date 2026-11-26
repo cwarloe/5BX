@@ -141,8 +141,16 @@ def _locked_store(folder):
             fcntl.flock(lock_file, fcntl.LOCK_UN)
 
 
-def initialize(folder, *, provider, credit_limit):
-    """Create one immutable provider-specific cap. Never silently raise it."""
+def initialize(folder, *, provider, credit_limit, opening_spent_credits=None,
+               opening_evidence_path=None, opening_run_ids=None):
+    """Create one immutable provider-specific cap with explicit continuity.
+
+    A missing ledger is *not* evidence of zero provider charges. Every fresh
+    store requires an explicit opening amount. A positive amount represents an
+    operator-reconciled debit from prior observed spending, not a forged run
+    receipt; it is linked to an existing, rehashed evidence document and prior
+    run fingerprints so those attempts cannot be reserved twice.
+    """
     provider = _require_text(provider, "provider")
     limit = _credit(credit_limit, "credit_limit")
     with _locked_store(folder) as store:
@@ -151,10 +159,39 @@ def initialize(folder, *, provider, credit_limit):
             policy = _policy(store)
             if policy.get("provider") != provider or policy.get("credit_limit") != limit:
                 raise ExperimentError("existing immutable budget policy differs; explicit authorization is required to change it")
+            if (opening_spent_credits is not None and
+                    _credit(opening_spent_credits, "opening_spent_credits") != policy["opening_spent_credits"]):
+                raise ExperimentError("opening spend differs from the immutable budget policy")
             return policy
+        if opening_spent_credits is None:
+            raise ExperimentError("new ledger requires explicit opening_spent_credits; missing records do not prove zero prior charges")
+        opening = _credit(opening_spent_credits, "opening_spent_credits")
+        prior_ids = opening_run_ids if opening_run_ids is not None else []
+        if not isinstance(prior_ids, list):
+            raise ExperimentError("opening_run_ids must be a list")
+        for run_id in prior_ids:
+            _require_digest(run_id, "opening_run_ids entry")
+        if len(set(prior_ids)) != len(prior_ids):
+            raise ExperimentError("opening_run_ids must not contain duplicates")
+        provenance = None
+        if Decimal(opening) > 0:
+            if not opening_evidence_path or not prior_ids:
+                raise ExperimentError("positive opening spend requires evidence file and prior run IDs")
+            evidence = Path(opening_evidence_path).expanduser().resolve()
+            if not evidence.is_file():
+                raise ExperimentError(f"opening spend evidence unavailable: {evidence}")
+            provenance = {
+                "classification": "operator_reconciled_prior_spend_not_native_receipts",
+                "evidence_reference": str(evidence),
+                "evidence_sha256": _sha_file(evidence),
+                "prior_run_ids": sorted(prior_ids),
+            }
+        elif opening_evidence_path is not None or prior_ids:
+            raise ExperimentError("zero opening spend must not claim prior debit evidence or run IDs")
         policy = {"schema_version": SCHEMA_VERSION, "provider": provider,
                   "credit_limit": limit, "created_at_utc": _now(),
-                  "meaning": "Per-provider total actual charges plus pending reservations, not transferable between providers"}
+                  "opening_spent_credits": opening, "opening_provenance": provenance,
+                  "meaning": "Per-provider prior reconciled debit plus native actual charges plus pending reservations; not transferable between providers"}
         _create_only(path, policy)
         return policy
 
@@ -165,6 +202,26 @@ def _policy(store):
         raise ExperimentError("unknown ledger schema version")
     _require_text(policy.get("provider"), "policy.provider")
     _credit(policy.get("credit_limit"), "policy.credit_limit")
+    # Existing stores predate the continuity fields; their native intents and
+    # charge receipts remain authoritative and are never reclassified.
+    opening = _credit(policy.get("opening_spent_credits", "0"), "policy.opening_spent_credits")
+    provenance = policy.get("opening_provenance")
+    if Decimal(opening) > 0:
+        if not isinstance(provenance, dict) or set(provenance) != {
+                "classification", "evidence_reference", "evidence_sha256", "prior_run_ids"}:
+            raise ExperimentError("positive opening debit has no valid immutable provenance")
+        if provenance["classification"] != "operator_reconciled_prior_spend_not_native_receipts":
+            raise ExperimentError("unknown opening debit classification")
+        _require_text(provenance["evidence_reference"], "opening_provenance.evidence_reference")
+        _require_digest(provenance["evidence_sha256"], "opening_provenance.evidence_sha256")
+        run_ids = provenance["prior_run_ids"]
+        if not isinstance(run_ids, list) or not run_ids or run_ids != sorted(set(run_ids)):
+            raise ExperimentError("opening debit requires distinct sorted prior run IDs")
+        for run_id in run_ids:
+            _require_digest(run_id, "opening_provenance.prior_run_id")
+    elif provenance is not None:
+        raise ExperimentError("zero opening debit cannot claim prior charge provenance")
+    policy = {**policy, "opening_spent_credits": opening, "opening_provenance": provenance}
     return policy
 
 
@@ -293,10 +350,14 @@ def _check_intent_record(intent, run_id):
 
 def _snapshot(store):
     policy = _policy(store)
-    committed = Decimal(0)
+    opening = Decimal(policy["opening_spent_credits"])
+    native_charges = Decimal(0)
     reserved = Decimal(0)
     planned = list((store / "intents").glob("*.json")) if (store / "intents").exists() else []
+    prior_run_ids = set((policy["opening_provenance"] or {}).get("prior_run_ids", []))
     for path in planned:
+        if path.stem in prior_run_ids:
+            raise ExperimentError(f"prior opening-debit run is also in native intents: {path.stem}; possible double count")
         intent = _read(path)
         _check_intent_record(intent, path.stem)
         outcome_path = store / "charges" / f"{path.stem}.json"
@@ -306,16 +367,20 @@ def _snapshot(store):
                 raise ExperimentError(f"charge receipt mismatches intent {path.stem}")
             if receipt.get("release_status") != HOLD or receipt.get("schema_version") != SCHEMA_VERSION:
                 raise ExperimentError(f"invalid immutable charge receipt {path.stem}")
-            committed += Decimal(_credit(receipt.get("actual_credits"), "actual_credits"))
+            native_charges += Decimal(_credit(receipt.get("actual_credits"), "actual_credits"))
         else:
             reserved += Decimal(_credit(intent.get("estimated_credits"), "estimated_credits"))
     limit = Decimal(_credit(policy["credit_limit"], "credit_limit"))
     orphans = {path.stem for path in (store / "charges").glob("*.json")} - {path.stem for path in planned} if (store / "charges").exists() else set()
     if orphans:
         raise ExperimentError(f"charge receipt without a known intent: {sorted(orphans)}")
+    committed = opening + native_charges
     return {"provider": policy["provider"], "credit_limit": format(limit, "f"),
             "actual_credits": format(committed, "f"), "pending_reserved_credits": format(reserved, "f"),
             "available_credits": format(limit - committed - reserved, "f"),
+            "opening_spent_credits": format(opening, "f"),
+            "native_receipts_actual_credits": format(native_charges, "f"),
+            "opening_reconciled_attempts": len(prior_run_ids),
             "attempts": len(planned), "unsettled_attempts": sum(not (store / "charges" / f"{p.stem}.json").exists() for p in planned)}
 
 
@@ -334,6 +399,8 @@ def reserve(folder, request):
         policy = _policy(store)
         if policy["provider"] != data["provider"]:
             raise ExperimentError("provider differs from budget policy; credits are not fungible")
+        if run_id in (policy["opening_provenance"] or {}).get("prior_run_ids", []):
+            raise ExperimentError("run already accounted for by opening prior-spend debit; never reserve it again")
         target = store / "intents" / f"{run_id}.json"
         if target.exists():
             original = _check_intent_record(_read(target), run_id)
@@ -422,6 +489,9 @@ def _main(argv=None):
     init.add_argument("--store", required=True)
     init.add_argument("--provider", required=True)
     init.add_argument("--credit-limit", required=True)
+    init.add_argument("--opening-spent-credits", help="REQUIRED for a fresh store: explicit zero or prior documented debits")
+    init.add_argument("--opening-evidence", help="Existing evidence document; rehashed for a positive prior debit")
+    init.add_argument("--opening-run-id", action="append", help="Prior immutable run fingerprint for an opening debit; repeat as needed")
     plan = actions.add_parser("reserve", help="Record exact submitted prompt/sources and reserve estimated credits")
     plan.add_argument("--store", required=True)
     plan.add_argument("--request", required=True, help="Private request JSON, see EXPERIMENTS.md")
@@ -442,7 +512,10 @@ def _main(argv=None):
     args = parser.parse_args(argv)
     try:
         if args.command == "init":
-            result = initialize(args.store, provider=args.provider, credit_limit=args.credit_limit)
+            result = initialize(args.store, provider=args.provider, credit_limit=args.credit_limit,
+                                opening_spent_credits=args.opening_spent_credits,
+                                opening_evidence_path=args.opening_evidence,
+                                opening_run_ids=args.opening_run_id)
         elif args.command == "reserve":
             result = reserve(args.store, _read(Path(args.request)))
         elif args.command == "status":

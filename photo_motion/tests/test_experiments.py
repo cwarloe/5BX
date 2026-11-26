@@ -47,7 +47,8 @@ class ExperimentLedgerTests(unittest.TestCase):
         }
 
     def initialize(self, cap="20"):
-        return experiments.initialize(self.private, provider="Google Flow", credit_limit=cap)
+        return experiments.initialize(self.private, provider="Google Flow", credit_limit=cap,
+                                      opening_spent_credits="0")
 
     def test_full_immutable_run_lifecycle_and_exact_prompt_bytes(self):
         self.initialize()
@@ -224,11 +225,87 @@ class ExperimentLedgerTests(unittest.TestCase):
     def test_standalone_cli_uses_no_paid_provider(self):
         with contextlib.redirect_stdout(io.StringIO()) as output:
             self.assertEqual(experiments._main(["init", "--store", str(self.private), "--provider", "Google Flow",
-                                                "--credit-limit", "4"]), 0)
+                                                "--credit-limit", "4", "--opening-spent-credits", "0"]), 0)
         self.assertEqual(json.loads(output.getvalue())["credit_limit"], "4")
         with contextlib.redirect_stdout(io.StringIO()) as output:
             self.assertEqual(experiments._main(["status", "--store", str(self.private)]), 0)
         self.assertEqual(json.loads(output.getvalue())["attempts"], 0)
+
+    def test_lost_store_requires_explicit_continuity_not_silent_reset(self):
+        with self.assertRaisesRegex(experiments.ExperimentError, "missing records do not prove zero"):
+            experiments.initialize(self.private, provider="Google Flow", credit_limit="200")
+        self.assertFalse((self.private / "policy.json").exists())
+        self.assertEqual(experiments._main(["init", "--store", str(self.private), "--provider", "Google Flow",
+                                            "--credit-limit", "200"]), 2)
+        self.assertFalse((self.private / "policy.json").exists())
+
+    def test_immutable_prior_spend_baseline_reconciles_available_without_forged_receipts(self):
+        evidence = self.root / "prior-observed-credit-change.md"
+        evidence.write_text("Synthetic private observed credits: 852 -> 834, 18 spent.\n", encoding="utf-8")
+        prior_id = "a" * 64
+        policy = experiments.initialize(self.private, provider="Google Flow", credit_limit="200",
+                                        opening_spent_credits="18", opening_evidence_path=evidence,
+                                        opening_run_ids=[prior_id])
+        self.assertEqual(policy["opening_spent_credits"], "18")
+        self.assertEqual(policy["opening_provenance"]["evidence_sha256"], hashlib.sha256(evidence.read_bytes()).hexdigest())
+        self.assertEqual(policy["opening_provenance"]["prior_run_ids"], [prior_id])
+        state = experiments.snapshot(self.private)
+        self.assertEqual(state["actual_credits"], "18")
+        self.assertEqual(state["opening_spent_credits"], "18")
+        self.assertEqual(state["native_receipts_actual_credits"], "0")
+        self.assertEqual(state["available_credits"], "182")
+        self.assertEqual(state["opening_reconciled_attempts"], 1)
+        self.assertFalse((self.private / "charges").exists(), "never fabricate past native receipt")
+        with self.assertRaisesRegex(experiments.ExperimentError, "opening spend differs"):
+            experiments.initialize(self.private, provider="Google Flow", credit_limit="200",
+                                   opening_spent_credits="0")
+        latest = experiments.reserve(self.private, self.request(attempt="new", cost="8"))
+        self.assertNotEqual(latest["run_id"], prior_id)
+        self.assertEqual(experiments.snapshot(self.private)["available_credits"], "174")
+
+    def test_positive_opening_requires_real_evidence_and_run_identity(self):
+        for evidence, run_ids in [(None, ["b" * 64]), (self.spec, None),
+                                  (self.root / "missing", ["b" * 64])]:
+            with self.subTest(evidence=evidence, run_ids=run_ids), self.assertRaises(experiments.ExperimentError):
+                experiments.initialize(self.private, provider="Google Flow", credit_limit="200",
+                                       opening_spent_credits="18", opening_evidence_path=evidence,
+                                       opening_run_ids=run_ids)
+            self.assertFalse((self.private / "policy.json").exists())
+
+    def test_new_store_requires_zero_attestation_and_refuses_prior_debit_with_zero(self):
+        with self.assertRaisesRegex(experiments.ExperimentError, "zero opening spend"):
+            experiments.initialize(self.private, provider="Google Flow", credit_limit="200",
+                                   opening_spent_credits="0", opening_evidence_path=self.spec)
+        self.assertFalse((self.private / "policy.json").exists())
+
+    def test_reconciled_prior_run_cannot_be_reserved_twice(self):
+        evidence = self.root / "provider-observation.txt"
+        evidence.write_text("Synthetic prior charge: 8 credits\n", encoding="utf-8")
+        request = self.request()
+        old_fingerprint = experiments._digest_bytes(experiments._canonical(experiments._validate_request(request)))
+        experiments.initialize(self.private, provider="Google Flow", credit_limit="20",
+                               opening_spent_credits="8", opening_evidence_path=evidence,
+                               opening_run_ids=[old_fingerprint])
+        with self.assertRaisesRegex(experiments.ExperimentError, "already accounted"):
+            experiments.reserve(self.private, request)
+        self.assertFalse((self.private / "intents").exists())
+        self.assertEqual(experiments.snapshot(self.private)["available_credits"], "12")
+
+    def test_recovered_native_intent_overlapping_opening_debit_stops_accounting(self):
+        evidence = self.root / "provider-observation.txt"
+        evidence.write_text("Synthetic previous charge\n", encoding="utf-8")
+        old_request = self.request()
+        old_fingerprint = experiments._digest_bytes(experiments._canonical(experiments._validate_request(old_request)))
+        experiments.initialize(self.private, provider="Google Flow", credit_limit="20",
+                               opening_spent_credits="8", opening_evidence_path=evidence,
+                               opening_run_ids=[old_fingerprint])
+        recovered = {"schema_version": experiments.SCHEMA_VERSION, "run_id": old_fingerprint,
+                     "request_fingerprint": old_fingerprint, "created_at_utc": "old",
+                     "release_status": experiments.HOLD,
+                     "request": experiments._validate_request(old_request), "estimated_credits": "8"}
+        experiments._create_only(self.private / "intents" / f"{old_fingerprint}.json", recovered)
+        with self.assertRaisesRegex(experiments.ExperimentError, "possible double count"):
+            experiments.snapshot(self.private)
 
 
 if __name__ == "__main__":
