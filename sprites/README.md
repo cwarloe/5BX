@@ -40,7 +40,11 @@ python3 sprites/kit/review_board.py --photos --chart 1 --out review-photo-chart1
 
 Open the resulting HTML: chart overview contact sheets come first, followed by
 recent refinements/safety holds and individual numbered image/video links. The
-gallery is derived from the existing `docs/photo_batches/2026-11-26` mobile
+bottom of the page separately lists the individual higher-resolution photo
+stills explicitly linked in the current review notes, with direct Drive output
+links and source/QA references. The set is deliberately not inflated with
+cropped contact-sheet panels or unverified source files. The gallery is derived
+from the existing `docs/photo_batches/2026-11-26` mobile
 review index and chart inventories, so there is **no second tracking ledger**.
 If thumbnails are unavailable because Drive permissions block embedding, each
 card still opens its original output directly in Drive/Flow. Exact prompts,

@@ -23,6 +23,7 @@ ID_RANGES = {1: (15, 20), 2: (21, 25), 3: (26, 29),
              4: (30, 34), 5: (35, 38), 6: (39, 42)}
 LINK = re.compile(r"\[([^\]]+)\]\((https?://[^)]+)\)")
 DRIVE = re.compile(r"^/file/d/([A-Za-z0-9_-]+)/view/?$")
+HIGH_RES_LABEL = re.compile(r"\b(?:high[- ]resolution|full[- ]resolution|standalone)\b", re.I)
 
 
 def _plain(value):
@@ -75,6 +76,46 @@ def _state(title):
     return "TEST ONLY"
 
 
+def _high_res_stills(folder, index, charts):
+    """Link separately rendered full-res stills already named in review notes.
+
+    Do not infer that every four-pose contact card is a high-resolution *single*
+    frame. Only explicit still links qualify, and each retains its source record.
+    """
+    records = [(n, INVENTORIES[n], (folder / INVENTORIES[n]).read_text(encoding="utf-8"))
+               for n in charts]
+    records.append((None, INDEX, index))
+    seen = set()
+    stills = []
+    for source_chart, source_name, text in records:
+        for line in text.splitlines():
+            for link in LINK.finditer(line):
+                label = _plain(link.group(1))
+                url = link.group(2)
+                if not HIGH_RES_LABEL.search(label) or not _image_url(url) or url in seen:
+                    continue
+                chart_match = re.search(r"\bChart\s+([1-6])\b", line, re.I)
+                chart = source_chart or (int(chart_match.group(1)) if chart_match else None)
+                if chart not in charts:
+                    continue
+                seen.add(url)
+                # Some labels just say 'full-resolution frame'. Pair those
+                # with the exact numbered revision in the surrounding note.
+                prefix = _plain(line[:link.start()])
+                ids = re.findall(r"\b(\d{2}[A-Z]?)\b", prefix)
+                title = label if re.match(r"^\d{2}[A-Z]?\b", label) else (
+                    f"{ids[-1]} — {label}" if ids else label)
+                state = _state(title)
+                if "REVIEW REQUIRED" in title.upper():
+                    state = "REVIEW ONLY"
+                if "identity HOLD" in line and "29H" in title:
+                    state = "HOLD"
+                stills.append({"chart": chart, "title": title, "url": url,
+                               "summary": _plain(line), "state": state,
+                               "source": source_name})
+    return sorted(stills, key=lambda item: item["chart"])
+
+
 def gallery_data(repo_root, chart=None):
     """Read current existing notes; fail visibly if a required source is absent."""
     folder = Path(repo_root) / PHOTO_DIR
@@ -115,7 +156,8 @@ def gallery_data(repo_root, chart=None):
     if chart:
         latest = [x for x in latest if f"Chart {chart}" in x["summary"]]
     return {"overviews": [overviews[n] for n in charts], "items": items,
-            "latest": latest, "record": PHOTO_DIR / INDEX}
+            "latest": latest, "high_res": _high_res_stills(folder, index, charts),
+            "record": PHOTO_DIR / INDEX}
 
 
 def _esc(value):
@@ -131,11 +173,15 @@ def _tile(item, kind):
     state = item.get("state", "EXPERIMENTAL")
     css = "hold" if state in ("HOLD", "REJECT") else "test"
     description = item.get("summary", item.get("description", ""))
+    open_label = "Open full-resolution still ↗" if kind == "still" else "Open output ↗"
+    source_link = (f'<a class="source-link" target="_blank" rel="noopener" '
+                   f'href="https://github.com/cwarloe/5BX/blob/main/{PHOTO_DIR}/{_esc(item["source"])}">'
+                   'Source / QA notes ↗</a>' if kind == "still" else "")
     return f'''<article class="tile {kind}">
       <a class="preview" target="_blank" rel="noopener noreferrer" href="{_esc(item['url'])}">
-        {image}<span class="open">Open output ↗</span></a>
+        {image}<span class="open">{open_label}</span></a>
       <div class="body"><div class="tag {css}">{_esc(state)}</div><h3>{_esc(title)}</h3>
-      <p>{_esc(description)}</p></div></article>'''
+      <p>{_esc(description)}</p>{source_link}</div></article>'''
 
 
 def render_gallery(data, chart=None):
@@ -155,6 +201,14 @@ def render_gallery(data, chart=None):
           <div class="grid products">{tiles}</div></section>''')
     latest = (f'<section class="group"><h2>Latest refinements and safety holds</h2>'
               f'<div class="grid refinements">{changes}</div></section>') if changes else ""
+    stills = "".join(_tile(x, "still") for x in data["high_res"])
+    high_res = (f'<section id="high-resolution-stills" class="group">'
+                f'<h2>Individual higher-resolution photo stills</h2>'
+                f'<p class="hint">Separately rendered frames, linked to their original Drive files. '
+                f'These are reference or video-test inputs, not automatically approved movements.</p>'
+                f'<div class="grid stills">{stills}</div></section>') if stills else ""
+    high_res_jump = ('<p><a href="#high-resolution-stills">Jump to individual higher-resolution stills ↓</a></p>'
+                     if stills else "")
     record = "https://github.com/cwarloe/5BX/blob/main/" + str(data["record"])
     timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
     return f'''<!doctype html><html lang="en"><head><meta charset="utf-8">
@@ -179,6 +233,7 @@ color:white;border-radius:7px;padding:6px 9px;font-size:.8rem;font-weight:700}}
 display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}}
 .tag {{display:inline-block;font-size:.68rem;letter-spacing:.04em;font-weight:800;color:#765000;
 background:#fff0c7;padding:4px 7px;border-radius:6px}} .tag.hold {{background:#ffe0dd;color:#932e27}}
+.source-link {{display:inline-block;margin-top:10px;font-size:.8rem}}
 footer {{color:#526574;font-size:.82rem;margin:30px 0}}
 @media(max-width:600px) {{main {{padding:12px}} header.hero {{padding:18px}} .grid {{gap:11px}}}}
 @media print {{body {{background:white}} .tile {{break-inside:avoid}}}}
@@ -186,10 +241,12 @@ footer {{color:#526574;font-size:.82rem;margin:30px 0}}
 <header class="hero"><h1>5BX photographic production traveler</h1>
 <p>Output-first review of {_esc(title)}. Tap an image to open the actual Drive product; tap a record link only if you want its prompts, tests or history.</p>
 <p class="alert">Experimental images and video. No human-approved exercise forms or verified final workout videos are implied by this gallery. Safety and identity holds remain active.</p>
+{high_res_jump}
 <p><a href="{_esc(record)}" target="_blank" rel="noopener">Canonical mobile index and current decisions ↗</a></p></header>
 <section class="group"><h2>Chart overviews · open the products</h2>
 <div class="grid overview-grid">{overview}</div></section>{latest}
 {''.join(sections)}
+{high_res}
 <footer>Generated {timestamp} from the existing review inventories. Thumbnails depend on Google Drive viewing permissions;
 the “Open output” links work with the viewer's normal Drive access. This page is read-only and does not record approvals.</footer>
 </main></body></html>'''
@@ -205,7 +262,8 @@ def main(argv=None):
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(render_gallery(data, args.chart), encoding="utf-8")
     print(f"Wrote {args.out}: {len(data['overviews'])} chart overviews, "
-          f"{len(data['items'])} numbered products, {len(data['latest'])} recent updates; "
+          f"{len(data['items'])} numbered products, {len(data['high_res'])} full-res still links, "
+          f"{len(data['latest'])} recent updates; "
           "zero form approvals granted")
 
 
