@@ -6,7 +6,7 @@ Every intent, actual-charge receipt, and artifact receipt carries an irreversibl
 
 `HOLD_FOR_HUMAN_FORM_AND_RELEASE_REVIEW`
 
-The human reviewer must inspect the **actual continuous MP4**, not a four-panel montage, before any downstream release. These records are cost and provenance evidence, **not** technical/form QA passes. `photo_motion.inspect`, contact/temporal/identity QA and the motion-contract checks remain complementary diagnostics.
+This flag **does not mean Charles must approve each diagnostic experiment**. The standing authorization permits autonomous photographic Flow tests within the original **200-credit cumulative workstream cap**, with a conditional increase to **300 only when an actual bottleneck is documented**. Record and optimize every real charge; a large Flow account balance does **not** increase the workstream allowance. Do not request per-attempt owner approval. The human reviewer must inspect the **actual continuous MP4**, not a four-panel montage, before any **final exercise-video release or publication**. These records are cost and provenance evidence, **not** technical/form QA passes. `photo_motion.inspect`, contact/temporal/identity QA and the motion-contract checks remain complementary diagnostics.
 
 ## Private storage and authorization
 
@@ -15,14 +15,34 @@ Use a **private directory outside every Git checkout**. Its JSON records contain
 Initialize only after receiving an **explicit provider-specific maximum credit allowance** from Charles. Example placeholders below are **not an approved spend**:
 
 ```bash
-# Replace these placeholders after budget authorization; this command spends 0 credits.
+# Only assert zero when this is genuinely the first run; this command spends 0 credits.
 python3 -m photo_motion.experiments init \
   --store /private/5bx-photo-experiments \
   --provider "PROVIDER_NAME_FROM_BUDGET_APPROVAL" \
-  --credit-limit "PROVIDER_CREDIT_CAP"
+  --credit-limit "PROVIDER_CREDIT_CAP" \
+  --opening-spent-credits 0
 ```
 
 The cap is immutable within the ledger. A separate provider gets a separate ledger and separately approved cap; credits are **not** converted or pooled. To change a cap, retain the old evidence and obtain a new documented authorization and separate store. Do not erase old runs to reclaim space or credits.
+
+### Continuity after a lost temporary store
+
+**An absent store is not evidence of an unspent budget.** A *new* policy now refuses initialization unless the operator explicitly supplies `--opening-spent-credits`. A positive opening debit must include an existing evidence file and every known original 64-character run fingerprint; the tool rehashes the file and freezes its reference, digest, debit and run IDs in the immutable policy. The debit is **clearly labeled reconciled prior spend**, not converted into invented native intent or charge receipts. Restoring a real older store/backup is preferable when possible; do not combine a recovered original receipt with an opening debit for the same run, as the snapshot will stop on that overlap. For other unrecorded charges, check the real provider account/history first; a missing or unverifiable charge is a blocker to confident reconciliation, not permission to assume zero.
+
+For the documented Chart 1 photographic video #21, the internal observation recorded **18 actual Flow credits** (account **852 → 834**) and original private run fingerprint `1a9023553d9d2d1939bd39d5d2fb06ef084543d347afc8fa0f54c623f9164a76`. If that original private ledger cannot be recovered and there have been **no additional untracked Flow charges**, its verified retrospective diagnostic can serve as the explicitly acknowledged, limited evidence for a recovered opening debit:
+
+```bash
+python3 -m photo_motion.experiments init \
+  --store /private/5bx-photo-experiments-recovered \
+  --provider "Google Flow" --credit-limit 200 \
+  --opening-spent-credits 18 \
+  --opening-evidence photo_motion/diagnostics/video21-scissor-v6-2026-11-26.md \
+  --opening-run-id 1a9023553d9d2d1939bd39d5d2fb06ef084543d347afc8fa0f54c623f9164a76
+```
+
+The resulting snapshot shows **opening debit 18**, **native receipts 0**, **effective actual 18**, **available 182**, and no false recovery of the video or prompt. This does not verify any later provider charges, does not raise the 200-credit allowance, and is not a final form/release approval. Never place the private ledger itself in Git or reset it merely to obtain fresh credits.
+
+**Retain the original ledger, not only the balance.** At a quiet point after recording a paid attempt, archive the entire private store (including `policy.json`, `intents/`, `charges/` and `artifacts/`) using a private archive file. For example, with a store at `/private/5bx-photo-experiments`, use `tar -czf /private/5bx-photo-ledger-UTCYYYYMMDD.tar.gz -C /private 5bx-photo-experiments`, then record its `sha256sum` and verify it lists the expected files with `tar -tzf`. Keep a separately backed-up, access-controlled copy in the existing **private Google Drive** workspace; do not share it publicly or place it in Git. The archive may contain the **full verbatim submitted prompts**, so treat it as private production data. This backup procedure is permitted archival, not authority to generate, approve, or publish media. For recovery, extract **into a new empty private location**, never over an active ledger, then run `status` and compare its actual charges and unresolved reservations with the current provider history. If the complete original ledger is restored, do **not** add another opening debit for its already recorded charges. If verification fails, stop new paid reservations until reconciled.
 
 Run `python3 -m photo_motion.experiments status --store /private/5bx-photo-experiments` to see actual spend, pending reservations, available credits and attempt count. A pending reservation stays pending even for a failed attempt until the provider's **actual** charge is recorded. If a real charge exceeds the estimate, the truthful available balance can become negative and all additional reservations are blocked.
 

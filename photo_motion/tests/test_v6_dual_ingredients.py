@@ -68,7 +68,7 @@ class DualV6IngredientTests(unittest.TestCase):
         }
 
     def verify_rejected(self, request, fragment):
-        experiments.initialize(self.ledger, provider="Google Flow", credit_limit="200")
+        experiments.initialize(self.ledger, provider="Google Flow", credit_limit="200", opening_spent_credits="0")
         with self.assertRaisesRegex(experiments.ExperimentError, fragment):
             experiments.reserve(self.ledger, request)
         self.assertEqual(experiments.snapshot(self.ledger)["attempts"], 0)
@@ -93,7 +93,7 @@ class DualV6IngredientTests(unittest.TestCase):
         req = self.request()
         req["input_assets"].pop()
         req["source_preflight"].pop("opposite_pose_reference")
-        experiments.initialize(self.ledger, provider="Google Flow", credit_limit="200")
+        experiments.initialize(self.ledger, provider="Google Flow", credit_limit="200", opening_spent_credits="0")
         run = experiments.reserve(self.ledger, req)
         self.assertEqual(run["request"]["source_preflight"],
                          preflight_v6.verify(self.spec, self.source, self.a, self.a_manifest))
@@ -117,7 +117,7 @@ class DualV6IngredientTests(unittest.TestCase):
 
     def test_exact_dual_recipe_can_reserve_once_without_duplication_or_approval(self):
         req = self.request()
-        experiments.initialize(self.ledger, provider="Google Flow", credit_limit="200")
+        experiments.initialize(self.ledger, provider="Google Flow", credit_limit="200", opening_spent_credits="0")
         first = experiments.reserve(self.ledger, req)
         self.assertEqual(first, experiments.reserve(self.ledger, req))
         self.assertEqual(first["release_status"], experiments.HOLD)
