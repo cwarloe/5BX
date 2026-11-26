@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "id": "c1-ex5-scissor-jump-photo-v1",
+  "chart": 1,
+  "exercise": 5,
+  "name": "Scissor jumps (two exchanges, returns to start)",
+  "movement_type": "scissor_jump",
+  "status": "EXPERIMENTAL",
+  "duration_seconds": 6.0,
+  "fps": 24,
+  "identity_reference": "sprites/docs/PHOTOREALISTIC_AVATAR_DIRECTION_2026-11-25.md; chart 1 master identity v2, blue tank/charcoal shorts",
+  "movement_reference": "sprites/docs/photo_batches/2026-11-26/scissor/QA.md; historical 5BX booklet/film; V7 is a conditional still, not video approval",
+  "camera": {
+    "locked": true,
+    "description": "One fixed tripod camera, head and both entire shoes visible, no pan/zoom/reframe; same 35 mm photographic treatment throughout"
+  },
+  "track_provenance": {
+    "orange": "Same apparent physical near ankle and same-side wrist in V6 diagnostic, consistently tracked in generated stills",
+    "teal": "Same apparent physical far ankle and same-side wrist in V6 diagnostic, consistently tracked in generated stills",
+    "anatomical_left_right_proven": false,
+    "warning": "Color track continuity in generated images is not proven anatomical left/right identity in the real source recording"
+  },
+  "rules": [
+    "One realistic middle-school boy with an unchanged face, normal soft youth anatomy, outfit and location for the entire uninterrupted clip",
+    "Exactly two arms and two legs, no ghosted or translucent duplicates, no blended still-image transitions",
+    "The orange near-side wrist and ankle retain the same physical limb ownership through both jumps; the teal far-side wrist and ankle likewise remain paired",
+    "The physical fore/aft leg and opposite-arm assignments change twice; NEVER relabel limbs by screen-left position",
+    "Both arms remain extended approximately shoulder high, forward and backward; no bent running-arm pump",
+    "Both feet are visibly above the ground during EACH of two airborne exchanges and land naturally without ballet toes",
+    "The final posture and contact points match the opening posture; no cut, camera movement, instant leg teleport or fade"
+  ],
+  "phases": [
+    {
+      "id": "A", "time_seconds": 0.0, "pose_key": "start", "support": "grounded",
+      "contacts": ["orange_foot", "teal_foot"], "arm_form": "straight_shoulder_high",
+      "limbs": {"orange_leg": "back", "teal_leg": "forward", "orange_arm": "forward", "teal_arm": "back"},
+      "pose": "Original split stance, near/orange leg behind, far/teal leg in front, opposite arms straight and shoulder high; both feet planted",
+      "still_evidence": "V7 panel A; human approval pending"
+    },
+    {
+      "id": "B", "time_seconds": 1.4, "pose_key": "first_flight", "support": "airborne",
+      "contacts": [], "arm_form": "straight_shoulder_high",
+      "limbs": {"orange_leg": "forward", "teal_leg": "back", "orange_arm": "back", "teal_arm": "forward"},
+      "pose": "First airborne switch with BOTH shoes off the track, orange leg moving to front and teal moving to back, opposing straight shoulder-height arms",
+      "still_evidence": "V7 panel B is an experimental airborne still; physical source identity unproven"
+    },
+    {
+      "id": "C", "time_seconds": 2.5, "pose_key": "opposite_landing", "support": "grounded",
+      "contacts": ["orange_foot", "teal_foot"], "arm_form": "straight_shoulder_high",
+      "limbs": {"orange_leg": "forward", "teal_leg": "back", "orange_arm": "back", "teal_arm": "forward"},
+      "pose": "Land softly in the opposite split stance with orange leg now leading and opposite arms fully extended",
+      "still_evidence": "V7 panel C; human approval pending"
+    },
+    {
+      "id": "D", "time_seconds": 3.8, "pose_key": "second_flight", "support": "airborne",
+      "contacts": [], "arm_form": "straight_shoulder_high",
+      "limbs": {"orange_leg": "back", "teal_leg": "forward", "orange_arm": "forward", "teal_arm": "back"},
+      "pose": "SECOND distinct airborne exchange: both shoes clear the track as the original fore/aft leg identities return, with opposite extended arms",
+      "still_evidence": "MISSING as a separate approved still; must be shown and inspected in video"
+    },
+    {
+      "id": "E", "time_seconds": 6.0, "pose_key": "start", "support": "grounded",
+      "contacts": ["orange_foot", "teal_foot"], "arm_form": "straight_shoulder_high",
+      "limbs": {"orange_leg": "back", "teal_leg": "forward", "orange_arm": "forward", "teal_arm": "back"},
+      "pose": "Return to exact original split stance A and planted foot locations; seamless endpoint with no camera or identity drift",
+      "still_evidence": "V7 panel D resembles A, but cannot prove the missing second airborne transition"
+    }
+  ]
+}
