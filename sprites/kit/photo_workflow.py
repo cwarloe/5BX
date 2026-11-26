@@ -21,7 +21,7 @@ SHA256 = re.compile(r"[0-9a-fA-F]{64}\Z")
 # A READY video must be the exact target of a clickable Markdown link in the
 # canonical index. A prose mention or prefix of another take's URL is not a
 # registered review artifact. Angle brackets support URLs with parentheses.
-REVIEW_LINK = re.compile(r"\]\(\s*(?:<(?P<angle>https://[^<>\s]+)>|(?P<plain>https://[^()\s]+))\s*\)")
+REVIEW_LINK = re.compile(r"\[[^\]\r\n]+\]\(\s*(?:<(?P<angle>https://[^<>\s]+)>|(?P<plain>https://[^()\s]+))\s*\)")
 ACTIVE = {"PRODUCING", "QA", "BLOCKED", "REWORK"}
 STATES = ACTIVE | {"READY_FOR_REVIEW", "DONE"}
 GATES = ("technical", "form", "motion", "loop", "identity")

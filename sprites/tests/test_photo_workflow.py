@@ -100,6 +100,7 @@ class WorkflowTest(unittest.TestCase):
         index = self.batch / "MOBILE_REVIEW_INDEX.md"
         for text in (
             "Status note mentions " + URL + " but gives no link",
+            "Malformed link-like prose: ](" + URL + ")",
             "[Play a different take](" + URL + "?revision=unapproved)",
             "[Play a different take](" + URL + "-obsolete)",
         ):
@@ -109,6 +110,8 @@ class WorkflowTest(unittest.TestCase):
                 self.assertEqual(result["ready_for_review"], [])
                 self.assertTrue(any("not registered" in e for e in result["errors"]))
         index.write_text("[Play exact scissor video](" + URL + ")")
+        self.assertEqual(len(photo_workflow.collect(self.root)["ready_for_review"]), 1)
+        index.write_text("[Play exact scissor video](<" + URL + ">)")
         self.assertEqual(len(photo_workflow.collect(self.root)["ready_for_review"]), 1)
 
     def test_no_fake_owner_done_from_agent_pass(self):
