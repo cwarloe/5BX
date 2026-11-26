@@ -27,6 +27,8 @@
 | Legs / shoes | PASS (visual) | Both feet stay on track, similar wide stance, realistic knee flex. |
 | Headroom | 43 FAIL; 43R PASS | First top-left hands nearly touch upper edge; edit adds clear space (~11%). |
 | Body proportions | CONDITIONAL | Soft middle-school physique preserved; some face/head-size drift across quadrants, minor. |
+| Wardrobe luminance | **COLOR DRIFT REVIEW** | Independent optical check found largest blue-tank median RGB varies: A (60,142,227); B (28,83,140); C (92,166,242); D (57,133,214). B substantially darker; could be pose-specific shading but must be evaluated before final use. |
+| Track camera registration | PASS (limited) | Independent optical check found track boundary spread 0 px across quadrants. |
 | Orientation | PASS | Nearly front-on, consistent with prior finding that this movement is clearest almost frontal. |
 | Movement/time | NOT TESTED | Still contact card; no Flow/Grok video or verified frame interpolation. |
 | 5BX precision | NOT CERTIFIED | A safe, plausible adapted demonstration. Literal historical six-inch outside-foot target intentionally relaxed; not strict proof of exact official form. |
@@ -34,6 +36,8 @@
 ## Repeatable lesson
 
 A strict numeric extremity target can create counterfeit anatomy. In prompting, replace it with: **'reach toward the outer shoe; stop when normal hamstring flexibility and unchanged arm length permit.'** Preserve upper-body and lower-body geometry, not fingertip goal achievement. Make wide headroom a first-generation constraint: contact sheets often crop the overhead hands even when a separate start-frame reference has enough headroom. Favor 8–12% vertical margin for video input.
+
+**Do not overlook photometric drift when poses pass.** Darker fabric in a bent-forward tile may be shadow, but it must be compared under stable illumination or corrected before producing a four-frame video anchor.
 
 ## Files
 
