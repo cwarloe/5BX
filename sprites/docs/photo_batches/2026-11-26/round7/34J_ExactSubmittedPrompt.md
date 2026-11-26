@@ -1,6 +1,6 @@
 # 34J — verbatim image-generator edit prompt
 
-**Edit target:** `34I_UserSelected_ExactEditBase.png`, copied from the exact image the user selected. No previous image was substituted.
+**Edit target:** `34H_UserSelected_ExactEditBase.png`, copied from the exact image the user selected, whose SHA-256 exactly matches the existing 34H candidate. No previous image was substituted.
 
 ```text
 Use case: precise-object-edit. EDIT TARGET: Image 1, the exact user-selected four-panel 35mm photograph of a 13–14-year-old boy doing alternating high knees outdoors. Keep the entire 2x2 card essentially unchanged.
