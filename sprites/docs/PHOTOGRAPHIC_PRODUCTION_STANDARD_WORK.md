@@ -39,6 +39,37 @@ refinements and an exception queue, and distinguishes a contact card from an
 actual standalone still or video. When the owner gives feedback, record it in
 the same versioned QA note; regenerating the traveler reflects that record.
 
+## Ordinary-boy form, not extreme-pose perfection
+
+The photographic performer is an **average middle-school boy**, with believable
+limb lengths, strength and flexibility, not a gymnast, ballet dancer or highly
+trained adult. Charles explicitly permits roughly **80–90% of the full range
+of motion** when that is the natural, convincing result for this character;
+this is a creative tolerance to evaluate **exercise by exercise**, not a
+universal safety threshold or a license to change the exercise's purpose.
+Prioritize the recognizable movement, limb ownership and sequencing,
+appropriate support/contact, natural joints and believable effort. Preserve
+what was reduced (for example, a shallower inverted V with the forehead short
+of the hands) in the same exercise QA note and owner review packet. Do **not**
+lengthen limbs, overextend elbows, force joint positions or silently pass an
+unsafe/physically implausible pose merely to match an extreme reference.
+Independent form review and the owner's exact-video acceptance remain required;
+the numeric range is not an automatic PASS. The rejected Chart 3 V-pike
+`29H/29I/29J` and the natural partial-V `29K` direction are the worked
+precedent in the [round-4 QA](photo_batches/2026-11-26/round4/ROUND4_HUMAN_FEEDBACK_AND_QA.md).
+
+**Preserve useful outtakes for future learning.** If a still or video is
+otherwise high-quality but has a specific visible defect, retain its exact
+original bytes **privately** in the existing experiment/review archive. In
+the same versioned QA record, keep its hash or private link, submitted prompt,
+named defect, rejection reason, and a short candidate teaching point; label
+it `OUTTAKE_CANDIDATE / NOT_INSTRUCTIONAL`. Distinguish an AI rendering error
+(for example, a wristband jumping between limbs) from a real-life form
+mistake (for example, a forced hyperextended elbow). Neither is an approved
+"what not to do" lesson without later human review of accuracy, safety and
+framing. Never mix outtakes into the production source pool or public channel
+without Charles's explicit selection; do not create a second outtake ledger.
+
 ## Kanban-lite flow control — no new board to maintain
 
 Treat the seven stations above as a **pull system**, with one tracked unit per
