@@ -1,7 +1,7 @@
-"""Proposed fail-first gates: audit-only, not part of the production branch.
+"""Formerly failing source/form regressions for the current photo pipeline.
 
-These deliberately fail against 12fc5b1. They guard a paid run from citing
-source geometry that was never verified and require real floor-reaching form.
+These protect paid experiments from citing forged source geometry or claiming
+an unsupported partial reach as the required Chart 1 floor touch.
 """
 
 import copy
