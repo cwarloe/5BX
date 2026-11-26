@@ -1,6 +1,6 @@
 # 5BX photorealistic Charts 1–2 parallel test batch
 
-**Mobile review starts here:** [`MOBILE_REVIEW_INDEX.md`](MOBILE_REVIEW_INDEX.md) for two direct Google Drive contact sheets, tests 15–25 and Flow video 20. Technical inventories: [`REVIEW_INVENTORY.md`](REVIEW_INVENTORY.md) for Chart 1, [`CHART2_PILOT_INVENTORY.md`](CHART2_PILOT_INVENTORY.md) for Chart 2. The independent checks and [color-marker pose-control playbook](COLOR_MARKER_POSE_CONTROL_PLAYBOOK.md) record both successes and failed experiments.
+**Mobile review starts here:** [`MOBILE_REVIEW_INDEX.md`](MOBILE_REVIEW_INDEX.md) for three direct Google Drive contact sheets, tests 15–29 and Flow video 20 (Chart 4 in progress). Technical inventories: [`REVIEW_INVENTORY.md`](REVIEW_INVENTORY.md) for Chart 1, [`CHART2_PILOT_INVENTORY.md`](CHART2_PILOT_INVENTORY.md) for Chart 2, and [`CHART3_PILOT_INVENTORY.md`](CHART3_PILOT_INVENTORY.md) for Chart 3. The independent checks and [color-marker pose-control playbook](COLOR_MARKER_POSE_CONTROL_PLAYBOOK.md) record both successes and failed experiments.
 
 **Owner instruction:** Generate/evaluate autonomously; bring back only decisions requiring Charles's human judgment. This batch is experimental; no asset is publicly approved merely because image generation succeeded.
 
