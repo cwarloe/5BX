@@ -375,7 +375,38 @@ def _validate_request(request):
                              "verification": "rehashed_from_local_bytes" if actual else "declared_unverified"})
     source_preflight = None
     entry = request.get("source_preflight")
-    if isinstance(entry, dict) and entry.get("authority") == "V13_V12_RAW_ARM_ONLY_V2V_EDIT_360P":
+    if isinstance(entry, dict) and entry.get("authority") == "V14_GROUNDED_ASTAR_CSTAR_FRAMES_360P":
+        from .preflight_v14_grounded import (
+            verify_sources as verify_v14_sources,
+            verify_existing_ledger as verify_v14_ledger,
+            verify_ui_observation as verify_v14_ui,
+            V14PreflightError, FLOW_MODEL as V14_MODEL,
+            FLOW_SETTINGS as V14_SETTINGS, PROMPT_SHA256 as V14_PROMPT_SHA256,
+        )
+        if request["exercise_id"] != "chart1-scissor-jump" or set(entry) != {
+                "authority", "v10_source_paths", "existing_ledger_store",
+                "flow_ui_observation"}:
+            raise ExperimentError("V14 requires exact replayable V10 source pair, existing native Flow ledger and fresh UI")
+        if _digest_bytes(prompt_bytes) != V14_PROMPT_SHA256:
+            raise ExperimentError("V14 prompt differs from the preregistered grounded-endpoint hypothesis")
+        try:
+            source_preflight = verify_v14_sources(spec, entry["v10_source_paths"])
+            source_preflight.update(verify_v14_ledger(entry["existing_ledger_store"]))
+            source_preflight = verify_v14_ui(entry["flow_ui_observation"], source_preflight)
+        except (V14PreflightError, OSError, ValueError, TypeError, KeyError) as exc:
+            raise ExperimentError(f"V14 grounded A*->C* precredit HOLD: {exc}") from exc
+        expected_assets = (("start-frame", source_preflight["start_sha256"]),
+                           ("end-frame", source_preflight["end_sha256"]))
+        if (len(clean_assets) != 2 or any(
+                asset["role"] != role or asset["verification"] != "rehashed_from_local_bytes"
+                or asset["sha256"] != digest
+                for asset, (role, digest) in zip(clean_assets, expected_assets))):
+            raise ExperimentError("V14 requires exactly two ordered locally rehashed A* and C* Frames inputs")
+        if (request["provider"] != "Google Flow" or request["model"] != V14_MODEL
+                or json.dumps(request["settings"], sort_keys=True) != json.dumps(V14_SETTINGS, sort_keys=True)
+                or Decimal(estimate) != Decimal(source_preflight["quoted_credits"])):
+            raise ExperimentError("V14 request differs from the actual fresh Omni Flash 360p/x1 grounded-endpoint quote")
+    elif isinstance(entry, dict) and entry.get("authority") == "V13_V12_RAW_ARM_ONLY_V2V_EDIT_360P":
         from .preflight_v13_v2v import (
             verify_v12_source, verify_ui_observation as verify_v13_ui,
             V13PreflightError, FLOW_MODEL as V13_MODEL,
@@ -672,13 +703,14 @@ def snapshot(folder):
 def reserve(folder, request):
     """Idempotently reserve one ATTEMPT's cost; new retries need new attempt_key."""
     preflight = request.get("source_preflight") if isinstance(request, dict) else None
-    if isinstance(preflight, dict) and preflight.get("authority") == "V13_V12_RAW_ARM_ONLY_V2V_EDIT_360P":
+    if isinstance(preflight, dict) and preflight.get("authority") in {
+            "V13_V12_RAW_ARM_ONLY_V2V_EDIT_360P", "V14_GROUNDED_ASTAR_CSTAR_FRAMES_360P"}:
         # The operator may not validate against the old reconciled store then
         # reserve in a freshly initialized or differently capped ledger.
         previous = preflight.get("existing_ledger_store")
         if (not isinstance(previous, str) or not previous.strip()
                 or _resolve_store(previous) != _resolve_store(folder)):
-            raise ExperimentError("V13 must reserve against the SAME existing V12 native-charge ledger")
+            raise ExperimentError("V13/V14 must reserve against the SAME existing V12 native-charge ledger")
     data = _validate_request(request)
     fingerprint = _digest_bytes(_canonical(data))
     run_id = fingerprint  # full SHA-256, no short-ID collision ambiguity
@@ -701,12 +733,13 @@ def reserve(folder, request):
             if prior.get("request", {}).get("attempt_key") == data["attempt_key"]:
                 raise ExperimentError("attempt_key already has an immutable manifest with different inputs; choose a new attempt_key for a real retry")
         current = _snapshot(store)
-        if data["source_preflight"] and data["source_preflight"].get("authority") == "V13_V12_RAW_ARM_ONLY_V2V_EDIT_360P":
+        if data["source_preflight"] and data["source_preflight"].get("authority") in {
+                "V13_V12_RAW_ARM_ONLY_V2V_EDIT_360P", "V14_GROUNDED_ASTAR_CSTAR_FRAMES_360P"}:
             # A different concurrent reservation/settlement invalidates the
             # balance attested in the 15-minute Flow edit observation.
             if any(data["source_preflight"][f"ledger_{name}"] != current[name]
                    for name in ("actual_credits", "pending_reserved_credits", "available_credits")):
-                raise ExperimentError("V13 live quote/ledger changed between UI attestation and paid reservation")
+                raise ExperimentError("V13/V14 live quote/ledger changed between UI attestation and paid reservation")
         # The actual provider charge can exceed the estimate and push remaining
         # credits negative. Preserve that truthful state, then block new runs.
         proposed = Decimal(current["available_credits"])
