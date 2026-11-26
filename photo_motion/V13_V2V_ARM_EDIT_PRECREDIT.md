@@ -1,10 +1,16 @@
 # V13: video-to-video arm-only rescue of failed V12 — precredit gate
 
-**Status: EXPERIMENTAL / no V13 generation yet.** This is a new, narrowly
-scoped precredit authority, independent of the prior V12 Frames-to-Video
+**Gate classification: EXPERIMENTAL (originally written before the V13 run).**
+This is a narrowly scoped precredit authority, independent of the prior V12 Frames-to-Video
 gate. A valid preflight or a successfully edited clip would **not** establish
 Chart 1 Exercise 5 historical form, the grounded opposite landing, a second
 airborne exchange, loop continuity, identity approval or release.
+
+**Post-run observation (not a change to this gate):** the original V13
+arm-edit diagnostic **failed** independent comparison; see the
+[safe V13 result note](diagnostics/v13-v2v-arm-edit-hold-2026-11-26.md).
+Its stop rule remains binding; this retrospective link does not renew
+precredit authority or authorize another generation.
 
 ## One falsifiable experiment
 
