@@ -41,3 +41,7 @@ jobs:
         run: npm run typecheck
       - name: Build development preview without deploying
         run: npm run build:dev
+      - name: Build static game without deploying
+        run: npm run pages
+      - name: Fail closed on unapproved public video media
+        run: node scripts/assert-approved-media.mjs --app-root public --app-root dist-pages --site-source ..

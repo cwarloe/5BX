@@ -47,6 +47,12 @@ jobs:
             --exclude node_modules --exclude game --exclude specs
           cp -r game/dist-pages _site/game
 
+      # The historical site reference is hash-pinned. No new photographic MP4
+      # may be deployed until Charles approves an exact asset and a trusted
+      # delivery-verification path is implemented.
+      - name: Reject unapproved public video media before upload
+        run: node game/scripts/assert-approved-media.mjs --site-root _site
+
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site
