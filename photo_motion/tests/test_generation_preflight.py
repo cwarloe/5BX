@@ -13,6 +13,7 @@ from photo_motion import generation_preflight
 
 
 SOURCE_SPEC = Path(__file__).resolve().parents[1] / "specs" / "chart1-toe-touch.json"
+KNEELING_SPEC = Path(__file__).resolve().parents[1] / "specs" / "chart1-kneeling-pushup.json"
 
 
 class GenerationPreflightTests(unittest.TestCase):
@@ -50,6 +51,14 @@ class GenerationPreflightTests(unittest.TestCase):
         return generation_preflight.evaluate(request or self.request, repo_root=self.root,
                                              available_credits=kwargs.pop("available_credits", "10"),
                                              **kwargs)
+
+    def use_kneeling_contract(self):
+        self.spec.unlink()
+        self.spec = self.spec.parent / KNEELING_SPEC.name
+        self.spec.write_bytes(KNEELING_SPEC.read_bytes())
+        self.request["spec_path"] = str(self.spec)
+        self.request["exercise_id"] = self.spec.stem
+        self.request["attempt_key"] = "chart1-kneeling-pushup-synthetic"
 
     def test_pass_is_input_only_and_never_a_reservation_or_approval(self):
         result = self.evaluate()
@@ -109,6 +118,51 @@ class GenerationPreflightTests(unittest.TestCase):
         changed = copy.deepcopy(self.request)
         changed["settings"]["generate_audio"] = True
         self.assertIn("audio_policy", " ".join(self.evaluate(changed)["errors"]))
+
+    def test_kneeling_explicit_no_contact_prompt_is_held_before_credit_spend(self):
+        self.use_kneeling_contract()
+        for text in (
+            "Lower until the chest is near the track but NOT touching the track.",
+            "Never let the chest touch the floor; return to the start.",
+            "The chest never touches the floor at any point.",
+            "The chest doesn't touch the track during the movement.",
+            "Do not allow the chest to touch the ground during the repetition.",
+            "At the bottom the chest hovers just above the mat.",
+        ):
+            with self.subTest(text=text):
+                self.prompt.write_text(text, encoding="utf-8")
+                result = self.evaluate()
+                self.assertEqual(result["status"], "HOLD")
+                self.assertIn("contradicts required kneeling chest-floor contact",
+                              " ".join(result["errors"]))
+                # Private submitted language must not be echoed into a receipt.
+                self.assertNotIn(text, json.dumps(result))
+                self.assertEqual(result["generation_authorization"], "NOT_GRANTED_BY_PREFLIGHT")
+
+    def test_kneeling_compatible_top_clearance_and_chin_rule_not_false_positive(self):
+        self.use_kneeling_contract()
+        for text in (
+            "The chest is clear of the floor at the top. At the bottom, gently "
+            "touch the floor with the chest. Do not let the chin touch the ground.",
+            "At the start, the chest does not touch the floor. The chest must "
+            "touch the track gently at the bottom.",
+            "The chest does not touch the ground at the top position; it "
+            "touches the floor gently at the low point.",
+        ):
+            with self.subTest(text=text):
+                self.prompt.write_text(text, encoding="utf-8")
+                result = self.evaluate()
+                self.assertEqual(result["status"], "PASS", result["errors"])
+                self.assertIn("cannot verify", " ".join(result["warnings"]))
+                self.assertEqual(result["form_and_release_approval"], "NOT_EVALUATED")
+
+    def test_non_kneeling_prompt_screen_does_not_invent_contact_requirement(self):
+        self.prompt.write_text(
+            "For this unrelated movement, the chest must never touch the floor.",
+            encoding="utf-8",
+        )
+        result = self.evaluate()
+        self.assertEqual(result["status"], "PASS", result["errors"])
 
     def test_source_aspect_ratio_and_hash_mismatch_are_detected(self):
         Image.new("RGB", (720, 1280), "#334466").save(self.image)
