@@ -18,6 +18,13 @@ QA_ROOT = Path("sprites/docs/photo_batches")
 SPEC_ROOT = Path("photo_motion/specs")
 MARKER = re.compile(r"^<!-- 5bx-production\s*\n(.*?)\n-->\s*$", re.M | re.S)
 SHA256 = re.compile(r"[0-9a-fA-F]{64}\Z")
+# A READY video must be the exact target of a clickable Markdown link in the
+# canonical index. A prose mention or prefix of another take's URL is not a
+# registered review artifact. Angle brackets support URLs with parentheses.
+REVIEW_LINK = re.compile(r"\[[^\]\r\n]+\]\(\s*(?:<(?P<angle>https://[^<>\s]+)>|(?P<plain>https://[^()\s]+))\s*\)")
+HTML_COMMENT = re.compile(r"<!--(?:.*?-->|.*\Z)", re.S)
+FENCE_LINE = re.compile(r"^ {0,3}(?P<run>`{3,}|~{3,})")
+INLINE_CODE = re.compile(r"(`+).*?\1")
 ACTIVE = {"PRODUCING", "QA", "BLOCKED", "REWORK"}
 STATES = ACTIVE | {"READY_FOR_REVIEW", "DONE"}
 GATES = ("technical", "form", "motion", "loop", "identity")
@@ -70,8 +77,33 @@ def _relative_existing(root, value):
     return target.is_file()
 
 
+def _visible_review_targets(source):
+    """Find exact Markdown link targets, ignoring non-rendered code/comments.
+
+    Conservatively skip indented code and multiline links. This is a narrow
+    registry check, not a Markdown renderer or a playable-MP4 inspection.
+    """
+    source = HTML_COMMENT.sub("", source)
+    fence = None
+    for line in source.splitlines():
+        marker = FENCE_LINE.match(line)
+        if fence is not None:
+            if (marker and marker.group("run")[0] == fence[0]
+                    and len(marker.group("run")) >= len(fence)
+                    and not line[marker.end():].strip()):
+                fence = None
+            continue
+        if marker:
+            fence = marker.group("run")
+            continue
+        if line.startswith("    ") or line.startswith("\t"):
+            continue
+        for match in REVIEW_LINK.finditer(INLINE_CODE.sub("", line)):
+            yield match.group("angle") or match.group("plain")
+
+
 def _indexed(root, chart, url):
-    """A review-ready output must also be linked in the canonical index."""
+    """A review-ready output must have its exact link in the canonical index."""
     batch = root / QA_ROOT
     for folder in sorted(batch.glob("*")):
         if not folder.is_dir():
@@ -79,8 +111,9 @@ def _indexed(root, chart, url):
         for name in ("MOBILE_REVIEW_INDEX.md", "REVIEW_INVENTORY.md",
                      f"CHART{chart}_PILOT_INVENTORY.md"):
             path = folder / name
-            if path.is_file() and url in path.read_text(encoding="utf-8"):
-                return True
+            if path.is_file():
+                if url in _visible_review_targets(path.read_text(encoding="utf-8")):
+                    return True
     return False
 
 
