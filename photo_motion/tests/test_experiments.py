@@ -249,6 +249,9 @@ class ExperimentLedgerTests(unittest.TestCase):
         self.assertEqual(policy["opening_spent_credits"], "18")
         self.assertEqual(policy["opening_provenance"]["evidence_sha256"], hashlib.sha256(evidence.read_bytes()).hexdigest())
         self.assertEqual(policy["opening_provenance"]["prior_run_ids"], [prior_id])
+        sidecar = self.private / "opening-evidence" / f"{hashlib.sha256(evidence.read_bytes()).hexdigest()}.bin"
+        self.assertEqual(sidecar.read_bytes(), evidence.read_bytes())
+        self.assertEqual(policy["opening_evidence_status"], "VERIFIED_PRIVATE_SNAPSHOT_AND_EXTERNAL")
         state = experiments.snapshot(self.private)
         self.assertEqual(state["actual_credits"], "18")
         self.assertEqual(state["opening_spent_credits"], "18")
@@ -272,7 +275,7 @@ class ExperimentLedgerTests(unittest.TestCase):
                                        opening_run_ids=run_ids)
             self.assertFalse((self.private / "policy.json").exists())
 
-    def test_opening_debit_evidence_tampering_or_loss_blocks_new_reservations(self):
+    def test_opening_debit_external_tamper_blocks_but_pruning_uses_verified_private_snapshot(self):
         evidence = self.root / "provider-observation.txt"
         evidence.write_text("Synthetic prior debit: 18 credits\n", encoding="utf-8")
         experiments.initialize(self.private, provider="Google Flow", credit_limit="200",
@@ -286,8 +289,114 @@ class ExperimentLedgerTests(unittest.TestCase):
             experiments.reserve(self.private, self.request())
         self.assertFalse((self.private / "intents").exists())
         evidence.unlink()
+        state = experiments.snapshot(self.private)
+        self.assertEqual(state["opening_evidence_status"], "EXTERNAL_MISSING_USING_VERIFIED_PRIVATE_SNAPSHOT")
+        run = experiments.reserve(self.private, self.request())
+        self.assertEqual(run["estimated_credits"], "8")
+        self.assertEqual(experiments.snapshot(self.private)["available_credits"], "174")
+
+    def test_private_opening_snapshot_tampering_blocks_all_accounting(self):
+        evidence = self.root / "observed-prior-debit.md"
+        evidence.write_text("Immutable synthetic prior charge 18\n", encoding="utf-8")
+        experiments.initialize(self.private, provider="Google Flow", credit_limit="200",
+                               opening_spent_credits="18", opening_evidence_path=evidence,
+                               opening_run_ids=["a" * 64])
+        run = experiments.reserve(self.private, self.request())
+        sidecar = self.private / "opening-evidence" / f"{hashlib.sha256(evidence.read_bytes()).hexdigest()}.bin"
+        sidecar.chmod(0o600)
+        sidecar.write_text("tampered evidence", encoding="utf-8")
+        with self.assertRaisesRegex(experiments.ExperimentError, "private evidence snapshot SHA-256 differs"):
+            experiments.snapshot(self.private)
+        with self.assertRaisesRegex(experiments.ExperimentError, "private evidence snapshot SHA-256 differs"):
+            experiments.reserve(self.private, self.request())
+        with self.assertRaisesRegex(experiments.ExperimentError, "private evidence snapshot SHA-256 differs"):
+            experiments.settle(self.private, run["run_id"], actual_credits="8",
+                               provider_generation_id="synthetic-provider-job", outcome="COMPLETED")
+
+    def test_old_ledger_migrates_after_original_scratch_path_is_lost_without_reset(self):
+        lost = self.root / "ephemeral-scratch" / "video21.md"
+        lost.parent.mkdir()
+        lost.write_text("Previously verified 18 Flow credits and original run ID\n", encoding="utf-8")
+        immutable_sha = hashlib.sha256(lost.read_bytes()).hexdigest()
+        prior_request = self.request()
+        prior = experiments._digest_bytes(experiments._canonical(experiments._validate_request(prior_request)))
+        experiments.initialize(self.private, provider="Google Flow", credit_limit="200",
+                               opening_spent_credits="18", opening_evidence_path=lost,
+                               opening_run_ids=[prior])
+        policy_file = self.private / "policy.json"
+        policy_original = policy_file.read_bytes()
+        sidecar = self.private / "opening-evidence" / f"{immutable_sha}.bin"
+        sidecar.unlink()  # Synthetic pre-snapshot legacy policy, never a real store.
+        self.assertEqual(experiments.snapshot(self.private)["opening_evidence_status"],
+                         "LEGACY_EXTERNAL_ONLY_ARCHIVE_REQUIRED")
+        with self.assertRaisesRegex(experiments.ExperimentError, "archive-evidence"):
+            experiments.reserve(self.private, self.request())
+        recovery_copy = self.root / "private-drive-restored-copy.md"
+        recovery_copy.write_bytes(lost.read_bytes())
+        lost.unlink()  # Simulate the original absolute scratch path pruning.
         with self.assertRaisesRegex(experiments.ExperimentError, "opening debit evidence unavailable"):
             experiments.snapshot(self.private)
+        with contextlib.redirect_stdout(io.StringIO()) as output:
+            self.assertEqual(experiments._main(["archive-evidence", "--store", str(self.private),
+                                                "--evidence", str(recovery_copy)]), 0)
+        receipt = json.loads(output.getvalue())
+        self.assertEqual(receipt["evidence_sha256"], immutable_sha)
+        self.assertEqual(receipt["original_evidence_reference"], str(lost))
+        self.assertEqual(sidecar.read_bytes(), recovery_copy.read_bytes())
+        self.assertEqual(policy_file.read_bytes(), policy_original, "never rewrite immutable 18-credit policy")
+        self.assertEqual(experiments.snapshot(self.private)["opening_spent_credits"], "18")
+        self.assertEqual(experiments.snapshot(self.private)["available_credits"], "182")
+        self.assertEqual(experiments.snapshot(self.private)["opening_evidence_status"],
+                         "EXTERNAL_MISSING_USING_VERIFIED_PRIVATE_SNAPSHOT")
+        self.assertEqual(experiments.archive_evidence(self.private, evidence_path=recovery_copy), receipt)
+        with self.assertRaisesRegex(experiments.ExperimentError, "already accounted"):
+            experiments.reserve(self.private, prior_request)
+        fresh = experiments.reserve(self.private, self.request(attempt="post-recovery", cost="8"))
+        self.assertNotEqual(fresh["run_id"], prior)
+        self.assertEqual(experiments.snapshot(self.private)["available_credits"], "174")
+
+    def test_wrong_recovery_evidence_never_overwrites_legacy_ledger(self):
+        original = self.root / "original-prior-evidence.md"
+        original.write_text("Eight recorded prior credits", encoding="utf-8")
+        experiments.initialize(self.private, provider="Google Flow", credit_limit="20",
+                               opening_spent_credits="8", opening_evidence_path=original,
+                               opening_run_ids=["b" * 64])
+        sidecar = self.private / "opening-evidence" / f"{hashlib.sha256(original.read_bytes()).hexdigest()}.bin"
+        sidecar.unlink()
+        wrong = self.root / "wrong-evidence.md"
+        wrong.write_text("Nine credits instead", encoding="utf-8")
+        policy_original = (self.private / "policy.json").read_bytes()
+        with self.assertRaisesRegex(experiments.ExperimentError, "SHA-256 differs"):
+            experiments.archive_evidence(self.private, evidence_path=wrong)
+        self.assertFalse(sidecar.exists())
+        self.assertEqual((self.private / "policy.json").read_bytes(), policy_original)
+
+    def test_archiving_old_opening_evidence_does_not_reclassify_native_actual_charges(self):
+        scratch = self.root / "short-lived-source.md"
+        scratch.write_text("Synthetic opening 18 charge\n", encoding="utf-8")
+        original_bytes = scratch.read_bytes()
+        experiments.initialize(self.private, provider="Google Flow", credit_limit="200",
+                               opening_spent_credits="18", opening_evidence_path=scratch,
+                               opening_run_ids=["a" * 64])
+        new_run = experiments.reserve(self.private, self.request(attempt="native-later", cost="8"))
+        experiments.settle(self.private, new_run["run_id"], actual_credits="7",
+                           provider_generation_id="native-provider-unique", outcome="COMPLETED")
+        charge_path = self.private / "charges" / f"{new_run['run_id']}.json"
+        charge_bytes = charge_path.read_bytes()
+        policy_bytes = (self.private / "policy.json").read_bytes()
+        (self.private / "opening-evidence" / f"{hashlib.sha256(original_bytes).hexdigest()}.bin").unlink()
+        durable_copy = self.root / "private-archive-source.md"
+        durable_copy.write_bytes(original_bytes)
+        scratch.unlink()
+        experiments.archive_evidence(self.private, evidence_path=durable_copy)
+        state = experiments.snapshot(self.private)
+        self.assertEqual(state["opening_spent_credits"], "18")
+        self.assertEqual(state["native_receipts_actual_credits"], "7")
+        self.assertEqual(state["actual_credits"], "25")
+        self.assertEqual(state["available_credits"], "175")
+        self.assertEqual(state["attempts"], 1)
+        self.assertEqual(charge_path.read_bytes(), charge_bytes)
+        self.assertEqual((self.private / "policy.json").read_bytes(), policy_bytes)
 
     def test_new_store_requires_zero_attestation_and_refuses_prior_debit_with_zero(self):
         with self.assertRaisesRegex(experiments.ExperimentError, "zero opening spend"):

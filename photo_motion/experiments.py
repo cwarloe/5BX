@@ -96,15 +96,16 @@ def _read(path):
         raise ExperimentError(f"missing or invalid immutable record {path}: {exc}") from exc
 
 
-def _create_only(path, record):
-    """Durable atomic exclusive create: crash cannot leave half-written JSON.
+def _create_only_bytes(path, encoded):
+    """Durable atomic exclusive create for immutable private bytes.
 
     Hard-linking a completely fsynced temporary file refuses to overwrite an
     existing record. A stale temp is safe, though later housekeeping may remove
     it only after confirming it is unrelated to an active writer.
     """
     path.parent.mkdir(parents=True, exist_ok=True)
-    encoded = _canonical(record) + b"\n"
+    if path.parent.is_symlink() or path.is_symlink():
+        raise ExperimentError(f"immutable record path must not be a symlink: {path}")
     handle, temp_name = tempfile.mkstemp(dir=path.parent, prefix=".pending-", suffix=".json")
     try:
         with os.fdopen(handle, "wb") as stream:
@@ -124,6 +125,37 @@ def _create_only(path, record):
             os.close(dfd)
     finally:
         os.unlink(temp_name)
+
+
+def _create_only(path, record):
+    """Create an immutable JSON record without partial writes or overwrites."""
+    _create_only_bytes(path, _canonical(record) + b"\n")
+
+
+def _opening_snapshot_path(store, digest):
+    # The immutable policy already pins the digest. This path is derived, not
+    # a second user-editable authority, and can be backed up with the ledger.
+    return store / "opening-evidence" / f"{digest}.bin"
+
+
+def _archive_opening_evidence(store, evidence_file, digest):
+    """Create/reuse a byte-exact append-only evidence snapshot inside ledger."""
+    source = Path(evidence_file).expanduser()
+    try:
+        if source.is_symlink() or not source.is_file():
+            raise ExperimentError(f"opening debit source evidence unavailable or symlink: {source}")
+        payload = source.read_bytes()
+    except OSError as exc:
+        raise ExperimentError(f"opening debit source evidence unavailable: {source}: {exc}") from exc
+    if _digest_bytes(payload) != digest:
+        raise ExperimentError("opening debit evidence SHA-256 differs from immutable policy; archive refused")
+    target = _opening_snapshot_path(store, digest)
+    if target.exists() or target.is_symlink():
+        if target.is_symlink() or not target.is_file() or _sha_file(target) != digest:
+            raise ExperimentError("opening debit private evidence snapshot is missing or altered; restore it from trusted backup")
+    else:
+        _create_only_bytes(target, payload)
+    return target
 
 
 @contextlib.contextmanager
@@ -180,10 +212,14 @@ def initialize(folder, *, provider, credit_limit, opening_spent_credits=None,
             evidence = Path(opening_evidence_path).expanduser().resolve()
             if not evidence.is_file():
                 raise ExperimentError(f"opening spend evidence unavailable: {evidence}")
+            # Capture the evidence itself *inside the private ledger* before
+            # publishing policy.json. The external scratch checkout may vanish.
+            evidence_sha = _sha_file(evidence)
+            _archive_opening_evidence(store, evidence, evidence_sha)
             provenance = {
                 "classification": "operator_reconciled_prior_spend_not_native_receipts",
                 "evidence_reference": str(evidence),
-                "evidence_sha256": _sha_file(evidence),
+                "evidence_sha256": evidence_sha,
                 "prior_run_ids": sorted(prior_ids),
             }
         elif opening_evidence_path is not None or prior_ids:
@@ -193,10 +229,10 @@ def initialize(folder, *, provider, credit_limit, opening_spent_credits=None,
                   "opening_spent_credits": opening, "opening_provenance": provenance,
                   "meaning": "Per-provider prior reconciled debit plus native actual charges plus pending reservations; not transferable between providers"}
         _create_only(path, policy)
-        return policy
+        return _policy(store)
 
 
-def _policy(store):
+def _policy(store, *, verify_evidence=True):
     policy = _read(store / "policy.json")
     if policy.get("schema_version") != SCHEMA_VERSION:
         raise ExperimentError("unknown ledger schema version")
@@ -219,19 +255,67 @@ def _policy(store):
             raise ExperimentError("opening debit requires distinct sorted prior run IDs")
         for run_id in run_ids:
             _require_digest(run_id, "opening_provenance.prior_run_id")
-        evidence = Path(provenance["evidence_reference"])
-        if not evidence.is_file():
-            raise ExperimentError(f"opening debit evidence unavailable: {evidence}; do not infer restored credits")
-        try:
-            evidence_digest = _sha_file(evidence)
-        except OSError as exc:
-            raise ExperimentError(f"opening debit evidence unavailable: {evidence}: {exc}") from exc
-        if evidence_digest != provenance["evidence_sha256"]:
-            raise ExperimentError("opening debit evidence SHA-256 differs from immutable policy; stop new reservations")
+        evidence_status = "NOT_CHECKED_FOR_ARCHIVAL_OPERATION"
+        if verify_evidence:
+            evidence = Path(provenance["evidence_reference"])
+            private = _opening_snapshot_path(store, provenance["evidence_sha256"])
+            has_snapshot = private.exists() or private.is_symlink()
+            if has_snapshot:
+                if private.is_symlink() or not private.is_file():
+                    raise ExperimentError("opening debit private evidence snapshot is not a regular file")
+                try:
+                    private_hash = _sha_file(private)
+                except OSError as exc:
+                    raise ExperimentError(f"opening debit private evidence snapshot unavailable: {exc}") from exc
+                if private_hash != provenance["evidence_sha256"]:
+                    raise ExperimentError("opening debit private evidence snapshot SHA-256 differs from immutable policy")
+            if evidence.is_symlink():
+                raise ExperimentError("opening debit original evidence reference was replaced with a symlink")
+            if evidence.exists() and not evidence.is_file():
+                raise ExperimentError("opening debit original evidence reference is no longer a regular file")
+            if evidence.is_file():
+                try:
+                    external_hash = _sha_file(evidence)
+                except OSError as exc:
+                    raise ExperimentError(f"opening debit original evidence unreadable: {exc}") from exc
+                if external_hash != provenance["evidence_sha256"]:
+                    raise ExperimentError("opening debit evidence SHA-256 differs from immutable policy; stop new reservations")
+                evidence_status = "VERIFIED_PRIVATE_SNAPSHOT_AND_EXTERNAL" if has_snapshot else "LEGACY_EXTERNAL_ONLY_ARCHIVE_REQUIRED"
+            elif has_snapshot:
+                # A pruned external scratch worktree is expected. Do not
+                # erase its historical reference or treat it as tampered
+                # *bytes*: a verified independent private snapshot is enough.
+                evidence_status = "EXTERNAL_MISSING_USING_VERIFIED_PRIVATE_SNAPSHOT"
+            else:
+                raise ExperimentError(f"opening debit evidence unavailable: {evidence}; run archive-evidence with a byte-exact copy before spending")
     elif provenance is not None:
         raise ExperimentError("zero opening debit cannot claim prior charge provenance")
-    policy = {**policy, "opening_spent_credits": opening, "opening_provenance": provenance}
+    else:
+        evidence_status = "NOT_APPLICABLE"
+    policy = {**policy, "opening_spent_credits": opening, "opening_provenance": provenance,
+              "opening_evidence_status": evidence_status}
     return policy
+
+
+def archive_evidence(folder, *, evidence_path):
+    """Upgrade an old positive-opening ledger without rewriting its policy.
+
+    Works even when the old absolute evidence path has disappeared. The
+    supplied replacement bytes must match the *existing* immutable digest;
+    there is no way to change a debit, cap or prior run ID via this command.
+    """
+    with _locked_store(folder) as store:
+        policy = _policy(store, verify_evidence=False)
+        provenance = policy["opening_provenance"]
+        if provenance is None:
+            raise ExperimentError("opening evidence archive applies only to a positive reconciled debit")
+        target = _archive_opening_evidence(store, evidence_path, provenance["evidence_sha256"])
+        return {"result": "VERIFIED_IMMUTABLE_PRIVATE_EVIDENCE_SNAPSHOT",
+                "opening_spent_credits": policy["opening_spent_credits"],
+                "original_evidence_reference": provenance["evidence_reference"],
+                "evidence_snapshot_reference": str(target),
+                "evidence_sha256": provenance["evidence_sha256"],
+                "prior_run_ids": provenance["prior_run_ids"]}
 
 
 def _validate_request(request):
@@ -436,6 +520,7 @@ def _snapshot(store):
             "actual_credits": format(committed, "f"), "pending_reserved_credits": format(reserved, "f"),
             "available_credits": format(limit - committed - reserved, "f"),
             "opening_spent_credits": format(opening, "f"),
+            "opening_evidence_status": policy["opening_evidence_status"],
             "native_receipts_actual_credits": format(native_charges, "f"),
             "opening_reconciled_attempts": len(prior_run_ids),
             "attempts": len(planned), "unsettled_attempts": sum(not (store / "charges" / f"{p.stem}.json").exists() for p in planned)}
@@ -456,6 +541,8 @@ def reserve(folder, request):
         policy = _policy(store)
         if policy["provider"] != data["provider"]:
             raise ExperimentError("provider differs from budget policy; credits are not fungible")
+        if policy["opening_evidence_status"] == "LEGACY_EXTERNAL_ONLY_ARCHIVE_REQUIRED":
+            raise ExperimentError("positive opening debit needs private evidence snapshot; run archive-evidence before reserving credits")
         if run_id in (policy["opening_provenance"] or {}).get("prior_run_ids", []):
             raise ExperimentError("run already accounted for by opening prior-spend debit; never reserve it again")
         target = store / "intents" / f"{run_id}.json"
@@ -499,6 +586,7 @@ def settle(folder, run_id, *, actual_credits, provider_generation_id, outcome):
     if outcome not in ("COMPLETED", "FAILED"):
         raise ExperimentError("outcome must be COMPLETED or FAILED")
     with _locked_store(folder) as store:
+        _policy(store)  # Revalidate private evidence before recording an actual charge.
         _known_run(store, run_id)
         target = store / "charges" / f"{run_id}.json"
         payload = {"schema_version": SCHEMA_VERSION, "run_id": run_id, "actual_credits": actual,
@@ -549,6 +637,9 @@ def _main(argv=None):
     init.add_argument("--opening-spent-credits", help="REQUIRED for a fresh store: explicit zero or prior documented debits")
     init.add_argument("--opening-evidence", help="Existing evidence document; rehashed for a positive prior debit")
     init.add_argument("--opening-run-id", action="append", help="Prior immutable run fingerprint for an opening debit; repeat as needed")
+    evidence = actions.add_parser("archive-evidence", help="Portably snapshot exact existing opening-debit evidence in the private ledger")
+    evidence.add_argument("--store", required=True)
+    evidence.add_argument("--evidence", required=True, help="Existing file with SHA matching immutable policy, even if old path was lost")
     plan = actions.add_parser("reserve", help="Record exact submitted prompt/sources and reserve estimated credits")
     plan.add_argument("--store", required=True)
     plan.add_argument("--request", required=True, help="Private request JSON, see EXPERIMENTS.md")
@@ -573,6 +664,8 @@ def _main(argv=None):
                                 opening_spent_credits=args.opening_spent_credits,
                                 opening_evidence_path=args.opening_evidence,
                                 opening_run_ids=args.opening_run_id)
+        elif args.command == "archive-evidence":
+            result = archive_evidence(args.store, evidence_path=args.evidence)
         elif args.command == "reserve":
             result = reserve(args.store, _read(Path(args.request)))
         elif args.command == "status":
