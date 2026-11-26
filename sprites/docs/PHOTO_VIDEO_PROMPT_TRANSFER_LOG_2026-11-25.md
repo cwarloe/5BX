@@ -1,0 +1,65 @@
+# 5BX photographic exercise prompt transfer log (2026-11-25)
+
+Purpose: make the image/video experiments reproducible in Google Flow and portable to Grok Imagine or another generator. This is an experiment log, not approval of any exercise's 5BX form. **Use the verbatim recorded prompts where available; do not confuse a proposed cross-model adaptation with the exact input that generated an asset.**
+
+## Character rule and the new drift finding
+
+- The boy must be recognizably the same within **one complete chart**: age about 12–14, ordinary and softly undeveloped build (no muscular definition, narrow waist, or altered bone lengths), fair untanned skin, natural modestly messy dark hair, unchanged nose/ears/eyes and actual face geometry.
+- Identity, camera, wardrobe and scene must be stable **across the exercises of that chart**. A different outfit or a consciously chosen version of the boy is permitted **between charts**, per Charles's 2026-11-25 clarification. Never allow unintentional drift *within* a chart.
+- The current blue/charcoal test branch: light/medium blue tank, loose charcoal running shorts, dark socks, gray/yellow sneakers, black wristband, red track and green field. Record clothing colors as viewed from the **master image**, not just textual color names.
+- On comparing frames from videos 08, 10, 13 and 14, the shirt becomes progressively paler blue; shorts shift toward lighter/bluish gray; hair and face also appear slightly different (some differences may come from pose/perspective). This is **real continuity risk**, not merely an exposure difference.
+- Likely cause to test: the recent Flow-native still sequence branched from **08 sit-up video -> saved frame / pose edit -> 10 knee push-up video -> saved frame / pose edit -> 12 prone video -> saved frame / pose edit -> 13 prone video**. Re-synthesizing a whole person at each step can accumulate changes. This is an inference, not a demonstrated causal ablation. Video 14 was made with deterministic ffmpeg reversal of part of video 13, so its palette drift was already present in 13.
+- **Next controlled experiment:** create one approved identity image per chart. For every exercise and every start/peak position, independently derive from that *same immutable chart identity reference*, not a child of a previously generated exercise video. Compare image crops of face, tank, shorts and shoes against the chart master before video generation. Generate each full exercise contact card jointly to minimize within-card drift.
+
+## Exact captured Flow prompts (copy verbatim from these records)
+
+1. **07 knee push-up** (olive tank / gray shorts, earlier identity): the exact executed 6-second Flow text is in [PHOTO_FLOW_VIDEO_PILOTS_2026-11-25.md](PHOTO_FLOW_VIDEO_PILOTS_2026-11-25.md), section "Exact Flow request, 07". Result: credible single-frame full-cycle movement, different older identity; not the canonical current boy.
+2. **08 straight-leg sit-up** (blue tank / charcoal shorts): verbatim executed 6-second Flow text in the same document, section "Exact Flow request, 08". Result: strong rise/reach **and full return to supine** after earlier one-way failures. The wording about returning all the way onto back and head matters. Generator: Flow Omni 1.2 Flash, 6 s, quoted 18 credits, 720p source.
+3. **09 four-phase current-boy knee-push-up card**: exact still-generation text in [PHOTO_PILOT_RUN_KNEE_PUSHUP_CURRENT_IDENTITY_2026-11-25.md](PHOTO_PILOT_RUN_KNEE_PUSHUP_CURRENT_IDENTITY_2026-11-25.md), section "IMAGE GENERATION PROMPT (verbatim)". The same file contains the full ready-to-paste single-frame Flow video prompt and describes the in-Flow frame editing that generated **10**. The still card was not directly used as video input. **Caveat:** the prompt is labeled "ready for Flow" in the record; this alone does not prove the executed 10 video prompt matched character-for-character. Treat the original editor text as not independently captured unless verified.
+4. **11 four-phase prone back-extension card**: exact prior still-generation prompt in the test archive's 11_PROMPT_QA__Prone_Back_Extension_2026-11-25.txt. The 2x2 rest / chest lift / straight-leg lift / combined sequence is a promising still candidate; do not claim the video succeeded.
+5. **12–13 prone Flow editing/video prompts:** the source records describe the exact *technique* (saved frames, Nano Banana 2.1 pose edit; long knees, modest 8–12 cm leg lift), but **do not preserve every word of every executed editor/video prompt verbatim**. Label any prompt recreated from those notes **RECONSTRUCTED** until the Flow project editor text is recovered. See the 14_PROMPT_QA__Prone_Back_Extension_Video_Loop_2026-11-25.txt record in the art archive.
+
+## Result register (video and form are separate outcomes)
+
+| ID | Tool/input | What worked | Failure/limit | Status |
+| --- | --- | --- | --- | --- |
+| 07 | Flow Omni 1.2 Flash; one old-identity kneeling-up photo | Plausible bend and return; no obvious multi-body ghost | Older olive-shirt identity, far arm visibility | REVIEW |
+| 08 | Flow Omni 1.2 Flash; one blue-shirt supine photo | Complete sit-up and recovery by explicit time beats | Loop seam/shape needs owner review | REVIEW |
+| 09 | Image generation; jointly made four-phase card | More consistent current-boy knee-push-up identity and anatomy | Four-panel still, not actual video | REVIEW |
+| 10 | Flow Nano Banana 2.1 edited native start image; Omni 1.2 Flash video | Promising current-blue-shirt kneeling up/down/up movement | Face, shoe and near/far arm/hip QA; no user form approval | REVIEW |
+| 11 | Image generation; jointly made four-phase prone card | Modest age-appropriate chest/hip straight-leg geometry | Stills do not validate motion | REVIEW |
+| 12 | Flow video from prone rest | Animation produced a leg rise | Knees bent toward ~90°; invalid 5BX extension | REJECT |
+| 13 | Flow video from correct straight-leg *peak* still | First ~3 s descent had relatively stable straight knees | Return used incorrect knee curl; identity/palette lighter | PARTIAL |
+| 14 | ffmpeg first 3 s from 13 + reversed first 3 s | Fluent, viewable six-second loop; no new generative identity pass | Owner says exercise form still poor; inherits video 13 color/face drift | PARTIAL: motion-only success, not form approval |
+
+For private MP4s and visual QA, use the individually playable files in the [mobile 5BX Video Review Drive folder](https://drive.google.com/drive/folders/1W9dWViCZENv2UvoZ_k0EME8h9xRUWNKY). Do not upload children's source images or video into the public GitHub repo without explicit release approval.
+
+## Portable prompt blocks for future tests — PROPOSED, NOT VALIDATED ON GROK
+
+**STILL / joint contact card (adapt exercise geometry per original 5BX reference):**
+
+> Make ONE high-resolution 35 mm documentary-photography contact card showing the SAME real-looking, ordinary 13–14-year-old middle-school boy in [3 or 4] chronological phases of [exact 5BX exercise]. The attached chart-master image is the authoritative reference for his face, age, natural messy dark hair, fair skin, normal softly undeveloped arms/legs/chest/waist, shirt, shorts, socks, shoes, wristband, and red running-track scenery. The 1959 5BX reference photo is authoritative ONLY for movement mechanics, not the actor. Generate all panels together with identical camera, boy, background, lighting, wardrobe and scale. Show all hands, feet, knees and elbows with two arms and two legs; pin [specific contact points] to the same locations. Phase 1 [anatomically exact start]. Phase 2 [working middle]. Phase 3 [reasonable peak]. Phase 4 [return to same start]. Do not lengthen limbs, invent adult flexibility/musculature, change age or make an impossible maximum-range pose. Every full figure remains visible, no extra limbs or labels.
+
+**VIDEO / one opening frame, explicit positive beat sequence:**
+
+> Using the ATTACHED SINGLE START PHOTOGRAPH as frame 1 and strict actor/outfit/camera reference, generate exactly one 5–6-second continuous photographic exercise shot. The same middle-school boy performs [exercise]. Seconds 0–1: hold [start]. Seconds 1–3: move [specific joints, direction, range] while [specific supports] stay planted; knees/elbows do [exact mechanics]. Seconds 3–6: return by natural body motion to [specific start] and hold; do not mirror the body or play the reference images backward. Keep face/age/hair/body, tank/shorts/socks/shoes, track and camera fixed. Natural youth range; no changing colors, generated extra limbs, shifting planted contacts, cuts, dissolves or reverse-order frame interpolation.
+
+**Important:** For Flow, the empirical best recent input was ONE approved start frame, **not** a three-frame storyboard. Three-frame video prompts occasionally reverse movement order or ghost/interpolate incorrectly. This is a result in these pilots, not proof that all future multi-frame tools will fail.
+
+**Grok Imagine handoff test (unverified):** Give Grok the same approved chart-master image and 1959 pose reference; request the full joint contact card first. Then use only the chosen first (or peak) still with the video block, while holding outfit, angle, duration and exercise motion constant. Record the Grok model, actual verbatim submitted prompt, image IDs, settings, output links, and frame-by-frame issues. Do not claim the above wording already succeeded in Grok.
+
+## Failure patterns worth retaining
+
+- **Knee push-up:** profile near 90° helps keep knees and hands planted, avoids a raised rear, and reduces far-arm "spider" artifact. Even a fluent video can teach poor form.
+- **Prone extension:** unqualified "raise legs" often makes feet shift backward or knees curl. Specify hip-driven *upward vertical displacement*, pelvis grounded, legs remaining nearly straight, small age-appropriate lift. One prompt explicitly saying this still produced knee curl, so the prohibition alone is insufficient.
+- **Forehead/V pike push-up:** model previously elongated the child and hyperextended shoulders/elbows to satisfy idealized forehead contact; prefer believable near-contact and unchanged limb lengths.
+- **Toe reach:** forcing 6 inches beyond outer foot can lengthen arms or exaggerate flexibility; ordinary near-outside-foot reach is more honest for this boy.
+- **Scissor / astride jump:** ballet-style pointed toes, reversed near/far legs and misleading overlap recur. State grounded athletic shoe mechanics and foreground/background thigh order. Side-oblique ~20–30° works for most exercises, but frontal/toe-touch and kneeling side-profile can be exceptions.
+- **Cross-exercise image edits:** new lighter-blue shirt and blue-gray shorts/face variation accumulate when input is repeatedly edited from an earlier generated video. Treat this as a controlled variable, not merely a cosmetic afterthought.
+- **Video QA:** score (a) fluid motion, (b) exact 5BX mechanics, and (c) same boy/wardrobe/scene **independently**. Do not promote a motion-only success to form-approved content.
+
+## How to log the next job
+
+Record: job ID, date, chart/exercise, input image identity/hash, pose authority/reference, *exact* raw submitted image prompt, *exact* raw submitted video prompt, tool/model/settings/credits, resulting file/link, assistant motion/form/identity verdict, Charles's verdict, and **single intended change** for next iteration. Mark missing verbatim prompts as MISSING; mark authored replacements as PROPOSED. This lets another agent run a controlled Grok-vs-Flow comparison without inventing past inputs.
+
+Other workflow rules: [photo/video pilot playbook](PHOTO_VIDEO_PILOT_PLAYBOOK.md) and [photographic character direction](PHOTOREALISTIC_AVATAR_DIRECTION_2026-11-25.md).
