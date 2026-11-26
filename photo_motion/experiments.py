@@ -710,6 +710,119 @@ def record_artifact(folder, run_id, *, artifact_path, role, locator):
         return receipt
 
 
+def audit_receipts(folder):
+    """Read-only internal receipt consistency audit; never read private media.
+
+    This can find corrupted receipts or conflicting attributions in an
+    otherwise readable store. It cannot independently confirm actual provider
+    debits, that a stored locator still serves the same bytes, or form safety.
+    """
+    with _locked_store(folder) as store:
+        state = _snapshot(store)
+        issues = []
+        checked_charges = 0
+        checked_artifacts = 0
+        provider_ids = {}
+        artifact_locations = {}
+        run_ids = {p.stem for p in (store / "intents").glob("*.json")}
+
+        def issue(code, reference):
+            # Never expose a private locator or verbatim prompt in CLI output.
+            issues.append({"code": code, "receipt": reference[:12]})
+
+        charges_root = store / "charges"
+        if charges_root.is_symlink():
+            issue("SYMLINK_CHARGE_DIRECTORY", "charges")
+        charge_paths = [] if charges_root.is_symlink() else sorted(charges_root.glob("*.json"))
+        for path in charge_paths:
+            checked_charges += 1
+            reference = path.stem
+            if path.is_symlink():
+                issue("SYMLINK_CHARGE_RECEIPT", reference)
+                continue
+            receipt = _read(path)
+            if (not isinstance(receipt, dict)
+                    or set(receipt) != {"schema_version", "run_id", "actual_credits",
+                                 "provider_generation_id", "outcome", "release_status",
+                                 "recorded_at_utc"}
+                    or receipt.get("schema_version") != SCHEMA_VERSION
+                    or receipt.get("outcome") not in ("COMPLETED", "FAILED")
+                    or not isinstance(receipt.get("recorded_at_utc"), str)
+                    or not receipt["recorded_at_utc"].strip()):
+                issue("INVALID_CHARGE_RECEIPT_SCHEMA", reference)
+                continue
+            generation_id = receipt.get("provider_generation_id")
+            if not isinstance(generation_id, str) or not generation_id.strip():
+                issue("MISSING_PROVIDER_GENERATION_ID", reference)
+            elif generation_id in provider_ids and provider_ids[generation_id] != reference:
+                # One provider generation cannot truthfully be billed as two
+                # independent attempts without further reconciliation.
+                issue("DUPLICATE_PROVIDER_GENERATION_ID", reference)
+            else:
+                provider_ids[generation_id] = reference
+
+        artifact_root = store / "artifacts"
+        if artifact_root.is_symlink():
+            issue("SYMLINK_ARTIFACT_DIRECTORY", "artifacts")
+        elif artifact_root.exists():
+            for directory in sorted(artifact_root.iterdir()):
+                if directory.is_symlink() or not directory.is_dir():
+                    issue("INVALID_ARTIFACT_RUN_DIRECTORY", directory.name)
+                    continue
+                if directory.name not in run_ids:
+                    issue("ARTIFACT_FOR_UNKNOWN_RUN", directory.name)
+                for path in sorted(directory.iterdir()):
+                    checked_artifacts += 1
+                    reference = path.stem
+                    if path.is_symlink() or not path.is_file() or path.suffix != ".json":
+                        issue("INVALID_ARTIFACT_RECEIPT_FILE", reference)
+                        continue
+                    try:
+                        receipt = _read(path)
+                        proof = receipt.get("proof") if isinstance(receipt, dict) else None
+                        if (not isinstance(receipt, dict)
+                                or set(receipt) != {"artifact_id", "created_at_utc", "proof"}
+                                or not isinstance(proof, dict)
+                                or set(proof) != {"schema_version", "run_id", "role", "locator",
+                                                      "sha256", "size_bytes", "verification", "release_status"}
+                                or receipt.get("artifact_id") != reference
+                                or _digest_bytes(_canonical(proof)) != reference
+                                or proof.get("schema_version") != SCHEMA_VERSION
+                                or proof.get("run_id") != directory.name
+                                or proof.get("verification") != "rehashed_from_local_bytes"
+                                or proof.get("release_status") != HOLD
+                                or not isinstance(proof.get("sha256"), str)
+                                or not DIGEST.fullmatch(proof["sha256"])
+                                or type(proof.get("size_bytes")) is not int
+                                or proof["size_bytes"] < 0
+                                or not isinstance(receipt.get("created_at_utc"), str)
+                                or not receipt["created_at_utc"].strip()):
+                            issue("INVALID_ARTIFACT_RECEIPT_PROOF", reference)
+                            continue
+                        role = _require_text(proof.get("role"), "artifact.role")
+                        locator = _require_text(proof.get("locator"), "artifact.locator")
+                    except (ExperimentError, KeyError, TypeError, ValueError):
+                        issue("INVALID_ARTIFACT_RECEIPT_PROOF", reference)
+                        continue
+                    if role == "raw-generated-video" and proof["size_bytes"] == 0:
+                        issue("EMPTY_RAW_VIDEO_RECEIPT", reference)
+                    key = (directory.name, role, locator)
+                    prior = artifact_locations.get(key)
+                    if prior is not None and prior != (proof["sha256"], proof["size_bytes"]):
+                        # Keep both immutable receipts: only flag the ambiguous
+                        # reuse of one stable locator for different bytes.
+                        issue("CONFLICTING_ARTIFACT_LOCATOR", reference)
+                    artifact_locations[key] = (proof["sha256"], proof["size_bytes"])
+
+        return {"verdict": "HOLD_RECEIPT_INCONSISTENCY" if issues else "PASS_INTERNAL_RECEIPT_CONSISTENCY_ONLY",
+                "checked_charge_receipts": checked_charges,
+                "checked_artifact_receipts": checked_artifacts,
+                "issues": issues,
+                "ledger_actual_credits": state["actual_credits"],
+                "ledger_pending_reserved_credits": state["pending_reserved_credits"],
+                "limitation": "Does not rehash absent video, confirm live provider debit, or approve form/release"}
+
+
 def _main(argv=None):
     parser = argparse.ArgumentParser(description="Immutable photographic experiment provenance and authorized credits")
     actions = parser.add_subparsers(dest="command", required=True)
@@ -728,6 +841,8 @@ def _main(argv=None):
     plan.add_argument("--request", required=True, help="Private request JSON, see EXPERIMENTS.md")
     state = actions.add_parser("status", help="Read current credit ceiling, spent, and pending reservations")
     state.add_argument("--store", required=True)
+    audit = actions.add_parser("audit", help="Check internal charge/artifact receipts without reading media")
+    audit.add_argument("--store", required=True)
     charged = actions.add_parser("settle", help="Record provider's actual charge once known")
     charged.add_argument("--store", required=True)
     charged.add_argument("--run-id", required=True)
@@ -753,6 +868,8 @@ def _main(argv=None):
             result = reserve(args.store, _read(Path(args.request)))
         elif args.command == "status":
             result = snapshot(args.store)
+        elif args.command == "audit":
+            result = audit_receipts(args.store)
         elif args.command == "settle":
             result = settle(args.store, args.run_id, actual_credits=args.actual_credits,
                             provider_generation_id=args.provider_generation_id, outcome=args.outcome)
@@ -763,6 +880,8 @@ def _main(argv=None):
         print(f"ERROR: {exc}", file=sys.stderr)
         return 2
     print(json.dumps(result, indent=2, sort_keys=True))
+    if args.command == "audit" and result["issues"]:
+        return 3
     return 0
 
 

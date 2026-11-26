@@ -144,6 +144,34 @@ python3 -m photo_motion.experiments artifact \
 
 Each artifact receipt records SHA-256, byte size, role and stable locator. A changed file results in **another** receipt; the old one survives. Track human review separately in the project's established process.
 
+### Read-only internal receipt audit before private backup
+
+Run this against the **existing** private ledger after recording the actual
+charge and the downloaded raw media (and before taking a private backup):
+
+```bash
+python3 -m photo_motion.experiments audit \
+  --store /private/5bx-photo-experiments
+```
+
+The audit adds **no new ledger, status board, artifact, paid call, or credit
+charge**. It checks internal charge-receipt schemas and duplicate provider
+generation IDs; verifies artifact-receipt IDs against their immutable proof
+content and recorded run; flags symlink/path anomalies, empty raw-video
+receipts and one stable artifact locator attributed to conflicting bytes.
+It reports `PASS_INTERNAL_RECEIPT_CONSISTENCY_ONLY` with exit code `0`, or
+`HOLD_RECEIPT_INCONSISTENCY` with issue codes and exit code `3`. In either
+case, both receipts of a conflict remain untouched for investigation.
+Invalid ledger accounting still fails closed with exit code `2`.
+
+**Do not mistake this for external verification.** The audit deliberately
+does not reopen raw media, prove that a private locator still resolves,
+independently validate a Flow debit, authenticate a provider generation ID,
+or judge photographic anatomy/form. Rehash the saved MP4 independently,
+compare the actual provider account history, and use the existing video QA
+before any owner review. A filesystem administrator could still alter the
+local ledger; preserve its private external archive.
+
 ## Reproducibility and failure boundaries
 
 - The ledger captures the exact declared *recipe* and factual output hashes, but cannot guarantee the video model will recreate the same pixels or validate exercise mechanics.

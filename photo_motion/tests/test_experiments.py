@@ -143,6 +143,77 @@ class ExperimentLedgerTests(unittest.TestCase):
         preserved = json.loads((self.private / "artifacts" / run["run_id"] / f"{first['artifact_id']}.json").read_text())
         self.assertEqual(first, preserved)
 
+    def test_read_only_receipt_audit_accepts_clean_store_and_keeps_media_private(self):
+        self.initialize()
+        run = experiments.reserve(self.private, self.request())
+        experiments.settle(self.private, run["run_id"], actual_credits="8",
+                           provider_generation_id="flow-synthetic-generation-1", outcome="COMPLETED")
+        experiments.record_artifact(self.private, run["run_id"], artifact_path=self.video,
+                                    role="raw-generated-video", locator="fixture:video/synthetic-1")
+        original_paths = sorted(str(p) for p in self.private.rglob("*.json"))
+        result = experiments.audit_receipts(self.private)
+        self.assertEqual(result["verdict"], "PASS_INTERNAL_RECEIPT_CONSISTENCY_ONLY")
+        self.assertEqual(result["issues"], [])
+        self.assertEqual(result["checked_charge_receipts"], 1)
+        self.assertEqual(result["checked_artifact_receipts"], 1)
+        self.assertEqual(sorted(str(p) for p in self.private.rglob("*.json")), original_paths)
+        self.assertNotIn("private://", json.dumps(result))
+
+    def test_receipt_audit_flags_same_provider_generation_attributed_to_two_runs(self):
+        self.initialize()
+        one = experiments.reserve(self.private, self.request(attempt="one"))
+        two = experiments.reserve(self.private, self.request(attempt="two"))
+        for run in (one, two):
+            experiments.settle(self.private, run["run_id"], actual_credits="8",
+                               provider_generation_id="same-flow-output-id", outcome="COMPLETED")
+        report = experiments.audit_receipts(self.private)
+        self.assertEqual(report["verdict"], "HOLD_RECEIPT_INCONSISTENCY")
+        self.assertIn("DUPLICATE_PROVIDER_GENERATION_ID", [i["code"] for i in report["issues"]])
+        self.assertEqual(experiments.snapshot(self.private)["actual_credits"], "16")
+
+    def test_receipt_audit_preserves_both_conflicting_artifacts_and_reports_locator(self):
+        self.initialize()
+        run = experiments.reserve(self.private, self.request())
+        one = experiments.record_artifact(self.private, run["run_id"], artifact_path=self.video,
+                                          role="raw-generated-video", locator="fixture:stable-video")
+        self.video.write_bytes(b"different synthetic bytes for the same stable locator")
+        two = experiments.record_artifact(self.private, run["run_id"], artifact_path=self.video,
+                                          role="raw-generated-video", locator="fixture:stable-video")
+        report = experiments.audit_receipts(self.private)
+        self.assertIn("CONFLICTING_ARTIFACT_LOCATOR", [i["code"] for i in report["issues"]])
+        self.assertEqual(report["checked_artifact_receipts"], 2)
+        self.assertNotEqual(one["artifact_id"], two["artifact_id"])
+        self.assertEqual(len(list((self.private / "artifacts" / run["run_id"]).glob("*.json"))), 2)
+        self.assertNotIn("fixture:stable-video", json.dumps(report))
+
+    def test_receipt_audit_rejects_modified_artifact_proof_and_symlink(self):
+        self.initialize()
+        run = experiments.reserve(self.private, self.request())
+        artifact = experiments.record_artifact(self.private, run["run_id"], artifact_path=self.video,
+                                               role="raw-generated-video", locator="fixture:video/one")
+        path = self.private / "artifacts" / run["run_id"] / f"{artifact['artifact_id']}.json"
+        path.chmod(0o600)
+        receipt = json.loads(path.read_text())
+        receipt["proof"]["size_bytes"] += 1
+        path.write_text(json.dumps(receipt), encoding="utf-8")
+        report = experiments.audit_receipts(self.private)
+        self.assertIn("INVALID_ARTIFACT_RECEIPT_PROOF", [i["code"] for i in report["issues"]])
+        path.unlink()
+        path.symlink_to(self.video)
+        report = experiments.audit_receipts(self.private)
+        self.assertIn("INVALID_ARTIFACT_RECEIPT_FILE", [i["code"] for i in report["issues"]])
+
+    def test_receipt_audit_cli_has_nonzero_exit_when_inconsistent(self):
+        self.initialize()
+        run = experiments.reserve(self.private, self.request())
+        self.video.write_bytes(b"")
+        experiments.record_artifact(self.private, run["run_id"], artifact_path=self.video,
+                                    role="raw-generated-video", locator="fixture:empty")
+        with contextlib.redirect_stdout(io.StringIO()) as output:
+            code = experiments._main(["audit", "--store", str(self.private)])
+        self.assertEqual(code, 3)
+        self.assertIn("EMPTY_RAW_VIDEO_RECEIPT", [i["code"] for i in json.loads(output.getvalue())["issues"]])
+
     def test_declared_hash_is_unverified_and_bad_hash_rejected(self):
         self.initialize()
         req = self.request()
