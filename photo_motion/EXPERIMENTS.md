@@ -6,7 +6,7 @@ Every intent, actual-charge receipt, and artifact receipt carries an irreversibl
 
 `HOLD_FOR_HUMAN_FORM_AND_RELEASE_REVIEW`
 
-The human reviewer must inspect the **actual continuous MP4**, not a four-panel montage, before any downstream release. These records are cost and provenance evidence, **not** technical/form QA passes. `photo_motion.inspect`, contact/temporal/identity QA and the motion-contract checks remain complementary diagnostics.
+This flag **does not mean Charles must approve each diagnostic experiment**. The standing authorization permits autonomous photographic Flow tests within the original **200-credit cumulative workstream cap**, with a conditional increase to **300 only when an actual bottleneck is documented**. Record and optimize every real charge; a large Flow account balance does **not** increase the workstream allowance. Do not request per-attempt owner approval. The human reviewer must inspect the **actual continuous MP4**, not a four-panel montage, before any **final exercise-video release or publication**. These records are cost and provenance evidence, **not** technical/form QA passes. `photo_motion.inspect`, contact/temporal/identity QA and the motion-contract checks remain complementary diagnostics.
 
 ## Private storage and authorization
 
