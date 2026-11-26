@@ -78,6 +78,10 @@ python3 -m photo_motion inspect photo_motion/specs/chart1-scissor-jump.json /pat
 
 Each inspection records the exact MP4 SHA-256, contract SHA-256, exact submitted prompt SHA-256 (if supplied), provider/model/known settings, original frame references, codec, FPS, phase sampling times, and any technical warnings. This makes deterministic **downstream inspection** repeatable and preserves the experimental recipe. AI video synthesis itself may be nondeterministic even when all known inputs match.
 
+### Audio as an explicit delivery constraint
+
+Add `"audio_policy": "forbid"` to a motion spec when its video must contain **no audio stream**, not even a silent one. The field is optional; omitted contracts use `"unspecified"` and do not fail just for containing audio. Inspection records stream count/codecs and read-only decoded mean/peak dBFS metadata. If a forbidden stream exists, it adds a technical warning even for digitally silent AAC. A finite decoded peak indicates nonzero PCM samples, **not necessarily audibility**. If the decoder cannot measure a track, the file still fails the forbidden-stream condition. The original source MP4 is never altered, and the inspector never marks form or release approved. Remove audio only from a separate, documented derived delivery asset if the owner chooses to use the clip.
+
 The first actual-video engineering smoke run is documented in [`diagnostics/video10-kneeling-pushup-2026-11-26.md`](diagnostics/video10-kneeling-pushup-2026-11-26.md). It checked the original blue-shirt Flow video 10 and found a contact/loop registration issue worth measuring before any approval. The raw private MP4 and extracted frames are not committed here.
 
 ## Additional real-video diagnostics

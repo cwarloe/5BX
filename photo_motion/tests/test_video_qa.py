@@ -90,7 +90,6 @@ class TestVideoQA(unittest.TestCase):
             self.assertTrue((tmp / "qa/phase_contact_sheet.png").exists())
             self.assertTrue((tmp / "qa/inspection.json").exists())
             self.assertEqual(json.loads((tmp / "qa/inspection.json").read_text())["form_and_release_approval"], "NOT_EVALUATED")
-
             with self.assertRaises(FileExistsError):
                 inspect(spec, spec_path, source, tmp / "qa")
             # An old output directory with an attacker-placed link to the
@@ -101,6 +100,54 @@ class TestVideoQA(unittest.TestCase):
             with self.assertRaises(FileExistsError):
                 inspect(spec, spec_path, source, hostile)
             self.assertEqual(source.read_bytes(), before)
+
+    @unittest.skipUnless(shutil.which("ffmpeg") and shutil.which("ffprobe"), "ffmpeg binaries not installed")
+    def test_forbidden_audio_is_flagged_even_when_track_is_silent(self):
+        try:
+            import PIL  # noqa: F401
+        except ImportError:
+            self.skipTest("Pillow not installed")
+        spec_path = ROOT / "specs/chart1-stationary-low-run.json"
+        spec = load_spec(spec_path)
+        self.assertEqual(spec["audio_policy"], "forbid")
+        with tempfile.TemporaryDirectory() as folder:
+            tmp = Path(folder)
+            for audio, source_name in (("anullsrc=r=48000:cl=mono", "silent.mp4"),
+                                       ("sine=frequency=440:sample_rate=48000", "tone.mp4")):
+                source = tmp / source_name
+                subprocess.run(["ffmpeg", "-nostdin", "-hide_banner", "-loglevel", "error", "-y",
+                                "-f", "lavfi", "-i", "testsrc2=size=640x360:rate=24:duration=6",
+                                "-f", "lavfi", "-i", audio, "-t", "6", "-shortest", "-c:v", "mpeg4",
+                                "-c:a", "aac", str(source)], check=True, capture_output=True)
+                original_hash = source.read_bytes()
+                result = inspect(spec, spec_path, source, tmp / ("qa-" + source.stem))
+                self.assertEqual(source.read_bytes(), original_hash)
+                self.assertEqual(result["video"]["audio_stream_count"], 1)
+                self.assertEqual(result["audio"]["policy"], "forbid")
+                self.assertTrue(any("Audio policy forbids sound" in w for w in result["technical_warnings"]))
+                self.assertEqual(result["form_and_release_approval"], "NOT_EVALUATED")
+                if source_name == "tone.mp4":
+                    self.assertIsInstance(result["audio"]["streams"][0]["peak_volume_dbfs"], float)
+                    self.assertTrue(result["audio"]["streams"][0]["has_nonzero_pcm_samples"])
+
+    @unittest.skipUnless(shutil.which("ffmpeg") and shutil.which("ffprobe"), "ffmpeg binaries not installed")
+    def test_forbidden_audio_accepts_video_without_audio_stream(self):
+        try:
+            import PIL  # noqa: F401
+        except ImportError:
+            self.skipTest("Pillow not installed")
+        spec_path = ROOT / "specs/chart1-stationary-low-run.json"
+        spec = load_spec(spec_path)
+        with tempfile.TemporaryDirectory() as folder:
+            tmp = Path(folder)
+            source = tmp / "video-only.mp4"
+            subprocess.run(["ffmpeg", "-nostdin", "-hide_banner", "-loglevel", "error", "-y",
+                            "-f", "lavfi", "-i", "testsrc2=size=640x360:rate=24:duration=6",
+                            "-c:v", "mpeg4", str(source)], check=True, capture_output=True)
+            result = inspect(spec, spec_path, source, tmp / "qa")
+            self.assertEqual(result["video"]["audio_stream_count"], 0)
+            self.assertEqual(result["audio"]["streams"], [])
+            self.assertFalse(any("Audio policy forbids" in w for w in result["technical_warnings"]))
 
     @unittest.skipUnless(shutil.which("ffmpeg") and shutil.which("ffprobe"), "ffmpeg binaries not installed")
     def test_source_swapped_during_frame_extraction_cannot_produce_a_mixed_take_report(self):

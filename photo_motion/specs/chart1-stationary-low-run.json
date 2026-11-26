@@ -8,6 +8,7 @@
   "status": "EXPERIMENTAL",
   "duration_seconds": 6,
   "fps": 24,
+  "audio_policy": "forbid",
   "identity_reference": "sprites/docs/PHOTOREALISTIC_AVATAR_DIRECTION_2026-11-25.md; unchanged Chart 1 v2 photographic identity, not frame descended from other Flow exercises",
   "movement_reference": "data/5bx-charts.json Chart 1 Exercise 5 low foot lift; sprites/docs/photo_batches/2026-11-26/low_run_video/INDEPENDENT_FLOW_QA.md; Video 20 has NOT passed frame-by-frame verification",
   "camera": {

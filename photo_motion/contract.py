@@ -46,6 +46,8 @@ def validate(spec):
         errors.append("schema_version must be 1")
     if not isinstance(spec["status"], str) or spec["status"] not in STATUSES:
         errors.append("status cannot assert approval; use EXPERIMENTAL/REVIEW/CANDIDATE/HOLD")
+    if spec.get("audio_policy", "unspecified") not in {"unspecified", "forbid"}:
+        errors.append("audio_policy must be 'unspecified' or 'forbid'")
     if not isinstance(spec["id"], str) or not spec["id"].strip():
         errors.append("id must be a nonempty string")
     if not isinstance(spec["chart"], int) or isinstance(spec["chart"], bool) or not 1 <= spec["chart"] <= 6:
