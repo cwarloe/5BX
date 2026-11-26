@@ -170,6 +170,8 @@ def _check_pushup(phases):
         required_chest = "touch_floor" if phase.get("pose_key") == "bottom" else "clear_of_floor"
         if chest != required_chest:
             errors.append(f"phase {phase['id']}: Chart 1 chest position must be {required_chest}; original booklet requires gentle chest-to-floor contact for a completed repetition")
+        if phase.get("pose_key") == "bottom" and phase.get("elbows") != "bent":
+            errors.append(f"phase {phase['id']}: chest-to-floor bottom requires bent elbows, not a straight-arm pose")
     if phases[0].get("elbows") != "extended" or phases[-1].get("elbows") != "extended":
         errors.append("kneeling push-up must start and finish with extended elbows")
     if not any(p.get("elbows") == "bent" for p in phases[1:-1]):

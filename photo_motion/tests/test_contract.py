@@ -113,6 +113,9 @@ class TestMotionContract(unittest.TestCase):
         bad["phases"][2]["chest_position"] = "hover_above_floor"
         self.assertIn("original booklet requires gentle chest-to-floor contact", " ".join(validate(bad)))
         self.assertIn('"chest_position":"touch_floor"', _prompt(self.pushup))
+        bad = copy.deepcopy(self.pushup)
+        bad["phases"][2]["elbows"] = "extended"
+        self.assertIn("bottom requires bent elbows", " ".join(validate(bad)))
 
     def test_pushup_must_return_to_start(self):
         bad = copy.deepcopy(self.pushup)
