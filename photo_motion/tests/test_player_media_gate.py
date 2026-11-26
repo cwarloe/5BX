@@ -70,7 +70,7 @@ class PlayerMediaAdmissionTests(unittest.TestCase):
             "revision": "synthetic-scissor-v1", "status": "DONE", "agent": "synthetic-producer",
             "contract": "photo_motion/specs/chart1-scissor-synthetic.json",
             "video": {"url": self.url, "sha256": self.hash, "media_type": "video/mp4"},
-            "inspection": {"video_sha256": self.hash, "report_sha256": "e" * 64,
+            "inspection": {"video_sha256": self.hash, "report_sha256": file_sha256(evidence),
                            "evidence": "photo_motion/diagnostics/private-qa-summary.md"},
             "checks": {g: {"verdict": "PASS", "evidence": "synthetic fixture only"}
                        for g in ("technical", "form", "motion", "loop", "identity")},
@@ -130,6 +130,13 @@ class PlayerMediaAdmissionTests(unittest.TestCase):
         report = self.evaluate()
         self.assert_held(report)
         self.assertIn("not registered in the canonical mobile index", " ".join(report["blockers"]))
+
+    def test_modified_inspection_report_cannot_pass_canonical_qa(self):
+        evidence = self.root / self.qa["inspection"]["evidence"]
+        evidence.write_text("Modified after synthetic inspection was recorded.")
+        report = self.evaluate()
+        self.assert_held(report)
+        self.assertIn("validation errors", " ".join(report["blockers"]))
 
     def test_absent_or_pending_or_stale_canonical_record_is_held(self):
         self.qa_path.unlink()

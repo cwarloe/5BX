@@ -1,5 +1,6 @@
 """Fail-closed tests for agent-complete versus owner-accepted video handoff."""
 
+import hashlib
 import json
 import sys
 import tempfile
@@ -12,7 +13,6 @@ from kit import photo_traveler, photo_workflow
 
 
 H = "a" * 64
-I = "b" * 64
 URL = "https://drive.google.com/file/d/test-video-one/view"
 
 
@@ -29,6 +29,7 @@ class WorkflowTest(unittest.TestCase):
         self.inspection = self.root / "photo_motion/diagnostics/scan.md"
         self.inspection.parent.mkdir(parents=True)
         self.inspection.write_text("Inspection results; owner form approval not inferred.")
+        self.inspection_sha = hashlib.sha256(self.inspection.read_bytes()).hexdigest()
         (self.batch / "MOBILE_REVIEW_INDEX.md").write_text(
             "[Play exact scissor video](" + URL + ")")
 
@@ -46,7 +47,7 @@ class WorkflowTest(unittest.TestCase):
                 "revision": "scissor-v2", "status": "READY_FOR_REVIEW", "agent": "producer-agent",
                 "contract": "photo_motion/specs/chart1-scissor.json",
                 "video": {"url": URL, "sha256": H, "media_type": "video/mp4"},
-                "inspection": {"video_sha256": H, "report_sha256": I,
+                "inspection": {"video_sha256": H, "report_sha256": self.inspection_sha,
                                "evidence": "photo_motion/diagnostics/scan.md"},
                 "checks": checks,
                 "review": {"summary": "One complete motion cycle inspected",
@@ -92,6 +93,26 @@ class WorkflowTest(unittest.TestCase):
         (self.batch / "MOBILE_REVIEW_INDEX.md").write_text("No output link yet")
         result = photo_workflow.collect(self.root)
         self.assertTrue(any("not registered" in x for x in result["errors"]))
+
+    def test_inspection_report_digest_is_verified_against_exact_file_bytes(self):
+        item = self.ready()
+        self.record(item)
+        self.assertEqual(len(photo_workflow.collect(self.root)["ready_for_review"]), 1)
+
+        item["inspection"]["report_sha256"] = "b" * 64
+        self.record(item)
+        result = photo_workflow.collect(self.root)
+        self.assertEqual(result["ready_for_review"], [])
+        self.assertTrue(any("report SHA-256 does not match" in error
+                            for error in result["errors"]))
+
+        item["inspection"]["report_sha256"] = self.inspection_sha
+        self.record(item)
+        self.inspection.write_text("Inspection modified after QA review.")
+        result = photo_workflow.collect(self.root)
+        self.assertEqual(result["ready_for_review"], [])
+        self.assertTrue(any("report SHA-256 does not match" in error
+                            for error in result["errors"]))
 
     def test_unlinked_or_lookalike_video_url_cannot_enter_owner_queue(self):
         """Index text or a URL substring is not a playable review link."""
