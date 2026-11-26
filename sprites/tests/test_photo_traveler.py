@@ -25,15 +25,21 @@ class PhotoTravelerTest(unittest.TestCase):
 4. [Chart 4 overview](https://drive.google.com/file/d/c4/view).
 5. [Chart 5 overview](https://drive.google.com/file/d/c5/view).
 6. [Chart 6 overview](https://drive.google.com/file/d/c6/view).
+## Full resolution references
+- Chart 3 new 29H: [full-resolution frame](https://drive.google.com/file/d/photo29h/view) — identity HOLD.
 """, encoding="utf-8")
         source = """# Chart 3
 ## Mobile gallery
 - [29E — forehead-pike ON HOLD](https://drive.google.com/file/d/photo29e/view). User caught elbows.
-- [29C — diagnostic](https://drive.google.com/file/d/photo29c/view). Not final.
+- [29C — standalone diagnostic, ELBOW REVIEW REQUIRED](https://drive.google.com/file/d/photo29c/view). Not final.
 ## Exact prompts
 - [29F — not a production output](https://drive.google.com/file/d/do_not_list/view)
 """
         (folder / photo_traveler.INVENTORIES[3]).write_text(source, encoding="utf-8")
+        (folder / photo_traveler.INVENTORIES[1]).write_text("""# Chart 1
+## Direct mobile links
+- [15 — contact sheet](https://drive.google.com/file/d/card15/view), [15A — first high-resolution start](https://drive.google.com/file/d/full15a/view), [15B — preferred full-resolution start](https://drive.google.com/file/d/full15b/view).
+""", encoding="utf-8")
 
     def test_only_current_review_outputs_are_listed(self):
         data = photo_traveler.gallery_data(self.root, chart=3)
@@ -41,11 +47,28 @@ class PhotoTravelerTest(unittest.TestCase):
         self.assertEqual([x["test"] for x in data["items"]], ["29E", "29C"])
         self.assertEqual(data["items"][0]["state"], "HOLD")
         self.assertEqual(data["latest"][0]["state"], "HOLD")
+        self.assertEqual([x["state"] for x in data["high_res"]], ["REVIEW ONLY", "HOLD"])
+        self.assertEqual(data["high_res"][1]["title"], "29H — full-resolution frame")
         html = photo_traveler.render_gallery(data, chart=3)
         self.assertIn("thumbnail?id=photo29e", html)
         self.assertIn("Read prompts and QA record", html)
         self.assertNotIn("do_not_list", html)
         self.assertIn("No human-approved exercise forms", html)
+        self.assertIn("Individual higher-resolution photo stills", html)
+        self.assertIn("thumbnail?id=photo29h", html)
+        self.assertIn("Open full-resolution still", html)
+
+    def test_all_named_full_resolution_links_are_at_bottom_without_new_ledger(self):
+        data = photo_traveler.gallery_data(self.root, chart=1)
+        self.assertEqual(len(data["items"]), 1)  # contact card stays in the main gallery
+        self.assertEqual([x["title"] for x in data["high_res"]], [
+            "15A — first high-resolution start", "15B — preferred full-resolution start"])
+        self.assertTrue(all(x["source"] == photo_traveler.INVENTORIES[1]
+                            for x in data["high_res"]))
+        html = photo_traveler.render_gallery(data, chart=1)
+        self.assertLess(html.index('id="chart-1"'), html.index('id="high-resolution-stills"'))
+        self.assertIn("Source / QA notes", html)
+        self.assertNotIn("photo29h", html)  # chart filter also applies to high-res links
 
     def test_old_gallery_remains_supported(self):
         # A missing chart record is never fabricated as a valid/approved image.
