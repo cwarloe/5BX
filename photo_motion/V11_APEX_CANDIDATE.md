@@ -1,17 +1,20 @@
 # V11 photographic B* apex — read-only candidate preflight
 
-**No accepted B* image, no paid authority, no video generation.** The first
-image candidate resembled the grounded opposite stance: independent review
-measured only 3px and 6px of shoe lift, failing the declared **25px minimum**.
-The next image candidate remains unreviewed. Never treat a plausible pose or
-its generation prompt as an approved video source.
+**B*002 passed diagnostic still-source review only; no V11 paid authority or
+video-form acceptance.** The first image candidate resembled a grounded
+opposite stance: independent review measured only 3px and 6px of shoe lift,
+failing the declared **25px minimum**. The second, separately hashed B*002
+candidate passed an independent eight-check diagnostic-source review (minimum
+two-shoe clearance 106px), but historical anatomical left/right and actual
+moving video form remain unproven. Never treat a plausible still or its
+generation prompt as an approved exercise video.
 
 `python3 -m photo_motion.apex_candidate_qa` is an **experimental, read-only
 still-image evidence gate**. It does not integrate with the credit ledger,
 reserve credits, call Flow, approve historical anatomy, or release videos.
-Future paid Frames generation needs a **separate, newly versioned** live
-provider quote/settings and precredit authority, after an actual B* candidate
-passes independent QA. A foreground-only animated character on a fixed track
+Prospective paid Frames generation requires the separately versioned
+[V12 exact-endpoint 360p gate](V12_APEX_FRAMES_PRECREDIT.md), plus a fresh live
+provider quote/settings and actual selected endpoint evidence. A foreground-only animated character on a fixed track
 is a parallel research idea and is not qualified by this B* test.
 
 ## Inputs and invariants
