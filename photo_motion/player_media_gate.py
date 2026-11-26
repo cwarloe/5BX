@@ -126,6 +126,8 @@ def evaluate(candidate, repo_root=REPO_ROOT):
         "admission": "HOLD",
         "form_and_release_approval": "NOT_EVALUATED",
         "owner_authentication": "NOT_EVALUATED",
+        "historical_diagnostic_integrity": "NOT_EVALUATED",
+        "delivered_url_byte_integrity": "NOT_EVALUATED",
         "technical_evidence": "HOLD",
         "public_release_authorized": False,
         "player_manifest": {"schemaVersion": 1, "clips": {}},
@@ -160,7 +162,7 @@ def evaluate(candidate, repo_root=REPO_ROOT):
             not isinstance(video.get("sha256"), str) or not SHA256.fullmatch(video["sha256"])):
         blockers.append("video must have an exact lowercase SHA-256, HTTPS URL, and MP4 media type")
     try:
-        if video.get("sha256") in _failed_diagnostic_hashes(root):
+        if isinstance(video.get("sha256"), str) and video["sha256"] in _failed_diagnostic_hashes(root):
             blockers.append("known failed diagnostic #20/#21 original is not an admissible clip")
     except (OSError, ValueError) as exc:
         blockers.append("cannot verify failed diagnostic exclusions: " + str(exc))
@@ -231,6 +233,10 @@ def evaluate(candidate, repo_root=REPO_ROOT):
                     multiples = trusted_slot / details["duration_seconds"]
                     if abs(multiples - round(multiples)) > EPS_SECONDS / details["duration_seconds"] or multiples < 1:
                         blockers.append("verified native clip cannot fill exact active slot without implicit trim/speed")
+                # A concurrent file replacement between first SHA, probe and
+                # frame count must never yield a seemingly stable report.
+                if file_sha256(path) != digest:
+                    blockers.append("media bytes changed during hash/probe verification; discard this inspection")
         except (OSError, RuntimeError, ValueError, KeyError, json.JSONDecodeError) as exc:
             blockers.append("local video verification failed: " + str(exc))
     try:
@@ -276,6 +282,8 @@ def main(argv=None):
     except (OSError, ValueError, json.JSONDecodeError) as exc:
         result = {"admission": "HOLD", "form_and_release_approval": "NOT_EVALUATED",
                   "owner_authentication": "NOT_EVALUATED", "public_release_authorized": False,
+                  "historical_diagnostic_integrity": "NOT_EVALUATED",
+                  "delivered_url_byte_integrity": "NOT_EVALUATED",
                   "player_manifest": {"schemaVersion": 1, "clips": {}},
                   "blockers": ["invalid candidate: " + str(exc)]}
     print(json.dumps(result, indent=2, sort_keys=True))

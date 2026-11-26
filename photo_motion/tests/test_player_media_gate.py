@@ -7,6 +7,7 @@ import subprocess
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 from photo_motion import player_media_gate as gate
 from photo_motion.video_qa import file_sha256, probe
@@ -107,6 +108,8 @@ class PlayerMediaAdmissionTests(unittest.TestCase):
     def assert_held(self, report):
         self.assertEqual(report["admission"], "HOLD")
         self.assertEqual(report["owner_authentication"], "NOT_EVALUATED")
+        self.assertEqual(report["historical_diagnostic_integrity"], "NOT_EVALUATED")
+        self.assertEqual(report["delivered_url_byte_integrity"], "NOT_EVALUATED")
         self.assertEqual(report["form_and_release_approval"], "NOT_EVALUATED")
         self.assertFalse(report["public_release_authorized"])
         self.assertEqual(report["player_manifest"], {"schemaVersion": 1, "clips": {}})
@@ -173,6 +176,26 @@ class PlayerMediaAdmissionTests(unittest.TestCase):
             self.assert_held(report)
             self.assertIn("full-native-duration", " ".join(report["blockers"]))
 
+    def test_unhashable_digest_also_produces_structured_hold(self):
+        item = copy.deepcopy(self.candidate)
+        item["video"]["sha256"] = []
+        report = self.evaluate(item)
+        self.assert_held(report)
+        self.assertIn("exact lowercase SHA-256", " ".join(report["blockers"]))
+
+    def test_source_replacement_during_ffprobe_cannot_pass(self):
+        real_probe = gate.probe
+
+        def mutate_after_probe(path):
+            details = real_probe(path)
+            path.write_bytes(path.read_bytes() + b"synthetic-race-replacement")
+            return details
+
+        with mock.patch.object(gate, "probe", side_effect=mutate_after_probe):
+            report = self.evaluate()
+        self.assert_held(report)
+        self.assertIn("media bytes changed during", " ".join(report["blockers"]))
+
     def test_six_second_scissor_cannot_be_silently_cut_to_five_seconds(self):
         longer = self._make_video("six-second-test.mp4", 6)
         item = copy.deepcopy(self.candidate)
@@ -218,6 +241,23 @@ class PlayerMediaAdmissionTests(unittest.TestCase):
         report = self.evaluate()
         self.assert_held(report)
         self.assertIn("cannot verify failed diagnostic exclusions", " ".join(report["blockers"]))
+
+    def test_valid_but_forged_diagnostic_hash_cannot_authenticate_exclusion(self):
+        """A syntactically valid changed note is NOT a trusted historical anchor.
+
+        Exercise the known source-tampering limitation without any real asset
+        hashes. The offline release remains blocked even after tampering.
+        """
+        diagnostic = self.root / gate.FAILED_DIAGNOSTIC_NOTES[0]
+        diagnostic.write_text("| Original SHA-256 | `" + self.hash + "` | Test-only failed video |\n")
+        report = self.evaluate()
+        self.assert_held(report)
+        self.assertIn("known failed diagnostic", " ".join(report["blockers"]))
+        diagnostic.write_text("| Original SHA-256 | `" + "8" * 64 + "` | Forged but valid |\n")
+        changed = self.evaluate()
+        self.assert_held(changed)
+        self.assertNotIn("known failed diagnostic", " ".join(changed["blockers"]))
+        self.assertEqual(changed["historical_diagnostic_integrity"], "NOT_EVALUATED")
 
     def test_contract_action_and_duration_must_match_version(self):
         spec = self.root / self.qa["contract"]
