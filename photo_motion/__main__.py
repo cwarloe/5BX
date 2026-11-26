@@ -23,10 +23,15 @@ def _prompt(spec):
         f"IDENTITY AUTHORITY (attach its actual image separately): {spec['identity_reference']}.",
         f"MOVEMENT AUTHORITY (inspect source separately): {spec['movement_reference']}.",
         f"CAMERA: {spec['camera']['description']}",
-        "Required chronological physical phases; times are targets, never permission to dissolve between stills:"
+        "Required chronological physical phases; times are targets, never permission to dissolve between stills.",
+        "Structured physical states below are mandatory: SUPPORT and CONTACTS describe actual foot/hand/body contact, and LIMBS name the same physical anatomy across time. Resolve any conflict with the descriptive pose text BEFORE submitting the prompt:"
     ]
     for phase in spec["phases"]:
-        lines.append(f"  {phase['time_seconds']:g}s [{phase['id']}] {phase['pose']}")
+        physical = {key: value for key, value in phase.items()
+                    if key not in ("id", "time_seconds", "pose")}
+        lines.append(f"  {phase['time_seconds']:g}s [{phase['id']}] MANDATORY_PHYSICAL_STATE "
+                     f"{json.dumps(physical, sort_keys=True, separators=(',', ':'))}")
+        lines.append(f"    Visual description: {phase['pose']}")
     lines.append("Hard rules:")
     for rule in spec["rules"]:
         lines.append(f"  - {rule}")

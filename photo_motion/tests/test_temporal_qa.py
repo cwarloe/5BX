@@ -1,12 +1,15 @@
 """Tests use tiny actual MP4s so decoder behavior is verified, not mocked."""
 
 import json
+import math
 import shutil
 import subprocess
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
+import photo_motion.temporal_qa as temporal_module
 from photo_motion.temporal_qa import _cuts, _holds, analyze, main
 
 
@@ -41,6 +44,34 @@ class TestTemporalVideoQA(unittest.TestCase):
         self.assertEqual(report["exercise_form_and_release_approval"], "NOT_EVALUATED")
         self.assertTrue(any(s["classification"] == "REVIEW_STILLNESS" for s in report["sustained_stillness"]))
         self.assertTrue(any("static" in w for w in report["technical_warnings"]))
+
+    def test_nonfinite_configuration_cannot_disable_stillness_detection(self):
+        video = self.encode("color=c=red:s=320x180:r=24:d=2")
+        for bad in (math.nan, math.inf, -math.inf):
+            with self.subTest(value=bad):
+                with self.assertRaisesRegex(ValueError, "finite"):
+                    analyze(video, still_threshold=bad)
+                with self.assertRaisesRegex(ValueError, "finite"):
+                    analyze(video, minimum_hold_seconds=bad)
+                with self.assertRaisesRegex(ValueError, "finite"):
+                    analyze(video, expected_holds=[(0, bad)])
+        destination = self.root / "should_not_exist.json"
+        self.assertEqual(main([str(video), "--report", str(destination), "--still-threshold", "nan"]), 2)
+        self.assertFalse(destination.exists())
+
+    def test_replaced_source_cannot_receive_sha_for_old_decoded_frames(self):
+        original = self.encode("color=c=red:s=320x180:r=24:d=2", name="original.mp4")
+        replacement = self.encode("testsrc2=size=320x180:rate=24:duration=2", name="replacement.mp4")
+        real_frame_times = temporal_module._frame_times
+
+        def replace_after_decoding(path):
+            timestamps = real_frame_times(path)
+            shutil.copyfile(replacement, original)
+            return timestamps
+
+        with patch.object(temporal_module, "_frame_times", side_effect=replace_after_decoding):
+            with self.assertRaisesRegex(RuntimeError, "source video changed"):
+                analyze(original)
 
     def test_expected_hold_does_not_create_false_warning(self):
         video = self.encode("color=c=blue:s=320x180:r=24:d=2")

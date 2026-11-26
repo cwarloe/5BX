@@ -176,6 +176,8 @@ def inspect(spec, spec_path, video_path, out_dir, recipe_path=None):
         raise ValueError("output directory cannot replace or contain the source video")
     if not shutil.which("ffmpeg"):
         raise RuntimeError("ffmpeg is required")
+    video_sha256 = file_sha256(video)
+    spec_sha256 = file_sha256(spec_path)
     info = probe(video)
     provenance = read_recipe(recipe_path) if recipe_path else None
     # Never replace a previous diagnostic, even if a caller accidentally
@@ -203,11 +205,17 @@ def inspect(spec, spec_path, video_path, out_dir, recipe_path=None):
         warnings.append("Clip has a frame dimension below 360px")
     if all(row["screen_space_mae_0_to_255"] < 0.5 for row in pairwise):
         warnings.append("All sampled phases look nearly identical at thumbnail resolution; verify the video contains real movement")
+    # FFprobe and each FFmpeg sample are separate readers. Reject results if
+    # a concurrent producer/rename replaces the source or movement contract.
+    if file_sha256(video) != video_sha256:
+        raise RuntimeError("source video changed during frame inspection; discard these results")
+    if file_sha256(spec_path) != spec_sha256:
+        raise RuntimeError("motion specification changed during frame inspection; discard these results")
     manifest = {
         "tool": "photo_motion.video_qa", "version": __version__,
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
-        "source_video": str(video), "source_video_sha256": file_sha256(video),
-        "spec_file": str(Path(spec_path).resolve()), "spec_sha256": file_sha256(spec_path),
+        "source_video": str(video), "source_video_sha256": video_sha256,
+        "spec_file": str(Path(spec_path).resolve()), "spec_sha256": spec_sha256,
         "video": info, "contact_sheet": board.name, "frames": samples,
         "screen_space_start_end_mae_0_to_255": seam,
         "consecutive_sample_screen_space_differences": pairwise,

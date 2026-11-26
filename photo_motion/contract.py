@@ -14,6 +14,17 @@ REQUIRED = ("schema_version", "id", "chart", "exercise", "name", "status",
             "camera", "phases", "rules", "movement_type")
 SUPPORTS = {"grounded", "airborne"}
 STATUSES = {"EXPERIMENTAL", "REVIEW", "CANDIDATE", "HOLD"}
+# Movement identity is pinned to the original Chart 1 exercise numbering in
+# data/5bx-charts.json. Scissor jumps occur within Exercise 5's run interval;
+# a motion description for another chart/exercise must not silently validate.
+CHART1_MOVEMENT_EXERCISE = {
+    "toe_touch": 1,
+    "partial_situp": 2,
+    "alternate_leg_raise": 3,
+    "kneeling_pushup": 4,
+    "stationary_run_low": 5,
+    "scissor_jump": 5,
+}
 
 
 def load_spec(path):
@@ -41,6 +52,12 @@ def validate(spec):
         errors.append("chart must be an integer from 1 to 6")
     if not isinstance(spec["exercise"], int) or isinstance(spec["exercise"], bool) or not 1 <= spec["exercise"] <= 5:
         errors.append("exercise must be an integer from 1 to 5")
+    kind = spec["movement_type"]
+    if not isinstance(kind, str) or not kind.strip():
+        errors.append("movement_type must be a nonempty string")
+    elif kind in CHART1_MOVEMENT_EXERCISE and (
+            spec["chart"] != 1 or spec["exercise"] != CHART1_MOVEMENT_EXERCISE[kind]):
+        errors.append(f"movement_type {kind!r} belongs to Chart 1 Exercise {CHART1_MOVEMENT_EXERCISE[kind]}, not Chart {spec['chart']} Exercise {spec['exercise']}")
     for field in ("name", "identity_reference", "movement_reference"):
         if not isinstance(spec[field], str) or not spec[field].strip():
             errors.append(f"{field} must be a nonempty string")

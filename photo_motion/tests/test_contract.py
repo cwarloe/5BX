@@ -19,6 +19,16 @@ class TestMotionContract(unittest.TestCase):
         self.assertEqual(validate(self.scissor), [])
         self.assertEqual(validate(self.pushup), [])
 
+    def test_core_motion_cannot_claim_unrelated_chart_or_exercise(self):
+        for base, chart, exercise in (
+            (self.scissor, 1, 4),
+            (self.pushup, 2, 4),
+        ):
+            with self.subTest(kind=base["movement_type"]):
+                bad = copy.deepcopy(base)
+                bad["chart"], bad["exercise"] = chart, exercise
+                self.assertIn("belongs to Chart 1 Exercise", " ".join(validate(bad)))
+
     def test_scissor_cannot_teleport_from_opposite_landing_to_start(self):
         bad = copy.deepcopy(self.scissor)
         bad["phases"].pop(3)
@@ -99,6 +109,11 @@ class TestMotionContract(unittest.TestCase):
         self.assertEqual(_prompt(self.scissor), _prompt(self.scissor))
         self.assertIn("SECOND distinct airborne exchange", _prompt(self.scissor))
         self.assertIn("No voice, captions or music", _prompt(self.scissor))
+        self.assertIn('"support":"airborne"', _prompt(self.scissor))
+        self.assertIn('"contacts":[]', _prompt(self.scissor))
+        self.assertIn('"arm_form":"straight_shoulder_high"', _prompt(self.scissor))
+        self.assertIn('"orange_leg":"back"', _prompt(self.scissor))
+        self.assertIn("Resolve any conflict", _prompt(self.scissor))
 
 
 if __name__ == "__main__":
