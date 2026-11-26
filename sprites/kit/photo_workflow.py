@@ -18,6 +18,10 @@ QA_ROOT = Path("sprites/docs/photo_batches")
 SPEC_ROOT = Path("photo_motion/specs")
 MARKER = re.compile(r"^<!-- 5bx-production\s*\n(.*?)\n-->\s*$", re.M | re.S)
 SHA256 = re.compile(r"[0-9a-fA-F]{64}\Z")
+# A READY video must be the exact target of a clickable Markdown link in the
+# canonical index. A prose mention or prefix of another take's URL is not a
+# registered review artifact. Angle brackets support URLs with parentheses.
+REVIEW_LINK = re.compile(r"\]\(\s*(?:<(?P<angle>https://[^<>\s]+)>|(?P<plain>https://[^()\s]+))\s*\)")
 ACTIVE = {"PRODUCING", "QA", "BLOCKED", "REWORK"}
 STATES = ACTIVE | {"READY_FOR_REVIEW", "DONE"}
 GATES = ("technical", "form", "motion", "loop", "identity")
@@ -79,8 +83,11 @@ def _indexed(root, chart, url):
         for name in ("MOBILE_REVIEW_INDEX.md", "REVIEW_INVENTORY.md",
                      f"CHART{chart}_PILOT_INVENTORY.md"):
             path = folder / name
-            if path.is_file() and url in path.read_text(encoding="utf-8"):
-                return True
+            if path.is_file():
+                targets = (match.group("angle") or match.group("plain")
+                           for match in REVIEW_LINK.finditer(path.read_text(encoding="utf-8")))
+                if url in targets:
+                    return True
     return False
 
 

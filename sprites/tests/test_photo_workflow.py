@@ -29,7 +29,8 @@ class WorkflowTest(unittest.TestCase):
         self.inspection = self.root / "photo_motion/diagnostics/scan.md"
         self.inspection.parent.mkdir(parents=True)
         self.inspection.write_text("Inspection results; owner form approval not inferred.")
-        (self.batch / "MOBILE_REVIEW_INDEX.md").write_text("Scissor video: " + URL)
+        (self.batch / "MOBILE_REVIEW_INDEX.md").write_text(
+            "[Play exact scissor video](" + URL + ")")
 
     def record(self, data, name="scissor-qa.md"):
         path = self.batch / name
@@ -91,6 +92,24 @@ class WorkflowTest(unittest.TestCase):
         (self.batch / "MOBILE_REVIEW_INDEX.md").write_text("No output link yet")
         result = photo_workflow.collect(self.root)
         self.assertTrue(any("not registered" in x for x in result["errors"]))
+
+    def test_unlinked_or_lookalike_video_url_cannot_enter_owner_queue(self):
+        """Index text or a URL substring is not a playable review link."""
+        item = self.ready()
+        self.record(item)
+        index = self.batch / "MOBILE_REVIEW_INDEX.md"
+        for text in (
+            "Status note mentions " + URL + " but gives no link",
+            "[Play a different take](" + URL + "?revision=unapproved)",
+            "[Play a different take](" + URL + "-obsolete)",
+        ):
+            with self.subTest(text=text):
+                index.write_text(text)
+                result = photo_workflow.collect(self.root)
+                self.assertEqual(result["ready_for_review"], [])
+                self.assertTrue(any("not registered" in e for e in result["errors"]))
+        index.write_text("[Play exact scissor video](" + URL + ")")
+        self.assertEqual(len(photo_workflow.collect(self.root)["ready_for_review"]), 1)
 
     def test_no_fake_owner_done_from_agent_pass(self):
         item = self.ready()
