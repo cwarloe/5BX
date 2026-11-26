@@ -267,6 +267,47 @@ class PlayerMediaAdmissionTests(unittest.TestCase):
         self.assertEqual(report["technical_evidence"], "HOLD")
         self.assertIn("frame count/FPS differs", " ".join(report["blockers"]))
 
+    def test_declared_duration_must_match_native_duration_to_browser_tolerance(self):
+        """A self-consistent 5s MP4 cannot be relabeled 4.99s and pass intake.
+
+        The legacy two-hundredths tolerance accepted such a label even though
+        the React player rejects metadata more than 1ms from its registry.
+        """
+        five = self._make_video("synthetic-5s.mp4", 5)
+        item = copy.deepcopy(self.candidate)
+        digest = file_sha256(five)
+        item["video"].update({"local_path": str(five), "sha256": digest,
+                              "duration_seconds": 4.99, "frame_count": 60})
+        spec_path = self.root / "photo_motion/specs/chart1-scissor-synthetic.json"
+        spec = json.loads(spec_path.read_text(encoding="utf-8"))
+        spec["duration_seconds"] = 5
+        spec_path.write_text(json.dumps(spec), encoding="utf-8")
+        self.qa["video"]["sha256"] = digest
+        self.qa["inspection"]["video_sha256"] = digest
+        self.qa["owner_decision"]["video_sha256"] = digest
+        self._write_qa()
+
+        report = self.evaluate(item)
+        self.assert_held(report)
+        self.assertEqual(report["technical_evidence"], "HOLD")
+        self.assertIn("native duration differs from declared", " ".join(report["blockers"]))
+
+        # The published React player's <=1ms metadata tolerance remains the
+        # shared rule; this is metadata consistency, not exercise approval.
+        item["video"]["duration_seconds"] = 4.9995
+        within_tolerance = self.evaluate(item)
+        self.assert_held(within_tolerance)
+        self.assertEqual(within_tolerance["technical_evidence"], "PASS")
+
+        # Even an exactly labeled native duration is unusable in the React
+        # registry if a rounded declared FPS makes frameCount/FPS disagree.
+        item["video"]["duration_seconds"] = 5
+        item["video"]["fps"] = 12.005
+        inconsistent_fps = self.evaluate(item)
+        self.assert_held(inconsistent_fps)
+        self.assertEqual(inconsistent_fps["technical_evidence"], "HOLD")
+        self.assertIn("declared frame count/FPS differs", " ".join(inconsistent_fps["blockers"]))
+
     def test_diagnostic_hashes_rejected_even_with_owner_looking_claim(self):
         for digest in self.synthetic_failed_hashes:
             item = copy.deepcopy(self.candidate)
