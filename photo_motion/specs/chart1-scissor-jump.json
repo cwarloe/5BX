@@ -9,7 +9,7 @@
   "duration_seconds": 6.0,
   "fps": 24,
   "identity_reference": "sprites/docs/PHOTOREALISTIC_AVATAR_DIRECTION_2026-11-25.md; chart 1 master identity v2, blue tank/charcoal shorts",
-  "movement_reference": "sprites/docs/photo_batches/2026-11-26/scissor/QA.md; historical 5BX booklet/film; V7 is a conditional still, not video approval",
+  "movement_reference": "Original 5BX booklet description reproduced in data/5bx-charts.json and sprites/docs/CHARTS-2-6.md; sprites/docs/photo_batches/2026-11-26/scissor/QA.md documents conditional still V7. The 1959 archival film is not a verified Chart 1 scissor-jump demonstration.",
   "camera": {
     "locked": true,
     "description": "One fixed tripod camera, head and both entire shoes visible, no pan/zoom/reframe; same 35 mm photographic treatment throughout"

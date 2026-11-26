@@ -25,6 +25,7 @@ python3 -m photo_motion inspect photo_motion/specs/chart1-scissor-jump.json /pat
 ```
 
 The `inspect` command leaves the source video untouched and writes `inspection.json`, a `phase_contact_sheet.png` and individual frame PNGs into the explicitly provided output directory. A real 6-second clip is needed; a four-panel contact-card still **is not video**.
+Use a **new output directory for every inspection**. Reusing an existing directory is rejected to prevent accidental overwrites of earlier frame evidence.
 
 ## First two exercise contracts
 
@@ -34,6 +35,7 @@ The `inspect` command leaves the source video untouched and writes `inspection.j
 | `specs/chart1-kneeling-pushup.json` | Both palms and knees planted, elbows bend together, full up/down/up cycle | Existing blue-shirt Flow video 10 remains a review candidate, not final form-approved. |
 
 Each spec contains planned phase times, support points, camera/identity instructions, and the source documents to consult. Phase times are **targets** for video generation/inspection, not assertions that the actual video will obey them. A plan that passes `validate` is a coherent *request*, not a valid clip.
+For Chart 1 scissor jumps, the movement authority is the **original booklet wording**, not the archival 1959 film (whose documented jump footage depicts other chart exercises). The six-second test duration is an experimental clip target, not a source-mandated scissor-jump cadence.
 
 ## Pin the real generator inputs
 

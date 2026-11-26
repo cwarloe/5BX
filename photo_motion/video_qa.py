@@ -62,10 +62,12 @@ def read_recipe(path):
             file_ref = recipe_path.parent / file_ref
         actual_hash = file_sha256(file_ref) if file_ref.is_file() else None
         expected = item.get("sha256")
+        if expected is not None and (not isinstance(expected, str) or not re.fullmatch(r"[0-9a-fA-F]{64}", expected)):
+            raise ValueError(f"generation recipe image {index} sha256 must be a 64-character hex digest")
         if expected and actual_hash and expected != actual_hash:
             raise ValueError(f"generation recipe image {index} hash mismatch")
-        if not (expected or actual_hash):
-            warnings.append(f"No independently verified SHA-256 for input image {index} ({item['role']})")
+        if not actual_hash:
+            warnings.append(f"Input image {index} ({item['role']}) was not locally available for SHA-256 verification; a recorded digest or URL is not proof of recoverability")
         images.append({"role": item["role"], "locator": item["locator"],
                        "sha256": expected or actual_hash, "hash_reverified_locally": actual_hash is not None})
     if not recipe["settings"]:
@@ -122,7 +124,9 @@ def _phase_samples(spec, info):
 
 
 def _extract(video, at, out):
-    _run(["ffmpeg", "-nostdin", "-hide_banner", "-loglevel", "error", "-y", "-ss", f"{at:.4f}",
+    # -n is defense in depth: even if a symlink appears inside the fresh
+    # output directory during extraction, ffmpeg must not follow/overwrite it.
+    _run(["ffmpeg", "-nostdin", "-hide_banner", "-loglevel", "error", "-n", "-ss", f"{at:.4f}",
           "-i", str(video), "-frames:v", "1", "-vf", "scale=640:-2", str(out)])
     if not out.is_file() or not out.stat().st_size:
         raise RuntimeError(f"ffmpeg did not extract a frame at {at:.3f}s")
@@ -147,7 +151,10 @@ def _contact_sheet(samples, out, name):
         sheet.paste(im, (x, y + 25))
         draw.text((x, y), f"{sample['phase']} @ {sample['sample_time_seconds']:.3f}s", fill="white")
     path = out / name
-    sheet.save(path)
+    # Exclusive output: never follow an attacker/accidentally placed symlink
+    # or overwrite old evidence even if it appears during this run.
+    with path.open("xb") as handle:
+        sheet.save(handle, format="PNG")
     return path
 
 
@@ -171,7 +178,9 @@ def inspect(spec, spec_path, video_path, out_dir, recipe_path=None):
         raise RuntimeError("ffmpeg is required")
     info = probe(video)
     provenance = read_recipe(recipe_path) if recipe_path else None
-    out.mkdir(parents=True, exist_ok=True)
+    # Never replace a previous diagnostic, even if a caller accidentally
+    # reuses the same output path. Each run needs its own evidence directory.
+    out.mkdir(parents=True, exist_ok=False)
     samples = []
     for phase_id, at, pose, evidence in _phase_samples(spec, info):
         safe_id = re.sub(r"[^a-zA-Z0-9_-]", "_", phase_id)
@@ -215,5 +224,6 @@ def inspect(spec, spec_path, video_path, out_dir, recipe_path=None):
         ],
         "form_and_release_approval": "NOT_EVALUATED"
     }
-    (out / "inspection.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+    with (out / "inspection.json").open("x", encoding="utf-8") as handle:
+        handle.write(json.dumps(manifest, indent=2) + "\n")
     return manifest

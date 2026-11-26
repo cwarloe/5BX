@@ -5,6 +5,7 @@ AI-generated still/video obeys the plan. Only the owner can approve actual form.
 """
 
 import json
+import math
 from pathlib import Path
 
 
@@ -12,7 +13,6 @@ REQUIRED = ("schema_version", "id", "chart", "exercise", "name", "status",
             "duration_seconds", "fps", "identity_reference", "movement_reference",
             "camera", "phases", "rules", "movement_type")
 SUPPORTS = {"grounded", "airborne"}
-POSITIONS = {"forward", "back", "neutral", "transition"}
 STATUSES = {"EXPERIMENTAL", "REVIEW", "CANDIDATE", "HOLD"}
 
 
@@ -33,7 +33,7 @@ def validate(spec):
         return errors
     if spec["schema_version"] != 1:
         errors.append("schema_version must be 1")
-    if spec["status"] not in STATUSES:
+    if not isinstance(spec["status"], str) or spec["status"] not in STATUSES:
         errors.append("status cannot assert approval; use EXPERIMENTAL/REVIEW/CANDIDATE/HOLD")
     if not isinstance(spec["id"], str) or not spec["id"].strip():
         errors.append("id must be a nonempty string")
@@ -45,10 +45,12 @@ def validate(spec):
         if not isinstance(spec[field], str) or not spec[field].strip():
             errors.append(f"{field} must be a nonempty string")
     for field in ("duration_seconds", "fps"):
-        if isinstance(spec[field], bool) or not isinstance(spec[field], (int, float)) or spec[field] <= 0:
-            errors.append(f"{field} must be positive")
+        if isinstance(spec[field], bool) or not isinstance(spec[field], (int, float)) or not math.isfinite(spec[field]) or spec[field] <= 0:
+            errors.append(f"{field} must be finite and positive")
     if not isinstance(spec["camera"], dict) or spec["camera"].get("locked") is not True:
         errors.append("camera.locked must be true for current photographic production")
+    if not isinstance(spec["camera"], dict) or not isinstance(spec["camera"].get("description"), str) or not spec["camera"].get("description", "").strip():
+        errors.append("camera.description must be a nonempty string for reproducible prompt generation")
     if not isinstance(spec["rules"], list) or not spec["rules"] or not all(isinstance(r, str) and r.strip() for r in spec["rules"]):
         errors.append("rules must be a nonempty list of text constraints")
     phases = spec["phases"]
@@ -71,15 +73,16 @@ def validate(spec):
             errors.append(f"{p}.id must be text")
         elif identifier in identifiers:
             errors.append(f"duplicate phase id {identifier}")
-        identifiers.add(identifier)
+        if isinstance(identifier, str):
+            identifiers.add(identifier)
         t = phase["time_seconds"]
-        if isinstance(t, bool) or not isinstance(t, (int, float)) or t <= previous_time or t > spec["duration_seconds"]:
-            errors.append(f"{p}.time_seconds must increase and not exceed duration")
+        if isinstance(t, bool) or not isinstance(t, (int, float)) or not math.isfinite(t) or t <= previous_time or t > spec["duration_seconds"]:
+            errors.append(f"{p}.time_seconds must be finite, increase and not exceed duration")
         else:
             previous_time = t
         if not isinstance(phase["pose"], str) or not phase["pose"].strip():
             errors.append(f"{p}.pose must describe the visible posture")
-        if phase["support"] not in SUPPORTS:
+        if not isinstance(phase["support"], str) or phase["support"] not in SUPPORTS:
             errors.append(f"{p}.support must be grounded or airborne")
         if not isinstance(phase["contacts"], list) or any(not isinstance(c, str) for c in phase["contacts"]):
             errors.append(f"{p}.contacts must be a list of named support points")
@@ -114,8 +117,8 @@ def _check_scissor(phases):
     tracks = {"orange_leg", "teal_leg", "orange_arm", "teal_arm"}
     for phase in phases:
         limbs = phase.get("limbs", {})
-        if not isinstance(limbs, dict) or set(limbs) != tracks or any(v not in POSITIONS for v in limbs.values()):
-            errors.append(f"phase {phase['id']}: all four persistent orange/teal limb tracks must have valid directions")
+        if not isinstance(limbs, dict) or set(limbs) != tracks or any(not isinstance(v, str) or v not in {"forward", "back"} for v in limbs.values()):
+            errors.append(f"phase {phase['id']}: all four tracked scissor limbs must have explicit FORWARD/BACK states (not neutral/transition)")
             continue
         if limbs["orange_leg"] == limbs["orange_arm"] or limbs["teal_leg"] == limbs["teal_arm"]:
             errors.append(f"phase {phase['id']}: each tracked arm must oppose its same-color leg")

@@ -1,4 +1,5 @@
 import copy
+import math
 import unittest
 from pathlib import Path
 
@@ -46,12 +47,38 @@ class TestMotionContract(unittest.TestCase):
     def test_invalid_timestamps_rejected(self):
         bad = copy.deepcopy(self.scissor)
         bad["phases"][3]["time_seconds"] = 1.0
-        self.assertIn("time_seconds must increase", " ".join(validate(bad)))
+        self.assertIn("increase and not exceed duration", " ".join(validate(bad)))
+
+    def test_nonfinite_timing_rejected(self):
+        bad = copy.deepcopy(self.scissor)
+        bad["fps"] = math.inf
+        self.assertIn("finite and positive", " ".join(validate(bad)))
+        bad = copy.deepcopy(self.scissor)
+        bad["phases"][1]["time_seconds"] = math.nan
+        self.assertIn("time_seconds must be finite", " ".join(validate(bad)))
 
     def test_unlocked_camera_rejected(self):
         bad = copy.deepcopy(self.scissor)
         bad["camera"]["locked"] = False
         self.assertIn("camera.locked must be true", " ".join(validate(bad)))
+
+    def test_camera_must_have_description_for_prompt(self):
+        bad = copy.deepcopy(self.scissor)
+        bad["camera"].pop("description")
+        self.assertIn("camera.description", " ".join(validate(bad)))
+
+    def test_malformed_support_is_rejected_without_exception(self):
+        bad = copy.deepcopy(self.scissor)
+        bad["phases"][0]["support"] = {"grounded": True}
+        self.assertIn("support must be grounded", " ".join(validate(bad)))
+
+    def test_uncertain_scissor_limb_directions_are_not_accepted(self):
+        bad = copy.deepcopy(self.scissor)
+        bad["phases"][1]["limbs"] = {
+            "orange_leg": "transition", "teal_leg": "neutral",
+            "orange_arm": "neutral", "teal_arm": "transition"
+        }
+        self.assertIn("explicit FORWARD/BACK", " ".join(validate(bad)))
 
     def test_no_self_approval_in_contract(self):
         bad = copy.deepcopy(self.pushup)

@@ -47,6 +47,21 @@ class TestVideoQA(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "hash mismatch"):
                 read_recipe(tmp / "run.json")
 
+    def test_recipe_rejects_untrusted_hash_and_warns_for_unverified_remote(self):
+        with tempfile.TemporaryDirectory() as folder:
+            tmp = Path(folder)
+            (tmp / "submitted.txt").write_text("Original prompt", encoding="utf-8")
+            data = {"schema_version": 1, "provider": "Google Flow", "model": "Omni test",
+                    "generation_id": "test", "submitted_prompt_file": "submitted.txt",
+                    "input_images": [{"role": "start", "locator": "https://provider.invalid/asset", "sha256": "not-a-hash"}],
+                    "settings": {"duration_seconds": 6}}
+            (tmp / "run.json").write_text(json.dumps(data), encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "64-character"):
+                read_recipe(tmp / "run.json")
+            data["input_images"][0]["sha256"] = "f" * 64
+            (tmp / "run.json").write_text(json.dumps(data), encoding="utf-8")
+            self.assertIn("not locally available", " ".join(read_recipe(tmp / "run.json")["warnings"]))
+
     @unittest.skipUnless(shutil.which("ffmpeg") and shutil.which("ffprobe"), "ffmpeg binaries not installed")
     def test_synthetic_mp4_inspection_is_nonmutating_and_unapproved(self):
         try:
@@ -73,6 +88,17 @@ class TestVideoQA(unittest.TestCase):
             self.assertTrue((tmp / "qa/phase_contact_sheet.png").exists())
             self.assertTrue((tmp / "qa/inspection.json").exists())
             self.assertEqual(json.loads((tmp / "qa/inspection.json").read_text())["form_and_release_approval"], "NOT_EVALUATED")
+
+            with self.assertRaises(FileExistsError):
+                inspect(spec, spec_path, source, tmp / "qa")
+            # An old output directory with an attacker-placed link to the
+            # ORIGINAL MP4 must be refused without mutating the source.
+            hostile = tmp / "hostile"
+            hostile.mkdir()
+            (hostile / "frame_01_A.png").symlink_to(source)
+            with self.assertRaises(FileExistsError):
+                inspect(spec, spec_path, source, hostile)
+            self.assertEqual(source.read_bytes(), before)
 
 
 if __name__ == "__main__":
