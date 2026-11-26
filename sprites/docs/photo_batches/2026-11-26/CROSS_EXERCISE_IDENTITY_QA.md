@@ -1,0 +1,42 @@
+# 5BX Chart 1 — independent cross-exercise character and form QA
+
+Date: 2026-11-26 UTC. Reviewer: independent agent, visual still-frame review only. All ratings are **assistant provisional**: none is Charles's form acceptance or evidence of successful video animation.
+
+## Fixed authorities
+
+- Identity/body/wardrobe master: `artifacts/character_master_candidates/2026-11-25/identity_sheet_v2_hair_arm_refinement.png`. Same recognizable ordinary 13–14-year-old fair-skinned boy, modest naturally messy dark-brown hair, average softly undeveloped musculature and waist, light/medium sky-blue tank, charcoal shorts, dark socks, gray/yellow sneakers, black wristband.
+- Movement authority: literal **Chart 1**, not harder Chart 2–6, in `repo_5bx_brightboy/sprites/docs/CHARTS-2-6.md`: EX1 simple floor touch and mild backward bend; EX2 partial sit-up just enough to see heels; EX3 alternate *single-leg* prone raise, hands under thighs; EX4 knee-supported push-up; jump alternates front/back physical legs and opposite arms. Camera is fixed for the prototype, but angle may differ between exercises as mechanically useful.
+- All still-generation tasks referenced the master independently, avoiding the earlier 08→10→13 chain of pose-edits from unrelated video frames. **Independent derivation reduces cumulative chain drift, but did not entirely eliminate cross-exercise facial/style variation.**
+
+## Outcome by exercise
+
+| Chart 1 asset | Independent rating | Correct Chart 1 anatomy / movement? | Identity, camera and detail evidence | Action before video |
+| --- | --- | --- | --- | --- |
+| **EX1 Toe-touch + gentle backward stretch** `toe_touch/C1_EX1_toetouch_backstretch_4phase_v1_REVIEW.png` | **PASS provisional still** | Four clearly ordered poses: overhead start → both fingertips between spread feet → overhead return → small balanced backward extension. Unlike Chart 3, **no outside-foot six-inch reach**. Feet maintain physical track position. No visibly stretched arms or spine. | Face, hair, body proportions and colors agree well with v2 across panels; near-frontal tripod is appropriate for visible floor contact. Photos quite coherent. | Top fingertips have little sky/headroom in up phases. If producing a solo 16:9 start frame, add margin while maintaining fixed camera. |
+| **EX2 Partial sit-up** `partial_situp/01_CANDIDATE__Chart1_PartialSitup_FourPhase_35mm.png` | **PASS provisional still, solo-frame continuity CONDITIONAL** | Start lying supine, straight legs/heels grounded, arms at sides, small head/upper-back curl to see heels, return supine. Bottom-left peak slightly larger than minimum possible but **not** the later full sit-up. | Same overall blue/charcoal boy, shoes and body age; static slightly oblique side view. The separately generated `02_CANDIDATE__Chart1_PartialSitup_SupineStart_35mm.png` has better real image detail but is a **new re-synthesis**, not the contact-card top-left pixels; face/texture need identity crop comparison before video. | Solo 1672×941 image is the better quality start candidate; inspect against v2 face crop and the card, then animate a mini-crunch only. |
+| **EX3 Alternate single-leg prone raise** `alt_leg/01_C1_EX3_AlternateLegRaise_FirstCandidate.png` and `alt_leg/02_C1_EX3_AlternateLegRaise_FarNearSwitchEdit.png` | **CONDITIONAL / diagnostic** | Good prone palms-under-thighs geometry; head and one straight leg rise modestly from hip, pelvis grounded, shoes do not kick backward. Crucially this is **not** Chart 2 both-leg back extension. However the second physical near/far leg is **not verifiably switched** in bottom-right phase. | Youth profile and blue/charcoal wardrobe remain coherent. Camera is closer to 90° side than requested oblique, which hides the leg ownership at hip/shorts overlap. Second text-only edit changed overlap but failed to prove opposite leg. | Do not animate full alternating cycle. Test more revealing ~25–35° oblique or tagged physical leg identity; prove two distinct hips/legs first. |
+| **EX4 Kneeling push-up** `knee_pushup/C1_E4_KNEELING_4PHASE_V2_REVIEW.png` | **CONDITIONAL strong still** | BOTH knees and palms apparently remain planted, shoes fold up behind, hips lower with shoulders, full up→middle→low→up. No toe push-up. Profile hides the far elbow (cannot prove both elbows bend from stills). | Rebased independently on v2 with natural colors, consistent fixed 90° camera. Relative to master, near shoulder/upper arm looks a bit more sculpted and profile nose/hair subtly reinterpreted, but age still plausible 13–14. | Use only after checking master profile identity. Native top-left crop is 883×438, not full 720p; prefer a high-resolution independent single up frame before quality-sensitive video. |
+| **Scissor jumps** `scissor/scissor_joint_card_V1_REJECT_same_leg.png` | **REJECT full exercise** | Foreground front/trailing leg **does not exchange** across opposed landed frames; airborne phases also substantially repeat, and arms below target shoulder height. This is the exact original failure mode. | Age/outfit/scene coherent enough for a still, but no reliable limb ownership or cross-frame camera registration. | Do not animate/release V1. Independent trailing-leg V2 is only an isolated diagnostic pose; it cannot be spliced with V1 as a true opposite endpoint without face/background and physical limb mapping drift. |
+
+## Cross-exercise identity verdict: CONDITIONAL, not chart-locked yet
+
+All four regular exercise contact cards and the scissor diagnostic look like **the same *type* of 13–14-year-old boy** with consistently blue tank, charcoal shorts, gray/yellow shoes, fair skin and soft ordinary build. None reverted to the old cyan/red cartoon or olive alternate. This is an improvement over the prior video-to-video chained edits.
+
+However, **a reader could still notice small identity differences across exercises**: scissor profile jaw/nose looks longer and hair more compact; kneeling profile hair is slightly fuller/more curled and arms more muscular; toe-touch frontal features are a little smaller/softer; sit-up solo face/skin texture has been separately rebuilt. View angles and lighting explain part of this, but there is no evidence that the exact same facial geometry was preserved pixel-to-pixel. Therefore mark chart-local *casting continuity* as **CONDITIONAL** until face/neck/costume crops are compared at consistent apparent sizes (a second human review may be worthwhile at final chart assembly).
+
+Within each card, identity is more consistent because the poses were generated jointly. **The scissor sheet still fails physical leg identity despite passing most appearance gates.**
+
+## Source resolution / Flow readiness caveat
+
+- A multi-panel image's nominal full canvas size is **not** its single-frame video-input resolution. Cropped phase tiles here range from roughly 599–887 px wide, with 438–656 px vertical space. Stretching these to 1280×720 does not recover details.
+- The independently generated 1672×941 partial-sit-up start is visibly sharper, with useful face, shirt and shoe microtexture. A parallel high-resolution **single still** should be made from each accepted contact-card *start* while using v2 as identity authority and the card as pose authority; only then attempt Flow. Keep the source still, the whole card, both exact prompts and hashes.
+- Camera must remain **static through each video**. Wide framing is intentional for running-in-place and scissor hops. Never improve perceived detail by a camera zoom during movement; improve source fidelity, illumination and relative subject occupancy *before generation*.
+
+## Immediate QA recommendations
+
+1. Proceed to one-frame Flow testing for **EX2** first (native 16:9 solo start ready), then EX1 after a high-detail solo overhead start, and EX4 after a full-resolution kneeling-up start.
+2. Hold **EX3** for a far/near leg ownership diagnostic. Do not increase range or lengthen limbs to make the raised leg more visible.
+3. Reject and retain scissor V1 and isolate V2 as a diagnostic. Next scissor test needs physically labeled anatomical leg markers / user 120-fps source frames, not another long text-only prompt iteration.
+4. For every video, score **motion fluidity**, **literal 5BX form**, **chart-level character identity/wardrobe**, **static camera registration**, and **image fidelity** independently. Do not promote based on visual appeal alone.
+
+No video generated in this QA task, no repository/Drive writes, no existing image files modified.
