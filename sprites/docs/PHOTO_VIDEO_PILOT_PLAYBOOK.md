@@ -1,5 +1,7 @@
 # 5BX photographic exercise pilot: repeatable image-to-video workflow
 
+**For handoff to Grok/other agents:** [Prompt transfer log, captured exact wording and failures](PHOTO_VIDEO_PROMPT_TRANSFER_LOG_2026-11-25.md). It distinguishes verbatim executed prompts from reconstructed descriptions, documents the newly observed chart-local identity drift, and supplies unverified cross-model templates.
+
 **Working protocol, 2026-11-25.** This is an experimental production checklist, not a claim that a pose, clip, or animated cycle has been approved for public release. The original cyan-shirt/red-shorts Sprite Boy is a legacy prototype. The target for new work is the [photographic middle-school character](PHOTOREALISTIC_AVATAR_DIRECTION_2026-11-25.md).
 
 **Newest identity-consistency test:** [Pilot 09: blue-shirt kneeling push-up](PHOTO_PILOT_RUN_KNEE_PUSHUP_CURRENT_IDENTITY_2026-11-25.md) uses the boy from the sit-up photographic pilot. The four-phase card and start frame are in Drive. This started as a still-card candidate; an identity-matched Video 10 was subsequently generated. Flow confirmed that pasting a Google Drive URL does **not** attach it as an image ingredient; upload an actual file before requesting video generation.
