@@ -115,6 +115,10 @@ def validate(spec):
         if phases[0].get("pose_key") != phases[-1].get("pose_key"):
             errors.append("first and last pose_key differ; loop is not closed")
         if spec["movement_type"] == "scissor_jump":
+            provenance = spec.get("track_provenance")
+            if (not isinstance(provenance, dict)
+                    or provenance.get("source_marker_start_state") != phases[0].get("limbs")):
+                errors.append("scissor source marker start-state must match the first physical arm/leg phase; never relabel tags to fit a pose")
             errors.extend(_check_scissor(phases))
         elif spec["movement_type"] == "kneeling_pushup":
             errors.extend(_check_pushup(phases))
@@ -162,10 +166,16 @@ def _check_pushup(phases):
             errors.append(f"phase {phase['id']}: kneeling push-up must keep both palms and knees planted")
         if phase.get("elbows") not in {"extended", "bending", "bent", "straightening"}:
             errors.append(f"phase {phase['id']}: specify synchronized elbow state")
+        chest = phase.get("chest_position")
+        required_chest = "touch_floor" if phase.get("pose_key") == "bottom" else "clear_of_floor"
+        if chest != required_chest:
+            errors.append(f"phase {phase['id']}: Chart 1 chest position must be {required_chest}; original booklet requires gentle chest-to-floor contact for a completed repetition")
     if phases[0].get("elbows") != "extended" or phases[-1].get("elbows") != "extended":
         errors.append("kneeling push-up must start and finish with extended elbows")
     if not any(p.get("elbows") == "bent" for p in phases[1:-1]):
         errors.append("kneeling push-up needs a visibly lowered bent-elbow phase")
+    if sum(p.get("pose_key") == "bottom" for p in phases) != 1:
+        errors.append("kneeling push-up must have exactly one designated chest-to-floor bottom phase")
     return errors
 
 

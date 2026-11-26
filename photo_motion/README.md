@@ -43,7 +43,7 @@ Use a **new output directory for every inspection**. Reusing an existing directo
 | Contract | Critical invariant | Known unresolved evidence |
 | --- | --- | --- |
 | `specs/chart1-scissor-jump.json` | **Two** genuine airborne exchanges, opposite physical leg/arm assignments, full recovery to original stance | V7 is a *conditional photographic still*, not verified video. Existing four panels lack a separately proven second flight. Orange/teal marks track generated near/far limbs, **not proven anatomical left/right** from the reference film. |
-| `specs/chart1-kneeling-pushup.json` | Both palms and knees planted, elbows bend together, full up/down/up cycle | Existing blue-shirt Flow video 10 remains a review candidate, not final form-approved. |
+| `specs/chart1-kneeling-pushup.json` | Both palms and knees planted, elbows bend together, **gentle chest-floor touch** at low point per booklet, full up/down/up cycle | Existing blue-shirt Flow video 10 remains a review candidate, not final form-approved; provisional near-knee contact drift requires independent confirmation. |
 
 The remaining Chart 1 photo contracts cover toe touching, **partial** sit-up, alternating physical leg raise, and low stationary running. They use separate exercise-specific checks in `extended_contract.py` and are included by the same wildcard validation command. See [`CHART1_MOTION_CONTRACTS.md`](CHART1_MOTION_CONTRACTS.md) for source-specific assumptions and unresolved still/video evidence. The experimental six-second run timing is not a replacement for the level-dependent prescribed cadence in `data/5bx-charts.json`.
 

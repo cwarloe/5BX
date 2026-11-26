@@ -18,14 +18,15 @@
     "One realistic normal 12–14-year-old boy with unchanged face, hair, outfit, body length and setting",
     "Both palms and both knees remain firmly planted on their original track marks for the full clip",
     "Both elbows bend and straighten together, shoulder to hip to knee remains a continuous line",
+    "Per the original Chart 1 booklet, a completed repetition requires the CHEST to touch the floor gently at its low point; do not substitute chin contact or an incomplete hover",
     "Lower legs remain bent behind planted knees; no toe-supported plank and no raised knees",
     "After reaching the low point, return the ENTIRE torso and head to the original straight-elbow start pose",
     "Continuous real body motion; no fades, still-image dissolves, ghost arms, cuts or camera moves"
   ],
   "phases": [
-    {"id": "A", "time_seconds": 0.0, "pose_key": "start", "support": "grounded", "contacts": ["left_palm", "right_palm", "left_knee", "right_knee"], "elbows": "extended", "pose": "Begin at kneeling push-up top, palms and knees planted, both elbows extended, torso aligned"},
-    {"id": "B", "time_seconds": 1.5, "pose_key": "lowering", "support": "grounded", "contacts": ["left_palm", "right_palm", "left_knee", "right_knee"], "elbows": "bending", "pose": "Both elbows bend together; shoulders, head and trunk descend as one aligned body"},
-    {"id": "C", "time_seconds": 3.0, "pose_key": "bottom", "support": "grounded", "contacts": ["left_palm", "right_palm", "left_knee", "right_knee"], "elbows": "bent", "pose": "Reach low point with both elbows visibly bent and chin naturally above the track; do not force contact"},
-    {"id": "D", "time_seconds": 6.0, "pose_key": "start", "support": "grounded", "contacts": ["left_palm", "right_palm", "left_knee", "right_knee"], "elbows": "extended", "pose": "Return head, torso and both elbows fully to the identical top posture, with hands and knees unmoved"}
+    {"id": "A", "time_seconds": 0.0, "pose_key": "start", "support": "grounded", "contacts": ["left_palm", "right_palm", "left_knee", "right_knee"], "elbows": "extended", "chest_position": "clear_of_floor", "pose": "Begin at kneeling push-up top, palms and knees planted, both elbows extended, torso aligned"},
+    {"id": "B", "time_seconds": 1.5, "pose_key": "lowering", "support": "grounded", "contacts": ["left_palm", "right_palm", "left_knee", "right_knee"], "elbows": "bending", "chest_position": "clear_of_floor", "pose": "Both elbows bend together; shoulders, head and trunk descend as one aligned body toward a gentle chest-floor touch"},
+    {"id": "C", "time_seconds": 3.0, "pose_key": "bottom", "support": "grounded", "contacts": ["left_palm", "right_palm", "left_knee", "right_knee"], "elbows": "bent", "chest_position": "touch_floor", "pose": "Reach the low point with chest gently touching the track to complete the movement; chin and forehead remain clear, no impact"},
+    {"id": "D", "time_seconds": 6.0, "pose_key": "start", "support": "grounded", "contacts": ["left_palm", "right_palm", "left_knee", "right_knee"], "elbows": "extended", "chest_position": "clear_of_floor", "pose": "Return head, torso and both elbows fully to the identical top posture, with hands and knees unmoved"}
   ]
 }

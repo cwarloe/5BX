@@ -15,15 +15,18 @@
     "description": "One fixed tripod camera, head and both entire shoes visible, no pan/zoom/reframe; same 35 mm photographic treatment throughout"
   },
   "track_provenance": {
-    "orange": "Same apparent physical near ankle and same-side wrist in V6 diagnostic, consistently tracked in generated stills",
-    "teal": "Same apparent physical far ankle and same-side wrist in V6 diagnostic, consistently tracked in generated stills",
+    "orange": "Verified V6 panel A: orange marker on BACK shoe ankle and FORWARD arm wrist. These markers track opposite-moving limb roles, not a proven same-anatomical-side pair.",
+    "teal": "Verified V6 panel A: teal marker on FORWARD shoe ankle and BACK arm wrist. These markers track opposite-moving limb roles, not a proven same-anatomical-side pair.",
+    "source_card_sha256": "4f27260bd19da14bc80a75944dc8f7e2bf790a7e148caa223017fbde130cb0f2",
+    "source_panel_a_clean_crop_half_open": [4, 4, 764, 508],
+    "source_marker_start_state": {"orange_leg": "back", "teal_leg": "forward", "orange_arm": "forward", "teal_arm": "back"},
     "anatomical_left_right_proven": false,
-    "warning": "Color track continuity in generated images is not proven anatomical left/right identity in the real source recording"
+    "warning": "This 760x504 V6 panel is not native 16:9 HD. Preserve head/entire shoes when reframing; color continuity does not prove actual anatomical left/right in the real source."
   },
   "rules": [
     "One realistic middle-school boy with an unchanged face, normal soft youth anatomy, outfit and location for the entire uninterrupted clip",
     "Exactly two arms and two legs, no ghosted or translucent duplicates, no blended still-image transitions",
-    "The orange near-side wrist and ankle retain the same physical limb ownership through both jumps; the teal far-side wrist and ankle likewise remain paired",
+    "Orange stays on the original forward-start WRIST and back-start ANKLE; teal stays on the original back-start WRIST and forward-start ANKLE. Each marker retains its own physical joint, but wrist/ankle color pairing does NOT prove anatomical same-side identity",
     "The physical fore/aft leg and opposite-arm assignments change twice; NEVER relabel limbs by screen-left position",
     "Both arms remain extended approximately shoulder high, forward and backward; no bent running-arm pump",
     "Both feet are visibly above the ground during EACH of two airborne exchanges and land naturally without ballet toes",

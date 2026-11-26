@@ -44,6 +44,14 @@ class TestMotionContract(unittest.TestCase):
         bad["phases"][1]["limbs"]["orange_arm"] = "forward"
         self.assertIn("same-color leg", " ".join(validate(bad)))
 
+    def test_verified_source_marker_roles_must_match_actual_first_phase(self):
+        bad = copy.deepcopy(self.scissor)
+        bad["track_provenance"]["source_marker_start_state"]["orange_leg"] = "forward"
+        self.assertIn("scissor source marker start-state", " ".join(validate(bad)))
+        bad = copy.deepcopy(self.scissor)
+        del bad["track_provenance"]["source_marker_start_state"]
+        self.assertIn("scissor source marker start-state", " ".join(validate(bad)))
+
     def test_bent_running_arms_are_rejected(self):
         bad = copy.deepcopy(self.scissor)
         bad["phases"][2]["arm_form"] = "bent_running"
@@ -100,6 +108,12 @@ class TestMotionContract(unittest.TestCase):
         bad["phases"][1]["contacts"] = ["left_palm", "right_palm", "left_knee"]
         self.assertIn("both palms and knees", " ".join(validate(bad)))
 
+    def test_chart1_pushup_requires_booklet_chest_floor_touch(self):
+        bad = copy.deepcopy(self.pushup)
+        bad["phases"][2]["chest_position"] = "hover_above_floor"
+        self.assertIn("original booklet requires gentle chest-to-floor contact", " ".join(validate(bad)))
+        self.assertIn('"chest_position":"touch_floor"', _prompt(self.pushup))
+
     def test_pushup_must_return_to_start(self):
         bad = copy.deepcopy(self.pushup)
         bad["phases"][-1]["elbows"] = "bent"
@@ -114,6 +128,8 @@ class TestMotionContract(unittest.TestCase):
         self.assertIn('"arm_form":"straight_shoulder_high"', _prompt(self.scissor))
         self.assertIn('"orange_leg":"back"', _prompt(self.scissor))
         self.assertIn("Resolve any conflict", _prompt(self.scissor))
+        self.assertIn("ORIGINAL SOURCE MARKER AUTHORITY", _prompt(self.scissor))
+        self.assertIn("760x504 V6 panel", _prompt(self.scissor))
 
 
 if __name__ == "__main__":
