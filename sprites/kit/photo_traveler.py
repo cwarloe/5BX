@@ -124,7 +124,8 @@ def _esc(value):
 
 def _tile(item, kind):
     thumb = _image_url(item["url"])
-    image = (f'<img loading="lazy" src="{_esc(thumb)}" alt="Preview: {_esc(item.get("title", f"Chart {item.get("chart", "")}"))}">'
+    image_alt = item.get("title") or "Chart {} overview".format(item.get("chart", ""))
+    image = (f'<img loading="lazy" src="{_esc(thumb)}" alt="Preview: {_esc(image_alt)}">'
              if thumb else '<span class="placeholder">Open video or record</span>')
     title = item.get("title") or f'Chart {item["chart"]} overview'
     state = item.get("state", "EXPERIMENTAL")
