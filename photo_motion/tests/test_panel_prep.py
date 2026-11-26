@@ -8,7 +8,10 @@ from pathlib import Path
 
 from PIL import Image, ImageChops, ImageDraw
 
-from photo_motion.panel_prep import DEFAULT_V6_A_BOUNDS, VERIFIED_V6_SOURCE_SHA256, main, prepare
+from photo_motion.panel_prep import (
+    DEFAULT_V6_A_BOUNDS, DEFAULT_V6_C_BOUNDS,
+    VERIFIED_V6_SOURCE_SHA256, main, prepare,
+)
 
 
 class PanelPreparationTests(unittest.TestCase):
@@ -27,6 +30,13 @@ class PanelPreparationTests(unittest.TestCase):
         dr.rectangle([155, 12, 600, 476], fill=(197, 66, 17))
         dr.ellipse([176, 405, 275, 480], fill=(25, 195, 220))
         dr.ellipse([457, 404, 546, 474], fill=(25, 195, 220))
+        # A distinct synthetic lower-left C subject and edge background.
+        for k in range(100):
+            dr.line([(k + 4, 516), (k + 4, 1019)], fill=(30, k, 200))
+            dr.line([(763 - k, 516), (763 - k, 1019)], fill=(k, 140, 30))
+        dr.rectangle([160, 528, 605, 974], fill=(19, 165, 93))
+        dr.ellipse([177, 930, 276, 987], fill=(220, 43, 140))
+        dr.ellipse([457, 929, 546, 988], fill=(220, 43, 140))
         src.save(self.source)
         self.original = self.source.read_bytes()
         self.hash = hashlib.sha256(self.original).hexdigest()
@@ -62,6 +72,67 @@ class PanelPreparationTests(unittest.TestCase):
         self.assertEqual(result["visual_subject_completeness"], "NOT_EVALUATED_FOR_THIS_SOURCE_AND_CROP")
         self.assertIn("can repeat visual features", result["mirrored_side_extension_risk"])
         self.assertEqual(result["expected_source_sha256"], self.hash)
+        self.assertEqual(result["source_panel"], "A")
+        self.assertTrue(result["crop_matches_verified_panel_bounds"])
+
+    def test_panel_c_exact_center_preserved_with_no_subject_crop(self):
+        dest = self.folder / "prepared-C.png"
+        result = prepare(self.source, dest, panel="C", expected_source_sha256=self.hash,
+                         expected_source_size=(1536, 1024))
+        self.assertEqual(result["source_panel"], "C")
+        self.assertTrue(result["crop_matches_verified_panel_bounds"])
+        self.assertEqual(result["crop_bounds_half_open"], [4, 516, 764, 1020])
+        self.assertEqual(result["crop_size"], [760, 504])
+        self.assertEqual(result["padding"]["left"], 68)
+        self.assertEqual(result["padding"]["right"], 68)
+        self.assertEqual(result["output_size"], [896, 504])
+        with Image.open(self.source) as source, Image.open(dest) as output:
+            expected = source.crop(DEFAULT_V6_C_BOUNDS)
+            center = output.crop((68, 0, 828, 504))
+            self.assertIsNone(ImageChops.difference(expected, center).getbbox())
+            self.assertEqual(output.getpixel((0, 0)), expected.getpixel((67, 0)))
+            self.assertEqual(output.getpixel((895, 0)), expected.getpixel((692, 0)))
+            self.assertEqual(output.getpixel((67, 0)), output.getpixel((68, 0)))
+            self.assertEqual(output.getpixel((827, 0)), output.getpixel((828, 0)))
+        self.assertEqual(self.source.read_bytes(), self.original)
+        self.assertEqual(result["source_image_sha256_before"], result["source_image_sha256_after"])
+        self.assertEqual(hashlib.sha256(dest.read_bytes()).hexdigest(), result["output_sha256"])
+        self.assertEqual(json.loads(dest.with_suffix(".manifest.json").read_text()), result)
+        self.assertEqual(result["visual_subject_completeness"], "NOT_EVALUATED_FOR_THIS_SOURCE_AND_CROP")
+
+    def test_default_panel_a_output_unchanged_from_explicit_a(self):
+        default = prepare(self.source, self.folder / "default-A.png")
+        explicit = prepare(self.source, self.folder / "explicit-A.png", panel="A")
+        self.assertEqual(default["crop_bounds_half_open"], list(DEFAULT_V6_A_BOUNDS))
+        self.assertEqual(default["output_sha256"], explicit["output_sha256"])
+        self.assertEqual((self.folder / "default-A.png").read_bytes(),
+                         (self.folder / "explicit-A.png").read_bytes())
+
+    def test_panel_c_cli_prep_720p_pins_explicit_source_sha(self):
+        dest = self.folder / "C-720.png"
+        with redirect_stdout(io.StringIO()) as stdout:
+            status = main([str(self.source), str(dest), "--panel", "C",
+                           "--expected-sha256", self.hash, "--export-size", "1280x720"])
+        self.assertEqual(status, 0)
+        manifest = json.loads(dest.with_suffix(".manifest.json").read_text())
+        self.assertEqual(manifest["source_panel"], "C")
+        self.assertEqual(manifest["crop_bounds_half_open"], list(DEFAULT_V6_C_BOUNDS))
+        self.assertEqual(manifest["canvas_size_before_resampling"], [896, 504])
+        self.assertEqual(manifest["output_size"], [1280, 720])
+        self.assertTrue(manifest["source_hash_matches_expected"])
+        self.assertIn('"source_panel": "C"', stdout.getvalue())
+
+    def test_custom_crop_for_panel_c_never_inherits_verified_claim(self):
+        result = prepare(self.source, self.folder / "override.png", panel="C", crop=DEFAULT_V6_A_BOUNDS)
+        self.assertEqual(result["source_panel"], "C")
+        self.assertFalse(result["crop_matches_verified_panel_bounds"])
+        self.assertEqual(result["visual_subject_completeness"], "NOT_EVALUATED_FOR_THIS_SOURCE_AND_CROP")
+
+    def test_invalid_panel_fails_without_output(self):
+        dest = self.folder / "bad-panel.png"
+        with self.assertRaisesRegex(ValueError, "panel must be A or C"):
+            prepare(self.source, dest, panel="D")
+        self.assertFalse(dest.exists())
 
     def test_cli_pins_verified_v6_sha_by_default(self):
         dest = self.folder / "wrong-source.png"
