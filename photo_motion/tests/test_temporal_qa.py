@@ -89,6 +89,60 @@ class TestTemporalVideoQA(unittest.TestCase):
         self.assertGreater(report["median_frame_difference"], 0.5)
         self.assertEqual(report["frame_pacing_anomalies_total"], 0)
 
+    def test_optional_motion_reversal_screen_flags_mirrored_sequence(self):
+        video = self.encode(
+            "testsrc2=size=320x180:rate=24:duration=1.5", name="palindrome.mp4",
+            filters=["-filter_complex",
+                     "[0:v]split=2[a][b];[b]reverse,trim=start_frame=1,setpts=PTS-STARTPTS[r];"
+                     "[a]setpts=PTS-STARTPTS[f];[f][r]concat=n=2:v=1:a=0[c];[c]fps=24[v]",
+                     "-map", "[v]"])
+        baseline = analyze(video)
+        self.assertEqual(baseline["motion_reversal_screen_space_verdict"], "NOT_REQUESTED")
+        self.assertFalse(any("mirrored" in w for w in baseline["technical_warnings"]))
+        report = analyze(video, check_motion_reversal=True)
+        self.assertEqual(report["motion_reversal_screen_space_verdict"], "REVIEW_NEAR_MIRRORED_SEQUENCE")
+        self.assertGreaterEqual(report["motion_reversal_candidates_total"], 1)
+        candidate = report["motion_reversal_candidates"][0]
+        self.assertEqual(candidate["center_frame_index"], 35)
+        self.assertEqual(candidate["mirrored_pair_count"], 5)
+        self.assertLess(candidate["velocity_cosine"], -.9)
+        self.assertEqual(report["exercise_form_and_release_approval"], "NOT_EVALUATED")
+
+    def test_reversal_screen_does_not_flag_static_or_progressing_video(self):
+        static = self.encode("color=c=red:s=320x180:r=24:d=2", name="static.mp4")
+        progressing = self.encode("testsrc2=size=320x180:rate=24:duration=2", name="progressing.mp4")
+        for video in (static, progressing):
+            with self.subTest(video=video.name):
+                report = analyze(video, check_motion_reversal=True)
+                self.assertEqual(report["motion_reversal_screen_space_verdict"],
+                                 "NO_NEAR_MIRRORED_SEQUENCE_DETECTED")
+                self.assertEqual(report["motion_reversal_candidates_total"], 0)
+
+    def test_symmetric_bounce_is_documented_false_positive_not_form_failure(self):
+        bounce = self.encode(
+            "color=c=black:s=320x180:r=24:d=3", name="idealized-bounce.mp4",
+            other_inputs=["-f", "lavfi", "-i", "color=c=white:s=20x20:r=24:d=3"],
+            filters=["-filter_complex",
+                     "[0:v][1:v]overlay=x=150:y=90-50*abs(sin(PI*t/2)):eval=frame[v]",
+                     "-map", "[v]"])
+        report = analyze(bounce, check_motion_reversal=True)
+        # Perfectly symmetric up/down motion is physically possible. This
+        # intentionally records a false positive for *bad exercise physics*.
+        self.assertEqual(report["motion_reversal_screen_space_verdict"],
+                         "REVIEW_NEAR_MIRRORED_SEQUENCE")
+        self.assertEqual(report["exercise_form_and_release_approval"], "NOT_EVALUATED")
+
+    def test_traveling_jump_avoids_mirrored_replay_warning(self):
+        traveling = self.encode(
+            "color=c=black:s=320x180:r=24:d=3", name="traveling-bounce.mp4",
+            other_inputs=["-f", "lavfi", "-i", "color=c=white:s=20x20:r=24:d=3"],
+            filters=["-filter_complex",
+                     "[0:v][1:v]overlay=x=80+20*t:y=90-50*abs(sin(PI*t/2)):eval=frame[v]",
+                     "-map", "[v]"])
+        report = analyze(traveling, check_motion_reversal=True)
+        self.assertEqual(report["motion_reversal_screen_space_verdict"],
+                         "NO_NEAR_MIRRORED_SEQUENCE_DETECTED")
+
     def test_cut_between_two_solid_colours_flagged(self):
         video = self.encode("color=c=red:s=320x180:r=24:d=1", name="cut.mp4",
                             other_inputs=["-f", "lavfi", "-i", "color=c=blue:s=320x180:r=24:d=1"],
@@ -159,6 +213,14 @@ class TestTemporalVideoQA(unittest.TestCase):
         self.assertEqual(main([str(video), "--background-roi", "0.1:bad:0.25:0.25",
                                "--report", str(invalid_destination)]), 2)
         self.assertFalse(invalid_destination.exists())
+
+    def test_cli_motion_reversal_opt_in_and_bool_validation(self):
+        video = self.encode("testsrc2=size=320x180:rate=24:duration=1")
+        destination = self.root / "reversal-screen.json"
+        self.assertEqual(main([str(video), "--check-motion-reversal", "--report", str(destination)]), 0)
+        self.assertTrue(json.loads(destination.read_text())["motion_reversal_check_requested"])
+        with self.assertRaisesRegex(ValueError, "check_motion_reversal"):
+            analyze(video, check_motion_reversal=1)
 
 
 class TestTemporalLogic(unittest.TestCase):

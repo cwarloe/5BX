@@ -11,6 +11,7 @@ inspect a full workout without keeping the entire clip in memory.
 """
 
 import argparse
+from collections import deque
 import hashlib
 import json
 import math
@@ -26,6 +27,7 @@ from .video_qa import probe
 
 
 WIDTH, HEIGHT = 160, 90
+REVERSAL_FLANK_FRAMES = 5
 
 
 def _sha256(path):
@@ -151,6 +153,78 @@ def _stream_differences(video, width=WIDTH, height=HEIGHT, background_rois=()):
             process.stderr.close()
 
 
+def _scan_motion_reversals(video, width=WIDTH, height=HEIGHT):
+    """Locate *near-exact mirrored frame sequences*, not anatomical reversal.
+
+    Five consecutive mirrored pairs around a center frame are more specific
+    than a single negative velocity cosine. A natural symmetric bounce can
+    still trigger this diagnostic, so its output requires human inspection.
+    A fixed-size ring buffer keeps memory bounded for long videos.
+    """
+    if not shutil.which("ffmpeg"):
+        raise RuntimeError("ffmpeg binary is required")
+    command = [
+        "ffmpeg", "-nostdin", "-hide_banner", "-v", "error", "-xerror", "-err_detect", "explode",
+        "-i", str(video), "-an", "-sn", "-dn",
+        "-vf", f"scale={width}:{height},format=gray",
+        "-fps_mode", "passthrough", "-f", "rawvideo", "-pix_fmt", "gray", "pipe:1",
+    ]
+    process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    flank = REVERSAL_FLANK_FRAMES
+    frames = deque(maxlen=2 * flank + 1)
+    candidates = []
+    count = 0
+    frame_size = width * height
+    try:
+        while True:
+            raw = process.stdout.read(frame_size)
+            if not raw:
+                break
+            if len(raw) != frame_size:
+                raise RuntimeError(f"truncated decoded frame: {len(raw)} of {frame_size} bytes")
+            frames.append(np.frombuffer(raw, dtype=np.uint8).reshape(height, width).astype(np.int16))
+            count += 1
+            if len(frames) != 2 * flank + 1:
+                continue
+            transitions = [float(np.abs(frames[k] - frames[k - 1]).mean())
+                           for k in range(1, len(frames))]
+            movement = statistics.median(transitions)
+            if movement < 0.6:
+                # Tiny codec/grain changes and static holds are not movement.
+                continue
+            mirrored = [float(np.abs(frames[flank - k] - frames[flank + k]).mean())
+                        for k in range(1, flank + 1)]
+            if (statistics.median(mirrored) > max(.3, .18 * movement)
+                    or max(mirrored) > max(.5, .40 * movement)):
+                continue
+            before = (frames[flank] - frames[flank - 1]).astype(np.float64).ravel()
+            after = (frames[flank + 1] - frames[flank]).astype(np.float64).ravel()
+            norm = float(np.linalg.norm(before) * np.linalg.norm(after))
+            cosine = float(np.dot(before, after) / norm) if norm else 0.0
+            if cosine > -.9:
+                continue
+            candidates.append({
+                "center_frame_index": count - flank - 1,
+                "velocity_cosine": round(cosine, 5),
+                "median_mirrored_pair_mae_0_to_255": round(statistics.median(mirrored), 4),
+                "max_mirrored_pair_mae_0_to_255": round(max(mirrored), 4),
+                "median_local_transition_mae_0_to_255": round(movement, 4),
+                "mirrored_pair_count": flank,
+            })
+        errors = process.stderr.read().decode("utf-8", errors="replace")
+        if process.wait() != 0:
+            raise RuntimeError(f"ffmpeg decoding failed: {errors[-600:]}")
+        return count, candidates
+    finally:
+        if process.poll() is None:
+            process.kill()
+            process.wait()
+        if process.stdout is not None:
+            process.stdout.close()
+        if process.stderr is not None:
+            process.stderr.close()
+
+
 def _holds(deltas, times, fps, threshold, minimum_seconds, expected_holds):
     """Find sustained *screen-space* stillness, not anatomically valid holds."""
     runs = []
@@ -191,13 +265,15 @@ def _cuts(deltas, timestamps, fps):
 
 
 def analyze(video_path, *, expected_holds=(), still_threshold=0.5, minimum_hold_seconds=0.5,
-            expect_loop=False, background_rois=()):
+            expect_loop=False, background_rois=(), check_motion_reversal=False):
     """Inspect a real video and return JSON-safe evidence, not approval."""
     video = Path(video_path).resolve()
     if not video.is_file():
         raise FileNotFoundError(video)
     if type(expect_loop) is not bool:
         raise ValueError("expect_loop must be a boolean")
+    if type(check_motion_reversal) is not bool:
+        raise ValueError("check_motion_reversal must be a boolean")
     regions = _validate_background_rois(background_rois)
     # A digest of a *different* later file must never be attached to decoded
     # frames from this take. Check both sides of the multi-process inspection.
@@ -218,6 +294,11 @@ def analyze(video_path, *, expected_holds=(), still_threshold=0.5, minimum_hold_
         raise ValueError("video frame rate missing")
     (decoded_count, delta, border, seam, seam_border,
      roi_changes, roi_seams) = _stream_differences(video, background_rois=regions)
+    reversal_candidates = []
+    if check_motion_reversal:
+        reversal_count, reversal_candidates = _scan_motion_reversals(video)
+        if reversal_count != decoded_count:
+            raise RuntimeError("motion-reversal scan decoded a different frame count; discard results")
     timestamps = _frame_times(video)
     if _sha256(video) != source_sha256:
         raise RuntimeError("source video changed during temporal inspection; discard these results")
@@ -250,6 +331,17 @@ def analyze(video_path, *, expected_holds=(), still_threshold=0.5, minimum_hold_
             warnings.append("Requested loop seam has excessive first/last screen-space difference; review the actual motion seam")
     else:
         loop_verdict = "NOT_REQUESTED"
+
+    if check_motion_reversal:
+        for item in reversal_candidates:
+            index = item["center_frame_index"]
+            item["at_seconds"] = round(timestamps[index], 4)
+        if reversal_candidates:
+            warnings.append("Near-mirrored forward/reverse frame sequence detected; inspect for a mechanically reversed segment. Natural symmetric movement may also trigger this warning")
+        reversal_verdict = ("REVIEW_NEAR_MIRRORED_SEQUENCE" if reversal_candidates
+                            else "NO_NEAR_MIRRORED_SEQUENCE_DETECTED")
+    else:
+        reversal_verdict = "NOT_REQUESTED"
 
     region_reports = []
     for roi, values, first_last in zip(regions, roi_changes, roi_seams):
@@ -285,6 +377,10 @@ def analyze(video_path, *, expected_holds=(), still_threshold=0.5, minimum_hold_
         "expect_loop": expect_loop,
         "loop_seam_review_threshold_mae_0_to_255": round(loop_threshold, 4),
         "loop_seam_screen_space_verdict": loop_verdict,
+        "motion_reversal_check_requested": check_motion_reversal,
+        "motion_reversal_screen_space_verdict": reversal_verdict,
+        "motion_reversal_candidates_total": len(reversal_candidates),
+        "motion_reversal_candidates": reversal_candidates[:100],
         "background_roi_diagnostics": region_reports,
         "near_identical_frame_transitions": sum(x <= still_threshold for x in delta),
         "total_frame_transitions": len(delta),
@@ -300,7 +396,9 @@ def analyze(video_path, *, expected_holds=(), still_threshold=0.5, minimum_hold_
             "can mask frozen anatomy. Optional static ROIs are reviewer-declared, not automatically discovered; "
             "their changes can be due to camera, matte, body intrusion or lighting. First/last seam alignment "
             "cannot prove anatomical continuity or natural looping. Frame deltas cannot establish physical left/right identity, real exercise form, "
-            "single-body coherence, absence of ghost limbs, or seamless anatomical looping. These need visual review."
+            "single-body coherence, absence of ghost limbs, or seamless anatomical looping. Optional near-mirrored "
+            "motion detection can flag legitimate symmetric jumps or other direction changes and can miss edited "
+            "reversals; it cannot prove a segment was time-reversed or that its physics are wrong. These need visual review."
         ),
         "exercise_form_and_release_approval": "NOT_EVALUATED"
     }
@@ -314,6 +412,8 @@ def main(argv=None):
     parser.add_argument("--still-threshold", type=float, default=0.5, help="Max frame-to-frame grayscale MAE counted visually still")
     parser.add_argument("--minimum-hold", type=float, default=0.5, help="Minimum continuous visually still span in seconds")
     parser.add_argument("--expect-loop", action="store_true", help="Warn on large first/last seam (not an exercise/loop approval)")
+    parser.add_argument("--check-motion-reversal", action="store_true",
+                        help="Screen five mirrored frame pairs around turnarounds; warning only, not form proof")
     parser.add_argument("--background-roi", action="append", default=[], metavar="X0:Y0:X1:Y1",
                         help="Reviewer-selected person-free normalized rectangle; repeatable")
     args = parser.parse_args(argv)
@@ -332,7 +432,8 @@ def main(argv=None):
             rois.append(tuple(float(value) for value in parts))
         result = analyze(args.video, expected_holds=windows,
                          still_threshold=args.still_threshold, minimum_hold_seconds=args.minimum_hold,
-                         expect_loop=args.expect_loop, background_rois=rois)
+                         expect_loop=args.expect_loop, background_rois=rois,
+                         check_motion_reversal=args.check_motion_reversal)
         args.report.parent.mkdir(parents=True, exist_ok=True)
         with args.report.open("x", encoding="utf-8") as handle:
             handle.write(json.dumps(result, indent=2) + "\n")
