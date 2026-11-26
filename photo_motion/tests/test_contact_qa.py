@@ -6,7 +6,9 @@ import subprocess
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
+import photo_motion.contact_qa as contact_module
 from photo_motion.contact_qa import evaluate_annotations, render_overlay, _overlay_sample_indices, _validate
 
 
@@ -94,6 +96,25 @@ class ContractTests(unittest.TestCase):
         doc["samples"][0]["landmarks"]["another_shoe"] = {"x": 10, "y": 10}
         with self.assertRaisesRegex(ValueError, "undeclared"):
             _validate(doc)
+
+    def test_replaced_annotations_cannot_be_hashed_as_the_evaluated_evidence(self):
+        with tempfile.TemporaryDirectory(prefix="contact-annotation-race-") as temp:
+            folder = Path(temp)
+            path = folder / "contact.json"
+            starting = example()
+            changed = copy.deepcopy(starting)
+            changed["samples"][-1]["landmarks"]["near_palm"]["x"] = 590
+            path.write_text(json.dumps(starting), encoding="utf-8")
+
+            def swap_after_evaluation(doc, **kwargs):
+                report = evaluate_annotations(doc, **kwargs)
+                path.write_text(json.dumps(changed), encoding="utf-8")
+                return report
+
+            with patch.object(contact_module, "evaluate_annotations", side_effect=swap_after_evaluation):
+                status = contact_module.main([str(path), "--out", str(folder / "out"), "--no-overlays"])
+            self.assertEqual(status, 2, "annotation hash must identify the JSON that was actually evaluated")
+            self.assertFalse((folder / "out" / "contact_qa.json").exists())
 
 
 @unittest.skipUnless(shutil.which("ffmpeg") and shutil.which("ffprobe"), "ffmpeg/ffprobe not installed")
