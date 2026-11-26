@@ -229,6 +229,16 @@ the exact corrected V10 source pair and asks whether a grounded opposite end
 pose prevents V12's intermediate running steps. It requires a new fresh
 Flow quote and the same native-charge ledger, never treats the held-out B*002
 still as a third input, and cannot qualify a complete scissor loop or release.
+
+After V14's independently observed intermediate grounded gait failure, the
+[V15 synthetic Video Ingredients method gate](V15_SYNTHETIC_MOTION_INGREDIENTS_PRECREDIT.md)
+separately evaluates **one** neutral, wholly procedural 3D motion guide plus
+the exact replayed A* photographic identity reference. Its source-bound
+joint/contact record describes two airborne intervals but is *not* human-performed or
+historically form-approved 5BX. V15 is exploratory provider-conditioning
+feasibility only; the preferred human-production reference remains consenting
+adult first-party motion, with its separate rights/intake checks. The gate
+does not upload, spend credits, approve an exercise, or authorize a retry.
 The [safe V14 result note](diagnostics/v14-astar-cstar-one-flight-hold-2026-11-26.md)
 documents the actual one-flight/grounded-running failure and its stop rule.
 

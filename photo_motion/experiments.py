@@ -375,7 +375,37 @@ def _validate_request(request):
                              "verification": "rehashed_from_local_bytes" if actual else "declared_unverified"})
     source_preflight = None
     entry = request.get("source_preflight")
-    if isinstance(entry, dict) and entry.get("authority") == "V14_GROUNDED_ASTAR_CSTAR_FRAMES_360P":
+    if isinstance(entry, dict) and entry.get("authority") == "V15_SYNTHETIC_MOTION_GUIDE_INGREDIENTS_360P_EXPERIMENTAL":
+        from .preflight_v15_synthetic import (
+            verify_sources as verify_v15_sources,
+            verify_existing_ledger as verify_v15_ledger,
+            verify_ui_observation as verify_v15_ui,
+            V15PreflightError, MODEL as V15_MODEL, SETTINGS as V15_SETTINGS,
+            PROMPT_SHA256 as V15_PROMPT_SHA256,
+        )
+        if request["exercise_id"] != "chart1-scissor-jump" or set(entry) != {
+                "authority", "source_paths", "existing_ledger_store", "flow_ui_observation"}:
+            raise ExperimentError("V15 requires exact independent synthetic-guide/photo source paths, existing ledger and fresh Ingredients UI")
+        if _digest_bytes(prompt_bytes) != V15_PROMPT_SHA256:
+            raise ExperimentError("V15 exact submitted prompt differs from preregistered exploratory method hypothesis")
+        try:
+            source_preflight = verify_v15_sources(spec, entry["source_paths"])
+            source_preflight.update(verify_v15_ledger(entry["existing_ledger_store"]))
+            source_preflight = verify_v15_ui(entry["flow_ui_observation"], source_preflight)
+        except (V15PreflightError, OSError, ValueError, TypeError, KeyError) as exc:
+            raise ExperimentError(f"V15 exploratory Ingredients precredit HOLD: {exc}") from exc
+        expected_assets = (("identity-image", source_preflight["identity_image_sha256"]),
+                           ("motion-reference-video", source_preflight["motion_video_sha256"]))
+        if (len(clean_assets) != 2 or any(
+                asset["role"] != role or asset["verification"] != "rehashed_from_local_bytes"
+                or asset["sha256"] != digest
+                for asset, (role, digest) in zip(clean_assets, expected_assets))):
+            raise ExperimentError("V15 requires exactly two ordered locally rehashed A* image/neutral motion guide Ingredients")
+        if (request["provider"] != "Google Flow" or request["model"] != V15_MODEL
+                or json.dumps(request["settings"], sort_keys=True) != json.dumps(V15_SETTINGS, sort_keys=True)
+                or Decimal(estimate) != Decimal(source_preflight["quoted_credits"])):
+            raise ExperimentError("V15 request differs from fresh single-output Omni Flash 360p Ingredients quote")
+    elif isinstance(entry, dict) and entry.get("authority") == "V14_GROUNDED_ASTAR_CSTAR_FRAMES_360P":
         from .preflight_v14_grounded import (
             verify_sources as verify_v14_sources,
             verify_existing_ledger as verify_v14_ledger,
@@ -704,13 +734,14 @@ def reserve(folder, request):
     """Idempotently reserve one ATTEMPT's cost; new retries need new attempt_key."""
     preflight = request.get("source_preflight") if isinstance(request, dict) else None
     if isinstance(preflight, dict) and preflight.get("authority") in {
-            "V13_V12_RAW_ARM_ONLY_V2V_EDIT_360P", "V14_GROUNDED_ASTAR_CSTAR_FRAMES_360P"}:
+            "V13_V12_RAW_ARM_ONLY_V2V_EDIT_360P", "V14_GROUNDED_ASTAR_CSTAR_FRAMES_360P",
+            "V15_SYNTHETIC_MOTION_GUIDE_INGREDIENTS_360P_EXPERIMENTAL"}:
         # The operator may not validate against the old reconciled store then
         # reserve in a freshly initialized or differently capped ledger.
         previous = preflight.get("existing_ledger_store")
         if (not isinstance(previous, str) or not previous.strip()
                 or _resolve_store(previous) != _resolve_store(folder)):
-            raise ExperimentError("V13/V14 must reserve against the SAME existing V12 native-charge ledger")
+            raise ExperimentError("V13/V14/V15 must reserve against the SAME existing V12 native-charge ledger")
     data = _validate_request(request)
     fingerprint = _digest_bytes(_canonical(data))
     run_id = fingerprint  # full SHA-256, no short-ID collision ambiguity
@@ -734,12 +765,13 @@ def reserve(folder, request):
                 raise ExperimentError("attempt_key already has an immutable manifest with different inputs; choose a new attempt_key for a real retry")
         current = _snapshot(store)
         if data["source_preflight"] and data["source_preflight"].get("authority") in {
-                "V13_V12_RAW_ARM_ONLY_V2V_EDIT_360P", "V14_GROUNDED_ASTAR_CSTAR_FRAMES_360P"}:
+                "V13_V12_RAW_ARM_ONLY_V2V_EDIT_360P", "V14_GROUNDED_ASTAR_CSTAR_FRAMES_360P",
+                "V15_SYNTHETIC_MOTION_GUIDE_INGREDIENTS_360P_EXPERIMENTAL"}:
             # A different concurrent reservation/settlement invalidates the
             # balance attested in the 15-minute Flow edit observation.
             if any(data["source_preflight"][f"ledger_{name}"] != current[name]
                    for name in ("actual_credits", "pending_reserved_credits", "available_credits")):
-                raise ExperimentError("V13/V14 live quote/ledger changed between UI attestation and paid reservation")
+                raise ExperimentError("V13/V14/V15 live quote/ledger changed between UI attestation and paid reservation")
         # The actual provider charge can exceed the estimate and push remaining
         # credits negative. Preserve that truthful state, then block new runs.
         proposed = Decimal(current["available_credits"])
