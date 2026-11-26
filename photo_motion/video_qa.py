@@ -37,7 +37,10 @@ def read_recipe(path):
     unknown; this metadata does not imply deterministic AI generation.
     """
     recipe_path = Path(path).resolve()
-    recipe = json.loads(recipe_path.read_text(encoding="utf-8"))
+    # Parse and hash the same snapshot of the recipe, even if an external
+    # producer is concurrently replacing the file.
+    recipe_bytes = recipe_path.read_bytes()
+    recipe = json.loads(recipe_bytes.decode("utf-8"))
     required = ("schema_version", "provider", "model", "generation_id", "submitted_prompt_file", "input_images", "settings")
     missing = [field for field in required if field not in recipe]
     if missing:
@@ -73,7 +76,7 @@ def read_recipe(path):
     if not recipe["settings"]:
         warnings.append("Provider settings were not recorded; rerun equivalence cannot be established")
     return {
-        "recipe_file": str(recipe_path), "recipe_sha256": file_sha256(recipe_path),
+        "recipe_file": str(recipe_path), "recipe_sha256": hashlib.sha256(recipe_bytes).hexdigest(),
         "provider": recipe["provider"], "model": recipe["model"],
         "generation_id": recipe["generation_id"], "settings": recipe["settings"],
         "exact_submitted_prompt_file": str(prompt_path),
@@ -81,6 +84,32 @@ def read_recipe(path):
         "input_images": images,
         "warnings": warnings
     }
+
+
+def _verify_recipe_still_same(provenance):
+    """Reject a mixed take if replayable recipe inputs changed during QA.
+
+    Remote-only inputs remain explicitly unverified as in read_recipe; only
+    originally rehashed local assets are eligible for this equality check.
+    This is a final byte-stability check, not proof of remote recoverability.
+    """
+    recipe_path = Path(provenance["recipe_file"])
+    checks = (
+        ("recipe", recipe_path, provenance["recipe_sha256"]),
+        ("prompt", Path(provenance["exact_submitted_prompt_file"]),
+         provenance["exact_submitted_prompt_sha256"]),
+    )
+    for role, path, expected in checks:
+        if not path.is_file() or file_sha256(path) != expected:
+            raise RuntimeError(f"{role} changed during frame inspection; discard these results")
+    for item in provenance["input_images"]:
+        if not item["hash_reverified_locally"]:
+            continue
+        path = Path(item["locator"])
+        if not path.is_absolute():
+            path = recipe_path.parent / path
+        if not path.is_file() or file_sha256(path) != item["sha256"]:
+            raise RuntimeError("image changed during frame inspection; discard these results")
 
 
 def _fraction(value):
@@ -279,6 +308,8 @@ def inspect(spec, spec_path, video_path, out_dir, recipe_path=None):
         raise RuntimeError("source video changed during frame inspection; discard these results")
     if file_sha256(spec_path) != spec_sha256:
         raise RuntimeError("motion specification changed during frame inspection; discard these results")
+    if provenance:
+        _verify_recipe_still_same(provenance)
     manifest = {
         "tool": "photo_motion.video_qa", "version": __version__,
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
