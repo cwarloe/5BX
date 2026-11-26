@@ -25,6 +25,8 @@ LINK = re.compile(r"\[([^\]]+)\]\((https?://[^)]+)\)")
 DRIVE = re.compile(r"^/file/d/([A-Za-z0-9_-]+)/view/?$")
 HIGH_RES_LABEL = re.compile(r"\b(?:high[- ]resolution|full[- ]resolution|standalone)\b", re.I)
 REVISION = re.compile(r"\b(\d{2}[A-Z]?)\b")
+FLOW_STATIONS = ("Hold / rework", "Still / form QA", "Human review",
+                 "Video QC", "Unclassified")
 
 
 def _plain(value):
@@ -206,7 +208,7 @@ def _current_refinements(index, charts):
     return output
 
 
-def _review_queue(index, latest, items, charts):
+def _review_queue(index, latest, items, charts, limit=3):
     """Show only live candidate decisions and explicit human-eyes requests.
 
     This is a read-only inbox. Approval happens in the existing review record,
@@ -248,7 +250,121 @@ def _review_queue(index, latest, items, charts):
                           "question": questions[0].strip() if questions else
                                       _plain(line).split(":", 1)[-1].strip(),
                           "source": INDEX})
-    return queue[:3]
+    return queue[:limit] if limit is not None else queue
+
+
+def _revision_rank(item):
+    """Prefer an explicit later variant, but not an unrelated diagnostic.
+
+    IDs represent test families, not guaranteed one-to-one physical exercises.
+    A repaired 35R can supersede rejected 35 without rewriting that history.
+    """
+    revision = item.get("test", "")
+    letter = revision[2:]
+    non_diagnostic = item.get("kind") not in ("diagnostic", "comparison")
+    if "diagnostic" in item.get("title", "").casefold():
+        non_diagnostic = False
+    return (int(non_diagnostic), ord(letter) if letter else 0)
+
+
+def _current_safety_state(item):
+    """A source-level veto overrides optimistic *assistant* grading.
+
+    Read the candidate label first: a source sentence can mention an older
+    rejected predecessor or an approved *identity master* without describing
+    the current output. This is not a human approval parser.
+    """
+    title = item.get("title", "")
+    direct = _state(title)
+    if direct in ("HOLD", "REJECT"):
+        return direct
+    summary = item.get("summary", "")
+    # A same-candidate narrative veto is still binding when the link label is
+    # neutral. Historical clauses do not automatically veto later corrections.
+    for clause in re.split(r"[.;|]", summary):
+        lower = clause.casefold()
+        if re.search(r"\b(?:older|earlier|previous|prior|original|historical|superseded)\b", lower):
+            continue
+        if re.search(r"\b(?:safety|identity|form|human|owner|user|current|still)\b", lower):
+            if re.search(r"\b(?:on hold|safety hold|identity hold|hold)\b", lower):
+                return "HOLD"
+            if re.search(r"\b(?:reject|rejected)\b", lower):
+                return "REJECT"
+    return None
+
+
+def _flow_rows(items, latest, review_queue):
+    """Read-only Kanban-style projection of existing numbered QA outputs.
+
+    Do not pretend a gallery entry tracks an agent's live assignment or elapsed
+    stage duration. Only explicit current outcomes can create review/hold status.
+    """
+    current = {}
+    for item in items:
+        family = item["test"][:2]
+        if family not in current or _revision_rank(item) > _revision_rank(current[family]):
+            current[family] = item
+    # The chronological latest-refinement headings supersede inventory cards.
+    for item in latest:
+        if item.get("revision"):
+            current[item["revision"][:2]] = item
+    queue = {entry["revision"][:2]: entry for entry in review_queue
+             if entry.get("revision")}
+    rows = []
+    for family, item in sorted(current.items(), key=lambda pair: (pair[1]["chart"], pair[0])):
+        revision = item.get("revision") or item.get("test")
+        veto = _current_safety_state(item)
+        review = queue.get(family)
+        kind = item.get("kind", "image")
+        if veto:
+            station = "Hold / rework"
+            state = veto
+            blocker = f"Current {state} recorded for this test candidate; see its QA source."
+            action = "Resolve the documented defect and recheck form before any video use."
+        elif kind == "video":
+            station = "Video QC"
+            state = "NEEDS EYES" if review else "UNVERIFIED"
+            blocker = "A video exists, but complete motion, identity and loop are not verified."
+            action = (review.get("question") if review else None) or (
+                "Review a full playable cycle, foot/hand identity, and the first-to-last frame seam.")
+        elif review:
+            station = "Human review"
+            state = "NEEDS EYES"
+            blocker = "A specific owner judgment is requested; no form approval is recorded."
+            action = review.get("question") or "Answer the question in the existing QA source."
+        elif kind in ("image", "contact card", "standalone still", "diagnostic"):
+            station = "Still / form QA"
+            state = "CONDITIONAL" if "conditional" in item.get("title", "").casefold() else "UNVERIFIED"
+            blocker = "Still/diagnostic evidence only; next production gate not evidenced here."
+            action = "Inspect the linked form/identity QA and record the next gate in that source."
+        else:
+            station = "Unclassified"
+            state = "UNVERIFIED"
+            blocker = "The existing review record does not establish a production stage."
+            action = "Record the stage and a concrete next action in the existing QA note."
+        rows.append({"chart": item["chart"], "work_id": family,
+                     "revision": revision, "title": item.get("title", family),
+                     "station": station, "state": state, "blocker": blocker,
+                     "next_action": action, "url": item["url"],
+                     "source": item.get("source", INDEX), "kind": kind})
+    return rows
+
+
+def _wip_control(repo_root):
+    """Read cap from the existing standard; no live WIP assignments are stored."""
+    standard = Path(repo_root) / "sprites/docs/PHOTOGRAPHIC_PRODUCTION_STANDARD_WORK.md"
+    try:
+        contents = standard.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return {"limit": None, "active": None, "source": None}
+    match = re.search(r"at most\s+(one|two|three|four|five|\d+)\s+release-validation exercises active",
+                      contents, re.I)
+    word_numbers = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5}
+    limit = (word_numbers.get(match.group(1).lower(), None)
+             if match and not match.group(1).isdigit() else
+             int(match.group(1)) if match else None)
+    return {"limit": limit, "active": None,
+            "source": "sprites/docs/PHOTOGRAPHIC_PRODUCTION_STANDARD_WORK.md"}
 
 
 def gallery_data(repo_root, chart=None):
@@ -282,9 +398,12 @@ def gallery_data(repo_root, chart=None):
                           "state": _state(title), "kind": _asset_kind(title, link.group(2)),
                           "source": INVENTORIES[n]})
     latest = _current_refinements(index, charts)
-    review_queue = _review_queue(index, latest, items, charts)
+    all_reviews = _review_queue(index, latest, items, charts, limit=None)
+    review_queue = all_reviews[:3]
     return {"overviews": [overviews[n] for n in charts], "items": items,
             "latest": latest, "review_queue": review_queue,
+            "flow": _flow_rows(items, latest, all_reviews),
+            "wip": _wip_control(repo_root),
             "high_res": _high_res_stills(folder, index, charts),
             "record": PHOTO_DIR / INDEX}
 
@@ -319,6 +438,105 @@ def _tile(item, kind):
       {question}<p>{_esc(description)}</p>{comparison} {source_link}</div></article>'''
 
 
+def _flow_board(data):
+    """Compact evidence board; assignments and approvals are NOT editable here."""
+    rows = data.get("flow", [])
+    if not rows:
+        return ""
+    columns = []
+    for station in FLOW_STATIONS:
+        present = [row for row in rows if row["station"] == station]
+        cards = []
+        for row in present:
+            output = row["url"]
+            thumb = _image_url(output)
+            image = (f'<img loading="lazy" src="{_esc(thumb)}" alt="Preview of '
+                     f'Chart {row["chart"]} test {_esc(row["work_id"])}">'
+                     if thumb else '<span class="placeholder">Open output</span>')
+            record = (f"https://github.com/cwarloe/5BX/blob/main/{PHOTO_DIR}/"
+                      f"{row['source']}")
+            state_class = "blocked" if row["station"] == "Hold / rework" else ""
+            cards.append(f'''<article class="flow-card {state_class}">
+              <a class="flow-preview" href="{_esc(output)}" target="_blank" rel="noopener noreferrer">
+                {image}<span>Open output ↗</span></a>
+              <div class="flow-copy"><strong>Chart {row["chart"]} · test family {_esc(row["work_id"])}</strong>
+                <span class="flow-status">{_esc(row["state"])}</span>
+                <p>Current source: {_esc(row["revision"])}</p>
+                <p><b>Blocker / gate:</b> {_esc(row["blocker"])}</p>
+                <p><b>Next:</b> {_esc(row["next_action"])}</p>
+                <a href="{_esc(record)}" target="_blank" rel="noopener noreferrer">QA/source record ↗</a>
+              </div></article>''')
+        columns.append(f'''<section class="flow-lane" aria-label="{_esc(station)}">
+          <h3>{_esc(station)} <span>{len(present)}</span></h3>
+          {''.join(cards) if cards else '<p class="flow-empty">No indexed item with this evidenced status.</p>'}
+          </section>''')
+    control = data.get("wip", {})
+    limit = control.get("limit")
+    cap = (f"Documented release-validation WIP limit: {int(limit)}. "
+           if limit is not None else "Documented release-validation WIP limit not found. ")
+    # The index documents outputs and QA, not when agents pulled work.
+    caution = ("Live assignments, blocked age, and per-stage cycle time are not recorded "
+               "in these notes; the displayed counts are indexed work families, NOT active WIP. "
+               "Ready/generating states cannot be inferred. No final human form approvals are claimed.")
+    return f'''<section id="production-flow" class="group">
+      <div class="heading"><h2>Production flow · Kanban-lite evidence view</h2>
+        <a href="https://github.com/cwarloe/5BX/blob/main/sprites/docs/PHOTOGRAPHIC_PRODUCTION_STANDARD_WORK.md"
+          target="_blank" rel="noopener noreferrer">Production rules ↗</a></div>
+      <p class="hint">{_esc(cap + caution)} Coverage: numbered tests in the published mobile inventories;
+        new unindexed drafts and concurrent agent activity are not automatically included.</p>
+      <div class="flow-board" aria-label="Indexed photographic production status">
+        {''.join(columns)}</div></section>'''
+
+
+def with_metrics(data, repo_root, chart=None):
+    """Attach observed measurements to a rendered view without a status ledger.
+
+    Kept separate from gallery_data so collecting measurements can inspect
+    indexed items without recursively constructing the gallery.
+    """
+    try:
+        from . import photo_metrics
+    except ImportError:  # Direct execution of photo_traveler.py.
+        import photo_metrics
+    data["metrics"] = photo_metrics.collect_metrics(repo_root, chart)
+    return data
+
+
+def _metric_panel(data):
+    """Show measurement *coverage* before attempting numeric comparisons."""
+    report = data.get("metrics")
+    if not report:
+        return ""
+    metrics = report["measurements"]
+    choices = (
+        ("first_pass_yield", "First-pass technical yield", "%"),
+        ("repeat_attempt_share", "Measured repeat-attempt share", "%"),
+        ("cycle_time_hours", "Mean measured stage time", "h"),
+        ("credits_per_approved_video", "Credits per approved video", "credits"),
+    )
+    cards = []
+    for key, title, suffix in choices:
+        item = metrics[key]
+        raw = item["value"]
+        value = ("Not measured" if raw is None else
+                 f"{raw * 100:.1f}%" if suffix == "%" else
+                 f"{raw:.2f} {suffix}")
+        cards.append(f'''<article class="metric-card"><h3>{_esc(title)}</h3>
+          <strong>{_esc(value)}</strong><p>Recorded samples: {int(item['sample_size'])}</p>
+          <p>{_esc(item['note'])}</p></article>''')
+    instrumentation = report["instrumentation"]
+    known = report.get("other_known_cost_observations", [])
+    cost = (f"One separately documented experimental Flow video used "
+            f"{_esc(known[0]['credits'])} credits, not total spend or an approval. "
+            if len(known) == 1 else "")
+    return f'''<section id="production-measurements" class="group">
+      <h2>Production measurements · evidence completeness</h2>
+      <p class="hint">{_esc(cost)}{int(instrumentation['annotated_attempts'])} instrumented attempts;
+      missing timestamps, attempts and costs stay unknown. These are technical observations,
+      never proof of a human-approved 5BX exercise.</p>
+      <div class="metric-grid">{''.join(cards)}</div></section>'''
+
+
 def render_gallery(data, chart=None):
     title = f"Chart {chart}" if chart else "Charts 1–6"
     overview = "".join(_tile(x, "overview") for x in data["overviews"])
@@ -342,6 +560,8 @@ def render_gallery(data, chart=None):
               f'<p class="hint">Click an output to inspect it. Decisions are recorded in the existing review notes; '
               f'this page does not approve or change assets.</p>'
               f'<div class="grid review-grid">{decisions}</div></section>') if decisions else ""
+    flow = _flow_board(data)
+    metrics = _metric_panel(data)
     stills = "".join(_tile(x, "still") for x in data["high_res"])
     high_res = (f'<section id="high-resolution-stills" class="group">'
                 f'<h2>Individual higher-resolution photo stills</h2>'
@@ -378,8 +598,24 @@ background:#fff0c7;padding:4px 7px;border-radius:6px}} .tag.hold {{background:#f
 .question {{background:#eaf6ff;border-left:4px solid #257da6;border-radius:4px;padding:8px;color:#1c4760!important}}
 .review {{border:2px solid #9bbccc}} .review .preview {{height:210px}}
 .source-link {{display:inline-block;margin-top:10px;font-size:.8rem}}
+.flow-board {{display:grid;grid-template-columns:repeat(5,minmax(225px,1fr));gap:12px;
+overflow-x:auto;padding-bottom:8px}} .flow-lane {{background:#e7edf1;border-radius:12px;padding:9px;min-width:0}}
+.flow-lane h3 {{margin:4px 4px 12px;display:flex;justify-content:space-between;gap:7px}}
+.flow-lane h3 span {{background:#cfdee8;color:#264258;padding:2px 7px;border-radius:12px;font-size:.82rem}}
+.flow-card {{background:#fff;border:1px solid #d1dfe6;border-radius:10px;overflow:hidden;margin:9px 0}}
+.flow-card.blocked {{border:2px solid #ca6a61}} .flow-preview {{display:flex;align-items:center;
+justify-content:space-between;gap:6px;font-size:.75rem;padding:7px;background:#edf4f9;min-height:70px}}
+.flow-preview img {{width:75px;height:52px;object-fit:contain}} .flow-copy {{padding:9px;font-size:.75rem}}
+.flow-copy strong {{display:block;font-size:.86rem;margin:0 0 6px}} .flow-copy p {{margin:7px 0;line-height:1.4}}
+.flow-copy a {{display:block;margin:7px 0}} .flow-status {{font-size:.68rem;font-weight:800;
+color:#5a3600;background:#fff0ce;padding:3px 5px;border-radius:5px}} .flow-empty {{font-size:.78rem;color:#526574}}
+.metric-grid {{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:12px}}
+.metric-card {{background:white;border:1px solid #d9e2e8;border-radius:12px;padding:12px}}
+.metric-card h3 {{font-size:.83rem;color:#415a6a}} .metric-card strong {{font-size:1.1rem}}
+.metric-card p {{color:#526574;font-size:.76rem;line-height:1.4;margin:7px 0}}
 footer {{color:#526574;font-size:.82rem;margin:30px 0}}
-@media(max-width:600px) {{main {{padding:12px}} header.hero {{padding:18px}} .grid {{gap:11px}}}}
+@media(max-width:600px) {{main {{padding:12px}} header.hero {{padding:18px}} .grid {{gap:11px}}
+.flow-board {{grid-template-columns:1fr;overflow-x:visible}}}}
 @media print {{body {{background:white}} .tile {{break-inside:avoid}}}}
 </style></head><body><main>
 <header class="hero"><h1>5BX photographic production traveler</h1>
@@ -388,6 +624,8 @@ footer {{color:#526574;font-size:.82rem;margin:30px 0}}
 {high_res_jump}
 <p><a href="{_esc(record)}" target="_blank" rel="noopener">Canonical mobile index and current decisions ↗</a></p></header>
 {review}
+{flow}
+{metrics}
 <section class="group"><h2>Chart overviews · open the products</h2>
 <div class="grid overview-grid">{overview}</div></section>{latest}
 {''.join(sections)}
@@ -403,7 +641,7 @@ def main(argv=None):
     parser.add_argument("--chart", type=int, choices=range(1, 7))
     parser.add_argument("--out", type=Path, default=Path("review-photos.html"))
     args = parser.parse_args(argv)
-    data = gallery_data(args.repo_root, args.chart)
+    data = with_metrics(gallery_data(args.repo_root, args.chart), args.repo_root, args.chart)
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(render_gallery(data, args.chart), encoding="utf-8")
     print(f"Wrote {args.out}: {len(data['overviews'])} chart overviews, "

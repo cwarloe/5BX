@@ -3,18 +3,24 @@ name: Photographic review gallery
 on:
   pull_request:
     paths:
-      - 'sprites/docs/photo_batches/2026-11-26/**'
+      - 'sprites/docs/photo_batches/**'
       - 'sprites/kit/photo_traveler.py'
+      - 'sprites/kit/photo_metrics.py'
       - 'sprites/kit/review_board.py'
-      - 'sprites/tests/test_photo_traveler.py'
+      - 'sprites/tests/test_photo_*.py'
+      - 'sprites/docs/PHOTOGRAPHIC_PRODUCTION_STANDARD_WORK.md'
+      - 'sprites/docs/PHOTO_RELEASE_RETROSPECTIVE.md'
       - '.github/workflows/photo-traveler.yml'
   push:
     branches: [main]
     paths:
-      - 'sprites/docs/photo_batches/2026-11-26/**'
+      - 'sprites/docs/photo_batches/**'
       - 'sprites/kit/photo_traveler.py'
+      - 'sprites/kit/photo_metrics.py'
       - 'sprites/kit/review_board.py'
-      - 'sprites/tests/test_photo_traveler.py'
+      - 'sprites/tests/test_photo_*.py'
+      - 'sprites/docs/PHOTOGRAPHIC_PRODUCTION_STANDARD_WORK.md'
+      - 'sprites/docs/PHOTO_RELEASE_RETROSPECTIVE.md'
       - '.github/workflows/photo-traveler.yml'
   workflow_dispatch:
 
@@ -29,16 +35,20 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Validate read-only gallery parsing
-        run: python3 -m unittest discover -s sprites/tests -p 'test_photo_traveler.py' -v
+      - name: Validate photographic traveler, metrics and flow contracts
+        run: python3 -m unittest discover -s sprites/tests -p 'test_photo_*.py' -v
       - name: Generate charts and Chart 1 pilot views
         run: |
           python3 sprites/kit/review_board.py --photos --out artifacts/review-photos.html
           python3 sprites/kit/review_board.py --photos --chart 1 --out artifacts/review-photo-chart1.html
+      - name: Snapshot recorded production measurements
+        run: python3 sprites/kit/photo_metrics.py --repo-root . --out artifacts/production-metrics.json
       - name: Attach visual outputs to this workflow run
         uses: actions/upload-artifact@v4
         with:
           name: photographic-review-traveler
-          path: artifacts/*.html
+          path: |
+            artifacts/*.html
+            artifacts/production-metrics.json
           if-no-files-found: error
           retention-days: 14

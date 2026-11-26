@@ -57,7 +57,13 @@ are committed to see updated products and explicit holds.
 
 The current [photographic production standard work](docs/PHOTOGRAPHIC_PRODUCTION_STANDARD_WORK.md)
 defines the two-attempt same-defect escalation rule, owner-only form decisions,
-two-exercise release WIP cap and first-pass yield/touch-time measurements.
+two-exercise release WIP cap and first-pass yield/touch-time measurements. Its
+Kanban-lite states describe **derived evidence, not editable approvals**; do
+not infer a stage or a performance number from a thumbnail. For each completed
+exercise or repeated-defect escalation, use the
+[5–10 minute retrospective template](docs/PHOTO_RELEASE_RETROSPECTIVE.md)
+in the existing exercise QA note to verify that a preventive change helps the
+next batch. No Scrum meetings or second tracking system are required.
 
 **Legacy cartoon artwork and regression review:**
 
