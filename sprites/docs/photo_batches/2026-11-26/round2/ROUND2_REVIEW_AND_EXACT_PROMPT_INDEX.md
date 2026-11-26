@@ -20,6 +20,7 @@
 | 34R | Earlier clean high-knee 34V3 | Slightly soften thigh shading | NOT PREFERRED | Still inherits the old unclear arm counter-swing; never replace mechanically better 34B with this cosmetic-only pass. |
 | 41S | Chart 6 chest-slap push-up 41R | Raise the obscured far palm clear of track during airborne phase B | **HOLD — IDENTITY AND MOTION** | Both palms are visibly airborne, but upper arms still read too developed. The unsupported ballistic phase must be tested in video. |
 | 29F | 29E V/forehead sequence | Lower exact forehead contact priority, target neutral elbows and an achievable partial pike | **HOLD — DIAGNOSTIC ONLY** | Forehead raised, but the near elbow still flexes sharply around head and far elbow remains obscured; **not** a demonstrated elbow fix. |
+| 29G | Earlier `02_almost_there` standalone pose + v2 identity reference | New natural partial-pike geometry with both elbows/palms visible and no forced forehead touch | **ANATOMY-PLAUSIBLE / IDENTITY HOLD**, independent second pass requested | The two arms look more believable, but curly hair and shoulder/calf definition drift older; one near elbow is more bent than requested. No four-panel card or video yet. |
 
 **Master identity:** fair, smooth-skinned American 13–14-year-old boy; naturally messy but controlled dark hair; average proportions with ordinary chest/waist/thigh girths, no sculpted deltoids/quads/abs, no visible mature body hair; medium-blue tank, charcoal shorts, dark socks, gray/yellow running shoes, wristband, red track and wooded grass. Do not thin the legs/rear or make him younger when softening muscle definition.
 
@@ -33,6 +34,7 @@
 - `41S_C6_FarHandClearance_R2_ExactPrompt.md`, `41S_C6_FarHandClearance_R2_QA.md`
 - `chart4_high_knee_arms/34A_WRIST_ANKLE_DIAGNOSTIC_PROMPT.md`, `chart4_high_knee_arms/34B_REMOVE_ALL_BANDS_EXACT_PROMPT.md`, `chart4_high_knee_arms/34A_34B_INDEPENDENT_SELF_QA.md`
 - `v_pike_elbow/29F_C3_ForeheadPike_NaturalElbow_ExactEditPrompt.md`, `v_pike_elbow/29F_SUBMITTED_PROMPT_VERBATIM.md` (if independently accepted, add a separate QA report).
+- `v_pike_elbow/29G_Standalone_RelaxedElbows_ExactSubmittedPrompt.md` and `v_pike_elbow/29G_Standalone_RelaxedElbows_StrictQA.md`: more natural standalone partial-pike experiment, but **not identity-accepted**.
 - `CHARTS4_TO_6_UPPER_BODY_SOFTNESS_REVIEW.md` and 32S prompt/QA under `chart4_ex4/` in the parallel source batch.
 - 34R prompt and QA under `lower_body_softness_audit/` in the parallel source batch.
 
