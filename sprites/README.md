@@ -6,7 +6,9 @@ pose strips at the plan's real pace with a timer, rep count and break cards. Its
 first operational prototype uses a cartoon boy (Chart 1 A+, 11:40 at 1080p),
 which remains available for regression tests and UI controls **only**. New character
 and movement generation should follow the [photographic-avatar direction](docs/PHOTOREALISTIC_AVATAR_DIRECTION_2026-11-25.md);
-experimental photographic assets are not yet registered for production. For repeatable 35 mm pose-card, motion prompt and QA steps, see the [photographic pilot playbook](docs/PHOTO_VIDEO_PILOT_PLAYBOOK.md).
+experimental photographic assets are not yet registered for production.
+
+**Phone-friendly current photographic tests:** [numbered review index 15–25](docs/photo_batches/2026-11-26/MOBILE_REVIEW_INDEX.md), with direct Google Drive contact sheets for Charts 1 and 2, one actual low-run Flow video, and the QA verdict for each. Exact successful/failed prompts and lessons are archived beside the index.
 
 **Built for change.** Assume the look, the wording, the character, the format and the exercises
 will all change. Each of those is one small file, and a rebuild only redoes what changed.
@@ -66,9 +68,8 @@ When a chart is ready to publish, run `python3 sprites/kit/line.py release-check
 after restoring its source sheets. This intentionally blocks incomplete/unreviewed artwork;
 the final rendered video still needs a viewing check. See the one-page
 [`STANDARD_WORK.md`](docs/STANDARD_WORK.md) for the seven stations and three gates.
-Start the next production dry run with the Chart 1 knee push-up; hold scissor-jump
-redesign until its additional references arrive. Then compare the approved movement
-instructions with a second approved character. The current process and priorities are
+The photographic Chart 1 kneeling push-up and scissor were tested: the scissor's earlier same-leg/bent-arm versions were rejected, then a physical wrist+ankle tracking test produced a **conditional** clean straight-arm V7 contact card. Historical form, child shoulder range and video motion still require review; do not release automatically. Next dry runs should use the [current review index](docs/photo_batches/2026-11-26/MOBILE_REVIEW_INDEX.md), and compare approved movement
+instructions against the current photo master before any alternate character. The current process and priorities are
 in [`PRODUCTION_CONTROL_PLAN.md`](docs/PRODUCTION_CONTROL_PLAN.md).
 
 For a new image-generation job, make the prompt from the current
