@@ -86,9 +86,23 @@ function ValidatedPhotoElement({ clip, slot, playing, label, onFailure }: Valida
   const frameTolerance = 1 / clip.fps;
 
   const revealIfAligned = (player: HTMLVideoElement) => {
-    if (!validated.current || failed.current || disposed.current || player.readyState < 2) return;
+    if (!validated.current || failed.current || disposed.current || player.readyState < 2 || player.seeking) return;
     if (Math.abs(player.currentTime - clockTarget(slot, clip)) <= frameTolerance) {
       setVisible(true);
+    }
+  };
+
+  const reconcileCompletedSeek = (player: HTMLVideoElement) => {
+    if (!validated.current || failed.current || disposed.current || player.readyState < 2 || player.seeking) return;
+    // An earlier seek can finish after a newer clock tick. If that tick was
+    // the last one (pause or tab suspension), no effect will rerun to repair
+    // the stale position. Keep the frame hidden until the latest seek lands.
+    const target = clockTarget(slot, clip);
+    if (Math.abs(player.currentTime - target) > frameTolerance) {
+      setVisible(false);
+      try { player.currentTime = target; } catch { fail(); }
+    } else {
+      revealIfAligned(player);
     }
   };
 
@@ -176,7 +190,7 @@ function ValidatedPhotoElement({ clip, slot, playing, label, onFailure }: Valida
         }
       }}
       onLoadedData={(event) => revealIfAligned(event.currentTarget)}
-      onSeeked={(event) => revealIfAligned(event.currentTarget)}
+      onSeeked={(event) => reconcileCompletedSeek(event.currentTarget)}
       onError={fail}
     />
   );
