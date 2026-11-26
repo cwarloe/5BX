@@ -35,9 +35,16 @@ function clockTarget(slot: PhotoPlaybackSlot, clip: ApprovedPhotoClip): number {
  */
 function ValidatedPhotoElement({ clip, slot, playing, label, onFailure }: ValidatedProps) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  const onFailureRef = useRef(onFailure);
+  onFailureRef.current = onFailure;
   const validated = useRef(false);
   const failed = useRef(false);
   const disposed = useRef(false);
+  // A pause/seek/unmount invalidates an outstanding asynchronous play request.
+  // Browsers may reject that request with AbortError *after* pause(), which
+  // must not turn an otherwise valid clip into a permanent playback failure.
+  const playGeneration = useRef(0);
+  const pendingPlay = useRef(false);
   const [visible, setVisible] = useState(false);
 
   const release = useCallback((player: HTMLVideoElement) => {
@@ -50,20 +57,31 @@ function ValidatedPhotoElement({ clip, slot, playing, label, onFailure }: Valida
     if (disposed.current || failed.current) return;
     failed.current = true;
     validated.current = false;
+    playGeneration.current += 1;
+    pendingPlay.current = false;
     setVisible(false);
     if (videoRef.current) release(videoRef.current);
-    onFailure();
-  }, [onFailure, release]);
+    onFailureRef.current();
+  }, [release]);
 
   useEffect(() => {
     const actualPlayer = videoRef.current;
     disposed.current = false;
+    // React StrictMode rehearses effect cleanup/setup on the *same* DOM node.
+    // Restore the known, admitted src removed during rehearsal, while still
+    // requiring a fresh metadata/seek validation before revealing a frame.
+    if (actualPlayer && !actualPlayer.hasAttribute("src") && !failed.current) {
+      actualPlayer.setAttribute("src", clip.url);
+      try { actualPlayer.load(); } catch { fail(); }
+    }
     return () => {
       disposed.current = true;
       validated.current = false;
+      playGeneration.current += 1;
+      pendingPlay.current = false;
       if (actualPlayer) release(actualPlayer);
     };
-  }, [release]);
+  }, [clip.url, fail, release]);
 
   const frameTolerance = 1 / clip.fps;
 
@@ -92,6 +110,8 @@ function ValidatedPhotoElement({ clip, slot, playing, label, onFailure }: Valida
       return;
     }
     if (Math.abs(player.currentTime - target) > frameTolerance) {
+      playGeneration.current += 1;
+      pendingPlay.current = false;
       player.pause();
       setVisible(false);
       try {
@@ -102,13 +122,24 @@ function ValidatedPhotoElement({ clip, slot, playing, label, onFailure }: Valida
       return;
     }
     if (!playing) {
+      playGeneration.current += 1;
+      pendingPlay.current = false;
       player.pause();
       return;
     }
-    if (!player.paused) return;
+    if (!player.paused || pendingPlay.current) return;
     try {
       // A rejected browser gesture policy is a HOLD, not a sprite fallback.
-      void Promise.resolve(player.play()).catch(fail);
+      const generation = playGeneration.current;
+      pendingPlay.current = true;
+      void Promise.resolve(player.play()).then(
+        () => { if (generation === playGeneration.current) pendingPlay.current = false; },
+        () => {
+          if (generation !== playGeneration.current) return;
+          pendingPlay.current = false;
+          fail();
+        },
+      );
     } catch {
       fail();
     }

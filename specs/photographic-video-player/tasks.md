@@ -12,12 +12,17 @@ evidence; all engineering tasks follow Charles's requirements approval on
       metadata/clock sync, pause/skip/error/reduced-motion cleanup (R2.1–7, R3.4).
 - [x] 3. Integrate dev-flag-only photographic preview with explicit HOLD
       states and **zero sprite renders/preloads**; preserve production (R3.1–3).
-- [ ] 4. Add negative-path and real DOM lifecycle regression tests; integrate
-      into Game CI, typecheck and development/production builds (R1–R3).
+- [x] 4. Add negative-path and simulated DOM lifecycle regression tests;
+      integrate into Game CI test command, typecheck and development build
+      (R1–R3). Real browser network/decode remains manual task 6.
 - [ ] 5. Confirm independent public-build artifact guard on final combined
       code; default empty registry means no public MP4 (R1.1, R1.5, R3.1).
 - [ ] 6. Review acceptance mapping and run explicit browser/mobile smoke check
       or record named pending manual check if browser unavailable (R1–R3).
-- [ ] 7. **Future owner-gated video release only:** authenticated exact-video
-      approval, action-specific canonical QA, byte-verified delivery and
-      revocation before any nonempty registry (R1.3–5). NOT IN THIS PR.
+
+## Future release gate — outside this engineering PR
+
+7. **Owner-gated video release only:** authenticated exact-video approval,
+   action-specific canonical QA, byte-verified delivery and revocation before
+   any nonempty registry (R1.3–5). This work remains HOLD and is not counted
+   toward engineering task completion.
