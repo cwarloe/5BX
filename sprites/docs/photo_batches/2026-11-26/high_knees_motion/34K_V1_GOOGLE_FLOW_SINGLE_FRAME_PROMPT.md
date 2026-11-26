@@ -5,6 +5,7 @@
 - **Start frame only:** `34K_V1_START_FarKneeUp_2x.png`, extracted losslessly as to pose/content from lower-left quadrant of human-preferred `34K_HigherFarElbow_Review.png`, then Lanczos 2× resized without adding AI details.
 - **Alternate start if needed (new job, one variable):** `34K_V1_ALT_START_NearKneeUp_2x.png`, upper-left quadrant, for an independent comparison.
 - [Primary start-frame image (Google Drive)](https://drive.google.com/file/d/1XM0whA2kq1ILwFD0KbZp-uimWmjF7Wpx/view) | [alternate start-frame image](https://drive.google.com/file/d/1PxLP4lA_VE3m4QG8rybB5mMiVRJSbVAy/view) | [full four-panel master](https://drive.google.com/file/d/106bH7oPR8fB6trXiOXppJ95DtG-WcP0Z/view)
+- [Named **34K-V1 high-knee scene** in the existing Google Flow 5BX project](https://flow.google.com/project/21f1691f-1259-4af7-9061-61f0c5c47e23/scene/d21f6ab8-4f51-484b-a426-9e92f5dfa69f). Scene is an empty prepared workspace, not a completed clip.
 - Do **not** upload the entire four-panel contact sheet as the video start image. It is a reference and process record, not a four-character scene.
 - Do **not** supply end or middle keyframes on V1. Prior Flow tests glitched when interpolating between poses and behaved better with a single up-pose input.
 
@@ -33,7 +34,7 @@
 ## Status / experiment rationale
 
 - This is a **ready-to-run prompt**. No Flow render is claimed here.
-- Generation status: the connected browser extension required for Google Flow control was unavailable in this session. Magnific was also checked as a possible image-to-video route, but the connected Magnific plan is Free and video generation is paid-only. Therefore no paid video run was started.
+- Generation status: the connected browser extension failed, but the authenticated Google Flow project was accessible in the cloud browser. A new named 34K-V1 scene was created. **No image was uploaded to Flow and no video render was started yet**; the prompt and start frame are both ready in Drive. Magnific was also checked as an alternative, but its connected plan is Free and video generation is paid-only.
 - Crop originals retained for P1–P4; full four-panel 34K remains the appearance master.
 - Start with ONE image because a previous Flow run using multiple positional images produced temporal reversal/glitches, whereas a single up frame worked. The best next test changes only the *far elbow* in the master, keeping model/camera, age, body and wardrobe stable.
 - If V1 fails on a frozen arm, make **V2 only change the action paragraph**: explicitly demand visible opposite-direction alternating arm swing every footfall, leaving all identity and camera text unchanged.
