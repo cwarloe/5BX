@@ -4,12 +4,27 @@ on:
   pull_request:
     paths:
       - 'photo_motion/**'
+      - 'sprites/kit/photo_*.py'
+      - 'sprites/tests/test_photo_*.py'
+      - 'sprites/docs/PHOTOGRAPHIC_PRODUCTION_STANDARD_WORK.md'
+      - 'AGENTS.md'
       - '.github/workflows/photographic-motion-ci.yml'
   push:
     branches: [main]
     paths:
       - 'photo_motion/**'
+      - 'sprites/kit/photo_*.py'
+      - 'sprites/tests/test_photo_*.py'
+      - 'sprites/docs/PHOTOGRAPHIC_PRODUCTION_STANDARD_WORK.md'
+      - 'AGENTS.md'
       - '.github/workflows/photographic-motion-ci.yml'
+  workflow_dispatch:
+
+# Keep only the newest verification for a moving pull request. Never cancel
+# other PRs or an unrelated provider's generation work.
+concurrency:
+  group: photo-motion-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
@@ -17,6 +32,7 @@ permissions:
 jobs:
   motion-contracts:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -29,5 +45,20 @@ jobs:
           python3 -m pip install 'Pillow>=10,<13' 'numpy>=1.26,<3'
       - name: Validate current photographic movement contracts
         run: python3 -m photo_motion validate photo_motion/specs/*.json
+      # Even a failed handoff check writes its factual queue for investigation.
+      - name: Fail closed on malformed owner-ready evidence or WIP overflow
+        run: python3 sprites/kit/photo_workflow.py --repo-root . --check --out artifacts/owner-review-queue.json
+      - name: Validate existing failure analysis and correction evidence
+        run: python3 sprites/kit/photo_defect_learning.py --repo-root . --all
       - name: Run motion sequencing and real-video inspection tests
         run: python3 -m unittest discover -s photo_motion/tests -v
+      - name: Cross-check photographic traveler and handoff contracts
+        run: python3 -m unittest discover -s sprites/tests -p 'test_photo_*.py' -v
+      - name: Preserve recorded handoff evidence, including on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: photo-motion-owner-evidence
+          path: artifacts/owner-review-queue.json
+          if-no-files-found: warn
+          retention-days: 14

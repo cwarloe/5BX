@@ -4,33 +4,31 @@ on:
   pull_request:
     paths:
       - 'sprites/docs/photo_batches/**'
-      - 'photo_motion/specs/**'
-      - 'photo_motion/diagnostics/**'
-      - 'sprites/kit/photo_traveler.py'
-      - 'sprites/kit/photo_metrics.py'
-      - 'sprites/kit/photo_workflow.py'
+      - 'photo_motion/**'
+      - 'sprites/kit/photo_*.py'
       - 'sprites/kit/review_board.py'
       - 'sprites/tests/test_photo_*.py'
+      - 'sprites/docs/PHOTO_*.md'
       - 'sprites/docs/PHOTOGRAPHIC_PRODUCTION_STANDARD_WORK.md'
-      - 'sprites/docs/PHOTO_RELEASE_RETROSPECTIVE.md'
       - 'AGENTS.md'
       - '.github/workflows/photo-traveler.yml'
   push:
     branches: [main]
     paths:
       - 'sprites/docs/photo_batches/**'
-      - 'photo_motion/specs/**'
-      - 'photo_motion/diagnostics/**'
-      - 'sprites/kit/photo_traveler.py'
-      - 'sprites/kit/photo_metrics.py'
-      - 'sprites/kit/photo_workflow.py'
+      - 'photo_motion/**'
+      - 'sprites/kit/photo_*.py'
       - 'sprites/kit/review_board.py'
       - 'sprites/tests/test_photo_*.py'
+      - 'sprites/docs/PHOTO_*.md'
       - 'sprites/docs/PHOTOGRAPHIC_PRODUCTION_STANDARD_WORK.md'
-      - 'sprites/docs/PHOTO_RELEASE_RETROSPECTIVE.md'
       - 'AGENTS.md'
       - '.github/workflows/photo-traveler.yml'
   workflow_dispatch:
+
+concurrency:
+  group: photo-traveler-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
@@ -38,22 +36,30 @@ permissions:
 jobs:
   gallery:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Validate photographic traveler, metrics and flow contracts
-        run: python3 -m unittest discover -s sprites/tests -p 'test_photo_*.py' -v
-      - name: Generate charts and Chart 1 pilot views
-        run: |
-          python3 sprites/kit/review_board.py --photos --out artifacts/review-photos.html
-          python3 sprites/kit/review_board.py --photos --chart 1 --out artifacts/review-photo-chart1.html
+      # Snapshot first, so the queue and measured coverage remain inspectable
+      # when a later unit test or gallery render fails.
       - name: Snapshot recorded production measurements
         run: python3 sprites/kit/photo_metrics.py --repo-root . --out artifacts/production-metrics.json
       - name: Validate agent WIP and owner-ready evidence
         run: python3 sprites/kit/photo_workflow.py --repo-root . --check --out artifacts/owner-review-queue.json
+      - name: Reject invalid defect-learning and countermeasure records
+        run: python3 sprites/kit/photo_defect_learning.py --repo-root . --all
+      - name: Validate photographic traveler, metrics and flow contracts
+        run: python3 -m unittest discover -s sprites/tests -p 'test_photo_*.py' -v
+      - name: Validate every photographic movement contract before generating a review view
+        run: python3 -m photo_motion validate photo_motion/specs/*.json
+      - name: Generate charts and Chart 1 pilot views
+        run: |
+          python3 sprites/kit/review_board.py --photos --out artifacts/review-photos.html
+          python3 sprites/kit/review_board.py --photos --chart 1 --out artifacts/review-photo-chart1.html
       - name: Attach visual outputs to this workflow run
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: photographic-review-traveler
@@ -61,5 +67,5 @@ jobs:
             artifacts/*.html
             artifacts/production-metrics.json
             artifacts/owner-review-queue.json
-          if-no-files-found: error
+          if-no-files-found: warn
           retention-days: 14

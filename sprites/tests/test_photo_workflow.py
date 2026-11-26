@@ -117,6 +117,33 @@ class WorkflowTest(unittest.TestCase):
         self.assertEqual(result["errors"], [])
         self.assertEqual(len(result["done"]), 1)
 
+    def test_owner_decision_requires_a_real_timezone_aware_timestamp(self):
+        item = self.ready()
+        item["status"] = "DONE"
+        item["owner_decision"] = {"reviewer": "cwarloe", "decision": "ACCEPT",
+                                  "decided_at": "approved yesterday",
+                                  "evidence_url": "https://github.com/cwarloe/5BX/issues/42#issuecomment-1",
+                                  "video_sha256": H}
+        self.record(item)
+        self.assertEqual(photo_workflow.collect(self.root)["done"], [])
+        self.assertTrue(any("timestamp" in x for x in photo_workflow.collect(self.root)["errors"]))
+        item["owner_decision"]["decided_at"] = "2026-11-26T12:00:00"
+        self.record(item)
+        self.assertEqual(photo_workflow.collect(self.root)["done"], [])
+        item["owner_decision"]["decided_at"] = "2026-11-26T12:00:00Z"
+        self.record(item)
+        self.assertEqual(len(photo_workflow.collect(self.root)["done"]), 1)
+
+    def test_independent_reviewer_cannot_be_producer_with_different_case_or_spacing(self):
+        item = self.ready()
+        item["checks"]["form"]["reviewer"] = " PRODUCER-AGENT "
+        item["checks"]["motion"]["reviewer"] = "producer-agent\t"
+        self.record(item)
+        result = photo_workflow.collect(self.root)
+        self.assertEqual(result["ready_for_review"], [])
+        self.assertTrue(any("form needs a named independent reviewer" in x for x in result["errors"]))
+        self.assertTrue(any("motion needs a named independent reviewer" in x for x in result["errors"]))
+
     def test_blocked_escalation_only_if_owner_needed(self):
         item = {"schema_version": 1, "chart": 1, "exercise": 5,
                 "revision": "scissor-v0", "status": "BLOCKED", "agent": "producer",
@@ -129,6 +156,30 @@ class WorkflowTest(unittest.TestCase):
         item["blocker"]["owner_needed"] = True
         self.record(item)
         self.assertEqual(len(photo_workflow.collect(self.root)["owner_blockers"]), 1)
+
+    def test_blocker_owner_needed_must_be_boolean(self):
+        item = {"schema_version": 1, "chart": 1, "exercise": 5,
+                "revision": "scissor-v0", "status": "BLOCKED", "agent": "producer",
+                "blocker": {"reason": "Need historical reference", "question": "Which source?",
+                            "recommendation": "Read original booklet", "owner_needed": "true"}}
+        self.record(item)
+        result = photo_workflow.collect(self.root)
+        self.assertEqual(result["owner_blockers"], [])
+        self.assertTrue(any("owner_needed" in x for x in result["errors"]))
+
+    def test_invalid_active_job_still_consumes_declared_wip(self):
+        # Invalid QA handoff must not make a seemingly free production slot.
+        self.record({"schema_version": 1, "chart": 1, "exercise": 5,
+                     "revision": "", "status": "QA", "agent": "producer-one"})
+        for exercise in (3, 4):
+            self.record({"schema_version": 1, "chart": 1, "exercise": exercise,
+                         "revision": "r1", "status": "PRODUCING", "agent": "producer-two"},
+                        f"other-{exercise}.md")
+        result = photo_workflow.collect(self.root)
+        self.assertEqual(result["active_wip"]["declared"], 3)
+        self.assertIn("WIP exceeded", " ".join(result["errors"]))
+        self.assertTrue(any(x["requested_status"] == "QA" and x["status"] == "INVALID"
+                            for x in result["other_recorded"]))
 
     def test_more_than_two_active_exercises_fails_closed(self):
         self.record({"schema_version": 1, "chart": 1, "exercise": 5,
@@ -153,6 +204,35 @@ class WorkflowTest(unittest.TestCase):
             '<!-- 5bx-production\n{"status": "READY_FOR_REVIEW",}\n-->\n', encoding="utf-8")
         self.assertTrue(any("invalid production marker" in x for x in
                             photo_workflow.collect(self.root)["errors"]))
+
+    def test_unhashable_marker_values_fail_closed_without_crashing_the_queue(self):
+        item = self.ready()
+        item["status"] = {"unexpected": "object"}
+        item["chart"] = [1]
+        self.record(item)
+        result = photo_workflow.collect(self.root)
+        self.assertEqual(result["ready_for_review"], [])
+        self.assertTrue(result["errors"])
+        self.assertEqual(result["other_recorded"][0]["status"], "INVALID")
+
+    def test_bad_done_video_type_is_invalid_not_a_scanner_exception(self):
+        item = self.ready()
+        item["status"] = "DONE"
+        item["video"] = "not a playable video record"
+        item["owner_decision"] = {"reviewer": "cwarloe", "decision": "ACCEPT",
+                                  "decided_at": "2026-11-26T12:00:00Z",
+                                  "evidence_url": "https://github.com/cwarloe/5BX/issues/42#issuecomment-1",
+                                  "video_sha256": H}
+        self.record(item)
+        result = photo_workflow.collect(self.root)
+        self.assertEqual(result["done"], [])
+        self.assertTrue(any("video" in e for e in result["errors"]))
+
+    def test_malformed_motion_spec_does_not_crash_registration(self):
+        self.spec.write_text(json.dumps({"chart": [1], "exercise": 5, "name": "bad"}))
+        result = photo_workflow.collect(self.root)
+        self.assertTrue(result["errors"])
+        self.assertEqual(result["ready_for_review"], [])
 
 
 if __name__ == "__main__":
