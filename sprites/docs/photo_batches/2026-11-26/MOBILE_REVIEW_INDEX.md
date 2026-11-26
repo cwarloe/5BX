@@ -4,8 +4,8 @@ Updated 2026-11-26 UTC. All assets are experimental; **no human final exercise-f
 
 ## Latest test — 34J hides the far arm naturally
 
-- The user identified that even 34I's visible far upper arm was too long for its background shoulder position. Rather than forcing an exposed far hand, hide the far forearm/wrist/hand behind the boy's torso and show only a **small rear elbow contour**.
-- [**34I vs 34J focused mobile comparison**](https://drive.google.com/file/d/1kXEJyTxVUkhMNHy4IzWu6CM0VRT_mX22/view) | [**34J full-resolution four-frame card**](https://drive.google.com/file/d/1bcvjYeWVF-t-onGOwJOSGfam21t9J1Xj/view). In 34J the hanging far fist disappears, foreground right-arm swing and alternating raised knees remain. **Review candidate only**; no video motion test yet.
+- The user selected **34H** (source hash verified) and identified that its visible far upper arm was too long for its background shoulder position. Rather than forcing an exposed far hand, hide the far forearm/wrist/hand behind the boy's torso and show only a **small rear elbow contour**.
+- [**34H vs 34J focused mobile comparison**](https://drive.google.com/file/d/1kXEJyTxVUkhMNHy4IzWu6CM0VRT_mX22/view) | [**34J full-resolution four-frame card**](https://drive.google.com/file/d/1bcvjYeWVF-t-onGOwJOSGfam21t9J1Xj/view). In 34J the hanging far fist disappears, foreground right-arm swing and alternating raised knees remain. **Review candidate only**; no video motion test yet.
 - [Round 7 occlusion lesson and exact prompt](https://github.com/cwarloe/5BX/blob/main/sprites/docs/photo_batches/2026-11-26/round7/ROUND7_OCCLUDED_FAR_ARM_FINDING.md). **Key finding:** camera occlusion is correct anatomy; forcing both hands visible from a 3/4 view creates false arm length and duplicated limbs.
 
 ## Earlier handedness follow-up — 34E rejected, 34G superseded
