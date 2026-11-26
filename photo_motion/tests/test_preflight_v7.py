@@ -226,6 +226,14 @@ class V7PreparedPairTests(unittest.TestCase):
         self.assertEqual(result["status"], "PASS", result["errors"])
         self.assertEqual(result["generation_authorization"], "NOT_GRANTED_BY_PREFLIGHT")
 
+    def test_validated_v7_settings_detach_from_mutable_caller(self):
+        req = self.request()
+        normalized = experiments._validate_request(req)
+        req["settings"]["variants"] = 99
+        req["settings"]["seed"] = "altered after validation"
+        self.assertEqual(normalized["settings"],
+                         {"duration_seconds": 6, "aspect_ratio": "16:9", "variants": 1, "seed": None})
+
 
 if __name__ == "__main__":
     unittest.main()
