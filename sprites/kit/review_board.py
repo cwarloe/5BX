@@ -233,7 +233,8 @@ def main(argv=None):
     args = parser.parse_args(argv)
     if args.photos:
         from kit import photo_traveler
-        data = photo_traveler.gallery_data(args.repo_root, args.chart)
+        data = photo_traveler.with_metrics(
+            photo_traveler.gallery_data(args.repo_root, args.chart), args.repo_root, args.chart)
         out = args.out or Path("review-photos.html")
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(photo_traveler.render_gallery(data, args.chart), encoding="utf-8")
