@@ -33,8 +33,11 @@ committed here.
 
 ## Spec-driven development
 
-Use a spec for features that take more than one sitting, touch several files,
-or have testable behavior. Small fixes skip it.
+Use a full spec where shared design and acceptance evidence materially reduce
+rework: substantial cross-component or user-facing changes, risky behavior,
+or multi-agent handoffs needing more than a PR description. For small,
+reversible, preauthorized changes, a clear PR and reproducible tests are
+sufficient even when several files change or the behavior is testable.
 Full guide: https://github.com/cwarloe/lessons-learned/blob/main/SPEC_DRIVEN_DEVELOPMENT.md
 
 - Specs live in `specs/<feature-slug>/` (requirements.md, design.md, tasks.md).
@@ -46,7 +49,9 @@ Full guide: https://github.com/cwarloe/lessons-learned/blob/main/SPEC_DRIVEN_DEV
   may continue through design, tasks, tests and a low-risk engineering PR without
   repeating that approval ceremony. Record the approved scope and acceptance
   evidence in the spec or PR; new material scope changes still require approval.
-- Work one task at a time; check it off in the commit that completes it.
+- Dependent tasks run in order. Independent tasks may run in parallel when file
+  ownership and integration are clear; check each task off in its completion
+  commit.
 - If the code needs to differ from the spec, update the spec first.
 - A feature is done when every acceptance criterion maps to a passing test or a
   named manual check.
