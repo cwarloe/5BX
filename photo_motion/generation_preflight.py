@@ -18,6 +18,7 @@ import argparse
 import hashlib
 import json
 import math
+import re
 import sys
 import warnings
 from decimal import Decimal, InvalidOperation
@@ -34,6 +35,64 @@ SPEC_ROOT = Path("photo_motion/specs")
 PHOTO_IDENTITY_POLICY = Path("sprites/docs/PHOTOREALISTIC_AVATAR_DIRECTION_2026-11-25.md")
 MIN_FRAME = (640, 360)
 IMAGE_TYPES = {"JPEG", "PNG", "WEBP"}
+
+# A deliberately narrow stop-the-line check, NOT general language or exercise
+# form understanding. It catches explicit directions which contradict a
+# contractually required chest-floor contact. It never certifies a prompt as
+# semantically correct, and never echoes private prompt text into receipts.
+CONTACT_SURFACE = r"(?:floor|ground|track|mat|surface)"
+CHEST = r"(?:chest|sternum)"
+CONTACT = r"(?:touch(?:es|ing)?|contact(?:s|ing)?)"
+CHEST_CONTACT_DENIAL = re.compile(
+    rf"\b{CHEST}\b.{{0,100}}?\b(?:not|never|without)\s+{CONTACT}\b.{{0,80}}?\b{CONTACT_SURFACE}\b"
+    rf"|\b{CHEST}\b.{{0,70}}?\b(?:doesn['’]t|isn['’]t)\s+{CONTACT}\b.{{0,70}}?\b{CONTACT_SURFACE}\b"
+    rf"|\b(?:do\s+not|don['’]t|never|avoid|prevent)\b.{{0,70}}?\b{CHEST}\b.{{0,70}}?\b{CONTACT}\b.{{0,70}}?\b{CONTACT_SURFACE}\b"
+    rf"|\b{CHEST}\b.{{0,70}}?\b(?:close|near)\b.{{0,60}}?\b(?:not|without)\s+{CONTACT}\b",
+    re.IGNORECASE,
+)
+BOTTOM_HOVER = re.compile(
+    rf"\b(?:at\s+the\s+bottom|at\s+the\s+lowest\s+point|at\s+the\s+low\s+point)\b"
+    rf".{{0,90}}?\b{CHEST}\b.{{0,80}}?\b(?:hover(?:s|ing)?|clear\s+of|above|off)\b"
+    rf".{{0,50}}?\b{CONTACT_SURFACE}\b",
+    re.IGNORECASE,
+)
+TOP_ONLY = re.compile(r"\b(?:at|in|during)\s+(?:the\s+)?(?:start|top|initial\s+pose)\b", re.IGNORECASE)
+GLOBAL_OR_BOTTOM = re.compile(
+    r"\b(?:bottom|lowest|low\s+point|throughout|entire\s+(?:clip|repetition|exercise)|never)\b",
+    re.IGNORECASE,
+)
+
+
+def _explicit_contact_contradiction(prompt_text, contract):
+    """Return True only for a few explicit contradictions, never approval.
+
+    The lower-body/support phases and normal top-pose clearance are not a
+    conflict. We screen only if the canonical contract actually demands a
+    chest-floor touch at some phase; negative examples in any other movement
+    cannot acquire this requirement through a code-level assumption.
+    """
+    if not isinstance(contract, dict) or contract.get("movement_type") != "kneeling_pushup":
+        return False
+    phases = contract.get("phases")
+    if not isinstance(phases, list) or not any(
+        isinstance(phase, dict) and phase.get("chest_position") == "touch_floor"
+        for phase in phases
+    ):
+        return False
+    # Keep contradictory wording local to a sentence/line. In particular,
+    # "chest clear at the start; then touches at the bottom" is compatible.
+    statements = re.split(r"[.!?;\n]+", prompt_text)
+    for statement in statements:
+        if BOTTOM_HOVER.search(statement):
+            return True
+        if CHEST_CONTACT_DENIAL.search(statement):
+            # The start/top pose must be clear of the floor. Do not reject a
+            # deliberately phase-scoped clearance instruction as if it
+            # prohibited touching at the *bottom* of the repetition.
+            if TOP_ONLY.search(statement) and not GLOBAL_OR_BOTTOM.search(statement):
+                continue
+            return True
+    return False
 
 
 def _sha_bytes(data):
@@ -194,6 +253,18 @@ def evaluate(request, *, repo_root, available_credits=None):
                             warnings_out.append("audio forbidden by contract, but provider-side audio disable is unverified; inspect MP4 audio streams before review")
         except (OSError, UnicodeError, json.JSONDecodeError, TypeError, ValueError) as exc:
             errors.append(f"motion contract cannot be verified: {exc}")
+
+    if normalized and isinstance(spec, dict) and spec.get("movement_type") == "kneeling_pushup":
+        try:
+            prompt_path = Path(request["submitted_prompt_file"]).expanduser()
+            # A private prompt is input data. Never print it or quote a matched
+            # phrase in a receipt or a CI failure message.
+            exact_prompt = prompt_path.read_bytes().decode("utf-8")
+            if _explicit_contact_contradiction(exact_prompt, spec):
+                errors.append("submitted prompt explicitly contradicts required kneeling chest-floor contact; revise and re-run preflight before spending credits")
+            warnings_out.append("narrow prompt contradiction screening cannot verify movement instructions or completed chest contact; independently review the actual prompt and output")
+        except (OSError, UnicodeError) as exc:
+            errors.append(f"submitted prompt could not be screened: {type(exc).__name__}")
 
     assets = request.get("input_assets")
     if isinstance(assets, list):
