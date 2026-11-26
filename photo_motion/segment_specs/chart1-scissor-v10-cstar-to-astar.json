@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "authority": "V10_REPLAYED_SHARED_CANVAS_FRAMES",
+  "exercise_id": "chart1-scissor-jump",
+  "segment_role": "C_TO_A",
+  "start_pose": "C*",
+  "end_pose": "A*",
+  "duration_seconds": 3,
+  "aspect_ratio": "16:9",
+  "provider": "Google Flow",
+  "model": "Omni 1.2 Flash",
+  "generation_mode": "Frames to Video",
+  "resolution": "720p",
+  "variants": 1,
+  "quoted_credits": "9",
+  "source_authority": "V7_DIRECT_PREPARED_PAIR_PLUS_ONE_BYTE_PINNED_A_PRIME_CANVAS",
+  "original_source_sha256": {
+    "A": "7758266ca6b27ee7601b4635e5df9e7ee8de09aa4f3bea95caea353e4bf78f2f",
+    "C": "c0ede374ee3a65266c19b27fc0f295a44a5a95e9d3aa0c1b41982b64f4a155a0",
+    "canvas": "10989cf3c87b1b9758599e0ebf3bb015141198fb36a6aec72b7c8491cd4aa550"
+  },
+  "derived_image_size": [1344, 756],
+  "derived_image_format": "RGB PNG",
+  "composition_transform": {
+    "scale_numerator": 37,
+    "scale_denominator": 50,
+    "rounded_image_size": [947, 533],
+    "offset_xy": [200, 172],
+    "window_half_open": [355, 172, 1020, 705],
+    "feather_side_top_bottom": [55, 5, 18],
+    "interpolation": "Pillow LANCZOS",
+    "blend": "linear alpha minimum of horizontal and vertical window ramps"
+  },
+  "parent_v6_card_status": "UNAVAILABLE_NOT_BYTE_REPLAY_VERIFIED",
+  "anatomical_left_right_proven": false,
+  "status": "EXPERIMENTAL_INDEPENDENT_SOURCE_QA_REQUIRED_NOT_EXERCISE_APPROVAL"
+}
