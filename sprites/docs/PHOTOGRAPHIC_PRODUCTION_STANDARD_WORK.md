@@ -7,6 +7,20 @@ references, exact submitted prompts, QA verdicts and Drive links already live
 under `sprites/docs/photo_batches/2026-11-26/`. Keep them authoritative; do
 not create a second spreadsheet, status ledger or separate review database.
 
+**New supporting controls (engineering pilot, not automatic form approval):**
+the [Lean 6S / Six Sigma control plan](../../photo_motion/LEAN_SIX_SIGMA_CONTROL_PLAN.md)
+defines digital sorting, model drift, stop-the-line rules, measurement integrity,
+and fair supplier experiments. The [generation preflight](../../photo_motion/GENERATION_PREFLIGHT.md)
+validates known requests before a separately authorized paid reservation;
+the [drift canary](../../photo_motion/DRIFT_CANARY.md) flags provider/model/
+reference changes for requalification. The [review safety and FMEA guide](PHOTO_REVIEW_RISK_CONTROL.md),
+[defect-to-regression guide](PHOTO_DEFECT_LEARNING.md), and
+[metric instrumentation guide](PHOTO_METRICS_INSTRUMENTATION.md) document
+independent review, the two-attempt correction control, and honest yield/cost
+measurement. These extensions use the **same existing QA notes and inventory**;
+they do not start a separate Flow job or spend credits. Continue the already
+active Flow media work without changing its inputs or ownership mid-run.
+
 ## Single route through the line
 
 | Station | Minimum evidence | Stop or advance |

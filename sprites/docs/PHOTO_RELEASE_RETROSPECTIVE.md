@@ -8,6 +8,10 @@ record** under `photo_batches/2026-11-26/`, then link that source from the
 mobile review index when it changes the current outcome. The read-only
 traveler should reflect the source record automatically.
 
+For recurring defects and proposed prevention controls, the optional
+[`5bx-learning` in-note comment](PHOTO_DEFECT_LEARNING.md) can be validated
+without creating a second tracking system or inferring exercise approval.
+
 ## Copy into the existing QA note
 
 ```markdown

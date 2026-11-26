@@ -9,6 +9,7 @@ attestations; private MP4 motion/form cannot be certified by this scanner.
 import argparse
 import json
 import re
+from datetime import datetime
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -29,6 +30,26 @@ def _nonempty(value):
 
 def _sha(value):
     return isinstance(value, str) and bool(SHA256.fullmatch(value))
+
+
+def _actor_id(value):
+    """Canonicalize reviewer labels for the limited producer-separation check.
+
+    This detects trivial whitespace/case aliases; it does not authenticate
+    reviewer identity, which must be established by external evidence.
+    """
+    return " ".join(value.split()).casefold() if _nonempty(value) else ""
+
+
+def _timestamp(value):
+    """Require a timezone-aware ISO-8601 timestamp, not arbitrary prose."""
+    if not _nonempty(value):
+        return False
+    try:
+        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError:
+        return False
+    return parsed.tzinfo is not None and parsed.utcoffset() is not None
 
 
 def _https(value):
@@ -100,7 +121,8 @@ def _ready_evidence(root, item):
             if not isinstance(entry, dict) or entry.get("verdict") != "PASS" or not _nonempty(entry.get("evidence")):
                 errors.append(f"{gate} gate requires a recorded PASS and evidence")
             elif gate in ("form", "motion") and (
-                not _nonempty(entry.get("reviewer")) or entry.get("reviewer") == item.get("agent")
+                not _actor_id(entry.get("reviewer")) or
+                _actor_id(entry.get("reviewer")) == _actor_id(item.get("agent"))
             ):
                 errors.append(f"{gate} needs a named independent reviewer, not the producer")
     review = item.get("review")
@@ -120,7 +142,7 @@ def _validate(root, item):
     if not _nonempty(item.get("revision")) or not _nonempty(item.get("agent")):
         errors.append("revision and producing agent are required")
     state = item.get("status")
-    if state not in STATES:
+    if not isinstance(state, str) or state not in STATES:
         errors.append("status must be PRODUCING, QA, BLOCKED, REWORK, READY_FOR_REVIEW or DONE")
     if errors:
         return errors
@@ -131,17 +153,23 @@ def _validate(root, item):
         if not isinstance(block, dict) or any(not _nonempty(block.get(k)) for k in
                                                ("reason", "question", "recommendation")):
             errors.append("BLOCKED requires reason, one question and recommended option")
+        elif type(block.get("owner_needed")) is not bool:
+            errors.append("BLOCKED requires boolean owner_needed")
     if state == "REWORK" and not _nonempty(item.get("defect")):
         errors.append("REWORK needs a named defect")
     decision = item.get("owner_decision")
     if state == "DONE":
+        video_record = item.get("video")
+        exact_sha = video_record.get("sha256") if isinstance(video_record, dict) else None
         if not isinstance(decision, dict) or any(not _nonempty(decision.get(k)) for k in
                                                  ("reviewer", "decided_at", "evidence_url")):
             errors.append("DONE needs a separate named owner decision and evidence link")
         elif (decision.get("reviewer") != "cwarloe" or decision.get("decision") != "ACCEPT" or
-              decision.get("video_sha256") != (item.get("video") or {}).get("sha256") or
+              exact_sha is None or decision.get("video_sha256") != exact_sha or
               not _https(decision.get("evidence_url"))):
             errors.append("DONE requires Charles's recorded ACCEPT of this exact video hash")
+        if isinstance(decision, dict) and not _timestamp(decision.get("decided_at")):
+            errors.append("DONE needs a timezone-aware ISO-8601 decision timestamp")
     elif decision is not None:
         errors.append("owner_decision must remain null until exact owner acceptance")
     return errors
@@ -189,21 +217,30 @@ def collect(repo_root):
                             "review": entry.get("review") if not findings else None,
                             "blocker": entry.get("blocker") if not findings else None,
                             "errors": findings})
-    active = [x for x in records if x["status"] in ACTIVE]
+    # Invalid active handoffs still occupy *declared* capacity until repaired.
+    # Excluding them would incorrectly present an available production slot.
+    active = [x for x in records if isinstance(x["requested_status"], str)
+              and x["requested_status"] in ACTIVE]
     if len(active) > MAX_ACTIVE:
         errors.append(f"production WIP exceeded: {len(active)} declared active exercises, limit {MAX_ACTIVE}")
     owner_ready = [x for x in records if x["status"] == "READY_FOR_REVIEW"]
     owner_blockers = [x for x in records if x["status"] == "BLOCKED" and
                       (x.get("blocker") or {}).get("owner_needed") is True]
     specs = []
-    known = {(x["chart"], x["exercise"]) for x in records}
+    known = {(x["chart"], x["exercise"]) for x in records
+             if type(x["chart"]) is int and type(x["exercise"]) is int}
     for path in sorted((root / SPEC_ROOT).glob("*.json")):
         try:
             spec = json.loads(path.read_text(encoding="utf-8"))
         except ValueError as exc:
             errors.append(f"{path.relative_to(root)}: invalid motion spec: {exc}")
             continue
-        if (spec.get("chart"), spec.get("exercise")) not in known:
+        if (not isinstance(spec, dict) or type(spec.get("chart")) is not int or
+                type(spec.get("exercise")) is not int or
+                spec.get("chart") not in range(1, 7) or spec.get("exercise") not in range(1, 6)):
+            errors.append(f"{path.relative_to(root)}: invalid motion spec chart/exercise")
+            continue
+        if (spec["chart"], spec["exercise"]) not in known:
             specs.append({"chart": spec.get("chart"), "exercise": spec.get("exercise"),
                           "name": spec.get("name"), "spec": path.relative_to(root).as_posix(),
                           "status": "UNREGISTERED"})

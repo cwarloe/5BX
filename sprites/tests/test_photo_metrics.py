@@ -113,6 +113,105 @@ class PhotoMetricsTest(unittest.TestCase):
         self.assertIsNone(content["measurements"]["first_pass_yield"]["value"])
         self.assertEqual(list((self.root / "output").iterdir()), [target])
 
+    def test_different_quality_gates_never_create_a_misleading_single_yield(self):
+        self._notes("""# QA
+<!-- 5bx-metric id=19A chart=1 exercise=5 stage=still gate=technical trial=1 quality=pass provider=Google_Flow model=Omni -->
+<!-- 5bx-metric id=19B chart=1 exercise=5 stage=video gate=motion trial=1 quality=fail provider=Google_Flow model=Omni defect_code=LIMB_ID defect_id=C1-E5-switch -->
+<!-- 5bx-metric id=19C chart=1 exercise=5 stage=video gate=motion trial=2 quality=pass provider=Google_Flow reviewer=independent-qa -->
+""")
+        data = photo_metrics.collect_metrics(self.root, chart=1)
+        self.assertIsNone(data["measurements"]["first_pass_yield"]["value"])
+        self.assertEqual(data["gate_breakdown"]["still/technical"]["first_pass_yield"]["value"], 1)
+        self.assertEqual(data["gate_breakdown"]["video/motion"]["first_pass_yield"]["value"], 0)
+        self.assertEqual(data["provider_breakdown"]["Google_Flow"]["first_pass_yield_by_gate"]
+                         ["video/motion"]["sample_size"], 1)
+
+    def test_credit_units_do_not_mix_across_providers_and_dollars_stay_separate(self):
+        self._notes("""# QA
+<!-- 5bx-metric id=19A chart=1 exercise=5 stage=video trial=1 quality=fail credits=18 provider=Google_Flow model=Omni cost_usd=0 -->
+<!-- 5bx-metric id=19B chart=1 exercise=5 stage=video trial=2 quality=pass credits=2 provider=Grok_Imagine cost_usd=0.50 manual_minutes=0 -->
+""")
+        data = photo_metrics.collect_metrics(self.root, chart=1)
+        self.assertIsNone(data["measurements"]["documented_attempt_credits"]["value"])
+        self.assertEqual(data["measurements"]["documented_attempt_credits"]["sample_size"], 2)
+        self.assertEqual(data["measurements"]["documented_attempt_cost_usd"]["value"], 0.5)
+        self.assertEqual(data["provider_breakdown"]["Google_Flow"]["documented_credits"], 18)
+        self.assertEqual(data["provider_breakdown"]["Grok_Imagine"]["documented_credits"], 2)
+        self.assertEqual(data["measurements"]["documented_manual_minutes"]["value"], 0)
+        self.assertEqual(data["instrumentation"]["with_cost_usd"], 2)
+
+    def test_stable_defect_identity_counts_real_recurrence_not_generic_code(self):
+        self._notes("""# QA
+<!-- 5bx-metric id=19A chart=1 exercise=5 stage=video trial=1 quality=fail defect_code=LIMB_ID defect_id=C1-E5-switch -->
+<!-- 5bx-metric id=19B chart=1 exercise=5 stage=video trial=2 quality=fail defect_code=LIMB_ID defect_id=C1-E5-switch -->
+<!-- 5bx-metric id=19C chart=1 exercise=5 stage=video trial=3 quality=fail defect_code=LIMB_ID defect_id=C1-E5-depth -->
+<!-- 5bx-metric id=19D chart=1 exercise=5 stage=video trial=4 quality=fail defect_code=FORM -->
+""")
+        data = photo_metrics.collect_metrics(self.root, chart=1)
+        defects = data["defect_breakdown"]
+        self.assertEqual(defects["observed_attempts_by_code"]["LIMB_ID"], 3)
+        self.assertEqual(defects["distinct_stable_defect_ids"], 2)
+        self.assertEqual(defects["repeated_stable_defects"], 1)
+        self.assertEqual(data["instrumentation"]["with_defect_id"], 3)
+
+    def test_invalid_review_or_duplicate_annotation_key_is_not_evidence(self):
+        self._notes("""# QA
+<!-- 5bx-metric id=19A chart=1 exercise=5 stage=video gate=motion trial=1 quality=pass -->
+<!-- 5bx-metric id=19B chart=1 exercise=5 stage=video trial=1 quality=fail provider=X provider=Google -->
+<!-- 5bx-metric id=19C chart=1 exercise=5 stage=video trial=1 quality=fail defect_code=MADE_UP -->
+<!-- 5bx-metric id=19D chart=1 exercise=6 stage=video trial=1 quality=fail -->
+<!-- 5bx-metric id=19E chart=1 exercise=5 stage=video gate=motion trial=1 quality=pass reviewer=independent-qa credits=unknown -->
+""")
+        data = photo_metrics.collect_metrics(self.root, chart=1)
+        self.assertEqual(data["instrumentation"]["annotated_attempts"], 1)
+        self.assertEqual(len(data["warnings"]), 4)
+        self.assertEqual(data["gate_breakdown"]["video/motion"]["first_pass_yield"]["value"], 1)
+        self.assertIsNone(data["measurements"]["documented_attempt_credits"]["value"])
+
+    def test_nonfinite_large_cost_cannot_be_serialized_as_real_spend(self):
+        huge_amount = "9" * 350
+        self._notes(f"<!-- 5bx-metric id=19A chart=1 exercise=5 stage=video "
+                    f"trial=1 quality=fail cost_usd={huge_amount} -->")
+        data = photo_metrics.collect_metrics(self.root, chart=1)
+        self.assertEqual(data["instrumentation"]["annotated_attempts"], 0)
+        self.assertEqual(len(data["warnings"]), 1)
+        json.dumps(data, allow_nan=False)
+
+    def test_unknown_optional_values_do_not_count_as_present_or_as_reviewers(self):
+        self._notes("""# QA
+<!-- 5bx-metric id=19A chart=1 exercise=5 stage=video gate=motion trial=1 quality=pass reviewer=unknown -->
+<!-- 5bx-metric id=19B chart=1 exercise=5 stage=still trial=1 quality=fail provider=unknown model=unknown defect_code=unknown defect_id=unknown credits=unknown -->
+""")
+        data = photo_metrics.collect_metrics(self.root, chart=1)
+        self.assertEqual(data["instrumentation"]["annotated_attempts"], 1)
+        self.assertEqual(data["instrumentation"]["with_provider"], 0)
+        self.assertEqual(data["instrumentation"]["with_model"], 0)
+        self.assertEqual(data["instrumentation"]["with_defect_id"], 0)
+        self.assertEqual(data["defect_breakdown"]["distinct_stable_defect_ids"], 0)
+        self.assertEqual(len(data["warnings"]), 1)
+
+    def test_multiple_qa_gates_on_same_attempt_do_not_double_bill(self):
+        self._notes("""# QA
+<!-- 5bx-metric id=C1-E5-V8 chart=1 exercise=5 stage=video gate=technical trial=1 quality=pass provider=Google_Flow credits=18 cost_usd=0 -->
+<!-- 5bx-metric id=C1-E5-V8 chart=1 exercise=5 stage=video gate=motion trial=1 quality=fail provider=Google_Flow credits=18 cost_usd=0 -->
+""")
+        data = photo_metrics.collect_metrics(self.root, chart=1)
+        self.assertEqual(data["instrumentation"]["annotated_attempts"], 2)
+        self.assertEqual(data["instrumentation"]["with_cost"], 1)
+        self.assertEqual(data["measurements"]["documented_attempt_credits"]["value"], 18)
+        self.assertEqual(data["measurements"]["documented_attempt_cost_usd"]["value"], 0)
+        self.assertEqual(len(data["warnings"]), 2)
+
+    def test_conflicting_costs_for_same_attempt_are_excluded_not_arbitrated(self):
+        self._notes("""# QA
+<!-- 5bx-metric id=C1-E5-V8 chart=1 exercise=5 stage=video gate=technical trial=1 quality=pass provider=Google_Flow credits=18 -->
+<!-- 5bx-metric id=C1-E5-V8 chart=1 exercise=5 stage=video gate=motion trial=1 quality=fail provider=Google_Flow credits=20 -->
+""")
+        data = photo_metrics.collect_metrics(self.root, chart=1)
+        self.assertEqual(data["instrumentation"]["with_cost"], 0)
+        self.assertIsNone(data["measurements"]["documented_attempt_credits"]["value"])
+        self.assertTrue(any("conflicting credits" in warning for warning in data["warnings"]))
+
 
 if __name__ == "__main__":
     unittest.main()
