@@ -381,7 +381,19 @@ def _validate_request(request):
         if Decimal(estimate) <= 0:
             raise ExperimentError("V6/V7 paid Flow attempt requires a positive provider-quoted credit estimate")
         entry = request.get("source_preflight")
-        if isinstance(entry, dict) and entry.get("authority") == "V7_DIRECT_PREPARED_PAIR":
+        if isinstance(entry, dict) and entry.get("authority") == "V8_FRAMES_DIRECT_A_C_SEGMENTS":
+            from .preflight_v8_segments import verify_segment, SegmentPreflightError
+            if set(entry) != {"authority", "a_png", "c_png", "segment_role"}:
+                raise ExperimentError("V8 segment preflight requires exact A/C paths and segment_role")
+            try:
+                source_preflight = verify_segment(
+                    spec, entry["a_png"], entry["c_png"], expected_role=entry["segment_role"])
+            except (SegmentPreflightError, OSError, ValueError, TypeError) as exc:
+                raise ExperimentError(f"V8 Frames endpoint preflight failed: {exc}") from exc
+            expected_assets = [("start-frame", source_preflight["start_sha256"]),
+                               ("end-frame", source_preflight["end_sha256"])]
+            authority_name = "V8 Frames endpoints"
+        elif isinstance(entry, dict) and entry.get("authority") == "V7_DIRECT_PREPARED_PAIR":
             # New versioned authority, NOT an exception to or relaxation of
             # V6's immutable original-card byte-replay rules.
             from .preflight_v7 import verify_pair as verify_v7_pair, PreflightError as V7Error
@@ -438,14 +450,18 @@ def _validate_request(request):
         ):
             if authority_name == "V6 scissor":
                 raise ExperimentError("V6 scissor pilot requires a prepared start-frame: ordered verified start-frame A and only optional opposite-pose-reference C matching their panel preflights")
-            raise ExperimentError("V7 prepared-pair pilot requires exactly ordered verified start-frame A and opposite-pose-reference C matching their preflights")
+            if authority_name == "V7 prepared-pair":
+                raise ExperimentError("V7 prepared-pair pilot requires exactly ordered verified start-frame A and opposite-pose-reference C matching their preflights")
+            raise ExperimentError(f"{authority_name} requires exactly ordered locally verified photographic endpoint images")
         try:
             requested_spec = json.loads(spec.read_text(encoding="utf-8"))
         except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
             raise ExperimentError(f"invalid V6 specification: {exc}") from exc
         if (request["settings"].get("duration_seconds") != requested_spec["duration_seconds"] or
                 request["settings"].get("aspect_ratio") != "16:9"):
-            raise ExperimentError("V6/V7 Flow duration/aspect settings must match the six-second 16:9 photographic contract")
+            if authority_name != "V8 Frames endpoints":
+                raise ExperimentError("V6/V7 Flow duration/aspect settings must match the six-second 16:9 photographic contract")
+            raise ExperimentError("Flow duration/aspect settings must match the versioned 16:9 photographic contract")
         if requested_spec.get("status") == "HOLD":
             raise ExperimentError("V6/V7 motion contract is explicitly on HOLD; do not reserve provider credits")
         if authority_name == "V7 prepared-pair":
@@ -459,6 +475,18 @@ def _validate_request(request):
             variants = request["settings"].get("variants")
             if type(variants) is not int or variants != 1:
                 raise ExperimentError("V7 paid two-image pilot requires exactly one quoted output (settings.variants=1)")
+        elif authority_name == "V8 Frames endpoints":
+            allowed = {"duration_seconds", "aspect_ratio", "variants", "seed",
+                       "generation_mode", "resolution"}
+            if set(request["settings"]) != allowed:
+                raise ExperimentError("V8 Frames request requires six exact quoted settings and no extra output modes")
+            if (request["provider"] != "Google Flow" or request["model"] != "Omni 1.2 Flash"
+                    or request["settings"]["generation_mode"] != "Frames to Video"
+                    or request["settings"]["resolution"] != "720p"
+                    or type(request["settings"]["variants"]) is not int
+                    or request["settings"]["variants"] != 1
+                    or request["settings"]["seed"] is not None):
+                raise ExperimentError("V8 Frames provider/model/mode/720p/x1/seed settings differ from qualified quote")
     elif "source_preflight" in request:
         raise ExperimentError("V6 source_preflight is only supported for the versioned Chart 1 scissor pilot")
     spec_sha = _sha_file(spec)
