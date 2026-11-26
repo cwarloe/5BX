@@ -6,9 +6,9 @@ import { fileURLToPath } from "node:url";
 import test from "node:test";
 import {
   appNameFromHost,
-  createHeadInjector,
+  createHeadInjector as createSharedHeadInjector,
   grokXCreatorHeadTags,
-  injectGrokPwaHead,
+  injectGrokPwaHead as injectSharedGrokPwaHead,
   isDocumentPath,
   isInstallQuery,
   publicAppHost,
@@ -20,6 +20,19 @@ import {
 import { renderInstallPage } from "./grok-pwa-plugin.mjs";
 
 const TEMPLATE_ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
+
+// Generic platform tests must not inherit the real app's site.json title/card
+// (currently 5BX Arcade). Exercise those fallbacks against a blank fixture;
+// individual filesystem tests can still override ctx.cwd explicitly.
+const EMPTY_SITE_ROOT = mkdtempSync(join(tmpdir(), "grok-pwa-test-site-"));
+
+function injectGrokPwaHead(html, ctx = {}) {
+  return injectSharedGrokPwaHead(html, { cwd: EMPTY_SITE_ROOT, ...ctx });
+}
+
+function createHeadInjector(ctx = {}) {
+  return createSharedHeadInjector({ cwd: EMPTY_SITE_ROOT, ...ctx });
+}
 
 test("injects before </head>", () => {
   const out = injectGrokPwaHead("<html><head><title>x</title></head><body></body></html>");
