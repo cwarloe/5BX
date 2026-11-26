@@ -62,13 +62,21 @@ number is a consistency check, **not** a grant of spending authority.
 | Shine | Source inputs must exist as independently decodable local JPEG/PNG/WebP bytes; broken, symlinked or remote-only reference declarations hold. |
 | Standardize | Duration, 16:9 start frame, optional declared FPS, original locked camera, and approved photographic identity policy are checked. |
 | Sustain | Existing source-embedded QA/WIP records must be consistent; an unseen active agent or missing exclusive lease remains an explicit warning. |
-| Safety | Existing motion validator rejects impossible planned topology; audio-policy conflicts and missing/insufficient budget prevent downstream paid work. Form safety and owner approval are **never inferred**. |
+| Safety | Existing motion validator rejects impossible planned topology; an explicit kneeling push-up prompt direction that forbids required chest-floor contact is held before any credit reservation. Audio-policy conflicts and missing/insufficient budget also hold. Form safety and owner approval are **never inferred**. |
 
 ### Critical limitations
 
 - **This gate validates the planned motion, not the generated motion.** No
   image inspection can substitute for independent physical-limb and exercise-
   form review of the actual MP4.
+- **Prompt contradiction screening is intentionally narrow.** For a kneeling
+  push-up contract that specifies `chest_position: touch_floor`, it catches
+  some explicit instructions to keep the chest hovering or never touching at
+  the bottom. It does not understand every paraphrase, recognize images,
+  verify a positive prompt, or establish that the model complied. A top-pose
+  instruction to keep the chest off the ground is not itself a contradiction.
+  The receipt never quotes the private prompt. Review exact wording and
+  physical contact manually even after a `PASS`.
 - Model behavior may shift without notice; a successful preflight is not a
   canary test for an AI provider, nor a guarantee that the output will be good.
 - An input can change after preflight. The paid runner must reserve/recheck
