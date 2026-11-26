@@ -63,3 +63,28 @@ inspection and independent form/motion QA. Only then try the offline
 per segment. Its C midpoint and outer A loop metrics are technical evidence,
 not proof of airborne exchange or correct anatomy. Hold all final form,
 release and publication for Charles's explicit video-specific decision.
+
+### Independent postflight endpoint measurement
+
+After a segment actually exists, the read-only postflight inspector compares
+its first and final **decoded frames** against the exactly pinned start and
+end photographs. It verifies source SHA-256 values against the ordered V8
+contract, fully decodes the video, measures original-resolution RGB mean
+absolute pixel error, records frame count/duration and **decoded audio level**,
+and emits a JSON report with no form or release approval:
+
+```bash
+python3 -m photo_motion.v8_postflight \
+  photo_motion/segment_specs/chart1-scissor-v8-a-to-c.json \
+  /private/verified-A.png /private/verified-C.png \
+  /private/raw-v8-a-to-c.mp4 --report /private/new-v8-postflight.json
+```
+
+For `C_TO_A`, reverse the positional photograph arguments. The report path
+must not already exist; originals are left untouched. Endpoint MAE is an
+**observation**, deliberately not an arbitrary pass threshold: a photorealistic
+clip can match both endpoints perfectly while stepping, crossfading, clipping
+its head, changing the subject or otherwise failing the actual 5BX exercise.
+Any audio stream is reported as a technical violation even if its decoded
+samples happen to be silent. Independent visual inspection and the existing
+frame-by-frame physical-marker/contact review remain mandatory.
