@@ -103,6 +103,16 @@ def probe(video):
     if len(streams) != 1:
         raise ValueError(f"expected exactly one video stream, found {len(streams)}")
     stream = streams[0]
+    # A coded 144x80 video can be displayed as 80x144 when the MP4 track
+    # carries a 90-degree rotation matrix. Preserve both possible ffprobe
+    # representations for the stricter photographic player admission gate.
+    display_rotations = []
+    tags = stream.get("tags") or {}
+    if isinstance(tags, dict) and "rotate" in tags:
+        display_rotations.append(tags["rotate"])
+    for side_data in stream.get("side_data_list") or []:
+        if isinstance(side_data, dict) and side_data.get("side_data_type") == "Display Matrix":
+            display_rotations.append(side_data.get("rotation"))
     duration = _fraction(stream.get("duration") or data.get("format", {}).get("duration"))
     if duration <= 0:
         raise ValueError("video duration could not be read")
@@ -114,6 +124,7 @@ def probe(video):
         "codec": stream.get("codec_name"),
         "pixel_format": stream.get("pix_fmt"),
         "frame_count_reported": stream.get("nb_frames"),
+        "display_rotations_degrees": display_rotations,
         "audio_stream_count": len(audio_streams),
         "audio_codecs": [s.get("codec_name") for s in audio_streams]
     }
