@@ -1,4 +1,5 @@
 import json
+import hashlib
 import shutil
 import subprocess
 import tempfile
@@ -193,6 +194,54 @@ class TestVideoQA(unittest.TestCase):
                 with self.assertRaisesRegex(RuntimeError, "source video changed"):
                     inspect(load_spec(spec_path), spec_path, source, tmp / "mixed-qa")
             self.assertFalse((tmp / "mixed-qa/inspection.json").exists())
+
+    @unittest.skipUnless(shutil.which("ffmpeg") and shutil.which("ffprobe"), "ffmpeg binaries not installed")
+    def test_provenance_changed_during_extraction_cannot_produce_a_mixed_recipe_report(self):
+        try:
+            import PIL  # noqa: F401
+        except ImportError:
+            self.skipTest("Pillow not installed")
+        spec_path = ROOT / "specs/chart1-kneeling-pushup.json"
+        with tempfile.TemporaryDirectory() as folder:
+            tmp = Path(folder)
+            source = tmp / "synthetic.mp4"
+            subprocess.run(["ffmpeg", "-nostdin", "-loglevel", "error", "-y", "-f", "lavfi",
+                            "-i", "testsrc2=size=640x360:rate=24:duration=1", "-c:v", "mpeg4",
+                            str(source)], check=True, capture_output=True)
+            prompt = tmp / "submitted.txt"
+            image = tmp / "source.png"
+            recipe_path = tmp / "recipe.json"
+            for kind in ("recipe", "prompt", "image"):
+                prompt.write_text("Exact submitted prompt", encoding="utf-8")
+                image.write_bytes(b"synthetic photo input")
+                recipe = {
+                    "schema_version": 1, "provider": "Synthetic", "model": "Unit test",
+                    "generation_id": "test-1", "submitted_prompt_file": "submitted.txt",
+                    "input_images": [{"role": "start", "locator": "source.png",
+                                      "sha256": hashlib.sha256(image.read_bytes()).hexdigest()}],
+                    "settings": {"duration_seconds": 1}
+                }
+                recipe_path.write_text(json.dumps(recipe), encoding="utf-8")
+                real_extract = video_module._extract
+                extracted = 0
+
+                def mutate_after_first_frame(video, at, output):
+                    nonlocal extracted
+                    real_extract(video, at, output)
+                    extracted += 1
+                    if extracted == 1:
+                        if kind == "recipe":
+                            recipe_path.write_text(json.dumps({**recipe, "changed": True}), encoding="utf-8")
+                        elif kind == "prompt":
+                            prompt.write_text("Replaced prompt", encoding="utf-8")
+                        else:
+                            image.write_bytes(b"replacement source photo")
+
+                with self.subTest(changed=kind), \
+                     patch.object(video_module, "_extract", side_effect=mutate_after_first_frame):
+                    with self.assertRaisesRegex(RuntimeError, f"{kind} changed during frame inspection"):
+                        inspect(load_spec(spec_path), spec_path, source, tmp / f"qa-{kind}", recipe_path=recipe_path)
+                    self.assertFalse((tmp / f"qa-{kind}/inspection.json").exists())
 
 
 if __name__ == "__main__":

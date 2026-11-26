@@ -128,6 +128,13 @@ between target timestamps that a successful container probe or contact sheet
 would miss. It is a read-only technical intake check and still cannot certify
 motion, anatomy, camera stability or exercise form.
 
+When `--recipe` is supplied, the inspector hashes the exact JSON bytes it
+parsed, then rehashes that recipe, the submitted prompt, and every locally
+verified input image before committing `inspection.json`. If any of those
+files changes or disappears during frame inspection, the run fails without
+publishing a mixed-provenance report. Remote-only source references remain
+unverified; this guard cannot establish their recoverability.
+
 ### Provider/model/prompt drift canary
 
 The offline [`drift_canary.py`](DRIFT_CANARY.md) compares two existing immutable
