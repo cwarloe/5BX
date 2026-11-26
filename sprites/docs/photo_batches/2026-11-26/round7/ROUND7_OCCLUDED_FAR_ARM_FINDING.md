@@ -8,7 +8,7 @@ The user reviewed the preceding 34I-type high-knee card and accepted that it was
 
 ## 34J controlled test
 
-- Source: the exact user-selected image, preserved as `34I_UserSelected_ExactEditBase.png`.
+- Source: the exact user-selected image, preserved as `34H_UserSelected_ExactEditBase.png`. Its SHA-256 matches the 34H diagnostic exactly, *not* the different 34I alternative. Both earlier variants remain preserved for comparison.
 - Change ONLY lower-left panel C's trailing background/left arm; physically hide its forearm/wrist/hand behind torso and hip. Leave a small natural rear elbow bulge behind lower rib/waist.
 - 34J visually removes the downward hanging hand and most of the implausibly long far upper arm. It no longer reads as a second foreground/right fist. The source boy, other panels, clothes and legs remain comparable. The near/foreground right arm is still raised forward in C and swung behind in upper-left A.
 - **Still uncertain:** whether the remaining visible rear elbow is ideal for a moving high-knee keyframe and whether a video system will infer a natural hidden arm rather than popping a limb into view. Needs human review and later video test.
@@ -20,9 +20,9 @@ The user reviewed the preceding 34I-type high-knee card and accepted that it was
 
 ## Files
 
-- `34I_UserSelected_ExactEditBase.png` — exact user-provided edit source
+- `34H_UserSelected_ExactEditBase.png` — exact user-provided edit source, hash-verified 34H
 - `34J_FarElbowOnly_Occlusion_Review.png` — candidate
-- `34I_vs_34J_Occlusion_MobileCompare.jpg` — focused comparison
+- `34H_vs_34J_Occlusion_MobileCompare.jpg` — focused comparison
 - `34J_ExactSubmittedPrompt.md` — verbatim prompt
 
 No new video has been generated in this round.
