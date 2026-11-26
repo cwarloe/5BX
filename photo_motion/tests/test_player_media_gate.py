@@ -121,6 +121,7 @@ class PlayerMediaAdmissionTests(unittest.TestCase):
         report = self.evaluate()
         self.assert_held(report)
         self.assertEqual(report["technical_evidence"], "PASS")
+        self.assertEqual(report["verified_video"]["full_stream_decode"], "PASS")
         self.assertEqual(report["canonical_qa_source"],
                          "sprites/docs/photo_batches/fixture/CURRENT_QA.md")
         self.assertIn("NOT_EVALUATED", " ".join(report["blockers"]))
@@ -212,6 +213,17 @@ class PlayerMediaAdmissionTests(unittest.TestCase):
         self.assert_held(report)
         self.assertIn("media bytes changed during", " ".join(report["blockers"]))
 
+    def test_midstream_decoder_failure_blocks_even_when_probe_and_frame_count_pass(self):
+        # Container metadata and countable frames do not establish that the
+        # encoded payload is safely decodable from beginning to end.
+        with mock.patch.object(gate, "_verify_full_video_decode",
+                               side_effect=RuntimeError("synthetic midstream decoder failure")):
+            report = self.evaluate()
+        self.assert_held(report)
+        self.assertEqual(report["technical_evidence"], "HOLD")
+        self.assertIn("synthetic midstream decoder failure", " ".join(report["blockers"]))
+        self.assertNotEqual(report["verified_video"].get("full_stream_decode"), "PASS")
+
     def test_six_second_scissor_cannot_be_silently_cut_to_five_seconds(self):
         longer = self._make_video("six-second-test.mp4", 6)
         item = copy.deepcopy(self.candidate)
@@ -242,6 +254,18 @@ class PlayerMediaAdmissionTests(unittest.TestCase):
         item["video"].update({"local_path": str(audio), "sha256": file_sha256(audio),
                               "audio_stream_count": 1})
         self.assertIn("contains audio", " ".join(self.evaluate(item)["blockers"]))
+
+    def test_decoded_frame_timing_must_match_browser_native_duration(self):
+        # A forged plausible count can match the asserted metadata while
+        # count/FPS implies a different clip length. The browser rejects this
+        # too; the offline gate must never claim technical PASS for it.
+        item = copy.deepcopy(self.candidate)
+        item["video"]["frame_count"] = 60
+        with mock.patch.object(gate, "_decoded_frame_count", return_value=60):
+            report = self.evaluate(item)
+        self.assert_held(report)
+        self.assertEqual(report["technical_evidence"], "HOLD")
+        self.assertIn("frame count/FPS differs", " ".join(report["blockers"]))
 
     def test_diagnostic_hashes_rejected_even_with_owner_looking_claim(self):
         for digest in self.synthetic_failed_hashes:
