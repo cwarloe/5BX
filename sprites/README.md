@@ -28,6 +28,29 @@ Missing local sheets are warnings: large source art lives in Drive; see [`ART.md
 
 ### Review grid + incoming image inspection
 
+**Current photographic outputs (read-only, output-first):**
+
+```bash
+# From the repository root: one gallery of Charts 1–6, including recent holds
+python3 sprites/kit/review_board.py --photos --out review-photos.html
+
+# Optional smaller Chart 1 gallery, for the scissor-jump pilot
+python3 sprites/kit/review_board.py --photos --chart 1 --out review-photo-chart1.html
+```
+
+Open the resulting HTML: chart overview contact sheets come first, followed by
+recent refinements/safety holds and individual numbered image/video links. The
+gallery is derived from the existing `docs/photo_batches/2026-11-26` mobile
+review index and chart inventories, so there is **no second tracking ledger**.
+If thumbnails are unavailable because Drive permissions block embedding, each
+card still opens its original output directly in Drive/Flow. Exact prompts,
+defects, hashes and QA judgments remain linked in the existing GitHub records.
+These are experimental candidates, **not** approved video or workout instruction;
+this view does not set acceptance or release status. Regenerate after new reviews
+are committed to see updated products and explicit holds.
+
+**Legacy cartoon artwork and regression review:**
+
 The read-only visual traveler shows one card per exercise: original booklet
 reference, the **actual registered render sheet**, selected library ID, Drive
 links, version-hash match, technical QC findings, and human-review backlog.

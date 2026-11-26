@@ -4,6 +4,8 @@
 From the repository root:
   python3 sprites/kit/review_board.py --chart 2 --out review-chart2.html
   python3 sprites/kit/review_board.py --chart 2 --art-root /path/to/restored/sprites --out review-chart2.html
+  python3 sprites/kit/review_board.py --photos --out review-photos.html
+  python3 sprites/kit/review_board.py --photos --chart 1 --out review-photo-chart1.html
 
 Selections come only from config/strips.json + library/index.json. This does
 not approve art, change selection, generate media, or contact an AI service.
@@ -222,11 +224,24 @@ Missing local images are marked NOT_RUN, never treated as a pass.</p>
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--chart", type=int, required=True, choices=range(1, 7))
+    parser.add_argument("--chart", type=int, choices=range(1, 7))
+    parser.add_argument("--photos", action="store_true",
+                        help="View current photographic outputs from existing review notes")
     parser.add_argument("--repo-root", type=Path, default=Path(__file__).resolve().parents[2])
     parser.add_argument("--art-root", type=Path, help="Root of restored sprites/ data (sheets/ etc.)")
     parser.add_argument("--out", type=Path, help="Generated HTML file; default: review-chartN.html")
     args = parser.parse_args(argv)
+    if args.photos:
+        from kit import photo_traveler
+        data = photo_traveler.gallery_data(args.repo_root, args.chart)
+        out = args.out or Path("review-photos.html")
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(photo_traveler.render_gallery(data, args.chart), encoding="utf-8")
+        print(f"Wrote {out}: {len(data['overviews'])} photographic chart views, "
+              f"{len(data['items'])} numbered outputs; human approval still pending")
+        return
+    if args.chart is None:
+        parser.error("--chart is required for legacy artwork reviews (or pass --photos)")
     items = review_items(args.repo_root, args.chart, args.art_root)
     plan = _read(args.repo_root / "data/5bx-charts.json")
     out = args.out or Path(f"review-chart{args.chart}.html")
