@@ -135,6 +135,33 @@ describe("photographic React video lifecycle (synthetic DOM)", () => {
     assert.equal(container.querySelector("img"), null);
   });
 
+  it("fails closed if browser duration changes after metadata admission", async () => {
+    const { container } = mount();
+    const player = container.querySelector("video");
+    // Some browsers emit durationchange before loadedmetadata, when the
+    // duration is not yet known. That event alone must not reject the clip.
+    setMetadata(player, Number.NaN);
+    fireEvent.durationChange(player);
+    assert.equal(container.querySelector("video"), player);
+    assert.equal(player.style.visibility, "hidden");
+
+    Object.defineProperty(player, "duration", { configurable: true, value: 5 });
+    fireEvent.loadedMetadata(player);
+    await waitFor(() => assert.equal(player.style.visibility, "visible"));
+    await waitFor(() => assert.ok(count("play", player) >= 1));
+    fireEvent.durationChange(player);
+    assert.equal(container.querySelector("video"), player);
+
+    // A later duration revision invalidates the exact released loop, even
+    // though the element was previously playing and visually admitted.
+    Object.defineProperty(player, "duration", { configurable: true, value: 5.05 });
+    fireEvent.durationChange(player);
+    assert.equal(container.querySelector("video"), null);
+    assert.equal(player.hasAttribute("src"), false);
+    assert.match(container.textContent, /unavailable.*playback failed/i);
+    assert.equal(container.querySelector("img"), null);
+  });
+
   it("waits for the simulation-aligned seek before revealing an in-progress interval", async () => {
     const late = photoWorkSlot("scissor", 1, 4, 42, 360);
     const { container } = mount({ slotValue: late });

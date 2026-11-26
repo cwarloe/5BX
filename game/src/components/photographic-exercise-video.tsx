@@ -189,6 +189,16 @@ function ValidatedPhotoElement({ clip, slot, playing, label, onFailure }: Valida
           revealIfAligned(player);
         }
       }}
+      onDurationChange={(event) => {
+        // Streaming/container metadata can revise duration after the first
+        // loadedmetadata event. Never keep showing an admitted clip whose
+        // actual browser duration no longer matches its reviewed frame count.
+        // Ignore the initial pre-metadata durationchange (often NaN/Infinity).
+        if (validated.current &&
+            !matchesReviewedDuration(event.currentTarget.duration, clip, slot.slotSeconds)) {
+          fail();
+        }
+      }}
       onLoadedData={(event) => revealIfAligned(event.currentTarget)}
       onSeeked={(event) => reconcileCompletedSeek(event.currentTarget)}
       onError={fail}
