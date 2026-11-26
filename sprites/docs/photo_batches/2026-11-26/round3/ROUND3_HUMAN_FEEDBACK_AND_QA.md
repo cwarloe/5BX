@@ -2,6 +2,8 @@
 
 2026-11-26 UTC. Experimental **photographic stills**, not validated motion or safe exercise instruction.
 
+> **Superseded by round 4 human review:** **34C is REJECTED** because its foreground arm freezes between alternating knee poses. **29H/29I/29J are production REJECTS** because of forced extreme elbow/head geometry. See `../round4_human_feedback/ROUND4_HUMAN_FEEDBACK_AND_QA.md`; retain this report only as historical QA/provenance.
+
 ## Controlling human review
 
 The user reviewed the current cards and reported:
@@ -16,8 +18,8 @@ The user reviewed the current cards and reported:
 | Variant | Target/change | Current observation | Gate |
 | --- | --- | --- | --- |
 | **29I** | 29H elbow local edit, unlocked 15–25° | The result remains extremely close to 29H, with elbows nearly straight. A prettier frame is **not** an observable form correction. | **HOLD / diagnostic only** |
-| **29J** | 29I with more visible ~30° normal bend, head clearance allowed | Elbow silhouettes bend a little more and the forehead remains off the track. Near/far joint paths overlap enough in profile that we cannot certify both hinge directions. Hair/body details changed slightly from master. | **HOLD / promising diagnostic only**, needs human eyeballs or a viewpoint that exposes both elbows |
-| **34C** | 34B with only the high-knee A/C rearward arm bent to a runner's natural ~80–100° | The rear hand now stays near the side of the shorts/hip with elbow naturally back, rather than dangling near the thigh. A/C raised knee/support shoe geometry looks consistent with 34B on visual comparison; B/D unchanged. | **Conditional photographic still**, physical far/near leg identity continues to depend on the older tagged 34A lineage. Video not tested. |
+| **29J** | 29I with more visible ~30° normal bend, head clearance allowed | The follow-on human review found the elbow/head anatomy still visibly wrong despite modest bending. | **REJECT for production**; historical diagnostic only |
+| **34C** | 34B with A/C rearward arms bent | **Failed temporal QA:** the foreground arm stops alternating between the raised-knee frames, even though its isolated positions can look natural. | **REJECT**, not conditional |
 
 ## QA priorities
 
