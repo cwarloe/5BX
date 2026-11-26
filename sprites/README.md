@@ -8,7 +8,7 @@ which remains available for regression tests and UI controls **only**. New chara
 and movement generation should follow the [photographic-avatar direction](docs/PHOTOREALISTIC_AVATAR_DIRECTION_2026-11-25.md);
 experimental photographic assets are not yet registered for production.
 
-**Phone-friendly current photographic tests:** [numbered review index 15–25](docs/photo_batches/2026-11-26/MOBILE_REVIEW_INDEX.md), with direct Google Drive contact sheets for Charts 1 and 2, one actual low-run Flow video, and the QA verdict for each. Exact successful/failed prompts and lessons are archived beside the index.
+**Phone-friendly current photographic tests:** [numbered review index 15–38](docs/photo_batches/2026-11-26/MOBILE_REVIEW_INDEX.md), with direct Google Drive contact sheets for Charts 1–5, one actual low-run Flow video, and the QA verdict for each. Exact successful/failed prompts and lessons are archived beside the index. They are experimental photographic assets, **not** production replacements for the legacy cartoon sprites or verified exercise videos.
 
 **Built for change.** Assume the look, the wording, the character, the format and the exercises
 will all change. Each of those is one small file, and a rebuild only redoes what changed.
