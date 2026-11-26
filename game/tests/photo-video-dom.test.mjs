@@ -260,6 +260,37 @@ describe("photographic React video lifecycle (synthetic DOM)", () => {
     assert.ok(count("pause", player) >= 1);
   });
 
+  it("honors reduced-motion changes in browsers with legacy MediaQueryList listeners", async () => {
+    const original = window.matchMedia;
+    const legacyListeners = new Set();
+    const legacyQuery = {
+      matches: false,
+      addListener(listener) { legacyListeners.add(listener); },
+      removeListener(listener) { legacyListeners.delete(listener); },
+    };
+    window.matchMedia = () => legacyQuery;
+    try {
+      const { container, unmount } = mount();
+      const player = container.querySelector("video");
+      assert.ok(player);
+      assert.equal(legacyListeners.size, 1);
+      setMetadata(player);
+      fireEvent.loadedMetadata(player);
+      await waitFor(() => assert.ok(count("play", player) >= 1));
+      legacyQuery.matches = true;
+      await act(async () => {
+        for (const listener of legacyListeners) listener();
+      });
+      assert.equal(container.querySelector("video"), null);
+      assert.ok(container.querySelector("button"));
+      assert.equal(player.hasAttribute("src"), false);
+      unmount();
+      assert.equal(legacyListeners.size, 0);
+    } finally {
+      window.matchMedia = original;
+    }
+  });
+
   it("treats browser play rejection as HOLD and discards the source", async () => {
     const original = HTMLMediaElement.prototype.play;
     HTMLMediaElement.prototype.play = function () {

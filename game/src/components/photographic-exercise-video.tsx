@@ -213,8 +213,18 @@ export function PhotographicExerciseVideo({ registry, slot, playing, label, buil
       setPrefersReducedMotion(query.matches);
       if (query.matches) setMotionOptIn(false);
     };
-    query.addEventListener("change", update);
-    return () => query.removeEventListener("change", update);
+    // Older WebKit MediaQueryList implements only addListener/removeListener.
+    // Losing this subscription must not crash the workout or strand a
+    // playing video when the user enables reduced motion at the OS level.
+    if (typeof query.addEventListener === "function" &&
+        typeof query.removeEventListener === "function") {
+      query.addEventListener("change", update);
+      return () => query.removeEventListener("change", update);
+    }
+    if (typeof query.addListener === "function" && typeof query.removeListener === "function") {
+      query.addListener(update);
+      return () => query.removeListener(update);
+    }
   }, []);
 
   // A new workout must not silently inherit a prior opt-in session.
