@@ -172,7 +172,7 @@ def _validate_request(request):
     if not isinstance(request, dict) or request.get("schema_version") != SCHEMA_VERSION:
         raise ExperimentError("request must have schema_version 1")
     allowed = {"schema_version", "attempt_key", "exercise_id", "spec_path", "submitted_prompt_file",
-               "input_assets", "provider", "model", "settings", "estimated_credits"}
+               "input_assets", "provider", "model", "settings", "estimated_credits", "source_preflight"}
     unknown = set(request) - allowed
     if unknown:
         raise ExperimentError(f"unknown request fields: {sorted(unknown)}")
@@ -223,13 +223,46 @@ def _validate_request(request):
             raise ExperimentError(f"input_assets[{index}] needs actual local bytes or a known SHA-256; URL alone is insufficient")
         clean_assets.append({"role": role, "locator": locator, "sha256": actual or expected,
                              "verification": "rehashed_from_local_bytes" if actual else "declared_unverified"})
+    source_preflight = None
+    if request["exercise_id"] == "chart1-scissor-jump":
+        # For the currently authorized V6 diagnostic, an unbound JSON spec or
+        # unverified remote image is not adequate to spend provider credits.
+        # This is a content check, not authorization or an exercise approval.
+        if Decimal(estimate) <= 0:
+            raise ExperimentError("V6 paid Flow attempt requires a positive provider-quoted credit estimate")
+        entry = request.get("source_preflight")
+        expected_fields = {"original_card", "prepared_png", "manifest"}
+        if not isinstance(entry, dict) or set(entry) != expected_fields:
+            raise ExperimentError("V6 scissor attempt requires source_preflight with original_card, prepared_png and manifest paths")
+        from .preflight_v6 import verify, PreflightError
+        try:
+            source_preflight = verify(spec, entry["original_card"], entry["prepared_png"], entry["manifest"])
+        except (PreflightError, OSError, ValueError, TypeError) as exc:
+            raise ExperimentError(f"V6 scissor preflight failed: {exc}") from exc
+        if len(clean_assets) != 1 or clean_assets[0]["role"] != "start-frame" or (
+                clean_assets[0]["verification"] != "rehashed_from_local_bytes" or
+                clean_assets[0]["sha256"] != source_preflight["prepared_png_sha256"]):
+            raise ExperimentError("V6 scissor pilot must submit exactly one locally verified prepared start-frame matching preflight")
+        try:
+            requested_spec = json.loads(spec.read_text(encoding="utf-8"))
+        except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
+            raise ExperimentError(f"invalid V6 specification: {exc}") from exc
+        if (request["settings"].get("duration_seconds") != requested_spec["duration_seconds"] or
+                request["settings"].get("aspect_ratio") != "16:9"):
+            raise ExperimentError("V6 Flow duration/aspect settings must match the six-second 16:9 photographic contract")
+    elif "source_preflight" in request:
+        raise ExperimentError("V6 source_preflight is only supported for the versioned Chart 1 scissor pilot")
+    spec_sha = _sha_file(spec)
+    if source_preflight and spec_sha != source_preflight["spec_sha256"]:
+        raise ExperimentError("V6 spec changed between preflight and reservation; discard this attempt")
     # Input order is semantically meaningful: many generators treat image 1 as
     # identity and image 2 as pose authority.
     return {"schema_version": SCHEMA_VERSION, "attempt_key": request["attempt_key"],
-            "exercise_id": request["exercise_id"], "spec_sha256": _sha_file(spec),
+            "exercise_id": request["exercise_id"], "spec_sha256": spec_sha,
             "spec_reference": spec.name, "submitted_prompt": content, "submitted_prompt_sha256": _digest_bytes(prompt_bytes),
             "input_assets": clean_assets, "provider": request["provider"], "model": request["model"],
-            "settings": request["settings"], "estimated_credits": estimate}
+            "settings": request["settings"], "estimated_credits": estimate,
+            "source_preflight": source_preflight}
 
 
 def _check_intent_record(intent, run_id):

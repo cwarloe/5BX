@@ -8,6 +8,11 @@ import json
 import math
 from pathlib import Path
 
+from .source_authority import (
+    V6_ANATOMICAL_LEFT_RIGHT_PROVEN, V6_PANEL_A_CROP,
+    V6_PANEL_A_START_STATE, V6_TAGGED_CARD_SHA256,
+)
+
 
 REQUIRED = ("schema_version", "id", "chart", "exercise", "name", "status",
             "duration_seconds", "fps", "identity_reference", "movement_reference",
@@ -119,6 +124,18 @@ def validate(spec):
             if (not isinstance(provenance, dict)
                     or provenance.get("source_marker_start_state") != phases[0].get("limbs")):
                 errors.append("scissor source marker start-state must match the first physical arm/leg phase; never relabel tags to fit a pose")
+            # These are claims about a particular inspected source image, not
+            # freely editable prompt hints. Unverified new sources need their
+            # own versioned authority before any paid experiment.
+            if isinstance(provenance, dict):
+                if provenance.get("source_card_sha256") != V6_TAGGED_CARD_SHA256:
+                    errors.append("scissor V6 source card SHA-256 must match the verified original diagnostic")
+                if provenance.get("source_panel_a_clean_crop_half_open") != list(V6_PANEL_A_CROP):
+                    errors.append("scissor V6 panel A crop must match the visually verified source bounds")
+                if provenance.get("source_marker_start_state") != V6_PANEL_A_START_STATE:
+                    errors.append("scissor V6 starting physical marker roles must match verified panel A")
+                if provenance.get("anatomical_left_right_proven") is not V6_ANATOMICAL_LEFT_RIGHT_PROVEN:
+                    errors.append("scissor V6 source does not prove anatomical left/right; this claim cannot be promoted")
             errors.extend(_check_scissor(phases))
         elif spec["movement_type"] == "kneeling_pushup":
             errors.extend(_check_pushup(phases))

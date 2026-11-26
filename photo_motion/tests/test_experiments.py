@@ -18,12 +18,12 @@ class ExperimentLedgerTests(unittest.TestCase):
         self.addCleanup(self.sandbox.cleanup)
         self.root = Path(self.sandbox.name)
         self.private = self.root / "private-ledger"
-        self.spec = self.root / "chart1-scissor-jump.json"
+        self.spec = self.root / "generic-photo-contract.json"
         self.prompt = self.root / "actual-submitted-prompt.txt"
         self.identity = self.root / "photographic-identity-reference.png"
         self.motion = self.root / "motion-reference.jpg"
         self.video = self.root / "generated-output.mp4"
-        self.spec.write_text('{"exercise_id":"chart1-scissor-jump","schema_version":1}\n', encoding="utf-8")
+        self.spec.write_text('{"exercise_id":"ledger-synthetic","schema_version":1}\n', encoding="utf-8")
         self.prompt.write_bytes(b"Verbatim photographic input\r\nTwo real flights.\r\n")
         self.identity.write_bytes(b"synthetic-identity-input-not-an-actual-image")
         self.motion.write_bytes(b"synthetic-motion-reference")
@@ -33,7 +33,7 @@ class ExperimentLedgerTests(unittest.TestCase):
         return {
             "schema_version": 1,
             "attempt_key": attempt,
-            "exercise_id": "chart1-scissor-jump",
+            "exercise_id": "ledger-synthetic",
             "spec_path": str(self.spec),
             "submitted_prompt_file": str(self.prompt),
             "input_assets": [

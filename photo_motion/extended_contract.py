@@ -59,6 +59,8 @@ def _stable_contacts(phases, required, name):
 
 def _toe_touch(phases):
     errors = _expected(phases, "motion", ["upright", "forward_fold", "upright", "gentle_backbend", "upright"], "toe touching")
+    errors += _expected(phases, "fingertips_touch_floor", [False, True, False, False, False],
+                        "toe touching: fingertips must actually TOUCH the floor between feet at the forward-fold peak")
     errors += _stable_contacts(phases, {"left_sole", "right_sole"}, "toe touching")
     for p in phases:
         if p.get("feet_fixed") is not True:

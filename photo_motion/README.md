@@ -38,6 +38,12 @@ python3 -m photo_motion inspect photo_motion/specs/chart1-scissor-jump.json /pat
 The `inspect` command leaves the source video untouched and writes `inspection.json`, a `phase_contact_sheet.png` and individual frame PNGs into the explicitly provided output directory. A real 6-second clip is needed; a four-panel contact-card still **is not video**.
 Use a **new output directory for every inspection**. Reusing an existing directory is rejected to prevent accidental overwrites of earlier frame evidence.
 
+For the V6 photographic scissor pilot, **before reserving or spending Flow
+credits**, run the exact original-card/prepared-PNG/transform-manifest binding
+check in [`V6_PRECREDIT.md`](V6_PRECREDIT.md). The experiment reservation now
+requires that verified binding and the identical uploaded start-frame bytes;
+the check does not approve the resulting exercise video.
+
 ## Exercise contracts
 
 | Contract | Critical invariant | Known unresolved evidence |
