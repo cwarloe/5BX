@@ -1,7 +1,8 @@
 """Deterministic, no-subject-crop 16:9 photo-panel preparation.
 
-Default half-open crop (4, 4, 764, 508) is the verified clean upper-left
-panel A of the archived V6 tagged photographic scissor-jump *diagnostic card*.
+Default half-open crop (4, 4, 764, 508) is the verified upper-left panel A;
+the optional opposite-contact lower-left panel C is (4, 516, 764, 1020).
+Both come from the archived V6 tagged scissor-jump *diagnostic card*.
 The original image is never edited, uploaded, or written to by this tool.
 
 Pure geometry: take a contiguous crop with no cut through the known subject,
@@ -20,8 +21,13 @@ from pathlib import Path
 from PIL import Image, __version__ as PILLOW_VERSION
 
 
+# Keep the V6 A manifest contract at version 1: the existing pre-credit
+# verifier pins this value. Panel selection is an additive manifest field;
+# a later two-ingredient preflight must introduce its own versioned contract.
 PIPELINE_VERSION = "1"
 DEFAULT_V6_A_BOUNDS = (4, 4, 764, 508)  # left, top, right, bottom; half-open
+DEFAULT_V6_C_BOUNDS = (4, 516, 764, 1020)
+DEFAULT_V6_PANEL_BOUNDS = {"A": DEFAULT_V6_A_BOUNDS, "C": DEFAULT_V6_C_BOUNDS}
 EXPECTED_V6_CARD_SIZE = (1536, 1024)
 VERIFIED_V6_SOURCE_SHA256 = "4f27260bd19da14bc80a75944dc8f7e2bf790a7e148caa223017fbde130cb0f2"
 
@@ -108,7 +114,8 @@ def _mirror_side_pad(crop, left, right):
     """Reflect only the source's outer strips into added background pixels.
 
     This does not assume mirror padding can repair a moving limb that touches
-    the crop boundary. V6 A was visually checked to have subject-free sides.
+    the crop boundary. Verified V6 A and C were visually checked to have
+    subject-free sides.
     """
     w, h = crop.size
     if left > w or right > w:
@@ -122,7 +129,7 @@ def _mirror_side_pad(crop, left, right):
     return final
 
 
-def prepare(source_path, output_path, *, crop=DEFAULT_V6_A_BOUNDS,
+def prepare(source_path, output_path, *, panel="A", crop=None,
             expected_source_sha256=None, expected_source_size=None,
             export_size=None):
     """Prepare an existing photo into a new image+manifest; never overwrite.
@@ -133,6 +140,10 @@ def prepare(source_path, output_path, *, crop=DEFAULT_V6_A_BOUNDS,
     """
     src = Path(source_path)
     out = Path(output_path)
+    if panel not in DEFAULT_V6_PANEL_BOUNDS:
+        raise ValueError(f"panel must be A or C, got {panel!r}")
+    verified_panel_crop = DEFAULT_V6_PANEL_BOUNDS[panel]
+    selected_crop = verified_panel_crop if crop is None else crop
     if src.is_symlink():
         raise ValueError("source must be an explicit non-symlink image for stable provenance")
     if not src.is_file():
@@ -160,11 +171,11 @@ def prepare(source_path, output_path, *, crop=DEFAULT_V6_A_BOUNDS,
         image_size = opened.size
         if expected_source_size and tuple(expected_source_size) != image_size:
             raise ValueError(f"source dimensions {image_size} do not match expected {tuple(expected_source_size)}")
-        box = _bounds(image_size, crop)
-        panel = opened.crop(box)
-        panel.load()
+        box = _bounds(image_size, selected_crop)
+        panel_image = opened.crop(box)
+        panel_image.load()
 
-    panel_w, panel_h = panel.size
+    panel_w, panel_h = panel_image.size
     if panel_h % 9:
         raise ValueError("crop height must be divisible by 9 for exact pixel-grid 16:9 side padding")
     full_w = panel_h * 16 // 9
@@ -172,7 +183,7 @@ def prepare(source_path, output_path, *, crop=DEFAULT_V6_A_BOUNDS,
         raise ValueError("selected panel is wider than 16:9; side padding cannot fix it without distortion")
     padding = full_w - panel_w
     pad_left, pad_right = padding // 2, padding - padding // 2
-    framed = _mirror_side_pad(panel, pad_left, pad_right)
+    framed = _mirror_side_pad(panel_image, pad_left, pad_right)
     target = _fit_size(export_size)
     if target:
         framed = framed.resize(target, Image.Resampling.LANCZOS)
@@ -192,9 +203,10 @@ def prepare(source_path, output_path, *, crop=DEFAULT_V6_A_BOUNDS,
         "source_image_sha256_after": source_sha_after,
         "expected_source_sha256": expected_source_sha256,
         "source_hash_matches_expected": bool(expected_source_sha256 and source_sha_before == expected_source_sha256),
-        "source_size": list(image_size), "source_mode": panel.mode,
+        "source_size": list(image_size), "source_mode": panel_image.mode,
+        "source_panel": panel, "crop_matches_verified_panel_bounds": box == verified_panel_crop,
         "crop_bounds_half_open": list(box), "crop_size": [panel_w, panel_h],
-        "crop_pixels_sha256": hashlib.sha256(panel.tobytes()).hexdigest(),
+        "crop_pixels_sha256": hashlib.sha256(panel_image.tobytes()).hexdigest(),
         "canvas_size_before_resampling": [full_w, panel_h],
         "padding": {"left": pad_left, "right": pad_right, "top": 0, "bottom": 0,
                     "strategy": "reflect_existing_outer_background_strips_horizontal"},
@@ -206,12 +218,12 @@ def prepare(source_path, output_path, *, crop=DEFAULT_V6_A_BOUNDS,
         "output_sha256": img_sha,
         "video_motion_and_form": "NOT_EVALUATED",
         "visual_subject_completeness": (
-            "PREVIOUSLY_VISUALLY_INSPECTED_V6_A_NOT_RETYPED_OR_APPROVED"
-            if source_sha_before == VERIFIED_V6_SOURCE_SHA256 and box == DEFAULT_V6_A_BOUNDS
+            f"PREVIOUSLY_VISUALLY_INSPECTED_V6_{panel}_NOT_RETYPED_OR_APPROVED"
+            if source_sha_before == VERIFIED_V6_SOURCE_SHA256 and box == verified_panel_crop
             else "NOT_EVALUATED_FOR_THIS_SOURCE_AND_CROP"
         ),
-        "mirrored_side_extension_risk": "Reflected trees/track/background can repeat visual features and look artificial. Source subject-clearance is only visually documented for verified V6 panel A; other sources require an independent review.",
-        "warning": "Tagged V6 still is diagnostic only; this geometric preparation does not establish anatomical identity or a completed video cycle."
+        "mirrored_side_extension_risk": "Reflected trees/track/background can repeat visual features and look artificial. Source subject-clearance is only visually documented for verified V6 panels A and C at their exact bounds; other sources require independent review.",
+        "warning": "Tagged V6 stills are diagnostic only; two isolated poses do not establish anatomical left/right identity, a scissor exchange, or a completed video cycle."
     }
     manifest_bytes = (json.dumps(manifest, indent=2, sort_keys=True) + "\n").encode("utf-8")
     _write_pair_exclusive(out, png, manifest_path, manifest_bytes)
@@ -229,11 +241,13 @@ def _parse_pair(text):
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description="Create a 16:9 diagnostic photo frame from source V6 A without subject cropping")
+    parser = argparse.ArgumentParser(description="Prepare V6 photographic panel A (start) or C (opposite contact) as a 16:9 diagnostic candidate")
     parser.add_argument("source", type=Path, help="Existing original 2x2 PNG; never modified")
     parser.add_argument("output", type=Path, help="New PNG path. Directory must exist, no overwrite or symlink")
-    parser.add_argument("--crop", type=int, nargs=4, default=DEFAULT_V6_A_BOUNDS,
-                        metavar=("LEFT", "TOP", "RIGHT", "BOTTOM"), help="Half-open bounds; default verified V6 A safe inset: 4 4 764 508")
+    parser.add_argument("--panel", choices=tuple(DEFAULT_V6_PANEL_BOUNDS), default="A",
+                        help="Verified V6 source panel; A is the unchanged default, C is the opposite-contact pose")
+    parser.add_argument("--crop", type=int, nargs=4,
+                        metavar=("LEFT", "TOP", "RIGHT", "BOTTOM"), help="Optional override of the selected panel's verified half-open crop; invalidates that crop verification")
     parser.add_argument("--expected-sha256", help="Exact source hash precondition; defaults to the verified V6 source SHA")
     parser.add_argument("--allow-unverified-source", action="store_true",
                         help="Explicitly bypass the default V6 SHA pin for a different controlled source; visual clearance then NOT_EVALUATED")
@@ -246,7 +260,7 @@ def main(argv=None):
     expected_sha256 = (None if args.allow_unverified_source
                        else args.expected_sha256 or VERIFIED_V6_SOURCE_SHA256)
     try:
-        result = prepare(args.source, args.output, crop=args.crop,
+        result = prepare(args.source, args.output, panel=args.panel, crop=args.crop,
                          expected_source_sha256=expected_sha256,
                          expected_source_size=args.expected_size,
                          export_size=args.export_size)
@@ -257,6 +271,7 @@ def main(argv=None):
                       "expected_source_sha256": result["expected_source_sha256"],
                       "source_hash_matches_expected": result["source_hash_matches_expected"],
                       "output_sha256": result["output_sha256"],
+                      "source_panel": result["source_panel"],
                       "output_size": result["output_size"],
                       "crop_bounds_half_open": result["crop_bounds_half_open"],
                       "padding": result["padding"],
