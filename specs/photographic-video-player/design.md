@@ -40,10 +40,12 @@ slot field (`chart`, `exercise`, `action`, canonical `exerciseId`), exact revisi
 SHA-256, H.264 MP4 type and reviewed duration. A registry key alone cannot
 change or reassign that exercise's identity.
 
-For future nonempty entries, URLs have one canonical same-origin shape under
-the explicitly controlled `/5BX/game/approved-photo/` path with the lowercase
-SHA-256 as filename: `/5BX/game/approved-photo/<sha256>.mp4`. Reject absolute
-external URLs, queries, fragments, encoded separators/traversal, noncanonical
+For future nonempty entries, URLs have a canonical same-origin shape under
+the explicitly controlled `approved-photo/` directory and lowercase SHA-256
+filename. Only the known build bases `/` (development/Vercel) and `/5BX/game/`
+(Pages) are supported, selected from `import.meta.env.BASE_URL` at build time;
+e.g. `/5BX/game/approved-photo/<sha256>.mp4` on Pages. Reject absolute external
+URLs, queries, fragments, encoded separators/traversal, noncanonical base
 characters and filename/hash disagreement. This is **URL-syntax defense**, not
 served-byte verification. Real release must separately prove that the deployed
 asset at this URL matches the trusted owner-accepted digest.
