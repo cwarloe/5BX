@@ -2,6 +2,12 @@
 
 Updated 2026-11-26 UTC. All assets are experimental; **no human final exercise-form approvals**. Open the contact sheets directly in Google Drive; no GitHub downloads required for viewing.
 
+## Latest test — 34K lifts the background elbow
+
+- User pinpointed the lower-left-panel far/background upper arm (x=21.8%, y=65%) as still too long on 34J. **34K raises the small visible far elbow contour above the foreground elbow**, while leaving the far forearm, hand and wrist entirely hidden behind the torso. Camera, running sequence, age and outfit held.
+- [**34J vs 34K close mobile comparison**](https://drive.google.com/file/d/1MWi_DQUS8OO71Jua6xqryOLC_5-rpmKU/view) | [**34K full-resolution four-frame card**](https://drive.google.com/file/d/106bH7oPR8fB6trXiOXppJ95DtG-WcP0Z/view). **Review candidate, not approved**; compare elbow heights and natural silhouette, not just presence of a hand.
+- [Exact 34K prompt and QA lesson](https://github.com/cwarloe/5BX/tree/main/sprites/docs/photo_batches/2026-11-26/round8).
+
 ## Latest test — 34J hides the far arm naturally
 
 - The user selected **34H** (source hash verified) and identified that its visible far upper arm was too long for its background shoulder position. Rather than forcing an exposed far hand, hide the far forearm/wrist/hand behind the boy's torso and show only a **small rear elbow contour**.
