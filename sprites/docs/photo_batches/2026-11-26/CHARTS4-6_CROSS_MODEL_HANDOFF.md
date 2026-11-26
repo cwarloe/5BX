@@ -22,7 +22,7 @@ Use [approved photo identity v2](https://drive.google.com/file/d/1kS-KxLMAoH1eDa
 | C6 Ex1 reverse-clasp toe circle | [42B](https://drive.google.com/file/d/1BbgAoGkCj9lsSoMcZGTEe_53l30DoqQm/view) | Outside-left, center, outside-right target and overhead gentle return | Palms-out reverse interlock, full circular pressing/reversal |
 | C6 Ex2 pike sit-up | [39](https://drive.google.com/file/d/1fCerj7-NGzdJsMgQw8cvG3pIzFdWHlSE/view) | Normal teen open V with both legs straight | Literal toe contact; avoid stretching arms to force it |
 | C6 Ex3 extra-press back extension | [40](https://drive.google.com/file/d/1B4jx7R7-ckjyu4mZ9-oKqqdTonkW2T4q/view) | Extra upper-back pulse while both feet lift | Big second leg height delta |
-| C6 Ex4 CHEST-SLAP push-up | [41R lower hover](https://drive.google.com/file/d/1Hc99HjHcVzPYa1bZipWQeaC5PkloaUMo/view) | BOTH airborne palms contact separate chest spots, not clap together | Sustainable hovering torso, realistic rapid landing |
+| C6 Ex4 CHEST-SLAP push-up | [41R lower hover](https://drive.google.com/file/d/1Hc99HjHcVzPYa1bZipWQeaC5PkloaUMo/view) | Two separate chest contacts, near palm release clear; far palm barely off surface | Reliable far-palm clearance, sustainable torso hovering, rapid landing |
 
 ## Image prompting recipe to transfer
 
