@@ -63,6 +63,14 @@ The remaining Chart 1 photo contracts cover toe touching, **partial** sit-up, al
 Each spec contains planned phase times, support points, camera/identity instructions, and the source documents to consult. Phase times are **targets** for video generation/inspection, not assertions that the actual video will obey them. A plan that passes `validate` is a coherent *request*, not a valid clip.
 For Chart 1 scissor jumps, the movement authority is the **original booklet wording**, not the archival 1959 film (whose documented jump footage depicts other chart exercises). The six-second test duration is an experimental clip target, not a source-mandated scissor-jump cadence.
 
+If a future generator experiment truly needs *live-action motion conditioning*,
+use the [first-party adult movement-reference field protocol](FIRST_PARTY_SCISSOR_MOTION_CAPTURE.md).
+It requires a consented adult demonstration of two whole A→airborne→C→airborne→A
+cycles, fixed side-on full-body framing, explicit rights for private AI input,
+and byte-verified raw-source evidence. It is a **capture protocol only**, not
+new footage, permission to reuse a stranger's video or approval to transfer a
+real demonstrator's face/biometrics to the target character.
+
 ## Pin the real generator inputs
 
 The prompt command prints a **proposed** tool-neutral prompt. If you use it in Google Flow or another tool, preserve the text **actually submitted**, including any manual edits. Do not mislabel an automatically generated draft as the submitted text.
