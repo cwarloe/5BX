@@ -230,9 +230,14 @@ def evaluate(candidate, repo_root=REPO_ROOT):
                     decoded_duration = details["frame_count"] / details["fps"]
                     if abs(decoded_duration - details["duration_seconds"]) > PLAYER_TIMING_EPS_SECONDS:
                         blockers.append("decoded frame count/FPS differs from native duration required by browser player")
-                for key in ("duration_seconds", "fps"):
-                    if abs(details[key] - video[key]) > (EPS_SECONDS if key == "duration_seconds" else EPS_FPS):
-                        blockers.append(f"ffprobe {key} mismatch")
+                # The browser compares its actual native duration with the
+                # trusted registry to 1ms. The broader motion-spec planning
+                # tolerance must not admit a manifest duration that the
+                # browser would later reject as a different clip.
+                if abs(details["duration_seconds"] - video["duration_seconds"]) > PLAYER_TIMING_EPS_SECONDS:
+                    blockers.append("native duration differs from declared video duration beyond browser 1ms tolerance")
+                if abs(details["fps"] - video["fps"]) > EPS_FPS:
+                    blockers.append("ffprobe fps mismatch")
                 for key in ("width", "height", "codec", "audio_stream_count", "frame_count"):
                     if details[key] != video[key]:
                         blockers.append(f"ffprobe {key} mismatch")
