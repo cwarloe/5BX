@@ -2,7 +2,13 @@
 
 Updated 2026-11-26 UTC. All assets are experimental; **no human final exercise-form approvals**. Open the contact sheets directly in Google Drive; no GitHub downloads required for viewing.
 
-## Handedness follow-up — 34E rejected, 34G under review
+## Latest test — 34J hides the far arm naturally
+
+- The user identified that even 34I's visible far upper arm was too long for its background shoulder position. Rather than forcing an exposed far hand, hide the far forearm/wrist/hand behind the boy's torso and show only a **small rear elbow contour**.
+- [**34I vs 34J focused mobile comparison**](https://drive.google.com/file/d/1kXEJyTxVUkhMNHy4IzWu6CM0VRT_mX22/view) | [**34J full-resolution four-frame card**](https://drive.google.com/file/d/1bcvjYeWVF-t-onGOwJOSGfam21t9J1Xj/view). In 34J the hanging far fist disappears, foreground right-arm swing and alternating raised knees remain. **Review candidate only**; no video motion test yet.
+- [Round 7 occlusion lesson and exact prompt](https://github.com/cwarloe/5BX/blob/main/sprites/docs/photo_batches/2026-11-26/round7/ROUND7_OCCLUDED_FAR_ARM_FINDING.md). **Key finding:** camera occlusion is correct anatomy; forcing both hands visible from a 3/4 view creates false arm length and duplicated limbs.
+
+## Earlier handedness follow-up — 34E rejected, 34G superseded
 
 - The user rejected 34E's **hybrid knuckle/finger fist**, while preferring the new slightly closer-to-body trailing-hand placement. [**34E vs 34G enlarged hand comparison**](https://drive.google.com/file/d/1qbA8VxCKFZDlzrFY766Uk-UiRl0zfS_-/view) and [**full 34G card**](https://drive.google.com/file/d/1NxUPBd-wyXYZgnSX4M9ehRfNsuBdl_fx/view).
 - **34F** used an enlarged upper-left *correct-hand reference* to replace the bottom-left rear left fist with more distinct relaxed fingers; however a wristband mistakenly migrated onto the far wrist. **34F is rejected.**
