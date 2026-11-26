@@ -7,6 +7,7 @@ attestations; private MP4 motion/form cannot be certified by this scanner.
 """
 
 import argparse
+import hashlib
 import json
 import re
 from datetime import datetime
@@ -145,6 +146,16 @@ def _ready_evidence(root, item):
     elif (inspection.get("video_sha256") != digest or
           not _relative_existing(root, inspection.get("evidence"))):
         errors.append("inspection must bind the exact video hash and existing QA evidence")
+    else:
+        try:
+            actual_report_hash = hashlib.sha256(
+                (root / inspection["evidence"]).read_bytes()
+            ).hexdigest()
+        except OSError:
+            errors.append("inspection QA evidence could not be read for hash verification")
+        else:
+            if actual_report_hash != inspection["report_sha256"].lower():
+                errors.append("inspection report SHA-256 does not match QA evidence bytes")
     checks = item.get("checks")
     if not isinstance(checks, dict):
         errors.append("all five internal quality gates need evidence")

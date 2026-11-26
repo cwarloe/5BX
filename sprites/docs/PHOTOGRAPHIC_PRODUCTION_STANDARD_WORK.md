@@ -160,7 +160,10 @@ To move to `READY_FOR_REVIEW`, expand that exact comment with:
   the same video URL registered in the existing mobile review index/inventory.
 - `inspection`: `{video_sha256, report_sha256, evidence}` where `evidence`
   is the existing repo QA/diagnostic record; report/video hashes bind the
-  inspection to the exact intended file. Keep raw private MP4/frames out of Git.
+  inspection to the exact intended file. `report_sha256` is the SHA-256 of the
+  referenced `evidence` file's exact bytes; a digest merely shaped like a hash
+  or copied from an earlier report fails the queue check. Keep raw private
+  MP4/frames out of Git.
 - `checks`: five named objects, `technical`, `form`, `motion`, `loop`,
   `identity`, each with `verdict: PASS` and substantive `evidence` text.
   `form` and `motion` must identify an independent `reviewer`, not the
