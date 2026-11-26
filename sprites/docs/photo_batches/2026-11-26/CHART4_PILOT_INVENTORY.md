@@ -14,7 +14,7 @@ Updated 2026-11-26 UTC. These are **assistant-reviewed, independently second-che
 
 ## Exact prompts and QA
 
-Local source files (published alongside this document): `chart4_ex2/30_C4_Ex2_ToeTouchSitup_ExactPrompt.md`; `chart4_ex3/31_C4_EX3_ExactPrompt.md`; `chart4_ex4/32_C4_EX4_ExactPrompt.md`; `chart4_jump/33_SUBMITTED_PROMPT_VERBATIM.txt` plus honest draft/QA; and `chart4_run/34_C4_HighKneeStationaryRun_ExactPrompt.md`, `34_C4_HighKneeStationaryRun_V2_ExactPrompt.md`, `34_C4_HighKneeStationaryRun_V3_CleanNoBands_ExactPrompt.md`, and `34_C4_HighKneeStationaryRun_QA.md`.
+Local source files (published alongside this document): `chart4_ex2/30_C4_Ex2_ToeTouchSitup_ExactPrompt.md`; `chart4_ex3/31_C4_EX3_ExactPrompt.md`; `chart4_ex4/32_C4_Ex4_WideHand_ExactPrompt.md`; `chart4_jump/33_SUBMITTED_PROMPT_VERBATIM.txt` plus honest draft/QA; and `chart4_run/34_C4_HighKneeStationaryRun_ExactPrompt.md`, `34_C4_HighKneeStationaryRun_V2_ExactPrompt.md`, `34_C4_HighKneeStationaryRun_V3_CleanNoBands_ExactPrompt.md`, and `34_C4_HighKneeStationaryRun_QA.md`.
 
 The independent image check is [`CHART4_INDEPENDENT_QA.md`](CHART4_INDEPENDENT_QA.md). **Critical lesson:** The first attractive high-knee card repeated the *same physical leg* at opposite peaks. An orange/teal ankle-marker card then proved two distinct leg lineages and the one-variable clean-up preserved the successful geometry. This is a **still-photo** control technique; it does not guarantee correct generated video motion. The front/rear arm swing remained similar in both knee peaks and warrants correction or motion review.
 
