@@ -20,7 +20,7 @@ Add 1 to 2 retries on the hard ones (the leg raise and the run each needed one).
 
 ## Suggested order
 
-1. **The knees-high run and the five other jumps** first: the run is reused by charts 4–6 and is 6 of every 11 minutes. (Chart 1's run and scissor jumps are done, and the 4-inch run already covers charts 2–3.)
+1. **The knees-high run and the five other jumps** first: the run is reused by charts 4–6 and is 6 of every 11 minutes. (The **legacy cartoon kit** already has Chart 1's run and scissor and can reuse the 4-inch run for charts 2–3. This does **not** mean the new photographic movements or videos are form-approved; see the [photo test status](photo_batches/2026-11-26/MOBILE_REVIEW_INDEX.md).)
 2. **Chart 2**, because it is the nearest to chart 1 (same run, sit-up and push-up are close relatives of chart 1's).
 3. Then charts 3–6, each reusing the previous chart's strips as the reference for editing.
 4. After each chart: `build.py --list`, `tests/smoke.py`, a `--preview`, then the full build.
@@ -28,7 +28,7 @@ Add 1 to 2 retries on the hard ones (the leg raise and the run each needed one).
 ## The strips
 
 
-### Chart 1 (**done**)
+### Chart 1 (**legacy cartoon implementation done; new photos/videos conditional**)
 
 | Slot | Exercise | Starts | Movement (booklet wording) |
 |---|---|---|---|
