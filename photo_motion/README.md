@@ -105,6 +105,12 @@ and identity; see [the limitations and comparison rules](DRIFT_CANARY.md).
 
 Add `"audio_policy": "forbid"` to a motion spec when its video must contain **no audio stream**, not even a silent one. The field is optional; omitted contracts use `"unspecified"` and do not fail just for containing audio. Inspection records stream count/codecs and read-only decoded mean/peak dBFS metadata. If a forbidden stream exists, it adds a technical warning even for digitally silent AAC. A finite decoded peak indicates nonzero PCM samples, **not necessarily audibility**. If the decoder cannot measure a track, the file still fails the forbidden-stream condition. The original source MP4 is never altered, and the inspector never marks form or release approved. Remove audio only from a separate, documented derived delivery asset if the owner chooses to use the clip.
 
+For a motion-valid candidate whose generator added unwanted audio, use the
+independent, [bitstream-verifying silent derivative command](SILENT_DERIVATIVE.md).
+It makes a silent review copy and immutable source/output manifest, without
+rewriting the raw generator's failed audio-policy result or approving exercise
+form. It never spends generation credits.
+
 The first actual-video engineering smoke run is documented in [`diagnostics/video10-kneeling-pushup-2026-11-26.md`](diagnostics/video10-kneeling-pushup-2026-11-26.md). It checked the original blue-shirt Flow video 10 and found a contact/loop registration issue worth measuring before any approval. The raw private MP4 and extracted frames are not committed here.
 
 ## Additional real-video diagnostics
