@@ -27,6 +27,7 @@ from PIL import Image, UnidentifiedImageError
 
 from . import experiments
 from .__main__ import _check_spec
+from .source_authority import V7_PREPARED_PAIR_AUTHORITY
 
 
 SPEC_ROOT = Path("photo_motion/specs")
@@ -160,7 +161,19 @@ def evaluate(request, *, repo_root, available_credits=None):
                     if spec.get("status") == "HOLD":
                         errors.append("motion contract is explicitly on HOLD")
                     expected_id = actual.stem
-                    if request.get("exercise_id") != expected_id:
+                    # V7 names the *versioned source authority* in its spec
+                    # filename, but experiment receipts retain the canonical
+                    # Chart 1 Exercise 5 ID across versions. Only this exact
+                    # validated pairing is allowed as an exception.
+                    provenance = spec.get("track_provenance")
+                    canonical_v7_exercise = (
+                        expected_id == "chart1-scissor-jump-v7-prepared-pair"
+                        and spec.get("id") == "c1-ex5-scissor-jump-photo-v7-prepared-pair"
+                        and isinstance(provenance, dict)
+                        and provenance.get("source_authority_version") == V7_PREPARED_PAIR_AUTHORITY
+                        and request.get("exercise_id") == "chart1-scissor-jump"
+                    )
+                    if request.get("exercise_id") != expected_id and not canonical_v7_exercise:
                         errors.append(f"exercise_id does not match versioned contract {expected_id!r}")
                     settings = request.get("settings")
                     if not isinstance(settings, dict):
