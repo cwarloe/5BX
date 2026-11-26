@@ -53,6 +53,18 @@ class PhotoCardTest(unittest.TestCase):
             report = audit(p)
         self.assertEqual(report["checks"]["track"]["status"], "REVIEW")
 
+    def test_lying_subject_does_not_shift_detected_track_edge(self):
+        with tempfile.TemporaryDirectory() as temp:
+            p = Path(temp) / "card.png"
+            img = synthetic_card()
+            draw = ImageDraw.Draw(img)
+            # Long, gray horizontal torso hides >70% of first red track row
+            # in panel A, but outer margins still show the true track edge.
+            draw.rectangle((30, 74, 171, 92), fill=(88, 94, 101))
+            img.save(p)
+            report = audit(p)
+        self.assertEqual(report["checks"]["track"]["status"], "PASS")
+
     def test_same_color_two_cards_show_zero_drift(self):
         with tempfile.TemporaryDirectory() as temp:
             p = Path(temp) / "one.png"
