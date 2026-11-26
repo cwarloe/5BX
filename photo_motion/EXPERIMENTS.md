@@ -32,6 +32,12 @@ Save the provider input exactly as submitted, *including manual edits*, in an un
 
 Write a private request JSON like this, replacing every placeholder with the *actual* values:
 
+**V6 scissor exception:** The generic sample below is *not* an acceptable
+pre-credit scissor request. That experiment requires source-byte verification
+and either one A start-frame or **A plus exactly one verified C opposite-pose
+reference** from the same immutable V6 card, as specified in
+[`V6_PRECREDIT.md`](V6_PRECREDIT.md).
+
 ```json
 {
   "schema_version": 1,

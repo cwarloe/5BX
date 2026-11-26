@@ -1,8 +1,8 @@
 """Fail-closed, *unpaid* V6 scissor start-frame provenance preflight.
 
-Bind the exact archived diagnostic card, its verified panel crop, a prepared
-16:9 PNG, the transform manifest and the versioned motion contract. A pretty
-single frame is never proof of exercise motion, identity or release approval.
+Bind the exact archived diagnostic card, its verified A start crop and optional
+C opposite grounded crop, prepared 16:9 PNGs, transform manifests and motion
+contract. Pretty still frames never prove exercise motion or form approval.
 
     python3 -m photo_motion.preflight_v6 SPEC ORIGINAL_CARD PREPARED_FRAME
 
@@ -22,8 +22,9 @@ from PIL import Image
 from .contract import validate
 from .panel_prep import _fit_size, _mirror_side_pad
 from .source_authority import (
-    V6_ANATOMICAL_LEFT_RIGHT_PROVEN, V6_PANEL_A_CROP,
-    V6_PANEL_A_START_STATE, V6_TAGGED_CARD_SHA256, V6_TAGGED_CARD_SIZE,
+    V6_ANATOMICAL_LEFT_RIGHT_PROVEN, V6_PANEL_A_CROP, V6_PANEL_C_CROP,
+    V6_PANEL_A_START_STATE, V6_PANEL_C_OPPOSITE_STATE,
+    V6_TAGGED_CARD_SHA256, V6_TAGGED_CARD_SIZE,
 )
 
 
@@ -50,21 +51,33 @@ def _unchanged(path, initial_hash, label):
         raise PreflightError(f"{label} changed during V6 preflight; discard results")
 
 
-def _manifest_fields(manifest, original, image, source_mode, exported):
+def _manifest_fields(manifest, original, image, source_mode, exported, panel):
     """Validate all identity/geometry fields that could change the artwork."""
+    bounds = V6_PANEL_A_CROP if panel == "A" else V6_PANEL_C_CROP
     checks = {
         "tool": "photo_motion.panel_prep", "version": "1",
         "source_image_sha256_before": V6_TAGGED_CARD_SHA256,
         "source_image_sha256_after": V6_TAGGED_CARD_SHA256,
         "source_size": list(V6_TAGGED_CARD_SIZE), "source_mode": source_mode,
-        "crop_bounds_half_open": list(V6_PANEL_A_CROP),
-        "crop_size": [760, 504], "crop_pixels_sha256": _hash(original.crop(V6_PANEL_A_CROP).tobytes()),
+        "crop_bounds_half_open": list(bounds),
+        "crop_size": [760, 504], "crop_pixels_sha256": _hash(original.crop(bounds).tobytes()),
         "canvas_size_before_resampling": [896, 504],
         "output_sha256": image[0], "output_size": image[1],
     }
     for key, expected in checks.items():
         if manifest.get(key) != expected:
             raise PreflightError(f"preparation manifest {key} does not match verified source/output")
+    # Old, verified A-only preparations predate explicit panel labels; keep
+    # them accepted without silently granting that legacy exception to C.
+    if panel == "C" or "source_panel" in manifest:
+        if manifest.get("source_panel") != panel:
+            raise PreflightError(f"preparation manifest source_panel must identify V6 panel {panel}")
+    if panel == "C" or "crop_matches_verified_panel_bounds" in manifest:
+        if manifest.get("crop_matches_verified_panel_bounds") is not True:
+            raise PreflightError("preparation manifest must attest verified panel-specific bounds")
+    if panel == "C" and (manifest.get("expected_source_sha256") != V6_TAGGED_CARD_SHA256 or
+                         manifest.get("source_hash_matches_expected") is not True):
+        raise PreflightError("C preparation manifest must pin the original verified V6 source hash")
     padding = manifest.get("padding")
     if not isinstance(padding, dict) or any(padding.get(key) != value for key, value in {
         "left": 68, "right": 68, "top": 0, "bottom": 0,
@@ -79,8 +92,11 @@ def _manifest_fields(manifest, original, image, source_mode, exported):
         raise PreflightError("preparation manifest resampling parameters do not match the output")
 
 
-def verify(spec_path, original_path, prepared_path, manifest_path=None):
+def verify(spec_path, original_path, prepared_path, manifest_path=None, *, panel="A"):
     """Independently reproduce prepared bytes; never generate media or spend."""
+    if panel not in ("A", "C"):
+        raise PreflightError("V6 preflight panel must be A (start) or C (opposite grounded)")
+    bounds = V6_PANEL_A_CROP if panel == "A" else V6_PANEL_C_CROP
     spec_file, spec_bytes = _bytes(spec_path, "motion specification")
     try:
         spec = json.loads(spec_bytes)
@@ -111,8 +127,8 @@ def verify(spec_path, original_path, prepared_path, manifest_path=None):
         if src.format != "PNG" or src.mode not in ("RGB", "RGBA") or src.size != V6_TAGGED_CARD_SIZE:
             raise PreflightError("verified original V6 image must be an RGB/RGBA 1536x1024 PNG")
         source_mode = src.mode
-        panel = src.crop(V6_PANEL_A_CROP)
-        framed = _mirror_side_pad(panel, 68, 68)
+        cropped_panel = src.crop(bounds)
+        framed = _mirror_side_pad(cropped_panel, 68, 68)
         exported = None
         resampling = manifest.get("resampling")
         if not isinstance(resampling, dict):
@@ -130,7 +146,7 @@ def verify(spec_path, original_path, prepared_path, manifest_path=None):
         rendered = io.BytesIO()
         framed.save(rendered, format="PNG", compress_level=6, optimize=False)
         expected_bytes = rendered.getvalue()
-        _manifest_fields(manifest, src, (_hash(prepared_bytes), list(framed.size)), source_mode, exported)
+        _manifest_fields(manifest, src, (_hash(prepared_bytes), list(framed.size)), source_mode, exported, panel)
 
     with Image.open(io.BytesIO(prepared_bytes)) as prepared:
         if (prepared.format != "PNG" or prepared.mode != source_mode
@@ -145,19 +161,43 @@ def verify(spec_path, original_path, prepared_path, manifest_path=None):
         (manifest_file, _hash(manifest_bytes), "preparation manifest"),
     ):
         _unchanged(path, digest, label)
-    return {
+    receipt = {
         "tool": "photo_motion.preflight_v6", "schema_version": 1,
         "spec_sha256": _hash(spec_bytes), "source_video_type": "STILL_IMAGE_ONLY",
         "original_v6_card_sha256": original_sha,
         "prepared_png_sha256": _hash(prepared_bytes),
         "preparation_manifest_sha256": _hash(manifest_bytes),
-        "prepared_size": list(framed.size), "source_crop_half_open": list(V6_PANEL_A_CROP),
-        "source_marker_start_state": dict(V6_PANEL_A_START_STATE),
+        "prepared_size": list(framed.size), "source_crop_half_open": list(bounds),
+        "source_marker_start_state": dict(V6_PANEL_A_START_STATE if panel == "A" else V6_PANEL_C_OPPOSITE_STATE),
         "anatomical_left_right_proven": V6_ANATOMICAL_LEFT_RIGHT_PROVEN,
         "preflight_result": "VERIFIED_INPUT_BYTES_ONLY",
         "exercise_motion_and_release_approval": "NOT_EVALUATED",
         "warning": "Only input provenance is checked; a single prepared frame cannot prove video, form, anatomical side or owner approval.",
     }
+    if panel == "C":
+        receipt["source_panel"] = "C"
+        receipt["source_marker_opposite_state"] = receipt.pop("source_marker_start_state")
+        receipt["warning"] = "An opposite grounded reference still is not evidence of a filmed airborne transition or human form approval."
+    return receipt
+
+
+def verify_pair(spec_path, original_path, prepared_a_path, manifest_a_path,
+                prepared_c_path, manifest_c_path):
+    """Verify independent A/C byte replay against ONE canonical V6 card.
+
+    The optional reference is C specifically, never an arbitrary extra image,
+    identity master, generated endpoint or unchecked remote photo.
+    """
+    start = verify(spec_path, original_path, prepared_a_path, manifest_a_path, panel="A")
+    opposite = verify(spec_path, original_path, prepared_c_path, manifest_c_path, panel="C")
+    if (start["original_v6_card_sha256"] != opposite["original_v6_card_sha256"] or
+            start["spec_sha256"] != opposite["spec_sha256"]):
+        raise PreflightError("A/C poses must derive from one identical verified V6 source and motion specification")
+    if start["prepared_png_sha256"] == opposite["prepared_png_sha256"]:
+        raise PreflightError("A and C cannot be byte-identical; the reference must show a real opposite stance")
+    # Add explicit A identity only to the NEW dual path: existing single-A
+    # receipts/fingerprints remain byte-for-byte compatible with earlier runs.
+    return {**start, "source_panel": "A", "opposite_pose_reference": opposite}
 
 
 def main(argv=None):
@@ -165,11 +205,13 @@ def main(argv=None):
     parser.add_argument("spec", type=Path)
     parser.add_argument("original_card", type=Path)
     parser.add_argument("prepared_png", type=Path)
+    parser.add_argument("--panel", choices=("A", "C"), default="A",
+                        help="A is the original starting pose; C is the optional opposite grounded reference")
     parser.add_argument("--manifest", type=Path, help="Defaults to PREPARED.manifest.json")
     parser.add_argument("--receipt", type=Path, help="Optional new private JSON preflight receipt; never overwrites")
     args = parser.parse_args(argv)
     try:
-        result = verify(args.spec, args.original_card, args.prepared_png, args.manifest)
+        result = verify(args.spec, args.original_card, args.prepared_png, args.manifest, panel=args.panel)
         if args.receipt:
             target = args.receipt
             if target.resolve() in {args.spec.resolve(), args.original_card.resolve(), args.prepared_png.resolve(),
