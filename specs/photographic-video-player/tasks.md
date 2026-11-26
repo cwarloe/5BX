@@ -21,8 +21,9 @@ evidence; all engineering tasks follow Charles's requirements approval on
       `node game/scripts/assert-approved-media.mjs --app-root game/public
       --app-root game/dist-pages --site-source .`; historical byte-pinned
       root-site animation reference remains outside photographic player.
-- [ ] 6. Review acceptance mapping and run explicit browser/mobile smoke check
-      or record named pending manual check if browser unavailable (R1–R3).
+- [x] 6. Review acceptance mapping; record explicit named pending browser/mobile
+      checks when real browser unavailable (R1–R3). See `verification.md`:
+      PHOTO-BROWSER-01/02/03 are **PENDING**, not acceptance PASS.
 
 ## Future release gate — outside this engineering PR
 
