@@ -56,6 +56,35 @@ preview and normal published workout remains unchanged. Automated production
 bundle inspection already verifies the player is absent from JS, but browser
 visual comparison is pending.
 
+## Real-browser attempt record — 2026-11-26 (BLOCKED)
+
+The independent post-merge reviewer attempted the prescribed local browser QA
+without user involvement or publishing any media:
+
+1. `cd game && VITE_PHOTO_PLAYER_PREVIEW=1 npm run dev -- --host 127.0.0.1 --strictPort`
+   started Vite successfully and reported `http://127.0.0.1:8080/`. The dev
+   server was stopped after this attempt.
+2. `cd game && node scripts/browser-smoke.mjs http://127.0.0.1:8080/ /workspace/screenshots/5bx-photo-dev.png`
+   exited **1** before opening a page: Playwright reported that its
+   `chromium_headless_shell-1248` executable was missing from the local browser
+   cache. Neither desktop nor mobile screenshots or browser verdicts were
+   produced. The system `chromium` command was also an unusable launcher: its
+   expected Chromium executable was absent. No usable `agent-browser` or
+   Firefox executable was found.
+3. A separate cloud Chrome browser attempted the same loopback URL and
+   returned `net::ERR_HTTP_RESPONSE_CODE_FAILURE` rather than the local Vite
+   app. That browser does not share the executor's loopback server.
+
+No browser package/OS installation, network tunnel, permission override,
+sign-in, public deployment, synthetic or actual MP4 upload, or paid service
+was used to work around the blocker. **PHOTO-BROWSER-01/02/03 all remain
+PENDING**: no live visual/layout, sprite network, video decoding/playback, or
+production UI behavior was observed. Existing pure/DOM tests and production
+bundle checks are separate evidence and do not constitute real-browser PASS.
+To complete these checks, provision an authorized Chrome/Playwright headless
+binary in the same executor as the dev server (and Safari separately for the
+specified platform coverage), then rerun the named checks above.
+
 ## Lessons retained for the next iteration
 
 - StrictMode rehearses effect cleanup/setup without replacing the DOM video;
