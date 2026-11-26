@@ -13,6 +13,22 @@ The tool takes a stricter approach to reproducibility:
 
 The JSON contracts and CLI are development controls, **not a second Kanban board, traveler or approval database**. The process advisor's existing review records remain the status authority.
 
+**Pre-publication privacy preflight:** before a photographic engineering PR,
+stage only intended source changes and run
+`python3 -m photo_motion.privacy_preflight --cached --check`. It inspects
+**newly added diff lines**, not historical unchanged QA evidence or deleted
+lines. It holds explicit Google Drive/Flow locators, labeled Drive file IDs,
+private-storage URIs and uninspectable binary changes; output prints a rule
+and diff position **without displaying the matched identifier**. An exact
+SHA-256 alone is allowed because content hashes are needed for reproducibility.
+The lightweight PR CI check repeats this scan against the event's exact base
+commit, with full Git history to handle GitHub's synthetic merge checkout.
+Missing base data is a **HOLD**, never an empty-diff PASS. Use only synthetic
+fixtures in tests; keep private source links and media in the controlled
+review archive. This narrowly scoped pattern guard cannot detect every
+possible secret, obfuscated URL, identity leak or private photographic image;
+it is **not** a privacy certification or publication permission.
+
 **Photographic player-media admission:** the read-only
 [`player_media_gate.py`](PLAYER_MEDIA_ADMISSION.md) cross-checks a proposed
 private MP4's exact bytes, metadata, active-player slot timing and canonical

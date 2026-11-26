@@ -1,0 +1,33 @@
+name: Photographic private-locator preflight
+
+on:
+  pull_request:
+    paths:
+      - 'photo_motion/**'
+      - 'sprites/docs/photo_batches/**'
+      - 'sprites/docs/PHOTO_*.md'
+      - 'sprites/kit/photo_*.py'
+      - '.github/workflows/photo-private-locator-check.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  photo-private-locators:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # PR checkout may be a synthetic merge commit. Its exact event base
+          # commit and all ancestors must exist locally; shallow history can
+          # falsely yield an empty diff or fail merge-base discovery.
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Fail closed on new private photographic locators
+        env:
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: python3 -m photo_motion.privacy_preflight --base "$PR_BASE_SHA" --check
