@@ -64,6 +64,22 @@ class TestVideoQA(unittest.TestCase):
             (tmp / "run.json").write_text(json.dumps(data), encoding="utf-8")
             self.assertIn("not locally available", " ".join(read_recipe(tmp / "run.json")["warnings"]))
 
+    def test_full_decode_failure_stops_intake_before_creating_evidence(self):
+        spec_path = ROOT / "specs/chart1-kneeling-pushup.json"
+        with tempfile.TemporaryDirectory() as folder:
+            tmp = Path(folder)
+            source = tmp / "corrupt.mp4"
+            source.write_bytes(b"synthetic placeholder")
+            info = {"duration_seconds": 6, "fps": 24, "width": 640, "height": 360,
+                    "audio_stream_count": 0}
+            with patch.object(video_module, "probe", return_value=info), \
+                 patch.object(video_module, "_verify_full_video_decode",
+                              side_effect=RuntimeError("decoder detected damaged frame")) as decode:
+                with self.assertRaisesRegex(RuntimeError, "damaged frame"):
+                    inspect(load_spec(spec_path), spec_path, source, tmp / "qa")
+            decode.assert_called_once_with(source.resolve())
+            self.assertFalse((tmp / "qa").exists())
+
     @unittest.skipUnless(shutil.which("ffmpeg") and shutil.which("ffprobe"), "ffmpeg binaries not installed")
     def test_synthetic_mp4_inspection_is_nonmutating_and_unapproved(self):
         try:
