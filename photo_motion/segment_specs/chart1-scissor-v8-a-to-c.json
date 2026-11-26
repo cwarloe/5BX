@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "authority": "V8_FRAMES_DIRECT_A_C_SEGMENTS",
+  "exercise_id": "chart1-scissor-jump",
+  "duration_seconds": 3,
+  "fps": 24,
+  "aspect_ratio": "16:9",
+  "resolution": "720p",
+  "model": "Omni 1.2 Flash",
+  "generation_mode": "Frames to Video",
+  "segment_role": "A_TO_C",
+  "start_pose": "A",
+  "end_pose": "C",
+  "start_sha256": "7758266ca6b27ee7601b4635e5df9e7ee8de09aa4f3bea95caea353e4bf78f2f",
+  "end_sha256": "c0ede374ee3a65266c19b27fc0f295a44a5a95e9d3aa0c1b41982b64f4a155a0",
+  "phase_support_sequence": ["A_grounded", "airborne_exchange", "C_grounded"],
+  "form_rules": ["one true airborne exchange with both shoes off ground", "physical orange/teal arm and leg identity preserved", "straight shoulder-high opposing arms", "fixed full-body camera", "no fade, ghost, audio or extra person"],
+  "parent_v7_cycle_spec": "photo_motion/specs/chart1-scissor-jump-v7-prepared-pair.json",
+  "status": "EXPERIMENTAL"
+}
