@@ -149,6 +149,51 @@ describe("photographic React video lifecycle (synthetic DOM)", () => {
     await waitFor(() => assert.ok(count("play", player) >= 1));
   });
 
+  it("resynchronizes a completed stale seek even without a subsequent clock tick", async () => {
+    const first = photoWorkSlot("scissor", 1, 4, 42, 360);
+    const newer = photoWorkSlot("scissor", 1, 4, 43, 360);
+    const props = (slotValue) => React.createElement(PhotographicExerciseVideo, {
+      registry: validRegistry, slot: slotValue, playing: true,
+      label: "Scissor jumps", buildBase: "/5BX/game/",
+    });
+    const { container, rerender } = render(props(first));
+    const player = container.querySelector("video");
+    setMetadata(player, 5, 2, 0);
+    fireEvent.loadedMetadata(player);
+    assert.equal(player.currentTime, 2);
+
+    // Simulate slow decoder seek while the workout clock advances. The
+    // browser reports the OLD seek completion after the final React render.
+    Object.defineProperty(player, "seeking", { configurable: true, value: true });
+    rerender(props(newer));
+    Object.defineProperty(player, "seeking", { configurable: true, value: false });
+    fireEvent.seeked(player);
+
+    // The event itself must request the latest target; there may be no more
+    // clock updates after a workout pause or a background-tab suspension.
+    assert.equal(player.currentTime, 3);
+    assert.equal(player.style.visibility, "hidden");
+    assert.equal(count("play", player), 0);
+    fireEvent.seeked(player);
+    await waitFor(() => assert.equal(player.style.visibility, "visible"));
+  });
+
+  it("does not reveal a target timestamp before an in-flight seek decodes its frame", async () => {
+    const late = photoWorkSlot("scissor", 1, 4, 42, 360);
+    const { container } = mount({ slotValue: late });
+    const player = container.querySelector("video");
+    setMetadata(player, 5, 2, 0);
+    fireEvent.loadedMetadata(player);
+    assert.equal(player.currentTime, 2);
+    Object.defineProperty(player, "seeking", { configurable: true, value: true });
+    fireEvent.loadedData(player);
+    assert.equal(player.style.visibility, "hidden");
+    assert.equal(count("play", player), 0);
+    Object.defineProperty(player, "seeking", { configurable: true, value: false });
+    fireEvent.seeked(player);
+    await waitFor(() => assert.equal(player.style.visibility, "visible"));
+  });
+
   it("pauses on workout pause and tears down an old clip on segment switch", async () => {
     const props = (slotValue, playing) => React.createElement(PhotographicExerciseVideo, {
       registry: validRegistry, slot: slotValue, playing,
