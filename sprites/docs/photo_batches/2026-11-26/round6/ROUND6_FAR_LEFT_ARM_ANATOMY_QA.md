@@ -2,7 +2,7 @@
 
 All variants are experimental photographs, not human-approved video reference frames.
 
-> **Superseded by next human review / round 7:** **34I is still not acceptable** because the far upper arm remains too exposed and looks unnatural for a background limb. The new approach is to occlude the far forearm and hand entirely behind the torso, leaving only a small rear elbow. See `../round7_occluded_far_arm/ROUND7_OCCLUDED_FAR_ARM_FINDING.md` and 34J. Preserve 34I as a diagnostic, not as a preferred production frame.
+> **Superseded by next human review / round 7:** The user explicitly selected **34H** (image hash verified) and found the far upper arm still too exposed and unnatural for a background limb. The new approach is to occlude the far forearm and hand entirely behind the torso, leaving only a small rear elbow. See `../round7_occluded_far_arm/ROUND7_OCCLUDED_FAR_ARM_FINDING.md` and 34J. **34I was a parallel alternative, not the user-selected source**, and remains an unapproved diagnostic.
 
 ## Controlling human finding
 
@@ -13,14 +13,14 @@ The user re-examined the explicit **34G selected source** and found that the low
 | ID | Intent | Visual QA | Gate |
 | --- | --- | --- | --- |
 | **34H** | Shorten visible far upper arm, place elbow higher and rear hand by waistband; insist on actual left-arm attachment while preserving 2x2 leg and near-arm exchange. | Far-side elbow and fist are now much closer to the torso/waist. However, the hand closed again and looks right-fisted in silhouette. | **Diagnostic only / REJECT for current motion**. |
-| **34I** | Alternative edit from same selected base: similar far-upper-arm foreshortening plus a visible, slightly OPEN, anatomically left hand. | Human follow-up: still unnatural because too much far upper arm and wrist/hand are visible from this view. | **HUMAN REJECT for production; source for 34J occlusion test**. |
+| **34I** | Alternative edit from same selected base: similar far-upper-arm foreshortening plus a visible, slightly OPEN, anatomically left hand. | Assistant saw improved finger visibility, but the user selected 34H instead; 34I has not received separate human form approval. | **HOLD / diagnostic, not source for 34J**. |
 
 ## Reusable manufacturing lesson
 
 - A wrong-handed arm can mimic a length problem. **Inspect shoulder depth → upper-arm apparent length → elbow height/angle → forearm → actual handedness** as a *single anatomical chain*. Do not repeatedly edit the fist in isolation when the far shoulder is placed as though it belongs to the foreground side.
 - With a 3/4 camera, far limbs are partly occluded and can be *visually foreshortened* without literally giving a child different bone lengths. Upper arm should be less exposed; rear hand can sit near the rear waistband during running arm swing.
 - Pose and limb-identity QA is cross-frame: panel A foreground right arm back; panel C foreground right arm forward. Any edit that freezes it fails even when single frames look polished.
-- Preferred candidate from this test is **34I** for the far-arm geometry *only*. Retain the selected original and 34H as provenance. Need human judgment of true left-arm attachment and hand orientation before animation.
+- This experiment is superseded by the **34J occlusion** attempt, using 34H as its exact selected source. Retain 34I as a parallel diagnostic; no image here is approved for animation.
 
 ## Versioned files
 
