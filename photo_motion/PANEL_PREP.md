@@ -10,7 +10,7 @@ The top-left A panel's clean inset is half-open `(left=4, top=4, right=764, bott
 
 ## Deterministic transform, with no subject crop or stretching
 
-1. Verify that the source is an RGB/RGBA PNG, optionally matching the expected 1536×1024 dimensions and the **exact** source SHA-256.
+1. Verify that the source is an RGB/RGBA PNG. The CLI defaults to the known 1536×1024 dimensions **and exact V6 source SHA-256** so a different card of identical dimensions cannot silently pass as V6. The Python API permits callers to supply optional exact source predicates.
 2. Crop exactly `(4,4,764,508)` as an uninterrupted rectangle. Do **not** crop again to force 16:9 or resize the person independently.
 3. Require a cropped height divisible by 9 (otherwise exact 16:9 is impossible with horizontal pixel padding alone). Compute width using integer arithmetic: `504 × 16 / 9 = 896`. The deficit is 136 pixels, so add **68 pixels each side**.
 4. For each side, reflect 68 pixels of the corresponding outermost panel area. These side strips show the background in the inspected V6 panel; no subject limb reaches the strip. This reflection is deterministic and preserves all 760×504 original center pixels exactly. It can create repeated landscape details, so inspect before treating it as a polished photographic master.
@@ -29,10 +29,13 @@ python3 -m photo_motion.panel_prep /path/to/verified-V6-original.png /path/to/re
 
 That gives a **896×504** PNG and `V6_A_native_16x9.manifest.json`. For explicit 720p delivery, add `--export-size 1280x720` and use a *different, unused output filename*. The software does not overwrite, replace, or delete previous results.
 
+The CLI pins the verified V6 SHA even if `--expected-sha256` is omitted. When preparing a **different controlled source**, pass its own `--expected-sha256` to keep reproducibility anchored to that image. If a hash truly is unavailable, explicitly pass `--allow-unverified-source`; the manifest then records `expected_source_sha256: null`, `source_hash_matches_expected: false`, and subject clearance `NOT_EVALUATED`. The bypass and a supplied expected SHA are mutually exclusive.
+
 ## Important limits and follow-up gates
 
 - The four colored tags are diagnostic. In panel A the orange **wrist is forward** and orange **ankle is back**, while teal wrist is back and teal ankle is forward. This demonstrates visible track roles, not anatomically proven left/right identities from an original human capture.
 - A reflected tree/track border is a geometric preparation method, not authentic new landscape footage. There is no generative fill or claim to restore lost detail. A truly native 1280×720 or larger source should be derived independently from the same immutable chart identity anchor if product-level detail is insufficient.
+- Mirrored padding is continuous in the pixel values at each join but reflects/repeats nearby scenery. It removes a harsh seam in color, **not** the risk of visibly mirrored trees or track patterns. The measured subject-preserving center remains unmodified.
 - The side strips were visually inspected as subject-free **only** for the exact verified V6 original SHA and A crop. For a different source/crop, verify head, hands, shoes, all markers, and both side strips anew; the manifest declares completeness `NOT_EVALUATED` for such inputs.
 - A single A pose cannot establish either airborne exchange, full scissor form or a seamless video loop. It is suitable only as **one candidate start-frame input** to an independently verified motion test.
 - The manifest records a *deterministic transform* and hashes. It does not claim the result is an accepted new source identity, any AI model will animate it correctly, or a human has approved exercise safety. Store any eventual generated output and exact actual submitted prompt with the canonical photographic QA record, not as a new approval database.

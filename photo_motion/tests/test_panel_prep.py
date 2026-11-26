@@ -1,12 +1,14 @@
 import hashlib
+import io
 import json
 import tempfile
 import unittest
+from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
 
 from PIL import Image, ImageChops, ImageDraw
 
-from photo_motion.panel_prep import DEFAULT_V6_A_BOUNDS, prepare
+from photo_motion.panel_prep import DEFAULT_V6_A_BOUNDS, VERIFIED_V6_SOURCE_SHA256, main, prepare
 
 
 class PanelPreparationTests(unittest.TestCase):
@@ -49,6 +51,9 @@ class PanelPreparationTests(unittest.TestCase):
             # Right pad mirrors exact outer 68 columns, in reverse order.
             self.assertEqual(output.getpixel((828, 0)), expected.getpixel((759, 0)))
             self.assertEqual(output.getpixel((895, 0)), expected.getpixel((692, 0)))
+            # Mirrored join has no one-pixel color discontinuity (C0 seam).
+            self.assertEqual(output.getpixel((67, 0)), output.getpixel((68, 0)))
+            self.assertEqual(output.getpixel((827, 0)), output.getpixel((828, 0)))
         self.assertEqual(self.source.read_bytes(), self.original)
         self.assertEqual(result["source_image_sha256_before"], result["source_image_sha256_after"])
         self.assertEqual(hashlib.sha256(dest.read_bytes()).hexdigest(), result["output_sha256"])
@@ -56,6 +61,44 @@ class PanelPreparationTests(unittest.TestCase):
         self.assertEqual(result["video_motion_and_form"], "NOT_EVALUATED")
         self.assertEqual(result["visual_subject_completeness"], "NOT_EVALUATED_FOR_THIS_SOURCE_AND_CROP")
         self.assertIn("can repeat visual features", result["mirrored_side_extension_risk"])
+        self.assertEqual(result["expected_source_sha256"], self.hash)
+
+    def test_cli_pins_verified_v6_sha_by_default(self):
+        dest = self.folder / "wrong-source.png"
+        with redirect_stderr(io.StringIO()) as stderr:
+            status = main([str(self.source), str(dest)])
+        self.assertEqual(status, 2)
+        self.assertIn("source SHA-256 differs", stderr.getvalue())
+        self.assertFalse(dest.exists())
+        self.assertFalse(dest.with_suffix(".manifest.json").exists())
+        self.assertNotEqual(self.hash, VERIFIED_V6_SOURCE_SHA256)
+
+    def test_cli_allows_explicit_unverified_source_and_records_gate(self):
+        dest = self.folder / "explicit-other-source.png"
+        with redirect_stdout(io.StringIO()):
+            status = main([str(self.source), str(dest), "--allow-unverified-source"])
+        self.assertEqual(status, 0)
+        manifest = json.loads(dest.with_suffix(".manifest.json").read_text())
+        self.assertIsNone(manifest["expected_source_sha256"])
+        self.assertFalse(manifest["source_hash_matches_expected"])
+        self.assertEqual(manifest["visual_subject_completeness"], "NOT_EVALUATED_FOR_THIS_SOURCE_AND_CROP")
+
+    def test_cli_accepts_explicit_alternate_exact_sha(self):
+        dest = self.folder / "other-exact-sha.png"
+        with redirect_stdout(io.StringIO()):
+            status = main([str(self.source), str(dest), "--expected-sha256", self.hash])
+        self.assertEqual(status, 0)
+        manifest = json.loads(dest.with_suffix(".manifest.json").read_text())
+        self.assertEqual(manifest["expected_source_sha256"], self.hash)
+        self.assertTrue(manifest["source_hash_matches_expected"])
+
+    def test_cli_rejects_conflicting_sha_options(self):
+        dest = self.folder / "conflicting.png"
+        with redirect_stderr(io.StringIO()) as stderr, self.assertRaises(SystemExit) as raised:
+            main([str(self.source), str(dest), "--expected-sha256", self.hash, "--allow-unverified-source"])
+        self.assertEqual(raised.exception.code, 2)
+        self.assertIn("mutually exclusive", stderr.getvalue())
+        self.assertFalse(dest.exists())
 
     def test_optional_720p_export_is_16_by_9_and_manifest_discloses_resampling(self):
         dest = self.folder / "prepared720.png"

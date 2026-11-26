@@ -190,6 +190,7 @@ def prepare(source_path, output_path, *, crop=DEFAULT_V6_A_BOUNDS,
         "pillow_version": PILLOW_VERSION,
         "source_filename": src.name, "source_image_sha256_before": source_sha_before,
         "source_image_sha256_after": source_sha_after,
+        "expected_source_sha256": expected_source_sha256,
         "source_hash_matches_expected": bool(expected_source_sha256 and source_sha_before == expected_source_sha256),
         "source_size": list(image_size), "source_mode": panel.mode,
         "crop_bounds_half_open": list(box), "crop_size": [panel_w, panel_h],
@@ -233,24 +234,33 @@ def main(argv=None):
     parser.add_argument("output", type=Path, help="New PNG path. Directory must exist, no overwrite or symlink")
     parser.add_argument("--crop", type=int, nargs=4, default=DEFAULT_V6_A_BOUNDS,
                         metavar=("LEFT", "TOP", "RIGHT", "BOTTOM"), help="Half-open bounds; default verified V6 A safe inset: 4 4 764 508")
-    parser.add_argument("--expected-sha256", help="Optional exact source hash precondition")
+    parser.add_argument("--expected-sha256", help="Exact source hash precondition; defaults to the verified V6 source SHA")
+    parser.add_argument("--allow-unverified-source", action="store_true",
+                        help="Explicitly bypass the default V6 SHA pin for a different controlled source; visual clearance then NOT_EVALUATED")
     parser.add_argument("--expected-size", type=_parse_pair, default=EXPECTED_V6_CARD_SIZE,
                         help="Original source dimensions, default 1536x1024; pass another explicit size for other controlled tests")
     parser.add_argument("--export-size", type=_parse_pair, help="Optional true 16:9 export, e.g. 1280x720")
     args = parser.parse_args(argv)
+    if args.allow_unverified_source and args.expected_sha256 is not None:
+        parser.error("--allow-unverified-source and --expected-sha256 are mutually exclusive")
+    expected_sha256 = (None if args.allow_unverified_source
+                       else args.expected_sha256 or VERIFIED_V6_SOURCE_SHA256)
     try:
         result = prepare(args.source, args.output, crop=args.crop,
-                         expected_source_sha256=args.expected_sha256,
+                         expected_source_sha256=expected_sha256,
                          expected_source_size=args.expected_size,
                          export_size=args.export_size)
     except (ValueError, FileExistsError, FileNotFoundError, RuntimeError, OSError) as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         return 2
     print(json.dumps({"source_sha256": result["source_image_sha256_before"],
+                      "expected_source_sha256": result["expected_source_sha256"],
+                      "source_hash_matches_expected": result["source_hash_matches_expected"],
                       "output_sha256": result["output_sha256"],
                       "output_size": result["output_size"],
                       "crop_bounds_half_open": result["crop_bounds_half_open"],
                       "padding": result["padding"],
+                      "visual_subject_completeness": result["visual_subject_completeness"],
                       "manifest": str(Path(args.output).with_suffix(".manifest.json"))}, indent=2))
     return 0
 
