@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "authority": "V9_DIRECT_A_OR_C_OUTPAINT_IMAGE_EDIT",
+  "exercise_id": "chart1-scissor-jump",
+  "artifact_kind": "EXPERIMENTAL_DERIVED_STILL_NOT_VIDEO",
+  "source_authority": "V7_DIRECT_PREPARED_PAIR",
+  "source_png_sha256": {
+    "A": "7758266ca6b27ee7601b4635e5df9e7ee8de09aa4f3bea95caea353e4bf78f2f",
+    "C": "c0ede374ee3a65266c19b27fc0f295a44a5a95e9d3aa0c1b41982b64f4a155a0"
+  },
+  "source_size": [1280, 720],
+  "source_format": "RGB PNG",
+  "provider": "Google Flow",
+  "model": "Nano Banana 2.1",
+  "settings": {
+    "generation_mode": "Image editor",
+    "aspect_ratio": "Original",
+    "thinking_level": "High",
+    "requested_outputs": 1
+  },
+  "provider_quote_credits": "0",
+  "parent_v6_card_status": "UNAVAILABLE_NOT_BYTE_REPLAY_VERIFIED",
+  "status": "EXPERIMENTAL_UNREVIEWED_DERIVED_STILL"
+}
