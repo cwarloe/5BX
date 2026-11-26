@@ -1,6 +1,6 @@
 /* 5BX service worker — offline-first for a fixed, tiny asset set. */
 
-var CACHE = '5bx-v19';
+var CACHE = '5bx-v20';
 var ASSETS = [
   './',
   './index.html',
@@ -76,6 +76,10 @@ self.addEventListener('fetch', function (e) {
   // Match the directory URL without its trailing slash too: the server redirects
   // /game to /game/, and that navigation must not be cached as this app's home page.
   if (url.pathname.indexOf(gamePath) === 0 || url.pathname === gamePath.slice(0, -1)) return;
+
+  // Independent photographic traveler must not poison the offline workout shell.
+  var photoTravelerPath = new URL('./photo-traveler/', self.location).pathname;
+  if (url.pathname.indexOf(photoTravelerPath) === 0 || url.pathname === photoTravelerPath.slice(0, -1)) return;
 
   // Navigations: network first so updates land, cache as the offline fallback.
   if (req.mode === 'navigate') {
