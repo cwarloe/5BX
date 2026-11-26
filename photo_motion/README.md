@@ -178,6 +178,11 @@ from the surviving original A/C inputs and one pinned experimental canvas
 JPEG, plus an independently bound source-pair QA report, before any paid
 segment reservation. It never upgrades V7/V8 source claims or approves form.
 
+The [V11 read-only airborne-apex candidate preflight](V11_APEX_CANDIDATE.md)
+tests a separately generated B* still against exact V10 source replay and
+independent full-body/marker/clearance measurements. It **cannot authorize
+Flow credits** or form/release acceptance; current B* review remains HOLD.
+
 The first actual-video engineering smoke run is documented in [`diagnostics/video10-kneeling-pushup-2026-11-26.md`](diagnostics/video10-kneeling-pushup-2026-11-26.md). It checked the original blue-shirt Flow video 10 and found a contact/loop registration issue worth measuring before any approval. The raw private MP4 and extracted frames are not committed here.
 
 ## Additional real-video diagnostics
