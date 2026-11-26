@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "id": "c1-ex4-kneeling-pushup-photo-v1",
+  "chart": 1,
+  "exercise": 4,
+  "name": "Kneeling push-up (up, down, fully back up)",
+  "movement_type": "kneeling_pushup",
+  "status": "EXPERIMENTAL",
+  "duration_seconds": 6.0,
+  "fps": 24,
+  "identity_reference": "sprites/docs/PHOTOREALISTIC_AVATAR_DIRECTION_2026-11-25.md; same Chart 1 photo identity master, not a descendant of another video",
+  "movement_reference": "sprites/docs/PHOTO_PILOT_RUN_KNEE_PUSHUP_CURRENT_IDENTITY_2026-11-25.md; historical 5BX knee push-up",
+  "camera": {
+    "locked": true,
+    "description": "Fixed 90-degree side profile, full body in frame on red running track, no camera movement"
+  },
+  "rules": [
+    "One realistic normal 12–14-year-old boy with unchanged face, hair, outfit, body length and setting",
+    "Both palms and both knees remain firmly planted on their original track marks for the full clip",
+    "Both elbows bend and straighten together, shoulder to hip to knee remains a continuous line",
+    "Lower legs remain bent behind planted knees; no toe-supported plank and no raised knees",
+    "After reaching the low point, return the ENTIRE torso and head to the original straight-elbow start pose",
+    "Continuous real body motion; no fades, still-image dissolves, ghost arms, cuts or camera moves"
+  ],
+  "phases": [
+    {"id": "A", "time_seconds": 0.0, "pose_key": "start", "support": "grounded", "contacts": ["left_palm", "right_palm", "left_knee", "right_knee"], "elbows": "extended", "pose": "Begin at kneeling push-up top, palms and knees planted, both elbows extended, torso aligned"},
+    {"id": "B", "time_seconds": 1.5, "pose_key": "lowering", "support": "grounded", "contacts": ["left_palm", "right_palm", "left_knee", "right_knee"], "elbows": "bending", "pose": "Both elbows bend together; shoulders, head and trunk descend as one aligned body"},
+    {"id": "C", "time_seconds": 3.0, "pose_key": "bottom", "support": "grounded", "contacts": ["left_palm", "right_palm", "left_knee", "right_knee"], "elbows": "bent", "pose": "Reach low point with both elbows visibly bent and chin naturally above the track; do not force contact"},
+    {"id": "D", "time_seconds": 6.0, "pose_key": "start", "support": "grounded", "contacts": ["left_palm", "right_palm", "left_knee", "right_knee"], "elbows": "extended", "pose": "Return head, torso and both elbows fully to the identical top posture, with hands and knees unmoved"}
+  ]
+}
