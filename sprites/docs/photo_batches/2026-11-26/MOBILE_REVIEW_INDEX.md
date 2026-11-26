@@ -2,7 +2,13 @@
 
 Updated 2026-11-26 UTC. All assets are experimental; **no human final exercise-form approvals**. Open the contact sheets directly in Google Drive; no GitHub downloads required for viewing.
 
-## Latest round 4 — 34C rejected, safer partial V tested
+## Latest round 5 — 34B's hand orientation was the real problem
+
+- **Human diagnosis:** In 34B's lower-left knee-up pose, the far trailing **left arm appears to end in a right-hand-shaped fist**: the knuckles face us, when the curled finger side should face us. The long-looking arm was secondary. Do not rework otherwise successful arm swing or leg alternation to solve a fist-rotation problem.
+- **34E direct hand-orientation test from 34B:** [**finger/knuckle close-up before vs after**](https://drive.google.com/file/d/1mPa__3QCVtmATiZvRNPjy7mHyKZTgnnB/view) | [full four-panel comparison](https://drive.google.com/file/d/1k8S2C_bGwWprb5R4aGcElYTb99N2T_Iy/view) | [full 34E image](https://drive.google.com/file/d/16bFGVBQeMk9rBi-fOwVl1AaRjVmaAtqg/view). The finger side is more visible, though the hand shifted slightly closer to his body. **Human review candidate, not video-approved.**
+- [Round 5 exact hand-edit prompt and QA](https://github.com/cwarloe/5BX/blob/main/sprites/docs/photo_batches/2026-11-26/round5/ROUND5_HANDEDNESS_FINDING_AND_QA.md). **34C remains rejected** for frozen near-arm motion; **34D is historical**, because it changed the arm shape instead of the underlying handedness issue.
+
+## Round 4 — 34C rejected, safer partial V tested
 
 - **34D high-knee review:** [34B vs 34D mobile comparison](https://drive.google.com/file/d/1opHlXgrygzG6y0TcORIkmyPDhksTmmJ8/view) | [full 34D](https://drive.google.com/file/d/12nVC2cfGtKtqA-nn3T6We9XdFcXjOjSr/view). From trusted **34B**, only the *far/background* arm in the second knee-lift panel was adjusted. **Near/foreground arm visibly alternates** across knee lifts. Review candidate only.
 - **29K partial V review:** [earlier almost-there vs 29K comparison](https://drive.google.com/file/d/1r9R4Pwfo_dp5g81hvQ_mHDe0TPVqadod/view) | [full 29K](https://drive.google.com/file/d/1KLq1B17moAgQ_6GuuosmrsUb0Mjlibbx/view). **No required forehead contact**; head near hands and elbows less contorted. Review candidate, not approved video frame.
