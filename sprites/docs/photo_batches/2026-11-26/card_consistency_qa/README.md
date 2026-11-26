@@ -17,6 +17,14 @@ python3 -m unittest discover -s . -p 'test_*.py' -v
 
 Requires Python, Pillow, NumPy, SciPy. No network/model credits.
 
+The first implementation scanned only entire rows, which falsely marked the
+Chart 2 prone back-extension card as 32 px out of registration: the long torso
+occluded much of the track. The corrected scan prefers left/right 8% strips,
+where the track edge is visible, then falls back to the original full-row
+method. On `C2BE01`, the corrected spread is **1 px PASS**, and the blue
+shirt median range is **4/255 PASS**. A synthetic prone-occlusion regression
+test prevents this false positive from silently returning.
+
 ## Verified local example: 34J → 34K
 
 | Check | 34J | 34K | Result |
