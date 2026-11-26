@@ -386,7 +386,10 @@ def _validate_request(request):
             "exercise_id": request["exercise_id"], "spec_sha256": spec_sha,
             "spec_reference": spec.name, "submitted_prompt": content, "submitted_prompt_sha256": _digest_bytes(prompt_bytes),
             "input_assets": clean_assets, "provider": request["provider"], "model": request["model"],
-            "settings": request["settings"], "estimated_credits": estimate,
+            # Do not retain the caller's mutable dict across verification and
+            # reservation fingerprinting; a concurrent edit could otherwise
+            # inject an unquoted output multiplier after validation.
+            "settings": json.loads(_canonical(request["settings"])), "estimated_credits": estimate,
             "source_preflight": source_preflight}
 
 
