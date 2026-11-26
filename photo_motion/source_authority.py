@@ -20,3 +20,13 @@ V6_PANEL_C_OPPOSITE_STATE = {
     "orange_arm": "back", "teal_arm": "forward",
 }
 V6_ANATOMICAL_LEFT_RIGHT_PROVEN = False
+
+# V7 is a new, strictly narrower direct-image authority. The original V6
+# 1536x1024 card was lost with ephemeral workspace state. These hashes pin
+# independently archived, byte-exact prepared PNGs; they do NOT reconstruct or
+# independently verify the parent V6 crop/padding/resampling provenance.
+V7_PREPARED_PAIR_AUTHORITY = "V7_DIRECT_PREPARED_PAIR"
+V7_PREPARED_A_SHA256 = "7758266ca6b27ee7601b4635e5df9e7ee8de09aa4f3bea95caea353e4bf78f2f"
+V7_PREPARED_C_SHA256 = "c0ede374ee3a65266c19b27fc0f295a44a5a95e9d3aa0c1b41982b64f4a155a0"
+V7_PREPARED_SIZE = (1280, 720)
+V7_PARENT_V6_STATUS = "UNAVAILABLE_NOT_BYTE_REPLAY_VERIFIED"
