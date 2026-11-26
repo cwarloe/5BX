@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#152334">
+<meta name="description" content="Mobile-first review traveler for 5BX photographic pilot exercise cards, QA status, prompt lineage, and original high-resolution stills.">
+<title>5BX Photographic Pilot — Review Traveler</title>
+<style>
+  :root {font:16px/1.46 system-ui,-apple-system,Segoe UI,sans-serif;color:#172434;background:#edf2f5}
+  * {box-sizing:border-box}
+  body {margin:0}
+  a {color:#075c9e}
+  a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible {outline:3px solid #ff9a1f;outline-offset:3px}
+  header {background:#152334;color:#fff}
+  .wrap {width:min(100%,1300px);margin:0 auto;padding:20px clamp(12px,3vw,32px)}
+  h1 {font-size:clamp(1.65rem,4vw,2.6rem);line-height:1.17;margin:6px 0 10px}
+  h2 {font-size:1.32rem;line-height:1.3}
+  p {margin:10px 0}
+  .muted {color:#607181}
+  .hero-notice {background:#294052;border-left:4px solid #ffb451;padding:10px 13px;border-radius:4px;margin-top:12px}
+  .hero-links {display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+  .hero-links a {background:#fff;color:#122a40;border-radius:7px;padding:10px 12px;font-weight:700;text-decoration:none;min-height:44px;display:inline-flex;align-items:center}
+  .toolbar {background:#fff;border:1px solid #cfd9df;border-radius:13px;padding:15px;display:grid;grid-template-columns:minmax(0,2fr) repeat(2,minmax(130px,1fr));gap:11px;box-shadow:0 2px 10px #142a3a12}
+  .toolbar label {display:block;font-weight:700;font-size:.82rem;margin-bottom:4px}
+  input,select {border:1px solid #9baebc;border-radius:7px;padding:11px 12px;background:#fff;color:#172434;width:100%;font:inherit;min-height:45px}
+  .metrics {display:flex;gap:8px;flex-wrap:wrap;margin:13px 0}
+  .metric {background:#e2eaf0;border-radius:8px;padding:7px 11px;font-size:.88rem}
+  .metric strong {font-size:1.05rem}
+  .cards {display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr));gap:15px;padding-bottom:20px}
+  article {min-width:0;background:white;border:1px solid #cdd8df;border-radius:12px;overflow:hidden;box-shadow:0 2px 7px #182c3b16;display:flex;flex-direction:column}
+  article:target {outline:4px solid #f1ab3d;scroll-margin-top:14px}
+  .card-head {padding:14px 15px 10px;display:flex;justify-content:space-between;gap:12px;align-items:start}
+  .eyebrow {font-size:.77rem;letter-spacing:.055em;color:#4a6578;font-weight:800}
+  .card-head h3 {font-size:1.14rem;line-height:1.23;margin:5px 0 0}
+  .pill {padding:5px 8px;border-radius:999px;font-size:.72rem;font-weight:800;white-space:nowrap}
+  .pill.candidate {background:#d9f4e4;color:#13613a}
+  .pill.conditional {background:#e0effc;color:#14517d}
+  .pill.hold,.pill.video-unverified {background:#fff1cc;color:#77520a}
+  .pill.reject {background:#ffe0dd;color:#9b2921}
+  .photo {aspect-ratio:1.12;background:linear-gradient(125deg,#d5dce2,#f2f5f6);position:relative;display:grid;place-items:center}
+  .photo img {display:block;width:100%;height:100%;object-fit:contain}
+  .photo .photo-fallback {padding:16px;text-align:center;color:#516678;font-size:.87rem}
+  .body {padding:12px 15px 15px;display:flex;flex-direction:column;flex:1}
+  .body p {font-size:.91rem;margin:0 0 12px}
+  .actions {display:flex;flex-wrap:wrap;gap:8px;margin-top:auto}
+  .actions a {background:#185c8e;color:#fff;text-decoration:none;padding:10px 12px;border-radius:7px;font-weight:750;font-size:.88rem;min-height:44px;display:inline-flex;align-items:center}
+  .actions a.secondary {background:#e6f0f6;color:#174f74}
+  details {border-top:1px solid #e0e7eb;margin-top:12px;padding-top:10px;font-size:.87rem}
+  summary {cursor:pointer;color:#145782;font-weight:750}
+  details ul {margin:9px 0 0;padding-left:20px}
+  details li {padding:3px 0}
+  .overview {display:flex;gap:9px;flex-wrap:wrap;margin-bottom:14px}
+  .overview a {font-size:.84rem;display:inline-flex;min-height:40px;align-items:center;padding:8px 10px;border:1px solid #bdd1dc;background:#fff;border-radius:7px;font-weight:700;text-decoration:none}
+  .refs {background:#fff;padding:15px 17px;border:1px solid #cbd8df;border-radius:12px}
+  .refs ul {padding-left:22px}
+  .refs li {margin:9px 0}
+  .loading {padding:35px;text-align:center;background:#fff;border-radius:12px}
+  footer {font-size:.84rem;color:#516371;padding:12px 0 28px}
+  @media(max-width:700px) {
+    .toolbar {grid-template-columns:1fr 1fr}
+    .toolbar .search {grid-column:1/-1}
+    .wrap {padding:14px 12px}
+    .hero-links a {flex:1}
+  }
+  @media(max-width:470px) {
+    .cards {grid-template-columns:1fr}
+    .photo {aspect-ratio:1.4}
+    .toolbar {grid-template-columns:1fr}
+    .toolbar .search {grid-column:auto}
+    .card-head {padding:13px}
+  }
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <div class="eyebrow" style="color:#e9b26e">5BX · Production traveler · Photographic pilot</div>
+  <h1>Every exercise, one review page</h1>
+  <p>Tap any card for its full-resolution source. Compare variants, inspect anatomical caveats, and locate the prompt that produced it.</p>
+  <div class="hero-notice" role="note"><strong>Experimental studies only.</strong> No image or video here is approved as safe/correct workout instruction. A strong still image is not proof of realistic motion.</div>
+  <div class="hero-links">
+    <a href="#asset-34K">Latest high knees · 34K</a>
+    <a href="#stills">High-resolution single stills</a>
+    <a href="#reference">Source references &amp; prompts</a>
+  </div>
+</div></header>
+<main class="wrap">
+  <form class="toolbar" id="filters" onsubmit="return false">
+    <div class="search"><label for="query">Search exercise or test number</label><input type="search" id="query" placeholder="e.g. knee, 34K, elbow"></div>
+    <div><label for="chart">Chart</label><select id="chart"><option value="all">All six charts</option></select></div>
+    <div><label for="status">Review state</label><select id="status"><option value="all">Every state</option><option value="candidate">Promising candidate</option><option value="conditional">Conditional</option><option value="hold">Safety / form hold</option><option value="video-unverified">Video unverified</option></select></div>
+  </form>
+  <div class="metrics" id="metrics" aria-live="polite"></div>
+  <nav class="overview" id="overviews" aria-label="Chart review contact sheets"></nav>
+  <div class="cards" id="cards"><p class="loading">Loading photographic review manifest…</p></div>
+  <section class="refs" id="stills"><h2>High-resolution individual stills</h2>
+    <p>These separate full-resolution photographs are useful when checking camera crop, age, complexion, hand/foot position, and wardrobe consistency.</p>
+    <ul id="stills-list"></ul>
+  </section>
+  <section class="refs" id="reference" style="margin-top:16px"><h2>Source references and prompts</h2>
+    <ul id="reference-list"></ul>
+    <p>Not every test has a stand-alone exact-prompt file yet. A missing prompt link means unindexed, not verified. Identity and exercise biomechanics must be reviewed separately.</p>
+  </section>
+  <footer id="footer">Card status is provisional. Use numbered tests to compare revisions without overwriting earlier images.</footer>
+</main>
+<script>
+"use strict";
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const drive=id=>"https://drive.google.com/file/d/"+encodeURIComponent(id)+"/view";
+const urlFor=item=>item.url||drive(item.driveId);
+const safe=url=>/^https:\/\/(?:drive\.google\.com|flow\.google\.com|github\.com)\//.test(url)?url:"#";
+const anchor=(href,label,cls="")=>'<a class="'+cls+'" href="'+esc(safe(href))+'" target="_blank" rel="noopener noreferrer">'+esc(label)+'</a>';
+const items=data=>data.cards||[];
+let manifest=null;
+function card(item) {
+  const heroUrl=urlFor(item);
+  const pic=item.driveId?'<img loading="lazy" src="https://drive.google.com/thumbnail?id='+encodeURIComponent(item.driveId)+'&sz=w600" alt="'+esc(item.title)+' photo card" onerror="this.style.display=\'none\';this.parentElement.insertAdjacentText(\'beforeend\',\'Preview unavailable — open full card in Drive.\')">':'<div class="photo-fallback">Motion clip. Open the video to review.</div>';
+  const extra=[...(item.stills||[]).map(s=>({title:s.title,href:drive(s.id)})),...(item.variants||[]).map(s=>({title:s.title,href:drive(s.id)}))];
+  const extras=extra.length?'<details><summary>Prior variants / individual stills ('+extra.length+')</summary><ul>'+extra.map(s=>'<li>'+anchor(s.href,s.title)+'</li>').join('')+'</ul></details>':"";
+  return '<article id="asset-'+esc(item.id)+'"><div class="card-head"><div><div class="eyebrow">CHART '+item.chart+' · TEST '+esc(item.id)+'</div><h3>'+esc(item.title)+'</h3></div><span class="pill '+esc(item.status)+'">'+esc(item.status.replace("-"," "))+'</span></div><a class="photo" href="'+esc(safe(heroUrl))+'" target="_blank" rel="noopener noreferrer" aria-label="Open '+esc(item.id)+' full size">'+pic+'</a><div class="body"><p>'+esc(item.note)+'</p><div class="actions">'+anchor(heroUrl,item.url?"Watch video":"Open full-size card")+ (item.prompt?anchor(item.prompt,"Exact prompt","secondary"):"")+'</div>'+extras+'</div></article>';
+}
+function paint() {
+  if(!manifest)return;
+  const q=$("query").value.trim().toLowerCase(), chart=$("chart").value, status=$("status").value;
+  const visible=items(manifest).filter(x=>(chart==="all"||String(x.chart)===chart)&&(status==="all"||x.status===status)&&(!q||[x.id,x.title,x.note,x.status,"chart "+x.chart].join(" ").toLowerCase().includes(q)));
+  $("cards").innerHTML=visible.length?visible.map(card).join(""):'<div class="loading">No matching cards. Try a broader search or clear a filter.</div>';
+  $("metrics").innerHTML='<div class="metric"><strong>'+visible.length+'</strong> matching cards</div><div class="metric"><strong>'+items(manifest).length+'</strong> total tests</div><div class="metric"><strong>0</strong> production approvals</div>';
+}
+function init(data) {
+  if(!data||data.schema!=="5bx-photo-traveler/v1"||!Array.isArray(data.cards)) throw new Error("Unsupported traveler data");
+  manifest=data;
+  $("chart").innerHTML='<option value="all">All six charts</option>'+data.charts.map(c=>'<option value="'+c.id+'">Chart '+c.id+'</option>').join("");
+  $("overviews").innerHTML=data.charts.map(c=>anchor(c.overview,"Chart "+c.id+" overview")).join("");
+  const stills=items(data).flatMap(x=>(x.stills||[]).map(s=>({test:x.id,...s})));
+  $("stills-list").innerHTML=stills.map(s=>'<li>'+anchor(drive(s.id),s.test+" · "+s.title)+'</li>').join("")+'<li>'+anchor(drive("106bH7oPR8fB6trXiOXppJ95DtG-WcP0Z"),"34K · full-resolution four-frame high-knee card")+'</li>';
+  $("reference-list").innerHTML='<li>'+anchor(data.identity.url,data.identity.title)+'</li><li>'+anchor(data.promptArchive,"Exact image prompts, safety holds, pose QA and failed experiments")+'</li><li>'+anchor("https://github.com/cwarloe/5BX/tree/main/sprites/prompts/refs","Original 5BX booklet exercise illustrations")+'</li><li>'+anchor("https://github.com/cwarloe/5BX/blob/main/sprites/docs/photo_batches/2026-11-26/card_consistency_qa/README.md","Automated card continuity QC (pose registration, shirt/short color drift)")+'</li>';
+  ["query","chart","status"].forEach(id=>$(id).addEventListener(id==="query"?"input":"change",paint));
+  paint();
+  if(location.hash&&location.hash.startsWith("#asset-"))setTimeout(()=>document.getElementById(location.hash.slice(1))?.scrollIntoView(),150);
+}
+fetch("./data.json",{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error("HTTP "+r.status);return r.json()}).then(init).catch(err=>{$("cards").innerHTML='<p class="loading">The review manifest could not be loaded ('+esc(err.message)+'). Open this page on the published site or run a local HTTP server.</p>'});
+</script>
+</body></html>
