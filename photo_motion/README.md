@@ -135,3 +135,10 @@ For example, after saving the true input MP4 and a contact-annotation file, run 
 5. Only after a specific video passes human form/motion review should it be considered for Mixer integration. There is no automatic publication step in this tool.
 
 The existing photographic standard work is in [`sprites/docs/PHOTOGRAPHIC_PRODUCTION_STANDARD_WORK.md`](../sprites/docs/PHOTOGRAPHIC_PRODUCTION_STANDARD_WORK.md) and the grounded scissor-marker experiments are in [`sprites/docs/photo_batches/2026-11-26/COLOR_MARKER_POSE_CONTROL_PLAYBOOK.md`](../sprites/docs/photo_batches/2026-11-26/COLOR_MARKER_POSE_CONTROL_PLAYBOOK.md). Their verdicts supersede any earlier generic animation advice.
+
+For a *later*, explicitly requalified framing-only experiment, the
+[`pair_reframe.py`](PAIR_REFRAME.md) utility can resize a pair of byte-pinned
+photographic A/C references together, preserving both originals and recording
+every central-resize and reflected-border pixel operation. Its derived images
+are not substitutes for any V6/V7 verified-source authority, and no extra Flow
+credits or video generation are triggered by preparation.
