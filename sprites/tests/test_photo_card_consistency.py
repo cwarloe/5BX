@@ -5,14 +5,17 @@ import unittest
 from pathlib import Path
 import sys
 
-from PIL import Image, ImageDraw
-
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 if (HERE.parent / "kit").is_dir():
     sys.path.insert(0, str(HERE.parent / "kit"))
 
-from photo_card_consistency import audit, compare
+try:
+    from PIL import Image, ImageDraw
+    from photo_card_consistency import audit, compare
+    OPTIONAL_MEDIA_DEPENDENCIES = True
+except ImportError:
+    OPTIONAL_MEDIA_DEPENDENCIES = False
 
 
 def synthetic_card(second_top_track: int = 75, shirt_rgb=(28, 110, 218)):
@@ -30,6 +33,8 @@ def synthetic_card(second_top_track: int = 75, shirt_rgb=(28, 110, 218)):
     return im
 
 
+@unittest.skipUnless(OPTIONAL_MEDIA_DEPENDENCIES,
+                     "Optional photographic QA requires Pillow, NumPy and SciPy")
 class PhotoCardTest(unittest.TestCase):
     def test_aligned_card_reports_track_and_shirt_pass(self):
         with tempfile.TemporaryDirectory() as temp:
