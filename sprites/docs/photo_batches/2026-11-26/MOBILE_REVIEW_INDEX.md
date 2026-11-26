@@ -2,10 +2,16 @@
 
 Updated 2026-11-26 UTC. All assets are experimental; **no human final exercise-form approvals**. Open the contact sheets directly in Google Drive; no GitHub downloads required for viewing.
 
-## Latest round 3 human feedback — overrides earlier internal V-pike QA
+## Latest round 4 — 34C rejected, safer partial V tested
 
-- **29H now HUMAN ELBOW SAFETY HOLD**. The user identified remaining hyperextension after our prior internal geometry pass, which is **revoked**. [Current Chart 3 safety board](https://drive.google.com/file/d/1eqWJDLNBOqAWZJ69cMcH7rjAG80xaN1R/view). [29I vs 29J controlled elbow-bend tests](https://drive.google.com/file/d/1F86BZcNdPBvNHvg2S_Q-I8SaLS3JPlCy/view): experimental only, not verified or animated.
-- **34C natural rear-arm test:** [34B vs 34C mobile comparison](https://drive.google.com/file/d/1r7UIo_7XspXtS6cXxdMxdJqa8KYqFJy9/view) and [full-size 34C](https://drive.google.com/file/d/1UVaheTjZOrcbEOrjiaK1VDzesy5FWkEa/view). Trailing elbow is bent and hand by hip; preserve established 34A→34B leg lineage. **Conditional still, no video yet.**
+- **34D high-knee review:** [34B vs 34D mobile comparison](https://drive.google.com/file/d/1opHlXgrygzG6y0TcORIkmyPDhksTmmJ8/view) | [full 34D](https://drive.google.com/file/d/12nVC2cfGtKtqA-nn3T6We9XdFcXjOjSr/view). From trusted **34B**, only the *far/background* arm in the second knee-lift panel was adjusted. **Near/foreground arm visibly alternates** across knee lifts. Review candidate only.
+- **29K partial V review:** [earlier almost-there vs 29K comparison](https://drive.google.com/file/d/1r9R4Pwfo_dp5g81hvQ_mHDe0TPVqadod/view) | [full 29K](https://drive.google.com/file/d/1KLq1B17moAgQ_6GuuosmrsUb0Mjlibbx/view). **No required forehead contact**; head near hands and elbows less contorted. Review candidate, not approved video frame.
+- **Human rejections:** **34C REJECT** — foreground arm froze between leg changes; **29H/29I/29J REJECT** for production motion — overlong/hyperextended arms and disconnected-looking head. All remain archived for reproducibility. [Round 4 critique and exact prompts](https://github.com/cwarloe/5BX/blob/main/sprites/docs/photo_batches/2026-11-26/round4/ROUND4_HUMAN_FEEDBACK_AND_QA.md).
+
+## Historical round 3 feedback — superseded above
+
+- **29H failed elbow-form test**. The user identified remaining hyperextension after the earlier geometry pass, which was revoked. [Chart 3 historical safety board](https://drive.google.com/file/d/1eqWJDLNBOqAWZJ69cMcH7rjAG80xaN1R/view). [29I vs 29J historical controlled tests](https://drive.google.com/file/d/1F86BZcNdPBvNHvg2S_Q-I8SaLS3JPlCy/view): **also rejected for production**.
+- **34C rejected rear-arm test:** [34B vs 34C historical comparison](https://drive.google.com/file/d/1r7UIo_7XspXtS6cXxdMxdJqa8KYqFJy9/view) and [full-size 34C](https://drive.google.com/file/d/1UVaheTjZOrcbEOrjiaK1VDzesy5FWkEa/view). **REJECT — foreground arm did not alternate when the legs did.**
 - **Standard and wide-hand push-ups:** The user rated them good/better; defer further cosmetic changes. [Round 3 exact prompts + skeptical QA](https://github.com/cwarloe/5BX/blob/main/sprites/docs/photo_batches/2026-11-26/round3/ROUND3_HUMAN_FEEDBACK_AND_QA.md).
 
 ## Most recent round 2 refinements — independent identity vetoes included
