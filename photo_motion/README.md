@@ -122,6 +122,12 @@ python3 -m photo_motion inspect photo_motion/specs/chart1-scissor-jump.json /pat
 
 Each inspection records the exact MP4 SHA-256, contract SHA-256, exact submitted prompt SHA-256 (if supplied), provider/model/known settings, original frame references, codec, FPS, phase sampling times, and any technical warnings. This makes deterministic **downstream inspection** repeatable and preserves the experimental recipe. AI video synthesis itself may be nondeterministic even when all known inputs match.
 
+Before extracting the sparse phase samples, inspection decodes the entire
+video stream with fatal decoder-error handling. This catches damaged frames
+between target timestamps that a successful container probe or contact sheet
+would miss. It is a read-only technical intake check and still cannot certify
+motion, anatomy, camera stability or exercise form.
+
 ### Provider/model/prompt drift canary
 
 The offline [`drift_canary.py`](DRIFT_CANARY.md) compares two existing immutable

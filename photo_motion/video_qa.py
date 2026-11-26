@@ -166,6 +166,19 @@ def _extract(video, at, out):
         raise RuntimeError(f"ffmpeg did not extract a frame at {at:.3f}s")
 
 
+def _verify_full_video_decode(video):
+    """Reject a clip with damaged frames outside the sparse phase samples.
+
+    ffprobe can read valid container metadata while the payload has corrupt
+    frames. Decode the *entire* video stream to a null sink, treating decoder
+    errors as fatal, without modifying the source or creating output media.
+    This is a technical intake gate, not a motion/form judgment.
+    """
+    _run(["ffmpeg", "-nostdin", "-hide_banner", "-loglevel", "error",
+          "-xerror", "-err_detect", "explode", "-i", str(video),
+          "-map", "0:v:0", "-an", "-f", "null", "-"])
+
+
 def _contact_sheet(samples, out, name):
     from PIL import Image, ImageDraw
 
@@ -213,6 +226,7 @@ def inspect(spec, spec_path, video_path, out_dir, recipe_path=None):
     video_sha256 = file_sha256(video)
     spec_sha256 = file_sha256(spec_path)
     info = probe(video)
+    _verify_full_video_decode(video)
     audio_policy = spec.get("audio_policy", "unspecified")
     if audio_policy not in {"unspecified", "forbid"}:
         raise ValueError(f"unsupported audio_policy {audio_policy!r}")
