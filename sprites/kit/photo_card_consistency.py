@@ -66,14 +66,35 @@ def dominant_blue_shirt(panel: Image.Image) -> dict | None:
 
 
 def track_boundary(panel: Image.Image) -> int | None:
-    """First majority-red row in the bottom part of an individual panel."""
+    """First red track row, preferring uncluttered outer image strips.
+
+    Prone exercises cover much of the first red track row with a horizontal
+    torso. A whole-row majority can falsely report different horizon heights.
+    First inspect the left/right 8% strips; fall back to the full-width scan
+    only when both strips are occluded or unsuitable.
+    """
     rgb = np.asarray(panel.convert("RGB"), dtype=np.float32)
     r, g, b = rgb[:, :, 0], rgb[:, :, 1], rgb[:, :, 2]
     red = (r > 85) & (r > 1.20 * g) & (r > 1.27 * b) & (g < 145)
-    fraction = red.mean(axis=1)
-    y = np.arange(len(fraction))
-    hits = np.flatnonzero((fraction >= 0.68) & (y >= len(y) * 0.30))
-    return int(hits[0]) if len(hits) else None
+    y = np.arange(red.shape[0])
+    margin = max(6, int(red.shape[1] * .08))
+
+    def first_red(strip, minimum_fraction=.67):
+        fraction = strip.mean(axis=1)
+        hits = np.flatnonzero((fraction >= minimum_fraction)
+                              & (y >= len(y) * .25))
+        return int(hits[0]) if len(hits) else None
+
+    edges = [
+        first_red(red[:, :margin]),
+        first_red(red[:, -margin:]),
+    ]
+    edges = [edge for edge in edges if edge is not None]
+    if edges:
+        # The earlier clean edge usually preserves the actual track entry
+        # when a shoe or arm occludes the other edge.
+        return min(edges)
+    return first_red(red, .68)
 
 
 def audit(path: Path) -> dict:
