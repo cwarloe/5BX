@@ -375,7 +375,34 @@ def _validate_request(request):
                              "verification": "rehashed_from_local_bytes" if actual else "declared_unverified"})
     source_preflight = None
     entry = request.get("source_preflight")
-    if isinstance(entry, dict) and entry.get("authority") == "V12_REVIEWED_APEX_B002_FRAMES_360P":
+    if isinstance(entry, dict) and entry.get("authority") == "V13_V12_RAW_ARM_ONLY_V2V_EDIT_360P":
+        from .preflight_v13_v2v import (
+            verify_v12_source, verify_ui_observation as verify_v13_ui,
+            V13PreflightError, FLOW_MODEL as V13_MODEL,
+            FLOW_SETTINGS as V13_SETTINGS, PROMPT_SHA256 as V13_PROMPT_SHA256,
+        )
+        if request["exercise_id"] != "chart1-scissor-jump" or set(entry) != {
+                "authority", "raw_v12_video", "independent_v12_qa",
+                "existing_ledger_store", "flow_ui_observation"}:
+            raise ExperimentError("V13 requires exact raw V12/independent HOLD QA, its native ledger, and fresh Flow edit evidence")
+        if _digest_bytes(prompt_bytes) != V13_PROMPT_SHA256:
+            raise ExperimentError("V13 submitted prompt differs from the one preregistered arm-only edit")
+        try:
+            source_preflight = verify_v12_source(
+                spec, entry["raw_v12_video"], entry["independent_v12_qa"],
+                entry["existing_ledger_store"])
+            source_preflight = verify_v13_ui(entry["flow_ui_observation"], source_preflight)
+        except (V13PreflightError, OSError, ValueError, TypeError) as exc:
+            raise ExperimentError(f"V13 video-to-video arm-only precredit HOLD: {exc}") from exc
+        if (len(clean_assets) != 1 or clean_assets[0]["role"] != "source-video"
+                or clean_assets[0]["verification"] != "rehashed_from_local_bytes"
+                or clean_assets[0]["sha256"] != source_preflight["source_video_sha256"]):
+            raise ExperimentError("V13 requires exactly one locally rehashed *original* V12 raw MP4, not a derivative")
+        if (request["provider"] != "Google Flow" or request["model"] != V13_MODEL
+                or json.dumps(request["settings"], sort_keys=True) != json.dumps(V13_SETTINGS, sort_keys=True)
+                or Decimal(estimate) != Decimal(source_preflight["quoted_credits"])):
+            raise ExperimentError("V13 differs from the fresh Omni Flash V2V edit/x1/360p quote")
+    elif isinstance(entry, dict) and entry.get("authority") == "V12_REVIEWED_APEX_B002_FRAMES_360P":
         from .preflight_v12_apex_frames import (
             verify_sources as verify_v12_sources, verify_ui_observation,
             V12PreflightError, FLOW_SETTINGS, FLOW_MODEL, FLOW_QUOTE_CREDITS,
@@ -644,6 +671,14 @@ def snapshot(folder):
 
 def reserve(folder, request):
     """Idempotently reserve one ATTEMPT's cost; new retries need new attempt_key."""
+    preflight = request.get("source_preflight") if isinstance(request, dict) else None
+    if isinstance(preflight, dict) and preflight.get("authority") == "V13_V12_RAW_ARM_ONLY_V2V_EDIT_360P":
+        # The operator may not validate against the old reconciled store then
+        # reserve in a freshly initialized or differently capped ledger.
+        previous = preflight.get("existing_ledger_store")
+        if (not isinstance(previous, str) or not previous.strip()
+                or _resolve_store(previous) != _resolve_store(folder)):
+            raise ExperimentError("V13 must reserve against the SAME existing V12 native-charge ledger")
     data = _validate_request(request)
     fingerprint = _digest_bytes(_canonical(data))
     run_id = fingerprint  # full SHA-256, no short-ID collision ambiguity
@@ -666,6 +701,12 @@ def reserve(folder, request):
             if prior.get("request", {}).get("attempt_key") == data["attempt_key"]:
                 raise ExperimentError("attempt_key already has an immutable manifest with different inputs; choose a new attempt_key for a real retry")
         current = _snapshot(store)
+        if data["source_preflight"] and data["source_preflight"].get("authority") == "V13_V12_RAW_ARM_ONLY_V2V_EDIT_360P":
+            # A different concurrent reservation/settlement invalidates the
+            # balance attested in the 15-minute Flow edit observation.
+            if any(data["source_preflight"][f"ledger_{name}"] != current[name]
+                   for name in ("actual_credits", "pending_reserved_credits", "available_credits")):
+                raise ExperimentError("V13 live quote/ledger changed between UI attestation and paid reservation")
         # The actual provider charge can exceed the estimate and push remaining
         # credits negative. Preserve that truthful state, then block new runs.
         proposed = Decimal(current["available_credits"])

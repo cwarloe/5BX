@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "authority": "V13_V12_RAW_ARM_ONLY_V2V_EDIT_360P",
+  "exercise_id": "chart1-scissor-jump",
+  "experiment": "ARM_MOVEMENT_ONLY_EDIT_RESCUE",
+  "source_segment": "V12_ASTAR_TO_B002_APEX_ONLY",
+  "source_video_sha256": "5680aff2e5811ef99d52a533a6c24405ad1d92ef66afa7bf9b37fb7e693d3fba",
+  "source_video_format": "H264_640X360_24FPS_72_FRAMES_WITH_AAC",
+  "source_independent_qa_sha256": "a1477c3d5ca7eae765bbf0d2377a467f4fe29021360805d78e16cea70f128d70",
+  "source_qa_verdict": "HOLD_WRONG_RUNNING_ARM_AND_CONTACT_MOTION",
+  "source_ledger_run_id": "cd098dc731c35283a78b47f500d357ecb0577654068f2f5fe7d95fe00e5ea14a",
+  "source_native_actual_credits": "3",
+  "submitted_prompt_sha256": "6c46960ec7c400b4d58b296fa2b8f40ef97e2b264c643c2d9a8a9579327ec231",
+  "provider": "Google Flow",
+  "model": "Omni 1.2 Flash",
+  "settings": {
+    "duration_seconds": 3,
+    "aspect_ratio": "16:9",
+    "variants": 1,
+    "seed": null,
+    "generation_mode": "Video to Video Edit",
+    "resolution": "360p",
+    "return_silent_videos": true
+  },
+  "max_quoted_credits": "3",
+  "precredit_status": "EXPERIMENTAL_REQUIRES_NATIVE_V12_PROOF_AND_FRESH_FLOW_UI",
+  "historical_anatomical_left_right_proven": false,
+  "full_scissor_cycle_proven": false,
+  "video_form_and_release_approval": "NOT_GRANTED"
+}
