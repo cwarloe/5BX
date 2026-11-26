@@ -13,6 +13,17 @@ The tool takes a stricter approach to reproducibility:
 
 The JSON contracts and CLI are development controls, **not a second Kanban board, traveler or approval database**. The process advisor's existing review records remain the status authority.
 
+**Agent work/owner handoff is now executable:** read the repository's
+[`AGENTS.md`](../AGENTS.md), maintain a `5bx-production` comment inside the
+**existing detailed photographic QA note**, and run
+`python3 sprites/kit/photo_workflow.py --repo-root . --check` before a PR.
+The command enforces source evidence and a two-active-exercise limit on
+**registered** jobs. A fully inspected video becomes `READY_FOR_REVIEW` and
+frees a producer slot while Charles decides whether to use it; `DONE` is
+reserved for Charles's exact-version acceptance. No existing clip is promoted
+merely because a prompt, plan or automated inspect command succeeded. See
+the [handoff contract](../sprites/docs/PHOTOGRAPHIC_PRODUCTION_STANDARD_WORK.md#executable-handoff-and-owner-queue).
+
 ## Quick start
 
 From repository root, with Python 3.11+, ffmpeg/ffprobe, and Pillow installed:

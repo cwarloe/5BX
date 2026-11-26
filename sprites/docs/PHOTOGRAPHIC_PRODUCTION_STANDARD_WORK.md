@@ -111,6 +111,69 @@ to rework with the named reason. No other agent may infer the decision.
   artifact. Do not assume authorization for new paid usage, private-media
   disclosure, or an irreversible deployment.
 
+### Executable handoff and owner queue
+
+The [photographic handoff validator](../kit/photo_workflow.py) reads one
+`5bx-production` JSON comment from each **current detailed photographic QA
+note** under `sprites/docs/photo_batches/`. The comment is part of that same
+versioned QA record, **not** a new status database. A producer should maintain
+only one current comment per chart/exercise; retain past revisions in ordinary
+QA history. Minimal start-of-work example (replace every example value):
+
+```markdown
+<!-- 5bx-production
+{
+  "schema_version": 1,
+  "chart": 1,
+  "exercise": 5,
+  "revision": "actual-controlled-revision",
+  "status": "PRODUCING",
+  "agent": "actual-producing-agent"
+}
+-->
+```
+
+Use `QA` for internal checking, `REWORK` with a `defect` for a specific
+correction, or `BLOCKED` with a `blocker` object containing `reason`, one
+`question`, `recommendation` and `owner_needed` (true **only** when Charles's
+decision is actually necessary). Blocked and rework jobs still consume active
+agent WIP; `READY_FOR_REVIEW` and `DONE` do not.
+
+To move to `READY_FOR_REVIEW`, expand that exact comment with:
+
+- `contract`: existing versioned motion-spec JSON path whose chart/exercise
+  matches; an exact `video` object (`url`, `sha256`, `media_type: video/mp4`);
+  the same video URL registered in the existing mobile review index/inventory.
+- `inspection`: `{video_sha256, report_sha256, evidence}` where `evidence`
+  is the existing repo QA/diagnostic record; report/video hashes bind the
+  inspection to the exact intended file. Keep raw private MP4/frames out of Git.
+- `checks`: five named objects, `technical`, `form`, `motion`, `loop`,
+  `identity`, each with `verdict: PASS` and substantive `evidence` text.
+  `form` and `motion` must identify an independent `reviewer`, not the
+  producing agent. A static contact sheet cannot substantiate motion or loop.
+- `review`: a short `summary`, `recommendation` and single `question` about
+  whether Charles will accept that **exact playable video**. Set
+  `owner_decision: null`; this is **not** a release approval.
+
+`DONE` requires that Charles subsequently supplies an explicit acceptance,
+which the QA record attaches as `owner_decision` with `reviewer: cwarloe`,
+`decision: ACCEPT`, the same `video_sha256`, a genuine decision timestamp,
+and an HTTPS `evidence_url` pointing to that human decision. Agents must
+**never invent or impersonate** that event. The validator checks this
+evidence's structure but cannot cryptographically prove a person authored
+an external comment, or independently verify a private video's anatomy.
+
+```bash
+python3 sprites/kit/photo_workflow.py --repo-root . --check --out owner-queue.json
+```
+
+The CI artifact exposes `READY_FOR_REVIEW`, genuine owner-only blockers,
+declared active WIP and unregistered existing motion contracts. An incomplete
+or contradictory marker is `INVALID`, **never** automatically promoted.
+This is a read-only production projection and does not launch AI agents or
+automatically generate paid video; external agent runners must explicitly
+consume the contracts and submit their source evidence.
+
 The initial **active agent-production** WIP limit of **two exercises** is an
 *operating rule*, not yet an automatically enforced lock. Pull the next ready
 exercise once one is completed for owner review or otherwise leaves active

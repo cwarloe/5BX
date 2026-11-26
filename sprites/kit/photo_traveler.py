@@ -503,8 +503,57 @@ def with_metrics(data, repo_root, chart=None):
         from . import photo_metrics
     except ImportError:  # Direct execution of photo_traveler.py.
         import photo_metrics
+    try:
+        from . import photo_workflow
+    except ImportError:
+        import photo_workflow
     data["metrics"] = photo_metrics.collect_metrics(repo_root, chart)
+    data["production"] = photo_workflow.collect(repo_root)
     return data
+
+
+def _production_queue(data, chart=None):
+    """Owner handoffs only from validated, source-embedded QA evidence."""
+    flow = data.get("production")
+    if not flow:
+        return ""
+    selected = lambda entries: [e for e in entries if chart is None or e.get("chart") == chart]
+    ready = selected(flow["ready_for_review"])
+    blocked = selected(flow["owner_blockers"])
+    unregistered = selected(flow["unregistered_specs"])
+    cards = []
+    for item in ready:
+        question = item["review"]["question"]
+        recommendation = item["review"]["recommendation"]
+        source = "https://github.com/cwarloe/5BX/blob/main/" + item["source"]
+        cards.append(f'''<article class="handoff-card"><span class="handoff-label">READY FOR REVIEW · NOT APPROVED</span>
+          <h3>Chart {item['chart']} · Exercise {item['exercise']} · {_esc(item['revision'])}</h3>
+          <p>{_esc(question)}</p><p><strong>Producer recommendation:</strong> {_esc(recommendation)}</p>
+          <a href="{_esc(item['video_url'])}" target="_blank" rel="noopener noreferrer">Play exact video ↗</a>
+          <a href="{_esc(source)}" target="_blank" rel="noopener noreferrer">QA and review packet ↗</a></article>''')
+    for item in blocked:
+        problem = item["blocker"]
+        source = "https://github.com/cwarloe/5BX/blob/main/" + item["source"]
+        cards.append(f'''<article class="handoff-card blocked"><span class="handoff-label">GENUINE OWNER BLOCKER</span>
+          <h3>Chart {item['chart']} · Exercise {item['exercise']}</h3><p>{_esc(problem['question'])}</p>
+          <p><strong>Recommended:</strong> {_esc(problem['recommendation'])}</p>
+          <a href="{_esc(source)}" target="_blank" rel="noopener noreferrer">Supporting QA note ↗</a></article>''')
+    active = flow["active_wip"]
+    names = ", ".join(f"Chart {e['chart']} Exercise {e['exercise']}" for e in unregistered)
+    info = (f"Declared active production: {active['declared']}/{active['limit']} slots; "
+            "not a reliable live count until agents register all active work. "
+            "Owner-ready products leave active WIP and remain in this separate review buffer. "
+            f"Unregistered motion contracts: {_esc(names or 'none')}.")
+    body = ''.join(cards) if cards else (
+        '<p class="hint">No evidence-complete final videos or genuinely blocked owner decisions '
+        'are registered yet. Existing early image-feedback questions below are optional; agents keep working.</p>')
+    error_note = (f'<p class="alert-error">{len(flow["errors"])} invalid handoff record(s); '
+                  'CI prevents their promotion to review.</p>' if flow["errors"] else '')
+    return f'''<section id="owner-handoffs" class="group">
+      <h2>Owner handoffs · finished video decisions only</h2>
+      <p class="hint">{info}</p>{error_note}<div class="handoff-grid">{body}</div>
+      <p class="hint">Only Charles accepts exact videos for use. A producer PASS, review packet or
+      machine-complete render never changes an item to DONE.</p></section>'''
 
 
 def _metric_panel(data):
@@ -566,6 +615,7 @@ def render_gallery(data, chart=None):
               f'Only a fully checked, playable cycle is READY FOR REVIEW; only Charles can mark it DONE. '
               f'This page does not approve or change assets.</p>'
               f'<div class="grid review-grid">{decisions}</div></section>') if decisions else ""
+    owner_handoffs = _production_queue(data, chart)
     flow = _flow_board(data)
     metrics = _metric_panel(data)
     stills = "".join(_tile(x, "still") for x in data["high_res"])
@@ -619,6 +669,13 @@ color:#5a3600;background:#fff0ce;padding:3px 5px;border-radius:5px}} .flow-empty
 .metric-card {{background:white;border:1px solid #d9e2e8;border-radius:12px;padding:12px}}
 .metric-card h3 {{font-size:.83rem;color:#415a6a}} .metric-card strong {{font-size:1.1rem}}
 .metric-card p {{color:#526574;font-size:.76rem;line-height:1.4;margin:7px 0}}
+.handoff-grid {{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,315px),1fr));gap:12px}}
+.handoff-card {{background:#f4fffa;border:2px solid #9ac7b6;border-radius:12px;padding:15px}}
+.handoff-card.blocked {{background:#fff4ef;border-color:#d69481}}
+.handoff-card p {{font-size:.88rem;line-height:1.45}}
+.handoff-card a {{display:block;margin-top:7px}}
+.handoff-label {{font-size:.72rem;font-weight:800;color:#225441}}
+.alert-error {{color:#9b2525;font-weight:700}}
 footer {{color:#526574;font-size:.82rem;margin:30px 0}}
 @media(max-width:600px) {{main {{padding:12px}} header.hero {{padding:18px}} .grid {{gap:11px}}
 .flow-board {{grid-template-columns:1fr;overflow-x:visible}}}}
@@ -629,6 +686,7 @@ footer {{color:#526574;font-size:.82rem;margin:30px 0}}
 <p class="alert">Experimental images and video. No human-approved exercise forms or verified final workout videos are implied by this gallery. Safety and identity holds remain active.</p>
 {high_res_jump}
 <p><a href="{_esc(record)}" target="_blank" rel="noopener">Canonical mobile index and current decisions ↗</a></p></header>
+{owner_handoffs}
 {review}
 {flow}
 {metrics}

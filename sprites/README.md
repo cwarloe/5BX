@@ -70,6 +70,14 @@ exercise or repeated-defect escalation, use the
 in the existing exercise QA note to verify that a preventive change helps the
 next batch. No Scrum meetings or second tracking system are required.
 
+The read-only traveler also includes an **owner handoff buffer** powered by
+`sprites/kit/photo_workflow.py`. A detailed QA note with a complete
+`5bx-production` handoff is required to claim `READY_FOR_REVIEW`; it must link
+an actual video, bound inspection hashes, independent internal checks and a
+concise recommendation. CI fails invalid handoffs and registered WIP over two.
+Absent handoffs are shown as unregistered work, **not** as idle agents or
+automatic approvals. Only Charles's explicit exact-revision acceptance is DONE.
+
 **Legacy cartoon artwork and regression review:**
 
 The read-only visual traveler shows one card per exercise: original booklet

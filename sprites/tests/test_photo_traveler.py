@@ -81,6 +81,15 @@ class PhotoTravelerTest(unittest.TestCase):
         self.assertIn("Recorded samples: 0", rendered)
         self.assertNotIn("100.0%", rendered)
 
+    def test_owner_handoff_panel_does_not_promote_unregistered_media(self):
+        data = photo_traveler.with_metrics(
+            photo_traveler.gallery_data(self.root, chart=1), self.root, chart=1)
+        self.assertEqual(data["production"]["ready_for_review"], [])
+        rendered = photo_traveler.render_gallery(data, chart=1)
+        self.assertIn('id="owner-handoffs"', rendered)
+        self.assertIn("No evidence-complete final videos", rendered)
+        self.assertIn("Only Charles", rendered)
+
     def test_old_gallery_remains_supported(self):
         # A missing chart record is never fabricated as a valid/approved image.
         with self.assertRaises(FileNotFoundError):
