@@ -10,7 +10,9 @@ from pathlib import Path
 
 from .source_authority import (
     V6_ANATOMICAL_LEFT_RIGHT_PROVEN, V6_PANEL_A_CROP,
-    V6_PANEL_A_START_STATE, V6_TAGGED_CARD_SHA256,
+    V6_PANEL_A_START_STATE, V6_PANEL_C_OPPOSITE_STATE, V6_TAGGED_CARD_SHA256,
+    V7_PARENT_V6_STATUS, V7_PREPARED_A_SHA256, V7_PREPARED_C_SHA256,
+    V7_PREPARED_PAIR_AUTHORITY, V7_PREPARED_SIZE,
 )
 
 
@@ -129,7 +131,27 @@ def validate(spec):
             # These are claims about a particular inspected source image, not
             # freely editable prompt hints. Unverified new sources need their
             # own versioned authority before any paid experiment.
-            if isinstance(provenance, dict):
+            if isinstance(provenance, dict) and provenance.get("source_authority_version") == V7_PREPARED_PAIR_AUTHORITY:
+                v7_checks = {
+                    "prepared_a_png_sha256": V7_PREPARED_A_SHA256,
+                    "prepared_c_png_sha256": V7_PREPARED_C_SHA256,
+                    "prepared_size": list(V7_PREPARED_SIZE),
+                    "parent_v6_card_sha256_historical_claim_only": V6_TAGGED_CARD_SHA256,
+                    "parent_v6_card_status": V7_PARENT_V6_STATUS,
+                    "source_marker_start_state": V6_PANEL_A_START_STATE,
+                    "source_marker_opposite_state": V6_PANEL_C_OPPOSITE_STATE,
+                    "anatomical_left_right_proven": False,
+                }
+                for key, value in v7_checks.items():
+                    if provenance.get(key) != value:
+                        errors.append(f"scissor V7 {key} differs from versioned direct prepared-pair authority")
+                if provenance.get("anatomical_left_right_proven") is not False:
+                    errors.append("scissor V7 anatomical left/right must remain explicitly unproven")
+                if "source_card_sha256" in provenance or "source_panel_a_clean_crop_half_open" in provenance:
+                    errors.append("scissor V7 must not claim verified original V6 card or crop provenance")
+            elif isinstance(provenance, dict) and provenance.get("source_authority_version") is not None:
+                errors.append("unknown scissor source authority version")
+            elif isinstance(provenance, dict):
                 if provenance.get("source_card_sha256") != V6_TAGGED_CARD_SHA256:
                     errors.append("scissor V6 source card SHA-256 must match the verified original diagnostic")
                 if provenance.get("source_panel_a_clean_crop_half_open") != list(V6_PANEL_A_CROP):

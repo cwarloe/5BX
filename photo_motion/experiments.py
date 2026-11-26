@@ -282,50 +282,82 @@ def _validate_request(request):
                              "verification": "rehashed_from_local_bytes" if actual else "declared_unverified"})
     source_preflight = None
     if request["exercise_id"] == "chart1-scissor-jump":
-        # For the currently authorized V6 diagnostic, an unbound JSON spec or
+        # For V6/V7 diagnostics, an unbound JSON spec or
         # unverified remote image is not adequate to spend provider credits.
         # This is a content check, not authorization or an exercise approval.
         if Decimal(estimate) <= 0:
-            raise ExperimentError("V6 paid Flow attempt requires a positive provider-quoted credit estimate")
+            raise ExperimentError("V6/V7 paid Flow attempt requires a positive provider-quoted credit estimate")
         entry = request.get("source_preflight")
-        expected_fields = {"original_card", "prepared_png", "manifest"}
-        if not isinstance(entry, dict) or set(entry) not in (expected_fields, expected_fields | {"opposite_pose_reference"}):
-            raise ExperimentError("V6 scissor attempt requires source_preflight with original_card, prepared_png, manifest, and only optional opposite_pose_reference")
-        has_opposite = "opposite_pose_reference" in entry
-        opposite_entry = entry.get("opposite_pose_reference")
-        if has_opposite and (not isinstance(opposite_entry, dict) or
-                             set(opposite_entry) != {"prepared_png", "manifest"}):
-            raise ExperimentError("V6 opposite_pose_reference must contain exactly prepared_png and manifest paths")
-        from .preflight_v6 import verify, verify_pair, PreflightError
-        try:
-            if not has_opposite:
-                source_preflight = verify(spec, entry["original_card"], entry["prepared_png"], entry["manifest"])
-            else:
-                source_preflight = verify_pair(spec, entry["original_card"], entry["prepared_png"],
-                                               entry["manifest"], opposite_entry["prepared_png"],
-                                               opposite_entry["manifest"])
-        except (PreflightError, OSError, ValueError, TypeError) as exc:
-            raise ExperimentError(f"V6 scissor preflight failed: {exc}") from exc
-        expected_assets = [("start-frame", source_preflight["prepared_png_sha256"])]
-        if has_opposite:
-            expected_assets.append(("opposite-pose-reference", source_preflight["opposite_pose_reference"]["prepared_png_sha256"]))
+        if isinstance(entry, dict) and entry.get("authority") == "V7_DIRECT_PREPARED_PAIR":
+            # New versioned authority, NOT an exception to or relaxation of
+            # V6's immutable original-card byte-replay rules.
+            from .preflight_v7 import verify_pair as verify_v7_pair, PreflightError as V7Error
+            permitted = {"authority", "prepared_png", "opposite_pose_reference"}
+            if set(entry) not in (permitted, permitted | {"historical_manifests"}):
+                raise ExperimentError("V7 source_preflight requires exactly authority, prepared_png, opposite_pose_reference, and optional historical_manifests")
+            opposite_entry = entry.get("opposite_pose_reference")
+            if not isinstance(opposite_entry, dict) or set(opposite_entry) != {"prepared_png"}:
+                raise ExperimentError("V7 opposite_pose_reference requires exactly prepared_png")
+            historical = entry.get("historical_manifests")
+            if historical is not None and (not isinstance(historical, dict) or
+                                           set(historical) != {"start", "opposite"}):
+                raise ExperimentError("V7 historical_manifests must contain exactly start and opposite paths")
+            try:
+                source_preflight = verify_v7_pair(
+                    spec, entry["prepared_png"], opposite_entry["prepared_png"],
+                    historical["start"] if historical else None,
+                    historical["opposite"] if historical else None)
+            except (V7Error, OSError, ValueError, TypeError) as exc:
+                raise ExperimentError(f"V7 prepared-pair preflight failed: {exc}") from exc
+            expected_assets = [
+                ("start-frame", source_preflight["prepared_png_sha256"]),
+                ("opposite-pose-reference", source_preflight["opposite_pose_reference"]["prepared_png_sha256"]),
+            ]
+            authority_name = "V7 prepared-pair"
+        else:
+            # Existing V6 replay paths remain unchanged, including old A-only
+            # run receipts and optional verified two-image A+C requests.
+            expected_fields = {"original_card", "prepared_png", "manifest"}
+            if not isinstance(entry, dict) or set(entry) not in (expected_fields, expected_fields | {"opposite_pose_reference"}):
+                raise ExperimentError("V6 scissor attempt requires source_preflight with original_card, prepared_png, manifest, and only optional opposite_pose_reference")
+            has_opposite = "opposite_pose_reference" in entry
+            opposite_entry = entry.get("opposite_pose_reference")
+            if has_opposite and (not isinstance(opposite_entry, dict) or
+                                 set(opposite_entry) != {"prepared_png", "manifest"}):
+                raise ExperimentError("V6 opposite_pose_reference must contain exactly prepared_png and manifest paths")
+            from .preflight_v6 import verify, verify_pair, PreflightError
+            try:
+                if not has_opposite:
+                    source_preflight = verify(spec, entry["original_card"], entry["prepared_png"], entry["manifest"])
+                else:
+                    source_preflight = verify_pair(spec, entry["original_card"], entry["prepared_png"],
+                                                   entry["manifest"], opposite_entry["prepared_png"],
+                                                   opposite_entry["manifest"])
+            except (PreflightError, OSError, ValueError, TypeError) as exc:
+                raise ExperimentError(f"V6 scissor preflight failed: {exc}") from exc
+            expected_assets = [("start-frame", source_preflight["prepared_png_sha256"])]
+            if has_opposite:
+                expected_assets.append(("opposite-pose-reference", source_preflight["opposite_pose_reference"]["prepared_png_sha256"]))
+            authority_name = "V6 scissor"
         if len(clean_assets) != len(expected_assets) or any(
             asset["role"] != role or asset["verification"] != "rehashed_from_local_bytes" or asset["sha256"] != digest
             for asset, (role, digest) in zip(clean_assets, expected_assets)
         ):
-            raise ExperimentError("V6 scissor pilot requires a prepared start-frame: ordered verified start-frame A and only optional opposite-pose-reference C matching their panel preflights")
+            if authority_name == "V6 scissor":
+                raise ExperimentError("V6 scissor pilot requires a prepared start-frame: ordered verified start-frame A and only optional opposite-pose-reference C matching their panel preflights")
+            raise ExperimentError("V7 prepared-pair pilot requires exactly ordered verified start-frame A and opposite-pose-reference C matching their preflights")
         try:
             requested_spec = json.loads(spec.read_text(encoding="utf-8"))
         except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
             raise ExperimentError(f"invalid V6 specification: {exc}") from exc
         if (request["settings"].get("duration_seconds") != requested_spec["duration_seconds"] or
                 request["settings"].get("aspect_ratio") != "16:9"):
-            raise ExperimentError("V6 Flow duration/aspect settings must match the six-second 16:9 photographic contract")
+            raise ExperimentError("V6/V7 Flow duration/aspect settings must match the six-second 16:9 photographic contract")
     elif "source_preflight" in request:
         raise ExperimentError("V6 source_preflight is only supported for the versioned Chart 1 scissor pilot")
     spec_sha = _sha_file(spec)
     if source_preflight and spec_sha != source_preflight["spec_sha256"]:
-        raise ExperimentError("V6 spec changed between preflight and reservation; discard this attempt")
+        raise ExperimentError("photographic motion spec changed between preflight and reservation; discard this attempt")
     # Input order is semantically meaningful: many generators treat image 1 as
     # identity and image 2 as pose authority.
     return {"schema_version": SCHEMA_VERSION, "attempt_key": request["attempt_key"],

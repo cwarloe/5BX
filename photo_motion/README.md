@@ -44,6 +44,13 @@ check in [`V6_PRECREDIT.md`](V6_PRECREDIT.md). The experiment reservation now
 requires that verified binding and the identical uploaded start-frame bytes;
 the check does not approve the resulting exercise video.
 
+If the original V6 composite is unavailable, do **not** relax that gate.
+For the separately authorized archival-source experiment, use the
+[`V7 direct A+C prepared-pair authority`](V7_DIRECT_PAIR_PRECREDIT.md): it
+pins both surviving private photographic PNGs directly while explicitly
+declining to certify historical V6 parent crop/transform claims. Its movement
+spec is `specs/chart1-scissor-jump-v7-prepared-pair.json`.
+
 ## Exercise contracts
 
 | Contract | Critical invariant | Known unresolved evidence |

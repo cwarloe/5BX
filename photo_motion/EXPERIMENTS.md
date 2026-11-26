@@ -52,11 +52,14 @@ Save the provider input exactly as submitted, *including manual edits*, in an un
 
 Write a private request JSON like this, replacing every placeholder with the *actual* values:
 
-**V6 scissor exception:** The generic sample below is *not* an acceptable
-pre-credit scissor request. That experiment requires source-byte verification
-and either one A start-frame or **A plus exactly one verified C opposite-pose
-reference** from the same immutable V6 card, as specified in
-[`V6_PRECREDIT.md`](V6_PRECREDIT.md).
+**V6/V7 scissor exceptions:** The generic sample below is *not* an acceptable
+pre-credit scissor request. The original V6 path requires byte-replay of the
+unchanged composite card and either one A start-frame or **A plus exactly one
+verified C opposite-pose reference**, as specified in
+[`V6_PRECREDIT.md`](V6_PRECREDIT.md). If that original card is unavailable,
+the separate [`V7 direct prepared-pair authority`](V7_DIRECT_PAIR_PRECREDIT.md)
+permits **only** exact archived A+C prepared photographs, explicitly records
+unverified historical parent provenance and requires a distinct V7 spec.
 
 ```json
 {
