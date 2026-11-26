@@ -219,6 +219,15 @@ def _policy(store):
             raise ExperimentError("opening debit requires distinct sorted prior run IDs")
         for run_id in run_ids:
             _require_digest(run_id, "opening_provenance.prior_run_id")
+        evidence = Path(provenance["evidence_reference"])
+        if not evidence.is_file():
+            raise ExperimentError(f"opening debit evidence unavailable: {evidence}; do not infer restored credits")
+        try:
+            evidence_digest = _sha_file(evidence)
+        except OSError as exc:
+            raise ExperimentError(f"opening debit evidence unavailable: {evidence}: {exc}") from exc
+        if evidence_digest != provenance["evidence_sha256"]:
+            raise ExperimentError("opening debit evidence SHA-256 differs from immutable policy; stop new reservations")
     elif provenance is not None:
         raise ExperimentError("zero opening debit cannot claim prior charge provenance")
     policy = {**policy, "opening_spent_credits": opening, "opening_provenance": provenance}
@@ -353,6 +362,19 @@ def _validate_request(request):
         if (request["settings"].get("duration_seconds") != requested_spec["duration_seconds"] or
                 request["settings"].get("aspect_ratio") != "16:9"):
             raise ExperimentError("V6/V7 Flow duration/aspect settings must match the six-second 16:9 photographic contract")
+        if requested_spec.get("status") == "HOLD":
+            raise ExperimentError("V6/V7 motion contract is explicitly on HOLD; do not reserve provider credits")
+        if authority_name == "V7 prepared-pair":
+            # The V7 quote and controlled comparison are for ONE generation.
+            # Unknown provider settings may hide batch/output multipliers;
+            # version a different experiment instead of silently adding them.
+            allowed_v7_settings = {"duration_seconds", "aspect_ratio", "variants", "seed"}
+            unknown_settings = set(request["settings"]) - allowed_v7_settings
+            if unknown_settings:
+                raise ExperimentError(f"unsupported V7 settings (potential unquoted extra output): {sorted(unknown_settings)}")
+            variants = request["settings"].get("variants")
+            if type(variants) is not int or variants != 1:
+                raise ExperimentError("V7 paid two-image pilot requires exactly one quoted output (settings.variants=1)")
     elif "source_preflight" in request:
         raise ExperimentError("V6 source_preflight is only supported for the versioned Chart 1 scissor pilot")
     spec_sha = _sha_file(spec)
