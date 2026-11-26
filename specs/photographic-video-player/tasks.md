@@ -15,8 +15,12 @@ evidence; all engineering tasks follow Charles's requirements approval on
 - [x] 4. Add negative-path and simulated DOM lifecycle regression tests;
       integrate into Game CI test command, typecheck and development build
       (R1–R3). Real browser network/decode remains manual task 6.
-- [ ] 5. Confirm independent public-build artifact guard on final combined
-      code; default empty registry means no public MP4 (R1.1, R1.5, R3.1).
+- [x] 5. Confirm independent public-build artifact guard on final combined
+      code; default empty registry means no new public MP4 (R1.1, R1.5,
+      R3.1). Verified with `VITE_PHOTO_PLAYER_PREVIEW=1 npm run pages` and
+      `node game/scripts/assert-approved-media.mjs --app-root game/public
+      --app-root game/dist-pages --site-source .`; historical byte-pinned
+      root-site animation reference remains outside photographic player.
 - [ ] 6. Review acceptance mapping and run explicit browser/mobile smoke check
       or record named pending manual check if browser unavailable (R1–R3).
 
