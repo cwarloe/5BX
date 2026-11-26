@@ -236,6 +236,9 @@ def evaluate(candidate, repo_root=REPO_ROOT):
                 # browser would later reject as a different clip.
                 if abs(details["duration_seconds"] - video["duration_seconds"]) > PLAYER_TIMING_EPS_SECONDS:
                     blockers.append("native duration differs from declared video duration beyond browser 1ms tolerance")
+                declared_decoded_duration = video["frame_count"] / video["fps"]
+                if abs(declared_decoded_duration - video["duration_seconds"]) > PLAYER_TIMING_EPS_SECONDS:
+                    blockers.append("declared frame count/FPS differs from declared duration required by browser player")
                 if abs(details["fps"] - video["fps"]) > EPS_FPS:
                     blockers.append("ffprobe fps mismatch")
                 for key in ("width", "height", "codec", "audio_stream_count", "frame_count"):
