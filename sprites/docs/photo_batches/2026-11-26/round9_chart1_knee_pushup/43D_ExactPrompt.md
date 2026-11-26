@@ -1,4 +1,6 @@
-# 43D — exact submitted prompt
+# C1-EX4 KP-43D — exact submitted prompt
+
+Exercise-qualified ID only; these files are distinct from Chart 1 toe-touch cards using bare 43/43R.
 
 ## Image roles
 
