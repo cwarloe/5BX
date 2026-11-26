@@ -102,7 +102,13 @@ rehashable A/C PNGs, a valid V7 contract and six-second 16:9 settings. It
 freezes both image hashes, manifest hashes if supplied, the literal prompt,
 model/settings, positive quoted estimate and the explicit unrecovered-parent
 status in the immutable intent. Unknown image roles or extra inputs fail before
-credit reservation. The previously approved Flow cap does **not** remove the
+credit reservation. A V7 paid reservation also requires `status` other than
+`HOLD` in the motion contract and **exactly one quoted output**:
+`settings.variants` must be the integer `1`; only `duration_seconds`,
+`aspect_ratio`, `variants` and `seed` are currently recognized. Unknown settings
+that may conceal extra outputs or an unquoted provider mode fail closed;
+qualify/version a different experiment before changing this controlled recipe.
+The previously approved Flow cap does **not** remove the
 need to reconcile actual historical charges if an ephemeral ledger is lost.
 Do not initialize a fresh empty cap as though earlier charges never occurred.
 
