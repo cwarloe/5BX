@@ -1,0 +1,14 @@
+# Test 25B — headroom-reframing edit, exact imagegen prompt
+
+One built-in imagegen edit, 2026-11-26 UTC. References in submitted order: (1) Test25 2×2 card as edit target; (2) approved photographic identity master v2; (3) 15B single 35mm raised-arm frame as framing-only reference. One call, no retries. Generated output: `25B_C2_EX1_ToeTouch_Bounce_4Phase_HEADROOM_CANDIDATE.png`.
+
+```text
+Use case: identity-preserve
+Asset type: high-fidelity 2x2 reference card for 5BX Chart 2 Ex1 toe-touch-and-single-press educational video.
+Image 1 = EDIT TARGET, exact four-panel 35mm photographic Chart 2 toe-touch sheet: A arms up; B fingertips touch track between feet; C tiny second downward press/bounce; D gentle raised-arm backward stretch.
+Image 2 = approved photographic character identity master (authority for boy's same precise normal middle-school face, brown messy short hair, soft proportionate nonmuscular arms/legs, blue tank/charcoal shorts/dark socks/gray trainers).
+Image 3 = a successfully reframed SINGLE full-res raised-arm Chart 1 photograph; its role is ONLY a guide for sensible overhead fingertip/sole margin, NOT a new pose/person or reason to change this 2x2 card's movements.
+Primary request: MAKE ONLY A SMALL CAMERA REFRAME / UNIFORM ZOOM-OUT of the existing four tiles. Every panel must now have 12–15% CLEAN HEADROOM ABOVE THE HIGHEST FINGERTIP with approx. 7–10% clearance below the shoe soles, so raised hands never clip during video. Simply frame each of the same photographed actions from slightly farther away (e.g. camera backs up 2 metres or a slightly wider lens) while retaining the same fixed nearly frontal angle, horizon, track, forest, lighting, and panel gutters. Keep the boy's anatomical proportions and exact limb configurations unchanged. Maintain plausible equal full-body scale and shoe baseline across A, B, C and D. 
+Do NOT recast, age, slim or thicken him. Do NOT lengthen arms or legs, change the waist, hair, hands, nose, footwear or socks, or make him look elementary-school age or older than 14. No muscle definition; normal pale Caucasian teen. Maintain the SAME 5BX Chart2 geometry: A normal overhead stretch with feet astride; B first floor touch between shoes; C tiny press just 1–2 inches lower with both hands contacting same floor zone and feet planted, NOT a deep squat; D modest upward/backward stretch with normal lumbar flexibility. Preserve natural blue/charcoal fabrics and the red track and trees, same exact person in every tile. Two arms, two legs, five fingers per hand, zero ghosts.
+2×2 grid, white dividing gutters, continuous original photographic quality, no captions/logos/watermarks. This is a conservative camera-framing correction, not a reinterpretation of the exercise; strongly prefer pixel-level invariance for everything other than scale/reframe/background fill.
+```
