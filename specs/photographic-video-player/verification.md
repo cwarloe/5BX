@@ -85,6 +85,24 @@ To complete these checks, provision an authorized Chrome/Playwright headless
 binary in the same executor as the dev server (and Safari separately for the
 specified platform coverage), then rerun the named checks above.
 
+### Connected-browser access follow-up — 2026-11-26 (BLOCKED)
+
+An independent follow-up attempted to reach the previously inventoried local
+preview through the connected browser. The browser extension entry point
+returned **“Browser access requires the originating browser context”** and
+offered no connected tab control. The separate cloud-browser attempt to bind
+the inventoried tab was refused at the browser URL-security gate before any
+page observation; the gate expressly disallowed alternate surfaces and
+workarounds. The attempt stopped at that policy boundary.
+
+No page DOM, screenshot, HTTP response, local preview, synthetic-video fixture,
+decoder result, or user-visible workout was observed. This is a **browser
+access-policy denial**, not a demonstrated 127.0.0.1 connectivity failure and
+not a playback failure. **PHOTO-BROWSER-01/02/03 remain PENDING.** Reattempt
+only in an authorized browser session that can reach its development server;
+do not convert the existing successful synthetic tests into a real-browser
+verdict or weaken browser security restrictions.
+
 ## Lessons retained for the next iteration
 
 - StrictMode rehearses effect cleanup/setup without replacing the DOM video;
