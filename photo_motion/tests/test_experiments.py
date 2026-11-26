@@ -272,6 +272,23 @@ class ExperimentLedgerTests(unittest.TestCase):
                                        opening_run_ids=run_ids)
             self.assertFalse((self.private / "policy.json").exists())
 
+    def test_opening_debit_evidence_tampering_or_loss_blocks_new_reservations(self):
+        evidence = self.root / "provider-observation.txt"
+        evidence.write_text("Synthetic prior debit: 18 credits\n", encoding="utf-8")
+        experiments.initialize(self.private, provider="Google Flow", credit_limit="200",
+                               opening_spent_credits="18", opening_evidence_path=evidence,
+                               opening_run_ids=["b" * 64])
+        self.assertEqual(experiments.snapshot(self.private)["available_credits"], "182")
+        evidence.write_text("Synthetic prior debit: corrected to unknown credits\n", encoding="utf-8")
+        with self.assertRaisesRegex(experiments.ExperimentError, "opening debit evidence SHA-256 differs"):
+            experiments.snapshot(self.private)
+        with self.assertRaisesRegex(experiments.ExperimentError, "opening debit evidence SHA-256 differs"):
+            experiments.reserve(self.private, self.request())
+        self.assertFalse((self.private / "intents").exists())
+        evidence.unlink()
+        with self.assertRaisesRegex(experiments.ExperimentError, "opening debit evidence unavailable"):
+            experiments.snapshot(self.private)
+
     def test_new_store_requires_zero_attestation_and_refuses_prior_debit_with_zero(self):
         with self.assertRaisesRegex(experiments.ExperimentError, "zero opening spend"):
             experiments.initialize(self.private, provider="Google Flow", credit_limit="200",

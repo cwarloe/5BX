@@ -10,7 +10,7 @@ from unittest.mock import patch
 
 from PIL import Image
 
-from photo_motion import contract, experiments, preflight_v7, source_authority
+from photo_motion import contract, experiments, generation_preflight, preflight_v7, source_authority
 
 
 SPEC = Path(__file__).resolve().parents[1] / "specs" / "chart1-scissor-jump-v7-prepared-pair.json"
@@ -69,7 +69,7 @@ class V7PreparedPairTests(unittest.TestCase):
                 {"role": "opposite-pose-reference", "locator": "private://v7/C-opposite", "local_path": str(self.c), "sha256": self.c_sha},
             ],
             "provider": "Google Flow", "model": "synthetic-Omni-Flash",
-            "settings": {"duration_seconds": 6, "aspect_ratio": "16:9", "seed": None},
+            "settings": {"duration_seconds": 6, "aspect_ratio": "16:9", "variants": 1, "seed": None},
             "estimated_credits": "18",
             "source_preflight": {
                 "authority": "V7_DIRECT_PREPARED_PAIR", "prepared_png": str(self.a),
@@ -176,19 +176,63 @@ class V7PreparedPairTests(unittest.TestCase):
     def test_paid_reservation_rejects_wrong_preflight_and_nonphotographic_settings(self):
         experiments.initialize(self.ledger, provider="Google Flow", credit_limit="200", opening_spent_credits="0")
         req = self.request()
-        for mutate, expected in (
+        for index, (mutate, expected) in enumerate((
             (lambda r: r["source_preflight"].pop("opposite_pose_reference"), "source_preflight requires"),
             (lambda r: r["source_preflight"]["opposite_pose_reference"].update({"manifest": "unverified"}), "requires exactly"),
             (lambda r: r["source_preflight"]["historical_manifests"].pop("opposite"), "historical_manifests"),
             (lambda r: r["settings"].update({"aspect_ratio": "9:16"}), "16:9"),
             (lambda r: r["settings"].update({"duration_seconds": 5}), "six-second"),
+            (lambda r: r["settings"].update({"variants": 3}), "one.*output"),
+            (lambda r: r["settings"].update({"variants": 1.0}), "one.*output"),
+            (lambda r: r["settings"].update({"output_count": 3}), "unsupported V7 settings"),
+            (lambda r: r["settings"].update({"batch_size": 9}), "unsupported V7 settings"),
+            (lambda r: r["settings"].pop("variants"), "one.*output"),
             (lambda r: r.update({"estimated_credits": "0"}), "positive provider-quoted"),
-        ):
+        )):
             broken = copy.deepcopy(req)
+            broken["attempt_key"] = f"invalid-v7-{index}"
             mutate(broken)
             with self.subTest(expected=expected), self.assertRaisesRegex(experiments.ExperimentError, expected):
                 experiments.reserve(self.ledger, broken)
         self.assertEqual(experiments.snapshot(self.ledger)["attempts"], 0)
+
+    def test_explicitly_held_v7_motion_contract_cannot_reserve_credits(self):
+        experiments.initialize(self.ledger, provider="Google Flow", credit_limit="200", opening_spent_credits="0")
+        spec = json.loads(self.spec.read_text())
+        spec["status"] = "HOLD"
+        self.spec.write_text(json.dumps(spec), encoding="utf-8")
+        # Image-byte verification alone can still PASS while production use is held.
+        self.assertEqual(preflight_v7.verify_pair(self.spec, self.a, self.c)["preflight_result"],
+                         "VERIFIED_DIRECT_PREPARED_PAIR_BYTES_ONLY")
+        with self.assertRaisesRegex(experiments.ExperimentError, "motion contract is explicitly on HOLD"):
+            experiments.reserve(self.ledger, self.request())
+        self.assertEqual(experiments.snapshot(self.ledger)["attempts"], 0)
+
+    def test_actual_v7_request_shape_passes_both_unpaid_input_gates(self):
+        """Canonical scissor exercise ID remains stable across V6/V7 spec versions."""
+        repo = self.root / "synthetic-repo"
+        spec_dir = repo / "photo_motion" / "specs"
+        spec_dir.mkdir(parents=True)
+        versioned_spec = spec_dir / "chart1-scissor-jump-v7-prepared-pair.json"
+        versioned_spec.write_bytes(self.spec.read_bytes())
+        identity_policy = repo / "sprites" / "docs" / "PHOTOREALISTIC_AVATAR_DIRECTION_2026-11-25.md"
+        identity_policy.parent.mkdir(parents=True)
+        identity_policy.write_text("Synthetic photographic identity policy", encoding="utf-8")
+        req = self.request()
+        req["spec_path"] = str(versioned_spec)
+        self.assertEqual(preflight_v7.verify_pair(versioned_spec, self.a, self.c)["preflight_result"],
+                         "VERIFIED_DIRECT_PREPARED_PAIR_BYTES_ONLY")
+        result = generation_preflight.evaluate(req, repo_root=repo, available_credits="182")
+        self.assertEqual(result["status"], "PASS", result["errors"])
+        self.assertEqual(result["generation_authorization"], "NOT_GRANTED_BY_PREFLIGHT")
+
+    def test_validated_v7_settings_detach_from_mutable_caller(self):
+        req = self.request()
+        normalized = experiments._validate_request(req)
+        req["settings"]["variants"] = 99
+        req["settings"]["seed"] = "altered after validation"
+        self.assertEqual(normalized["settings"],
+                         {"duration_seconds": 6, "aspect_ratio": "16:9", "variants": 1, "seed": None})
 
 
 if __name__ == "__main__":

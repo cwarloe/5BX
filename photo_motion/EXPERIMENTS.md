@@ -29,6 +29,8 @@ The cap is immutable within the ledger. A separate provider gets a separate ledg
 
 **An absent store is not evidence of an unspent budget.** A *new* policy now refuses initialization unless the operator explicitly supplies `--opening-spent-credits`. A positive opening debit must include an existing evidence file and every known original 64-character run fingerprint; the tool rehashes the file and freezes its reference, digest, debit and run IDs in the immutable policy. The debit is **clearly labeled reconciled prior spend**, not converted into invented native intent or charge receipts. Restoring a real older store/backup is preferable when possible; do not combine a recovered original receipt with an opening debit for the same run, as the snapshot will stop on that overlap. For other unrecorded charges, check the real provider account/history first; a missing or unverifiable charge is a blocker to confident reconciliation, not permission to assume zero.
 
+When a positive opening debit exists, `status` and every new reservation **rehash its preserved evidence file again**. If that evidence was deleted, moved or altered, accounting stops until the exact original evidence bytes are restored; moving or replacing the ledger to reset this error is not a remedy.
+
 For the documented Chart 1 photographic video #21, the internal observation recorded **18 actual Flow credits** (account **852 → 834**) and original private run fingerprint `1a9023553d9d2d1939bd39d5d2fb06ef084543d347afc8fa0f54c623f9164a76`. If that original private ledger cannot be recovered and there have been **no additional untracked Flow charges**, its verified retrospective diagnostic can serve as the explicitly acknowledged, limited evidence for a recovered opening debit:
 
 ```bash
