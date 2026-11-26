@@ -36,9 +36,16 @@ magick "$src/00_CHART3_TESTS26-29_MOBILE_QA_CONTACT.jpg" \
   -fill '#a70c1a' -draw 'rectangle 580,955 1166,1068' \
   -fill white -pointsize 30 -annotate +605+962 'DO NOT ANIMATE 29E' \
   -pointsize 23 -annotate +605+1009 'Older conditional label superseded' \
-  -fill '#b16a00' -draw 'rectangle 7,1390 580,1495' \
-  -fill white -pointsize 29 -annotate +25+1398 '29C: REFERENCE ONLY' \
-  -pointsize 23 -annotate +25+1448 'Elbow mechanics not verified' \
+  "$here/ch3_safety_stage.png"
+magick "$new/v_pike_elbow/29H_PoseLocked_Photographic_CANDIDATE.png" \
+  -resize 566x318 -background white -gravity center -extent 566x320 "$here/ch3_29h_tile.png"
+magick "$here/ch3_safety_stage.png" \
+  -fill white -draw 'rectangle 0,1090 585,1601' \
+  "$here/ch3_29h_tile.png" -geometry +9+1110 -compose over -composite \
+  -font DejaVu-Sans-Bold -gravity northwest \
+  -fill '#215c35' -pointsize 28 -annotate +11+1453 '29H: INDEPENDENT GEOMETRY PASS' \
+  -fill '#a70c1a' -pointsize 29 -annotate +11+1498 'IDENTITY HOLD — NO VIDEO' \
+  -fill '#253440' -pointsize 22 -annotate +11+1543 'Replaces old 29C reference tile' \
   "$here/ch3_annotated.png"
 note_card 'CHART 3: POSITIONS 26–28 CONDITIONAL; 29E ON HOLD' "$here/ch3_footer.png" '#9a101b'
 magick "$here/ch3_title.png" "$here/ch3_annotated.png" "$here/ch3_footer.png" \
