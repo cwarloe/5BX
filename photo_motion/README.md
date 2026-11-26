@@ -93,6 +93,11 @@ cycles, fixed side-on full-body framing, explicit rights for private AI input,
 and byte-verified raw-source evidence. It is a **capture protocol only**, not
 new footage, permission to reuse a stranger's video or approval to transfer a
 real demonstrator's face/biometrics to the target character.
+For a future privately recorded adult original, use the
+[read-only, fail-closed capture intake validator](HUMAN_MOTION_REFERENCE_INTAKE.md)
+before proposing any separate provider experiment. It validates source bytes,
+the nine ordered human-reviewed phases and four distinct flight windows, and
+rehashed private rights evidence; it never approves provider upload, form or release.
 
 ## Pin the real generator inputs
 
