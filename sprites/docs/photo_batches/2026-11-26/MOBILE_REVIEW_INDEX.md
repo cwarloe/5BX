@@ -2,6 +2,14 @@
 
 Updated 2026-11-26 UTC. All assets are experimental; **no human final exercise-form approvals**. Open the contact sheets directly in Google Drive; no GitHub downloads required for viewing.
 
+## Most recent round 2 refinements — independent identity vetoes included
+
+- [**Chart 2 — 24R shoulder softness**](https://drive.google.com/file/d/1RRDpqgL3YqHHNW-NwGrVjYiBdthcJYoe/view): **eligible as a controlled video TEST INPUT**, not a validated video or workout instruction. [Full-resolution 24R](https://drive.google.com/file/d/1KwDdKRNnwivIWW1Pm3fTUTnxGw8yMQYf/view).
+- [**Chart 3 — replaced in place: V-pike elbow SAFETY HOLD**](https://drive.google.com/file/d/1eqWJDLNBOqAWZJ69cMcH7rjAG80xaN1R/view): do not animate 29E; 29F not a fix. [29E vs 29F anatomy comparison](https://drive.google.com/file/d/1OQzVVA-_4oQb0LwaIfaOKr0DRWCony9y/view).
+- [**Chart 4 — 32S/34B review**](https://drive.google.com/file/d/1qDnImnZdzww9UVRNkvTPbxJ7BRbgjgWW/view): **32S identity HOLD** (upper arms too athletic); **34B diagnostic conditional** with proof dependent on [physically tagged 34A](https://drive.google.com/file/d/1CQl_ZpieFOymQD9NWQpmIPf0f6nR3RnU/view). [34B clean card](https://drive.google.com/file/d/1pR3fJulwd3lYUeENuhzH4jd-VXIZDirg/view).
+- [**Chart 6 — 41S chest slap**](https://drive.google.com/file/d/1cIuOH2DvnO1SA3OQuGDGUZ_pi0S2x535/view): **identity HOLD**, even though both palms are visibly airborne. Video motion still untested.
+- [**Verbatim round 2 prompts, QA and code**](https://github.com/cwarloe/5BX/blob/main/sprites/docs/photo_batches/2026-11-26/round2/ROUND2_REVIEW_AND_EXACT_PROMPT_INDEX.md): includes failed approaches, independent vetoes and quantitative marker/track checks. The 29G standalone elbow trial is anatomy-plausible but remains an identity hold.
+
 1. [**Chart 1 overview — tests 15–21**](https://drive.google.com/file/d/1mvivfArCHRDNdut3KyuVy1UfMlIiRr-a/view). Contains toe touch, partial sit-up, alternate leg raise, kneeling push-up, improved scissor, one Flow-video status tile and Chart 2 back extension.
 2. [**Chart 2 overview — tests 21–25**](https://drive.google.com/file/d/1zgvzRdV--CnF_5qmrxskkfWtHp5iMIQ0/view). Five preferred still candidates with exercise-specific QA warnings.
 3. [**Chart 3 overview — tests 26–29**](https://drive.google.com/file/d/1eqWJDLNBOqAWZJ69cMcH7rjAG80xaN1R/view). **SAFETY UPDATE: 29E V/forehead push-up ON HOLD** because a later human review caught implausibly cocked elbows; earlier contact-sheet conditional label is superseded. Other tiles retain their original assistant-level QA.
