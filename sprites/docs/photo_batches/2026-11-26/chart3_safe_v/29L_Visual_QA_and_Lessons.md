@@ -14,6 +14,7 @@
 | Hand, foot, and body ownership | Two independent palms and two shoe pairs remain visible. Forelegs point to image-left, palms image-right. Hips remain high V. | PASS visual limb topology |
 | Four-stage communication | A high → B moderate descent → C safe deeper descent → D recovery. All 4 frames in one jointly generated card, making outfit/age more stable. | PASS story, not actual motion |
 | Camera/contact registration | Near palm image-left A is around tile x~500 vs B/C/D x~430–450 (about **50–70 px** horizontal drift). Shoes also shift ~20–50 px. Camera crop/background not pixel locked. | FAIL as four independent video keyframes |
+| Independent optical continuity | Parent's objective QA found track boundary spread only **2 px**, and blue-shirt median color range **11/255** across panels. These are good camera/palette measures but DO NOT show that palms remained fixed. | PASS background/color, FAIL joint contacts |
 | New vs prior oblique 02 | 29L C lifts face a little farther from track and keeps naturally bent front elbow. Changes are subtle, not a novel solution of rigorous floor-contact frame registration. | CONDITIONAL improvement |
 
 ## Working rule
@@ -32,3 +33,7 @@ Animate only the same real 13–14-year-old boy from this photograph in a single
 - `29L_UpFrame_SingleVideoSeed.png`: A-frame crop only, safer for video.
 - `02_vs_29L_SafeDepth_MobileCompare.jpg`: bottom pose before/after for mobile visual QA.
 - `29L_ExactSubmittedPrompt.md`: full exact prompt and reference roles.
+
+## High-resolution repaint follow-up: REJECT as identity seed
+
+Tested `29L_HiResRepaint_IDENTITY_REJECT.png` with an imagegen photo-restoration edit of the up-frame and identity reference. It made fabric/skin/shoe textures sharper, but the boy's deltoid and biceps became too pronounced and his face older/stronger than the approved soft middle-school master. It is not the same boy confidently enough for video anchoring. **Use original cropped 29L up-frame instead.** This is a useful negative test: simply demanding photoreal detail and a character sheet can inject adult-looking muscle definition, violating the youth identity gate.
