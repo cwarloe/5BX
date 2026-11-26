@@ -4,7 +4,9 @@ import subprocess
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
+import photo_motion.video_qa as video_module
 from photo_motion.contract import load_spec
 from photo_motion.video_qa import _phase_samples, inspect, probe, read_recipe
 
@@ -99,6 +101,35 @@ class TestVideoQA(unittest.TestCase):
             with self.assertRaises(FileExistsError):
                 inspect(spec, spec_path, source, hostile)
             self.assertEqual(source.read_bytes(), before)
+
+    @unittest.skipUnless(shutil.which("ffmpeg") and shutil.which("ffprobe"), "ffmpeg binaries not installed")
+    def test_source_swapped_during_frame_extraction_cannot_produce_a_mixed_take_report(self):
+        try:
+            import PIL  # noqa: F401
+        except ImportError:
+            self.skipTest("Pillow not installed")
+        spec_path = ROOT / "specs/chart1-kneeling-pushup.json"
+        with tempfile.TemporaryDirectory() as folder:
+            tmp = Path(folder)
+            source, other = tmp / "red.mp4", tmp / "blue.mp4"
+            for path, color in ((source, "red"), (other, "blue")):
+                subprocess.run(["ffmpeg", "-nostdin", "-loglevel", "error", "-y", "-f", "lavfi",
+                                "-i", f"color=c={color}:s=640x360:r=24:d=6", "-c:v", "mpeg4",
+                                str(path)], check=True, capture_output=True)
+            real_extract = video_module._extract
+            extracted = 0
+
+            def swap_after_first_frame(video, at, output):
+                nonlocal extracted
+                real_extract(video, at, output)
+                extracted += 1
+                if extracted == 1:
+                    shutil.copyfile(other, source)
+
+            with patch.object(video_module, "_extract", side_effect=swap_after_first_frame):
+                with self.assertRaisesRegex(RuntimeError, "source video changed"):
+                    inspect(load_spec(spec_path), spec_path, source, tmp / "mixed-qa")
+            self.assertFalse((tmp / "mixed-qa/inspection.json").exists())
 
 
 if __name__ == "__main__":

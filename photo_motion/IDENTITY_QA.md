@@ -45,6 +45,8 @@ python3 -m photo_motion.identity_qa /path/to/annotations.json --out /path/to/new
 
 The program refuses to overwrite existing reports, input manifests or source images. It preserves SHA-256 hashes of the annotation file, reference still and every sampled frame. Store the report with the **existing** video QA evidence and numbered batch notes, not in a new tracking database. Private frames/master images do not belong in the repository.
 
+**Input mutation guard:** Each image is snapshotted into memory and decoded from those exact bytes. The tool then rehashes the on-disk source both after analysis of that image and before assembling the final report, including sources processed earlier and the annotation manifest. If any content changed, it refuses to produce a report. This prevents reporting a replacement image's hash beside statistics calculated from the earlier image; it does not lock files against other programs or prevent later changes after the run.
+
 ## What its metrics mean
 
 | Measurement | Useful question | What it cannot prove |

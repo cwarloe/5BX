@@ -21,6 +21,15 @@ DEFAULT_MIN_CONFIDENCE = 0.5
 DEFAULT_MIN_OBSERVATIONS = 3
 
 
+def _overlay_sample_indices(count, max_images):
+    """Evenly sample annotations without ever omitting the final contact."""
+    if not isinstance(max_images, int) or isinstance(max_images, bool) or max_images < 2:
+        raise ValueError("max_images must be an integer of at least two to preserve both endpoints")
+    if count <= max_images:
+        return list(range(count))
+    return [round(i * (count - 1) / (max_images - 1)) for i in range(max_images)]
+
+
 def _sha256(path):
     h = hashlib.sha256()
     with open(path, "rb") as source:
@@ -91,8 +100,9 @@ def evaluate_annotations(doc, *, max_drift_fraction=DEFAULT_MAX_DRIFT_FRACTION,
                          video_path=None):
     """Return a technical screening result, never a form/release decision.
 
-    A PASS requires at least 3 credible samples for EVERY named planted point,
-    and a real MP4 whose native size + SHA-256 match the annotations. An absent
+    A PASS requires credible samples covering the beginning AND final frame of
+    the original video for EVERY named planted point, plus a real MP4 whose
+    native size + SHA-256 match the annotations. An absent
     point, low-confidence model result, missing source pin, or source mismatch
     cannot be silently treated as a PASS.
     """
@@ -110,6 +120,7 @@ def evaluate_annotations(doc, *, max_drift_fraction=DEFAULT_MAX_DRIFT_FRACTION,
     source = None
     pinned = doc.get("source_video_sha256")
     matched = False
+    endpoint_coverage = None
     if video_path is not None:
         from .video_qa import probe
 
@@ -118,10 +129,30 @@ def evaluate_annotations(doc, *, max_drift_fraction=DEFAULT_MAX_DRIFT_FRACTION,
             raise FileNotFoundError(video)
         actual = _sha256(video)
         meta = probe(video)
+        if _sha256(video) != actual:
+            raise RuntimeError("source video changed during contact inspection; discard these results")
         if (meta["width"], meta["height"]) != (w, h):
             raise ValueError("contact annotation dimensions do not match native video dimensions")
         if doc["samples"][-1]["time_seconds"] >= meta["duration_seconds"]:
             raise ValueError("contact annotation timestamp is beyond the last video frame")
+        # Sampled-window stability is not full-video loop closure. A user might
+        # annotate three perfect frames from the middle and omit both landings.
+        # Use a one-frame grace window for rounded timestamp annotations.
+        frame_interval = 1.0 / meta["fps"]
+        first_time = doc["samples"][0]["time_seconds"]
+        last_time = doc["samples"][-1]["time_seconds"]
+        last_frame_time = max(0.0, meta["duration_seconds"] - frame_interval)
+        endpoint_coverage = {
+            "first_sample_seconds": first_time,
+            "last_sample_seconds": last_time,
+            "expected_last_frame_seconds": round(last_frame_time, 6),
+            "tolerance_seconds": round(frame_interval, 6),
+            "starts_at_video_beginning": first_time <= frame_interval + 1e-6,
+            "reaches_video_final_frame": last_time >= last_frame_time - frame_interval - 1e-6,
+        }
+        if not (endpoint_coverage["starts_at_video_beginning"]
+                and endpoint_coverage["reaches_video_final_frame"]):
+            warnings.append("Annotations do not cover original video start and final frame; sampled-window drift cannot establish full-loop contact stability")
         if pinned and actual != pinned:
             raise ValueError("source video SHA-256 does not match contact annotations; never reuse annotations across different takes")
         matched = pinned == actual
@@ -184,11 +215,20 @@ def evaluate_annotations(doc, *, max_drift_fraction=DEFAULT_MAX_DRIFT_FRACTION,
     # be exactly the point that would expose the defect.
     if status != "NOT_EVALUATED" and not matched:
         status = "NOT_EVALUATED"
+    if endpoint_coverage and not (endpoint_coverage["starts_at_video_beginning"]
+                                  and endpoint_coverage["reaches_video_final_frame"]):
+        status = "NOT_EVALUATED"
+        for item in summaries:
+            if item["screen_status"] == "PASS":
+                item["sampled_window_status"] = "PASS"
+                item["screen_status"] = "NOT_EVALUATED"
+                item["reason"] = "Video start/final-frame annotation coverage is required for a full-loop PASS"
     return {
         "tool": "photo_motion.contact_qa", "schema_version": 1,
         "technical_contact_screen": status,
         "meaning": "PASS means only that *supplied* named pixel annotations stayed within tolerance; it does not validate exercise form or anatomy.",
-        "video": source, "annotation_method": doc["annotation_method"],
+        "video": source, "video_endpoint_coverage": endpoint_coverage,
+        "annotation_method": doc["annotation_method"],
         "fixed_contacts": doc["fixed_contacts"], "sample_count": len(doc["samples"]),
         "tolerance_fraction_width": max_drift_fraction,
         "min_confidence": min_confidence, "min_observations": min_observations,
@@ -212,11 +252,16 @@ def render_overlay(doc, video_path, output_dir, *, max_images=24):
     from PIL import Image, ImageDraw
     from .video_qa import _extract
 
+    video = Path(video_path).resolve()
+    start_sha256 = _sha256(video)
+    w, h = _validate(doc)
+    # Independently invoked overlays must have the same source-pin checks as
+    # the evaluator; otherwise a wrong take could be visually mislabeled.
+    evaluate_annotations(doc, video_path=video)
     requested = Path(output_dir)
     if requested.is_symlink():
         raise ValueError("overlay output path must not be a symbolic link")
     out = requested.resolve()
-    video = Path(video_path).resolve()
     if out == video.parent or out == video or out in video.parents:
         raise ValueError("output directory must be separate from the original video")
     if not out.exists():
@@ -225,7 +270,6 @@ def render_overlay(doc, video_path, output_dir, *, max_images=24):
         raise ValueError("overlay output must be a directory")
     if any(out.iterdir()):
         raise FileExistsError("overlay output directory is not empty; refusing to replace evidence")
-    w, h = _validate(doc)
     palette = ["#ff8c2b", "#19c5bd", "#e95353", "#5aa9ff", "#fff300", "#d66af5"]
     baseline = {}
     for sample in doc["samples"]:
@@ -233,7 +277,8 @@ def render_overlay(doc, video_path, output_dir, *, max_images=24):
             if name not in baseline and sample["landmarks"].get(name) is not None:
                 baseline[name] = sample["landmarks"][name]
     paths = []
-    for idx, sample in enumerate(doc["samples"][:max_images]):
+    for idx in _overlay_sample_indices(len(doc["samples"]), max_images):
+        sample = doc["samples"][idx]
         raw_path = out / f"source_frame_{idx + 1:02d}.png"
         path = out / f"annotated_{idx + 1:02d}.png"
         _extract(video, sample["time_seconds"], raw_path)
@@ -258,6 +303,8 @@ def render_overlay(doc, video_path, output_dir, *, max_images=24):
         with path.open("xb") as output:
             im.save(output, format="PNG")
         paths.append(str(path))
+    if _sha256(video) != start_sha256:
+        raise RuntimeError("source video changed during contact overlay rendering; discard these results")
     return paths
 
 
@@ -279,8 +326,11 @@ def main(argv=None):
         output.mkdir(parents=True, exist_ok=False)
         report["annotation_sha256"] = _sha256(original)
         if args.video and not args.no_overlays:
+            indices = _overlay_sample_indices(len(doc["samples"]), 24)
             report["overlay_images"] = [str(Path(path).relative_to(output))
                                         for path in render_overlay(doc, args.video, output)]
+            report["overlay_sample_indices_zero_based"] = indices
+            report["overlay_omitted_sample_count"] = len(doc["samples"]) - len(indices)
         with (output / "contact_qa.json").open("x", encoding="utf-8") as handle:
             handle.write(json.dumps(report, indent=2) + "\n")
         print(json.dumps({"contact_screen": report["technical_contact_screen"],

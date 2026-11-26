@@ -7,6 +7,7 @@ from pathlib import Path
 from photo_motion.contract import load_spec
 from photo_motion.extended_contract import validate_extended
 from photo_motion.__main__ import _check_spec
+from photo_motion.__main__ import _prompt
 
 
 ROOT = Path(__file__).resolve().parents[1] / "specs"
@@ -26,6 +27,13 @@ class ExtendedChartOneMovementTests(unittest.TestCase):
                 self.assertEqual(validate_extended(spec), [])
                 self.assertEqual(_check_spec(spec), [])
                 self.assertEqual(spec["status"], "EXPERIMENTAL")
+
+    def test_prompt_includes_exact_structured_support_and_tracked_running_limb_roles(self):
+        prompt = _prompt(self.running)
+        self.assertIn('"contacts":["orange_foot"]', prompt)
+        self.assertIn('"contacts":["teal_foot"]', prompt)
+        self.assertIn('"teal_leg":"low_lift"', prompt)
+        self.assertIn('"foot_lift_class":"low_about_four_inches"', prompt)
 
     def test_chart1_toe_must_reach_between_feet_not_outside(self):
         bad = copy.deepcopy(self.toe)
@@ -92,6 +100,18 @@ class ExtendedChartOneMovementTests(unittest.TestCase):
         errors = " ".join(validate_extended(bad))
         self.assertIn("camera.locked", errors)
         self.assertIn("cannot assert approval", errors)
+
+    def test_chart_and_exercise_number_cannot_relabel_an_unrelated_motion(self):
+        for original, chart, exercise in (
+            (self.toe, 6, 4),
+            (self.sit, 1, 3),
+            (self.leg, 2, 3),
+            (self.running, 5, 2),
+        ):
+            with self.subTest(kind=original["movement_type"]):
+                mislabeled = copy.deepcopy(original)
+                mislabeled["chart"], mislabeled["exercise"] = chart, exercise
+                self.assertIn("belongs to Chart 1 Exercise", " ".join(validate_extended(mislabeled)))
 
 
 if __name__ == "__main__":

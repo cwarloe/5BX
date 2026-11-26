@@ -151,9 +151,17 @@ def analyze(video_path, *, expected_holds=(), still_threshold=0.5, minimum_hold_
     video = Path(video_path).resolve()
     if not video.is_file():
         raise FileNotFoundError(video)
+    # A digest of a *different* later file must never be attached to decoded
+    # frames from this take. Check both sides of the multi-process inspection.
+    source_sha256 = _sha256(video)
+    for label, value in (("still_threshold", still_threshold), ("minimum_hold_seconds", minimum_hold_seconds)):
+        if isinstance(value, bool) or not isinstance(value, (float, int)) or not math.isfinite(value):
+            raise ValueError(f"{label} must be a finite number")
     if still_threshold < 0 or minimum_hold_seconds <= 0:
         raise ValueError("stillness threshold must be nonnegative and hold duration positive")
     for start, stop in expected_holds:
+        if any(isinstance(t, bool) or not isinstance(t, (float, int)) or not math.isfinite(t) for t in (start, stop)):
+            raise ValueError("expected hold endpoints must be finite numbers")
         if start < 0 or stop <= start:
             raise ValueError("expected holds must have 0 <= start < end")
     info = probe(video)
@@ -162,6 +170,8 @@ def analyze(video_path, *, expected_holds=(), still_threshold=0.5, minimum_hold_
         raise ValueError("video frame rate missing")
     decoded_count, delta, border = _stream_differences(video)
     timestamps = _frame_times(video)
+    if _sha256(video) != source_sha256:
+        raise RuntimeError("source video changed during temporal inspection; discard these results")
     warnings = []
     if len(timestamps) != decoded_count:
         warnings.append("Frame timestamps unavailable or inconsistent with decoded count; time positions use average FPS")
@@ -185,7 +195,7 @@ def analyze(video_path, *, expected_holds=(), still_threshold=0.5, minimum_hold_
         warnings.append("Background/border pixels change substantially; inspect for camera motion, relighting or background drift")
     return {
         "tool": "photo_motion.temporal_qa", "schema_version": 1,
-        "source_video": str(video), "source_video_sha256": _sha256(video),
+        "source_video": str(video), "source_video_sha256": source_sha256,
         "video": info, "decoded_frame_count": decoded_count,
         "sampling_size": [WIDTH, HEIGHT], "difference_units": "Mean absolute grayscale change per pixel, 0–255",
         "mean_frame_difference": round(statistics.mean(delta), 4),

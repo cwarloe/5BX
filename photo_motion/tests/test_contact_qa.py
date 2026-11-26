@@ -7,7 +7,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from photo_motion.contact_qa import evaluate_annotations, render_overlay, _validate
+from photo_motion.contact_qa import evaluate_annotations, render_overlay, _overlay_sample_indices, _validate
 
 
 def example(width=640, height=360):
@@ -114,13 +114,35 @@ class VideoVerificationTests(unittest.TestCase):
     def sample(self):
         doc = example()
         doc["source_video_sha256"] = self.sha
+        # The 2-second 24 fps fixture has its last frame at 47/24 seconds.
+        doc["samples"][-1]["time_seconds"] = 47 / 24
         return doc
 
     def test_matching_real_source_and_stable_points_can_screen_pass(self):
         result = evaluate_annotations(self.sample(), video_path=self.video)
         self.assertEqual(result["technical_contact_screen"], "PASS")
         self.assertTrue(result["video"]["matched_annotation_sha256"])
+        self.assertTrue(result["video_endpoint_coverage"]["reaches_video_final_frame"])
         self.assertEqual(result["exercise_form_approval"], "NOT_EVALUATED")
+
+    def test_middle_only_samples_cannot_certify_whole_video_loop(self):
+        doc = self.sample()
+        for index, sample in enumerate(doc["samples"]):
+            sample["time_seconds"] = 0.5 + 0.4 * index
+        result = evaluate_annotations(doc, video_path=self.video)
+        self.assertEqual(result["technical_contact_screen"], "NOT_EVALUATED")
+        self.assertFalse(result["video_endpoint_coverage"]["starts_at_video_beginning"])
+        self.assertFalse(result["video_endpoint_coverage"]["reaches_video_final_frame"])
+        self.assertEqual(result["per_landmark"][0]["screen_status"], "NOT_EVALUATED")
+        self.assertEqual(result["per_landmark"][0]["sampled_window_status"], "PASS")
+
+    def test_missing_final_frame_cannot_certify_loop(self):
+        doc = self.sample()
+        doc["samples"][-1]["time_seconds"] = 1.6
+        result = evaluate_annotations(doc, video_path=self.video)
+        self.assertEqual(result["technical_contact_screen"], "NOT_EVALUATED")
+        self.assertTrue(result["video_endpoint_coverage"]["starts_at_video_beginning"])
+        self.assertFalse(result["video_endpoint_coverage"]["reaches_video_final_frame"])
 
     def test_matching_source_and_large_drift_warns(self):
         doc = self.sample()
@@ -157,6 +179,25 @@ class VideoVerificationTests(unittest.TestCase):
         with Image.open(paths[0]) as im:
             self.assertEqual(im.size, (640, 360))
         self.assertEqual(hashlib.sha256(self.video.read_bytes()).hexdigest(), before)
+
+    def test_dense_annotations_include_the_last_frame_even_when_overlays_are_capped(self):
+        doc = self.sample()
+        doc["samples"] = []
+        for index in range(30):
+            x = 300 + (40 if index == 29 else 0)
+            doc["samples"].append({
+                "time_seconds": (47 / 24) * index / 29,
+                "landmarks": {"near_palm": {"x": x, "y": 245},
+                              "near_knee": {"x": 100, "y": 240}},
+            })
+        result = evaluate_annotations(doc, video_path=self.video)
+        self.assertEqual(result["technical_contact_screen"], "WARN")
+        indices = _overlay_sample_indices(30, 4)
+        self.assertEqual(indices[0], 0)
+        self.assertEqual(indices[-1], 29)
+        paths = render_overlay(doc, self.video, self.folder / "dense-overlays", max_images=4)
+        self.assertEqual(len(paths), 4)
+        self.assertEqual(Path(paths[-1]).name, "annotated_30.png")
 
 
 if __name__ == "__main__":

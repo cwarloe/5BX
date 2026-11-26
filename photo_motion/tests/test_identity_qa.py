@@ -2,9 +2,11 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 from PIL import Image
 
+import photo_motion.identity_qa as identity_qa
 from photo_motion.identity_qa import inspect_manifest, main, validate_box
 
 
@@ -100,6 +102,59 @@ class TestIdentityQA(unittest.TestCase):
         report.write_text("important previous QA")
         self.assertEqual(main([str(path), "--out", str(report)]), 2)
         self.assertEqual(report.read_text(), "important previous QA")
+
+    def test_master_mutated_during_patch_analysis_is_rejected(self):
+        path = self.write_manifest()
+        original = identity_qa.patch_stats
+        def mutate_master_during_stats(image, box, name):
+            result = original(image, box, name)
+            if name == "reference.shirt":
+                # The decoder inspected the *original* red master, while its
+                # path is replaced before the report is created.
+                Image.new("RGB", (120, 120), (30, 30, 250)).save(self.root / "master.png")
+            return result
+        with mock.patch.object(identity_qa, "patch_stats", side_effect=mutate_master_during_stats):
+            with self.assertRaisesRegex(ValueError, "master image changed during analysis"):
+                inspect_manifest(path)
+
+    def test_sample_mutated_during_patch_analysis_is_rejected(self):
+        path = self.write_manifest()
+        original = identity_qa.patch_stats
+        def mutate_sample_during_stats(image, box, name):
+            result = original(image, box, name)
+            if name == "samples[0].shirt":
+                Image.new("RGB", (120, 120), (50, 70, 90)).save(self.root / "brighter.png")
+            return result
+        with mock.patch.object(identity_qa, "patch_stats", side_effect=mutate_sample_during_stats):
+            with self.assertRaisesRegex(ValueError, "sample image 0 changed during analysis"):
+                inspect_manifest(path)
+
+    def test_earlier_frame_mutated_while_later_frame_is_analyzed(self):
+        path = self.write_manifest(samples=[
+            {"image": "brighter.png", "time_seconds": 1.5, "regions": {"shirt": [.2, .2, .6, .6]}},
+            {"image": "different.png", "time_seconds": 3.0, "regions": {"shirt": [.2, .2, .6, .6]}}
+        ])
+        original = identity_qa.patch_stats
+        def mutate_earlier_frame(image, box, name):
+            result = original(image, box, name)
+            if name == "samples[1].shirt":
+                Image.new("RGB", (120, 120), (1, 2, 3)).save(self.root / "brighter.png")
+            return result
+        with mock.patch.object(identity_qa, "patch_stats", side_effect=mutate_earlier_frame):
+            with self.assertRaisesRegex(ValueError, "sample image 0 changed during analysis"):
+                inspect_manifest(path)
+
+    def test_manifest_mutated_after_parsing_is_rejected(self):
+        path = self.write_manifest()
+        original = identity_qa.patch_stats
+        def mutate_manifest(image, box, name):
+            result = original(image, box, name)
+            if name == "reference.shirt":
+                path.write_text('{"schema_version": 1, "forged": true}', encoding="utf-8")
+            return result
+        with mock.patch.object(identity_qa, "patch_stats", side_effect=mutate_manifest):
+            with self.assertRaisesRegex(ValueError, "annotation manifest changed during analysis"):
+                inspect_manifest(path)
 
 
 if __name__ == "__main__":

@@ -11,6 +11,7 @@ are private/local unless the operator separately archives the result.
 
 import argparse
 import hashlib
+import io
 import json
 import math
 import sys
@@ -23,6 +24,23 @@ def sha256_file(path):
         for part in iter(lambda: stream.read(1024 * 1024), b""):
             digest.update(part)
     return digest.hexdigest()
+
+
+def _snapshot_source(path, role):
+    """Pin bytes that the decoder will actually inspect, not a later file version."""
+    blob = Path(path).read_bytes()
+    digest = hashlib.sha256(blob).hexdigest()
+    return blob, digest
+
+
+def _assert_unchanged(path, digest, role):
+    """Reject inconsistent attribution when an input changes during inspection."""
+    try:
+        actual = sha256_file(path)
+    except FileNotFoundError as exc:
+        raise ValueError(f"{role} disappeared during analysis: {path}") from exc
+    if actual != digest:
+        raise ValueError(f"{role} changed during analysis: {path}; discard this report and rerun with immutable source files")
 
 
 def validate_box(box, name):
@@ -104,7 +122,8 @@ def inspect_manifest(manifest_path):
     from PIL import Image
 
     path = Path(manifest_path).resolve()
-    doc = json.loads(path.read_text(encoding="utf-8"))
+    manifest_bytes, manifest_hash = _snapshot_source(path, "annotation manifest")
+    doc = json.loads(manifest_bytes.decode("utf-8"))
     if doc.get("schema_version") != 1:
         raise ValueError("schema_version must be 1")
     ref = doc.get("reference")
@@ -120,11 +139,15 @@ def inspect_manifest(manifest_path):
         if not file.is_file():
             raise FileNotFoundError(file)
         return file
+    source_digests = {}
     ref_path = read_image(ref["image"])
-    with Image.open(ref_path) as ref_image:
+    ref_bytes, ref_hash = _snapshot_source(ref_path, "master image")
+    with Image.open(io.BytesIO(ref_bytes)) as ref_image:
         reference = {name: patch_stats(ref_image, box, f"reference.{name}")
                      for name, box in ref["regions"].items()}
         ref_dims = ref_image.size
+    _assert_unchanged(ref_path, ref_hash, "master image")
+    source_digests[ref_path] = (ref_hash, "master image")
     if "subject_box" in ref:
         validate_box(ref["subject_box"], "reference.subject_box")
     output = []
@@ -135,7 +158,8 @@ def inspect_manifest(manifest_path):
         if isinstance(when, bool) or not isinstance(when, (int, float)) or not math.isfinite(when) or when < 0:
             raise ValueError(f"samples[{i}].time_seconds must be a nonnegative finite number")
         file = read_image(sample["image"])
-        with Image.open(file) as image:
+        sample_bytes, sample_hash = _snapshot_source(file, f"sample image {i}")
+        with Image.open(io.BytesIO(sample_bytes)) as image:
             detected = {}
             for name in reference:
                 if name not in sample["regions"]:
@@ -150,15 +174,23 @@ def inspect_manifest(manifest_path):
             output.append({
                 "sample_index": i,
                 "sample_time_seconds": when,
-                "image": str(file), "image_sha256": sha256_file(file),
+                "image": str(file), "image_sha256": sample_hash,
                 "image_size": list(image.size),
                 "subject_box_area_ratio_to_master": scale,
                 "regions": detected
             })
+        _assert_unchanged(file, sample_hash, f"sample image {i}")
+        source_digests[file] = (sample_hash, f"sample image {i}")
+    # A source processed earlier must not be silently replaced while we inspect
+    # later frames, or before we assemble this report. The same applies to the
+    # recipe; its hash must describe the bytes that were actually parsed.
+    for file, (digest, role) in source_digests.items():
+        _assert_unchanged(file, digest, role)
+    _assert_unchanged(path, manifest_hash, "annotation manifest")
     return {
         "tool": "photo_motion.identity_qa", "schema_version": 1,
-        "input_manifest": str(path), "input_manifest_sha256": sha256_file(path),
-        "master_image": str(ref_path), "master_sha256": sha256_file(ref_path),
+        "input_manifest": str(path), "input_manifest_sha256": manifest_hash,
+        "master_image": str(ref_path), "master_sha256": ref_hash,
         "master_image_size": list(ref_dims), "reference_patch_stats": reference,
         "samples": output,
         "identity_verdict": "NOT_EVALUATED",
