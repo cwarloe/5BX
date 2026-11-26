@@ -319,25 +319,31 @@ def main(argv=None):
     args = parser.parse_args(argv)
     try:
         original = args.annotations.resolve()
-        doc = json.loads(original.read_text(encoding="utf-8"))
+        # The provenance digest must name the exact bytes parsed, not a later
+        # unrelated revision of a human-editable annotation file.
+        annotation_bytes = original.read_bytes()
+        annotation_sha256 = hashlib.sha256(annotation_bytes).hexdigest()
+        doc = json.loads(annotation_bytes.decode("utf-8"))
         report = evaluate_annotations(doc, max_drift_fraction=args.tolerance,
                                       min_confidence=args.min_confidence, video_path=args.video)
         output = args.out.resolve()
         output.mkdir(parents=True, exist_ok=False)
-        report["annotation_sha256"] = _sha256(original)
+        report["annotation_sha256"] = annotation_sha256
         if args.video and not args.no_overlays:
             indices = _overlay_sample_indices(len(doc["samples"]), 24)
             report["overlay_images"] = [str(Path(path).relative_to(output))
                                         for path in render_overlay(doc, args.video, output)]
             report["overlay_sample_indices_zero_based"] = indices
             report["overlay_omitted_sample_count"] = len(doc["samples"]) - len(indices)
+        if _sha256(original) != annotation_sha256:
+            raise RuntimeError("annotation file changed during contact inspection; discard this report")
         with (output / "contact_qa.json").open("x", encoding="utf-8") as handle:
             handle.write(json.dumps(report, indent=2) + "\n")
         print(json.dumps({"contact_screen": report["technical_contact_screen"],
                           "output": str(output), "source_sha256_checked": bool(report["video"] and report["video"]["matched_annotation_sha256"]),
                           "exercise_form_approval": "NOT_EVALUATED"}, indent=2))
         return 0
-    except (ValueError, OSError, RuntimeError, json.JSONDecodeError) as error:
+    except (ValueError, OSError, RuntimeError, UnicodeDecodeError, json.JSONDecodeError) as error:
         print(f"ERROR: {error}", file=sys.stderr)
         return 2
 
