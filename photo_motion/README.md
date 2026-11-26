@@ -178,6 +178,13 @@ from the surviving original A/C inputs and one pinned experimental canvas
 JPEG, plus an independently bound source-pair QA report, before any paid
 segment reservation. It never upgrades V7/V8 source claims or approves form.
 
+The independent [experimental foreground/static-plate compositor](FOREGROUND_COMPOSITE.md)
+combines byte-pinned RGBA frames with one fixed photographic plate using
+reproducible integer alpha math. Synthetic-only regression tests cover
+mask clipping, chromakey spill, exact background preservation and optional
+H.264 preview replay. It neither extracts the subject nor authenticates an
+empty background, and cannot grant exercise-form or release acceptance.
+
 The [V11 read-only airborne-apex candidate preflight](V11_APEX_CANDIDATE.md)
 tests a separately generated B* still against exact V10 source replay and
 independent full-body/marker/clearance measurements. It **cannot authorize
