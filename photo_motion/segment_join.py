@@ -9,6 +9,7 @@ exercise safety, or a seamless loop; those always require separate review.
 import argparse
 import hashlib
 import json
+import os
 import re
 import shutil
 import subprocess
@@ -283,8 +284,28 @@ def join_segments(first_file, second_file, output_dir, *,
         with (staging / "two_segment_manifest.json").open("x", encoding="utf-8") as handle:
             json.dump(report, handle, indent=2, sort_keys=True)
             handle.write("\n")
-        # The entire evidence directory appears only after all checks pass.
-        staging.rename(out)
+        # Reserve the final directory *exclusively* after every content check.
+        # Directory rename could replace a concurrently created empty folder
+        # on POSIX. Hard-linking our two validated staged files into a newly
+        # created directory with EEXIST protection avoids that overwrite race.
+        out.mkdir(exist_ok=False)
+        linked = []
+        try:
+            for source, target in (
+                (destination, out / destination.name),
+                (staging / "two_segment_manifest.json",
+                 out / "two_segment_manifest.json"),
+            ):
+                os.link(source, target)
+                linked.append(target)
+        except OSError:
+            # Only paths this process itself linked are removed. Never
+            # replace or delete a preexisting caller-owned evidence file.
+            for item in linked:
+                item.unlink(missing_ok=True)
+            if not any(out.iterdir()):
+                out.rmdir()
+            raise
     return report
 
 
