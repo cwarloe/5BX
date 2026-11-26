@@ -10,7 +10,7 @@ evidence; all engineering tasks follow Charles's requirements approval on
       canonical SHA URL and full-repeat slot timing (R1.1–5, R2.3, R2.6).
 - [x] 2. Implement invisible-before-validation video lifecycle, strict
       metadata/clock sync, pause/skip/error/reduced-motion cleanup (R2.1–7, R3.4).
-- [ ] 3. Integrate dev-flag-only photographic preview with explicit HOLD
+- [x] 3. Integrate dev-flag-only photographic preview with explicit HOLD
       states and **zero sprite renders/preloads**; preserve production (R3.1–3).
 - [ ] 4. Add negative-path and real DOM lifecycle regression tests; integrate
       into Game CI, typecheck and development/production builds (R1–R3).

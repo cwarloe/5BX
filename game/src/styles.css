@@ -13,6 +13,11 @@
   --color-frame-teal: #005a78;
   --color-frame-gold: #d9822b;
   --color-frame-red: #d92323;
+  --color-photo-bg: #11191d;
+  --color-photo-surface: #1e2d33;
+  --color-photo-border: #8babb2;
+  --color-photo-fg: #f4f8f8;
+  --color-photo-accent: #fbdb7a;
   --font-pixel: "Press Start 2P", ui-monospace, monospace;
   --font-condensed: "Oswald", Impact, "Arial Narrow", sans-serif;
 }
@@ -75,6 +80,57 @@
   min-height: 0;
   container-type: size;
   overflow: hidden;
+}
+
+/* Development-only photographic player: no legacy/pixel-art media falls back. */
+.photographic-stage { background: var(--color-photo-bg); color: var(--color-photo-fg); }
+.photographic-player-stage {
+  position: absolute;
+  inset: 8% 8% 18%;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+}
+.photo-exercise-video { width: 100%; height: 100%; object-fit: contain; }
+.photo-video-unavailable {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  max-width: 32rem;
+  padding: 1.2rem;
+  background: var(--color-photo-surface);
+  border: 2px solid var(--color-photo-border);
+  color: var(--color-photo-fg);
+  text-align: center;
+  font-family: system-ui, sans-serif;
+  font-size: clamp(0.75rem, 2.2cqw, 1rem);
+}
+.photo-preview-label {
+  font: 700 0.8rem system-ui, sans-serif;
+  color: var(--color-photo-accent);
+  letter-spacing: 0.06em;
+}
+.photographic-stage .title,
+.photographic-stage .kicker,
+.photographic-stage .goal,
+.photographic-stage .ready-line,
+.photographic-stage .note { color: var(--color-photo-fg); }
+.photo-motion-opt-in {
+  font: inherit;
+  font-weight: 700;
+  color: var(--color-photo-bg);
+  background: var(--color-photo-accent);
+  border: 0;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  padding: 0.6rem 1rem;
+  min-height: 44px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .photographic-stage .press-start { animation: none; }
 }
 
 .sky {
