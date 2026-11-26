@@ -1,0 +1,323 @@
+{
+  "schema_version": 1,
+  "id": "c1-ex5-stationary-low-run-photo-v1",
+  "chart": 1,
+  "exercise": 5,
+  "name": "Chart 1 low stationary run — alternate physical feet, approximate four-inch foot lift",
+  "movement_type": "stationary_run_low",
+  "status": "EXPERIMENTAL",
+  "duration_seconds": 6,
+  "fps": 24,
+  "identity_reference": "sprites/docs/PHOTOREALISTIC_AVATAR_DIRECTION_2026-11-25.md; unchanged Chart 1 v2 photographic identity, not frame descended from other Flow exercises",
+  "movement_reference": "data/5bx-charts.json Chart 1 Exercise 5 low foot lift; sprites/docs/photo_batches/2026-11-26/low_run_video/INDEPENDENT_FLOW_QA.md; Video 20 has NOT passed frame-by-frame verification",
+  "camera": {
+    "locked": true,
+    "description": "Single fixed tripod camera in near-side/oblique view, full boy and both shoes visible, no camera movement; natural 35 mm photograph realism"
+  },
+  "track_provenance": {
+    "orange": "Apparent physical camera-near leg and same-side arm, retained across frames",
+    "teal": "Apparent camera-far physical leg and same-side arm, retained across frames",
+    "anatomical_left_right_proven": false,
+    "warning": "Which color is actual left foot has not been verified; do not equate screen-left with anatomical left"
+  },
+  "timing_note": "Seventeen alternate contact states in a six-second illustrative form loop (eight same-track-leg returns): NOT a prescribed 5BX level cadence. App timing remains sourced from data/5bx-charts.json; do not use this video to count booklet left-foot touches unless physical left is independently confirmed.",
+  "rules": [
+    "Use one immutable 13–14-year-old normal photographic identity, same clothes, face, environment, body scale, lighting and single fixed 35 mm camera",
+    "One real running-in-place body, not a slide show or forward-traveling runner; natural reciprocal arm swing, physically consistent ankle/hip chains",
+    "The same physical orange and teal legs alternate foot contact, with only low approximately four-inch foot clearance, NOT Chart 4 waist-high knees",
+    "Keep knees natural and feet athletic, no pointed ballet toes, no sudden leg-length changes, broken elbows or impossibly long occluded arm",
+    "Continuous real steps throughout 6 s, no fades, duplicate ghosts, teleported foot positions or camera moves; final physical stance returns to initial for looping",
+    "The booklet counts the anatomical left foot touching the ground; color markers from generated AI stills alone cannot establish which color is anatomical left"
+  ],
+  "phases": [
+    {
+      "id": "R00",
+      "time_seconds": 0,
+      "pose_key": "orange_plant",
+      "support": "grounded",
+      "contacts": [
+        "orange_foot"
+      ],
+      "foot_lift_class": "low_about_four_inches",
+      "limbs": {
+        "orange_leg": "planted",
+        "teal_leg": "low_lift",
+        "orange_arm": "forward",
+        "teal_arm": "back"
+      },
+      "pose": "Orange tracked foot plants; teal foot lifts only about four inches; orange arm forward and teal arm back"
+    },
+    {
+      "id": "R01",
+      "time_seconds": 0.375,
+      "pose_key": "teal_plant",
+      "support": "grounded",
+      "contacts": [
+        "teal_foot"
+      ],
+      "foot_lift_class": "low_about_four_inches",
+      "limbs": {
+        "orange_leg": "low_lift",
+        "teal_leg": "planted",
+        "orange_arm": "back",
+        "teal_arm": "forward"
+      },
+      "pose": "Teal tracked foot plants; orange foot lifts only about four inches; teal arm forward and orange arm back"
+    },
+    {
+      "id": "R02",
+      "time_seconds": 0.75,
+      "pose_key": "orange_plant",
+      "support": "grounded",
+      "contacts": [
+        "orange_foot"
+      ],
+      "foot_lift_class": "low_about_four_inches",
+      "limbs": {
+        "orange_leg": "planted",
+        "teal_leg": "low_lift",
+        "orange_arm": "forward",
+        "teal_arm": "back"
+      },
+      "pose": "Orange tracked foot plants; teal foot lifts only about four inches; orange arm forward and teal arm back"
+    },
+    {
+      "id": "R03",
+      "time_seconds": 1.125,
+      "pose_key": "teal_plant",
+      "support": "grounded",
+      "contacts": [
+        "teal_foot"
+      ],
+      "foot_lift_class": "low_about_four_inches",
+      "limbs": {
+        "orange_leg": "low_lift",
+        "teal_leg": "planted",
+        "orange_arm": "back",
+        "teal_arm": "forward"
+      },
+      "pose": "Teal tracked foot plants; orange foot lifts only about four inches; teal arm forward and orange arm back"
+    },
+    {
+      "id": "R04",
+      "time_seconds": 1.5,
+      "pose_key": "orange_plant",
+      "support": "grounded",
+      "contacts": [
+        "orange_foot"
+      ],
+      "foot_lift_class": "low_about_four_inches",
+      "limbs": {
+        "orange_leg": "planted",
+        "teal_leg": "low_lift",
+        "orange_arm": "forward",
+        "teal_arm": "back"
+      },
+      "pose": "Orange tracked foot plants; teal foot lifts only about four inches; orange arm forward and teal arm back"
+    },
+    {
+      "id": "R05",
+      "time_seconds": 1.875,
+      "pose_key": "teal_plant",
+      "support": "grounded",
+      "contacts": [
+        "teal_foot"
+      ],
+      "foot_lift_class": "low_about_four_inches",
+      "limbs": {
+        "orange_leg": "low_lift",
+        "teal_leg": "planted",
+        "orange_arm": "back",
+        "teal_arm": "forward"
+      },
+      "pose": "Teal tracked foot plants; orange foot lifts only about four inches; teal arm forward and orange arm back"
+    },
+    {
+      "id": "R06",
+      "time_seconds": 2.25,
+      "pose_key": "orange_plant",
+      "support": "grounded",
+      "contacts": [
+        "orange_foot"
+      ],
+      "foot_lift_class": "low_about_four_inches",
+      "limbs": {
+        "orange_leg": "planted",
+        "teal_leg": "low_lift",
+        "orange_arm": "forward",
+        "teal_arm": "back"
+      },
+      "pose": "Orange tracked foot plants; teal foot lifts only about four inches; orange arm forward and teal arm back"
+    },
+    {
+      "id": "R07",
+      "time_seconds": 2.625,
+      "pose_key": "teal_plant",
+      "support": "grounded",
+      "contacts": [
+        "teal_foot"
+      ],
+      "foot_lift_class": "low_about_four_inches",
+      "limbs": {
+        "orange_leg": "low_lift",
+        "teal_leg": "planted",
+        "orange_arm": "back",
+        "teal_arm": "forward"
+      },
+      "pose": "Teal tracked foot plants; orange foot lifts only about four inches; teal arm forward and orange arm back"
+    },
+    {
+      "id": "R08",
+      "time_seconds": 3,
+      "pose_key": "orange_plant",
+      "support": "grounded",
+      "contacts": [
+        "orange_foot"
+      ],
+      "foot_lift_class": "low_about_four_inches",
+      "limbs": {
+        "orange_leg": "planted",
+        "teal_leg": "low_lift",
+        "orange_arm": "forward",
+        "teal_arm": "back"
+      },
+      "pose": "Orange tracked foot plants; teal foot lifts only about four inches; orange arm forward and teal arm back"
+    },
+    {
+      "id": "R09",
+      "time_seconds": 3.375,
+      "pose_key": "teal_plant",
+      "support": "grounded",
+      "contacts": [
+        "teal_foot"
+      ],
+      "foot_lift_class": "low_about_four_inches",
+      "limbs": {
+        "orange_leg": "low_lift",
+        "teal_leg": "planted",
+        "orange_arm": "back",
+        "teal_arm": "forward"
+      },
+      "pose": "Teal tracked foot plants; orange foot lifts only about four inches; teal arm forward and orange arm back"
+    },
+    {
+      "id": "R10",
+      "time_seconds": 3.75,
+      "pose_key": "orange_plant",
+      "support": "grounded",
+      "contacts": [
+        "orange_foot"
+      ],
+      "foot_lift_class": "low_about_four_inches",
+      "limbs": {
+        "orange_leg": "planted",
+        "teal_leg": "low_lift",
+        "orange_arm": "forward",
+        "teal_arm": "back"
+      },
+      "pose": "Orange tracked foot plants; teal foot lifts only about four inches; orange arm forward and teal arm back"
+    },
+    {
+      "id": "R11",
+      "time_seconds": 4.125,
+      "pose_key": "teal_plant",
+      "support": "grounded",
+      "contacts": [
+        "teal_foot"
+      ],
+      "foot_lift_class": "low_about_four_inches",
+      "limbs": {
+        "orange_leg": "low_lift",
+        "teal_leg": "planted",
+        "orange_arm": "back",
+        "teal_arm": "forward"
+      },
+      "pose": "Teal tracked foot plants; orange foot lifts only about four inches; teal arm forward and orange arm back"
+    },
+    {
+      "id": "R12",
+      "time_seconds": 4.5,
+      "pose_key": "orange_plant",
+      "support": "grounded",
+      "contacts": [
+        "orange_foot"
+      ],
+      "foot_lift_class": "low_about_four_inches",
+      "limbs": {
+        "orange_leg": "planted",
+        "teal_leg": "low_lift",
+        "orange_arm": "forward",
+        "teal_arm": "back"
+      },
+      "pose": "Orange tracked foot plants; teal foot lifts only about four inches; orange arm forward and teal arm back"
+    },
+    {
+      "id": "R13",
+      "time_seconds": 4.875,
+      "pose_key": "teal_plant",
+      "support": "grounded",
+      "contacts": [
+        "teal_foot"
+      ],
+      "foot_lift_class": "low_about_four_inches",
+      "limbs": {
+        "orange_leg": "low_lift",
+        "teal_leg": "planted",
+        "orange_arm": "back",
+        "teal_arm": "forward"
+      },
+      "pose": "Teal tracked foot plants; orange foot lifts only about four inches; teal arm forward and orange arm back"
+    },
+    {
+      "id": "R14",
+      "time_seconds": 5.25,
+      "pose_key": "orange_plant",
+      "support": "grounded",
+      "contacts": [
+        "orange_foot"
+      ],
+      "foot_lift_class": "low_about_four_inches",
+      "limbs": {
+        "orange_leg": "planted",
+        "teal_leg": "low_lift",
+        "orange_arm": "forward",
+        "teal_arm": "back"
+      },
+      "pose": "Orange tracked foot plants; teal foot lifts only about four inches; orange arm forward and teal arm back"
+    },
+    {
+      "id": "R15",
+      "time_seconds": 5.625,
+      "pose_key": "teal_plant",
+      "support": "grounded",
+      "contacts": [
+        "teal_foot"
+      ],
+      "foot_lift_class": "low_about_four_inches",
+      "limbs": {
+        "orange_leg": "low_lift",
+        "teal_leg": "planted",
+        "orange_arm": "back",
+        "teal_arm": "forward"
+      },
+      "pose": "Teal tracked foot plants; orange foot lifts only about four inches; teal arm forward and orange arm back"
+    },
+    {
+      "id": "R16",
+      "time_seconds": 6,
+      "pose_key": "orange_plant",
+      "support": "grounded",
+      "contacts": [
+        "orange_foot"
+      ],
+      "foot_lift_class": "low_about_four_inches",
+      "limbs": {
+        "orange_leg": "planted",
+        "teal_leg": "low_lift",
+        "orange_arm": "forward",
+        "teal_arm": "back"
+      },
+      "pose": "Orange tracked foot plants; teal foot lifts only about four inches; orange arm forward and teal arm back"
+    }
+  ]
+}

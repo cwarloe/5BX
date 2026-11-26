@@ -27,12 +27,14 @@ python3 -m photo_motion inspect photo_motion/specs/chart1-scissor-jump.json /pat
 The `inspect` command leaves the source video untouched and writes `inspection.json`, a `phase_contact_sheet.png` and individual frame PNGs into the explicitly provided output directory. A real 6-second clip is needed; a four-panel contact-card still **is not video**.
 Use a **new output directory for every inspection**. Reusing an existing directory is rejected to prevent accidental overwrites of earlier frame evidence.
 
-## First two exercise contracts
+## Exercise contracts
 
 | Contract | Critical invariant | Known unresolved evidence |
 | --- | --- | --- |
 | `specs/chart1-scissor-jump.json` | **Two** genuine airborne exchanges, opposite physical leg/arm assignments, full recovery to original stance | V7 is a *conditional photographic still*, not verified video. Existing four panels lack a separately proven second flight. Orange/teal marks track generated near/far limbs, **not proven anatomical left/right** from the reference film. |
 | `specs/chart1-kneeling-pushup.json` | Both palms and knees planted, elbows bend together, full up/down/up cycle | Existing blue-shirt Flow video 10 remains a review candidate, not final form-approved. |
+
+The remaining Chart 1 photo contracts cover toe touching, **partial** sit-up, alternating physical leg raise, and low stationary running. They use separate exercise-specific checks in `extended_contract.py` and are included by the same wildcard validation command. See [`CHART1_MOTION_CONTRACTS.md`](CHART1_MOTION_CONTRACTS.md) for source-specific assumptions and unresolved still/video evidence. The experimental six-second run timing is not a replacement for the level-dependent prescribed cadence in `data/5bx-charts.json`.
 
 Each spec contains planned phase times, support points, camera/identity instructions, and the source documents to consult. Phase times are **targets** for video generation/inspection, not assertions that the actual video will obey them. A plan that passes `validate` is a coherent *request*, not a valid clip.
 For Chart 1 scissor jumps, the movement authority is the **original booklet wording**, not the archival 1959 film (whose documented jump footage depicts other chart exercises). The six-second test duration is an experimental clip target, not a source-mandated scissor-jump cadence.
@@ -66,6 +68,18 @@ python3 -m photo_motion inspect photo_motion/specs/chart1-scissor-jump.json /pat
 Each inspection records the exact MP4 SHA-256, contract SHA-256, exact submitted prompt SHA-256 (if supplied), provider/model/known settings, original frame references, codec, FPS, phase sampling times, and any technical warnings. This makes deterministic **downstream inspection** repeatable and preserves the experimental recipe. AI video synthesis itself may be nondeterministic even when all known inputs match.
 
 The first actual-video engineering smoke run is documented in [`diagnostics/video10-kneeling-pushup-2026-11-26.md`](diagnostics/video10-kneeling-pushup-2026-11-26.md). It checked the original blue-shirt Flow video 10 and found a contact/loop registration issue worth measuring before any approval. The raw private MP4 and extracted frames are not committed here.
+
+## Additional real-video diagnostics
+
+The following optional diagnostics are independent of the generated pose sheets. They preserve the original MP4 and never issue a form or release verdict.
+
+| Tool | What it measures | Key limitation |
+| --- | --- | --- |
+| [`contact_qa.py`](CONTACT_QA.md) | Drift of named planted palms/knees/feet, with source MP4 hash, timestamps and overlay frames | Requires real anatomical landmark annotations; it does **not** find or verify joints automatically |
+| [`temporal_qa.py`](TEMPORAL_QA.md) | Every decoded frame for sustained stillness, sudden visual changes, irregular frame timing and background motion | Pixel differences cannot prove movement correctness; legitimate holds are normal |
+| [`identity_qa.py`](IDENTITY_QA.md) | Color/brightness/texture and framing of explicitly located shirt/shorts/hair/face patches | Requires consistent, independently identified regions; cannot certify a person's identity |
+
+For example, after saving the true input MP4 and a contact-annotation file, run `python3 -m photo_motion.contact_qa /path/to/contacts.json --video /path/to/input.mp4 --out /path/to/new-contact-qa-dir`. For temporal analysis use `python3 -m photo_motion.temporal_qa /path/to/input.mp4 --report /path/to/new-report.json`. Appearance comparison accepts a manifest of reference and frame image regions, documented in `IDENTITY_QA.md`. Always choose a **new** destination for each run: existing output files are deliberately never replaced.
 
 ## What automated QA can and cannot prove
 

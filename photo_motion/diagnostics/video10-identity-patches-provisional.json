@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "purpose": "PROVISIONAL engineering measurement only, not an approved visual identity marker set",
+  "source_video_sha256": "9c9e3da1421adb506567dec0d1daaf46c47568a40f7e4e0f7ed4288561cf474f",
+  "source_video_ref": "https://drive.google.com/file/d/1uNvFvPe2VyyWuaHq7gyOCoCQH9Jv12Kp/view",
+  "reference_note": "Uses VIDEO 10's first frame as within-video appearance baseline, NOT the immutable Chart 1 identity master. These approximate regions were placed by a reviewer and require recheck on the actual frames.",
+  "reference": {
+    "image": "frame_01_A.png",
+    "regions": {
+      "shirt": [0.542, 0.542, 0.588, 0.611],
+      "shorts": [0.431, 0.669, 0.480, 0.739]
+    }
+  },
+  "samples": [
+    {"image": "frame_02_B.png", "time_seconds": 1.5, "regions": {"shirt": [0.547, 0.578, 0.581, 0.639], "shorts": [0.445, 0.700, 0.494, 0.767]}},
+    {"image": "frame_03_C.png", "time_seconds": 3.0, "regions": {"shirt": [0.547, 0.639, 0.589, 0.694], "shorts": [0.438, 0.703, 0.481, 0.767]}},
+    {"image": "frame_04_D.png", "time_seconds": 5.958, "regions": {"shirt": [0.531, 0.528, 0.583, 0.597], "shorts": [0.433, 0.653, 0.477, 0.728]}}
+  ]
+}

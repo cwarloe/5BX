@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "id": "c1-ex1-toe-touch-photo-v1",
+  "chart": 1,
+  "exercise": 1,
+  "name": "Chart 1 simple toe touching and modest backward stretch",
+  "movement_type": "toe_touch",
+  "status": "EXPERIMENTAL",
+  "duration_seconds": 6.0,
+  "fps": 24,
+  "identity_reference": "sprites/docs/PHOTOREALISTIC_AVATAR_DIRECTION_2026-11-25.md; same immutable Chart 1 v2 blue/charcoal character identity",
+  "movement_reference": "data/5bx-charts.json Chart 1 Exercise 1; sprites/docs/photo_batches/2026-11-26/toe_touch/QA_EXACT_PROMPT.md; 43R remains a conditional natural-range still",
+  "camera": {"locked": true, "description": "Static near-frontal 35 mm documentary photograph/video, whole body including overhead fingers and shoes, 8–12% headroom, unchanging track/treeline"},
+  "rules": [
+    "Use the same realistic 13–14-year-old boy, unchanged chart identity, face, youth proportions, outfit, lighting and background",
+    "Both feet remain spread and planted on the same track marks; torso hinges with naturally sized arms and relaxed knees",
+    "This is simple Chart 1 middle floor reach; do not confuse with the Chart 3 outside-foot reaches or extend limbs to force extra range",
+    "Start arms overhead, bend forward toward floor between feet, rise back up, extend chest modestly backward, then return to the identical arms-up start",
+    "Real connected 35 mm-style movement without cuts, dissolves, ghosts, new limbs, body growth or camera motion; no audio or on-video captions"
+  ],
+  "phases": [
+    {"id":"A","time_seconds":0.0,"pose_key":"start","support":"grounded","contacts":["left_sole","right_sole"],"motion":"upright","arms":"up","feet_fixed":true,"range":"natural","pose":"Feet astride; torso upright, head neutral, both arms straight overhead with full finger headroom"},
+    {"id":"B","time_seconds":1.7,"pose_key":"forward_fold","support":"grounded","contacts":["left_sole","right_sole"],"motion":"forward_fold","arms":"down","feet_fixed":true,"hand_target":"between_feet","range":"natural","pose":"Hinge forward between spread planted shoes, knees gently unlocked as needed; fingertips toward track between feet, no elongated arms"},
+    {"id":"C","time_seconds":3.0,"pose_key":"upright_middle","support":"grounded","contacts":["left_sole","right_sole"],"motion":"upright","arms":"up","feet_fixed":true,"range":"natural","pose":"Return torso upright with arms rising overhead; same face, head scale and shoe contact marks"},
+    {"id":"D","time_seconds":4.3,"pose_key":"modest_backbend","support":"grounded","contacts":["left_sole","right_sole"],"motion":"gentle_backbend","arms":"up","feet_fixed":true,"range":"modest","pose":"Small balanced upward/backward stretch of chest and arms, not a gymnastics bridge; pelvis remains over feet"},
+    {"id":"E","time_seconds":6.0,"pose_key":"start","support":"grounded","contacts":["left_sole","right_sole"],"motion":"upright","arms":"up","feet_fixed":true,"range":"natural","pose":"Return exactly to start arms-overhead neutral standing posture, feet and full-body framing unchanged"}
+  ]
+}

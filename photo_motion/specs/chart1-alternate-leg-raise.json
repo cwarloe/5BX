@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "id": "c1-ex3-alternate-leg-raise-photo-v1",
+  "chart": 1,
+  "exercise": 3,
+  "name": "Chart 1 prone alternate straight-leg raise with head lift",
+  "movement_type": "alternate_leg_raise",
+  "status": "EXPERIMENTAL",
+  "duration_seconds": 6.0,
+  "fps": 24,
+  "identity_reference": "sprites/docs/PHOTOREALISTIC_AVATAR_DIRECTION_2026-11-25.md; same immutable Chart 1 v2 blue/charcoal photo identity",
+  "movement_reference": "data/5bx-charts.json Chart 1 Exercise 3; sprites/docs/photo_batches/2026-11-26/alt_leg/QA_PROMPTS.md; clean marker-removal candidate remains conditional",
+  "camera": {"locked": true, "description": "Fixed rear-oblique/side 35 mm documentary camera, full feet, pelvis, face, arms and torso visible without silhouette overlap"},
+  "track_provenance": {"orange":"Physical camera-near ankle band in generated diagnostic 04","teal":"Physical camera-far ankle band in diagnostic 04","anatomical_left_right_proven":false,"warning":"Near/far color marks in the AI card do not prove anatomical left/right in historical film"},
+  "rules": [
+    "Prone on abdomen, both palms stay beneath thighs; normal 13–14-year-old proportions and unchanged chart identity",
+    "Lift head and ONLY the physically orange tracked straight leg, lower both to rest, then lift head and ONLY the physically teal tracked straight leg; finish at rest",
+    "Thigh of active leg clears resting palms, knees stay straight, pelvis remains supported on track; only anatomically natural range of motion",
+    "Orange and teal refer to persistent physical leg ownership carried from diagnostic marked card; after removing bands never infer ownership from screen-left shoe",
+    "Real connected motion, no still fades or ghost legs, no change of camera, clothes, face, background or audio"
+  ],
+  "phases": [
+    {"id":"A","time_seconds":0.0,"pose_key":"start","support":"grounded","contacts":["pelvis","left_palm","right_palm"],"head":"rest","knees":"straight","palms":"under_thighs","limbs":{"orange_leg":"rest","teal_leg":"rest"},"pose":"Prone with head low, both straight legs on track, palms beneath thighs, pelvis supported"},
+    {"id":"B","time_seconds":1.5,"pose_key":"orange_peak","support":"grounded","contacts":["pelvis","left_palm","right_palm"],"head":"raised","knees":"straight","palms":"under_thighs","limbs":{"orange_leg":"raised","teal_leg":"rest"},"pose":"Lift head and physically orange tracked straight leg, thigh clear of palm; teal leg stays relaxed on floor"},
+    {"id":"C","time_seconds":2.5,"pose_key":"mid_rest","support":"grounded","contacts":["pelvis","left_palm","right_palm"],"head":"rest","knees":"straight","palms":"under_thighs","limbs":{"orange_leg":"rest","teal_leg":"rest"},"pose":"Lower orange leg and head fully, both shoes low again without camera or pelvic drift"},
+    {"id":"D","time_seconds":4.0,"pose_key":"teal_peak","support":"grounded","contacts":["pelvis","left_palm","right_palm"],"head":"raised","knees":"straight","palms":"under_thighs","limbs":{"orange_leg":"rest","teal_leg":"raised"},"pose":"Lift head and physically teal tracked straight leg this time; orange stays resting, palms and pelvis planted"},
+    {"id":"E","time_seconds":6.0,"pose_key":"start","support":"grounded","contacts":["pelvis","left_palm","right_palm"],"head":"rest","knees":"straight","palms":"under_thighs","limbs":{"orange_leg":"rest","teal_leg":"rest"},"pose":"Return head and both straight legs to original prone rest, chart identity, scene and contact points unchanged"}
+  ]
+}

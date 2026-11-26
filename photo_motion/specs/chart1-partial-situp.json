@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "id": "c1-ex2-partial-situp-photo-v1",
+  "chart": 1,
+  "exercise": 2,
+  "name": "Chart 1 partial sit-up: head and shoulders just high enough to see heels",
+  "movement_type": "partial_situp",
+  "status": "EXPERIMENTAL",
+  "duration_seconds": 6.0,
+  "fps": 24,
+  "identity_reference": "sprites/docs/PHOTOREALISTIC_AVATAR_DIRECTION_2026-11-25.md; same immutable Chart 1 v2 blue/charcoal identity, not an older full-sit-up Flow clone",
+  "movement_reference": "data/5bx-charts.json Chart 1 Exercise 2; sprites/docs/photo_batches/2026-11-26/partial_situp/QA_EXACT_PROMPTS.md",
+  "camera": {"locked": true, "description": "Tripod side/very mild oblique 35 mm documentary view, full outstretched legs, shoulders, head, hands and shoes in frame on same track"},
+  "rules": [
+    "This is the original Chart 1 PARTIAL sit-up, not the full straight-leg sit-up already attempted in older Flow video 08",
+    "Lie on back, legs straight with feet roughly six inches apart and both arms at sides; feet, heels and pelvis do not slide",
+    "Lift head and shoulders clear of ground only far enough to see heels; do not sit upright or reach for toes",
+    "Return head, neck, shoulders and back to original resting posture, unchanged face/body proportions",
+    "Single continuous 35 mm photographic shot, no camera motion, cuts, fade, duplicate limbs, adult musculature, captions or sound"
+  ],
+  "phases": [
+    {"id":"A","time_seconds":0.0,"pose_key":"start","support":"grounded","contacts":["left_heel","right_heel","pelvis"],"shoulders":"down","legs":"straight","arms":"at_sides","full_situp":false,"pose":"Supine; straight legs about six inches apart, heels grounded, arms resting by sides, back and head relaxed"},
+    {"id":"B","time_seconds":1.5,"pose_key":"curling","support":"grounded","contacts":["left_heel","right_heel","pelvis"],"shoulders":"lifting","legs":"straight","arms":"at_sides","full_situp":false,"pose":"Curl head and upper shoulders gently off track, pelvis and heels fixed, legs straight and arms still by sides"},
+    {"id":"C","time_seconds":3.0,"pose_key":"peak","support":"grounded","contacts":["left_heel","right_heel","pelvis"],"shoulders":"slightly_raised","legs":"straight","arms":"at_sides","full_situp":false,"heel_visibility":"see_heels","pose":"Head and shoulders clear floor just enough to see heels; torso remains mostly down and never becomes vertical"},
+    {"id":"D","time_seconds":6.0,"pose_key":"start","support":"grounded","contacts":["left_heel","right_heel","pelvis"],"shoulders":"down","legs":"straight","arms":"at_sides","full_situp":false,"pose":"Gently uncurl to the identical supine beginning, both shoulders and head relaxed back on track, heels unmoved"}
+  ]
+}
