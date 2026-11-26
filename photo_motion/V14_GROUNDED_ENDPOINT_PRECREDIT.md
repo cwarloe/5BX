@@ -1,6 +1,6 @@
 # V14 — A* to grounded C* single-exchange Frames pilot
 
-**Status: EXPERIMENTAL engineering gate, no V14 paid generation.** V14 is
+**Gate classification: EXPERIMENTAL (originally written before the V14 run).** V14 is
 not a continuation of V10's 720p/nine-credit paid authority, nor a workaround
 for V12's independently observed wrong motion. It is a separately qualified
 360p experiment that asks one narrow question: does replacing V12's airborne
@@ -13,6 +13,11 @@ exchange. It cannot establish a full A→flight→C→flight→A scissor cycle, 
 original booklet's anatomical right/left ownership, loop continuity,
 historically correct form, identity approval or release. Only Charles can
 approve an exact final exercise video.
+
+**Post-run observation (not a change to this gate):** the original V14
+grounded-endpoint diagnostic **failed** because grounded gait preceded the
+airborne interval. See the [safe V14 result note](diagnostics/v14-astar-cstar-one-flight-hold-2026-11-26.md).
+This link does not renew precredit authority or authorize a retake.
 
 ## Source/process pins and no-claim boundaries
 

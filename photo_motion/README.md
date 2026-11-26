@@ -206,7 +206,9 @@ same existing private ledger, and rejects anything except a fresh live
 Omni 1.2 Flash edit quote of at most three credits. Its real prompt remains
 private, bound by SHA-256. Success at this **arm-correction diagnostic** cannot
 fix the documented grounded-running leg motion, certify 5BX form or authorize
-release. The [safe V12 failure note](diagnostics/v12-astar-b002-motion-hold-2026-11-26.md)
+release. The [safe V13 failure note](diagnostics/v13-v2v-arm-edit-hold-2026-11-26.md)
+records the actual narrow arm-correction failure without private media.
+The [safe V12 failure note](diagnostics/v12-astar-b002-motion-hold-2026-11-26.md)
 retains no raw media, private scene locator or submitted prompt.
 
 The [V14 separately gated A*→grounded C* 360p Frames pilot](V14_GROUNDED_ENDPOINT_PRECREDIT.md)
@@ -215,6 +217,8 @@ the exact corrected V10 source pair and asks whether a grounded opposite end
 pose prevents V12's intermediate running steps. It requires a new fresh
 Flow quote and the same native-charge ledger, never treats the held-out B*002
 still as a third input, and cannot qualify a complete scissor loop or release.
+The [safe V14 result note](diagnostics/v14-astar-cstar-one-flight-hold-2026-11-26.md)
+documents the actual one-flight/grounded-running failure and its stop rule.
 
 The first actual-video engineering smoke run is documented in [`diagnostics/video10-kneeling-pushup-2026-11-26.md`](diagnostics/video10-kneeling-pushup-2026-11-26.md). It checked the original blue-shirt Flow video 10 and found a contact/loop registration issue worth measuring before any approval. The raw private MP4 and extracted frames are not committed here.
 
