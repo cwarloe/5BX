@@ -38,8 +38,10 @@ python3 sprites/kit/review_board.py --photos --out review-photos.html
 python3 sprites/kit/review_board.py --photos --chart 1 --out review-photo-chart1.html
 ```
 
-Open the resulting HTML: chart overview contact sheets come first, followed by
-recent refinements/safety holds and individual numbered image/video links. The
+Open the resulting HTML: the exception-only review queue comes first, followed
+by chart overview contact sheets, the latest supported refinement and individual
+numbered image/video links. The traveler identifies contact cards, standalone
+stills, comparison/diagnostic images and actual video links separately. The
 bottom of the page separately lists the individual higher-resolution photo
 stills explicitly linked in the current review notes, with direct Drive output
 links and source/QA references. The set is deliberately not inflated with
@@ -52,6 +54,10 @@ defects, hashes and QA judgments remain linked in the existing GitHub records.
 These are experimental candidates, **not** approved video or workout instruction;
 this view does not set acceptance or release status. Regenerate after new reviews
 are committed to see updated products and explicit holds.
+
+The current [photographic production standard work](docs/PHOTOGRAPHIC_PRODUCTION_STANDARD_WORK.md)
+defines the two-attempt same-defect escalation rule, owner-only form decisions,
+two-exercise release WIP cap and first-pass yield/touch-time measurements.
 
 **Legacy cartoon artwork and regression review:**
 
