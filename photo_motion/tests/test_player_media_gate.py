@@ -299,6 +299,15 @@ class PlayerMediaAdmissionTests(unittest.TestCase):
         self.assert_held(within_tolerance)
         self.assertEqual(within_tolerance["technical_evidence"], "PASS")
 
+        # Even an exactly labeled native duration is unusable in the React
+        # registry if a rounded declared FPS makes frameCount/FPS disagree.
+        item["video"]["duration_seconds"] = 5
+        item["video"]["fps"] = 12.005
+        inconsistent_fps = self.evaluate(item)
+        self.assert_held(inconsistent_fps)
+        self.assertEqual(inconsistent_fps["technical_evidence"], "HOLD")
+        self.assertIn("declared frame count/FPS differs", " ".join(inconsistent_fps["blockers"]))
+
     def test_diagnostic_hashes_rejected_even_with_owner_looking_claim(self):
         for digest in self.synthetic_failed_hashes:
             item = copy.deepcopy(self.candidate)
