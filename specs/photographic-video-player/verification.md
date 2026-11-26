@@ -15,7 +15,7 @@ included here.
 | R1.5 strict origin and bytes | Pure URL tests reject off-origin, arbitrary paths, traversal and digest/name mismatch; Pages/public artifact scan rejects unapproved videos | The browser cannot prove response-byte identity. Future deployment gate must hash *served* bytes against owner-accepted digest and support revocation |
 | R2.1–3 time and segments | Simulation-derived 40s jog/5s scissor slots and frame/metadata tests; no autoplay before validation, pause/seek loop; 6s jump rejected | Real browser decoder and A→C→A visual review await footage |
 | R2.4–6 invisible until full-loop admitted | Synthetic DOM tests: hidden before metadata, 5.05s rejected, seek-before-reveal, source removal on error/unmount/segment; pure timing tests reject 5.01s, 5.05s, 6s, 4.95s, accept exact 5.00s as **duration-only** | Actual decoded playable duration and seam quality require later per-asset motion QA; exact 5.00s alone never admits a clip |
-| R2.7 drift and lifecycle | Runtime seeks when clock deviates by more than 1/FPS; 11 jsdom tests cover StrictMode, pause/segment switch, error, reduced motion, pending `play()` AbortError, rejected browser play promise | Real Chrome/Safari decode/seek, background/resume, phone timing pending manual check |
+| R2.7 drift and lifecycle | Runtime seeks when clock deviates by more than 1/FPS; 13 jsdom tests cover StrictMode, pause/segment switch, error, reduced motion, pending `play()` AbortError, rejected browser play promise, stale seek completion after the last simulation tick, and a seek-in-flight frame-visibility guard | Real Chrome/Safari decode/seek, background/resume, phone timing pending manual check |
 | R3.1 production isolation | `import.meta.env.DEV && VITE_PHOTO_PLAYER_PREVIEW === "1"`; `VITE_PHOTO_PLAYER_PREVIEW=1 npm run pages` succeeds; production JS contains no photographic player strings | Public default sprite experience intentionally unchanged until media release |
 | R3.2 no photo-preview sprites | Source audit: `new Image()` preload and upcoming HUD `<img>` strictly behind `!photoPreview`; synthetic DOM has no sprite fallback; independent reviewer corroborated | Actual browser Network panel `/sprites/` count is **PENDING MANUAL** |
 | R3.3–4 accessible HOLD/opt-in | Labeled video and status/HOLD, keyboard-operable button, live reduced-motion toggle/opt-in/reset DOM tests | Mobile layout, keyboard/assistive-tech smoke pending manual |
@@ -93,5 +93,9 @@ specified platform coverage), then rerun the named checks above.
 - An outstanding browser `play()` Promise may reject *after* an intentional
   pause; invalidate obsolete attempts so that expected interruption does not
   permanently HOLD a valid clip. A genuine current rejection still HOLDs.
+- A seek requested for an earlier workout tick can complete after the final
+  newer tick, such as when a tab is backgrounded or a workout pauses. The
+  `seeked` event now aligns the video to the latest clock before revealing a
+  frame; synthetic DOM regression evidence is not a real-browser verdict.
 - No full-loop or SHA-looking metadata is proof of exercise-form quality,
   owner decision, or served bytes. Keep release authority outside the player.
