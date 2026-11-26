@@ -232,17 +232,31 @@ def _validate_request(request):
             raise ExperimentError("V6 paid Flow attempt requires a positive provider-quoted credit estimate")
         entry = request.get("source_preflight")
         expected_fields = {"original_card", "prepared_png", "manifest"}
-        if not isinstance(entry, dict) or set(entry) != expected_fields:
-            raise ExperimentError("V6 scissor attempt requires source_preflight with original_card, prepared_png and manifest paths")
-        from .preflight_v6 import verify, PreflightError
+        if not isinstance(entry, dict) or set(entry) not in (expected_fields, expected_fields | {"opposite_pose_reference"}):
+            raise ExperimentError("V6 scissor attempt requires source_preflight with original_card, prepared_png, manifest, and only optional opposite_pose_reference")
+        has_opposite = "opposite_pose_reference" in entry
+        opposite_entry = entry.get("opposite_pose_reference")
+        if has_opposite and (not isinstance(opposite_entry, dict) or
+                             set(opposite_entry) != {"prepared_png", "manifest"}):
+            raise ExperimentError("V6 opposite_pose_reference must contain exactly prepared_png and manifest paths")
+        from .preflight_v6 import verify, verify_pair, PreflightError
         try:
-            source_preflight = verify(spec, entry["original_card"], entry["prepared_png"], entry["manifest"])
+            if not has_opposite:
+                source_preflight = verify(spec, entry["original_card"], entry["prepared_png"], entry["manifest"])
+            else:
+                source_preflight = verify_pair(spec, entry["original_card"], entry["prepared_png"],
+                                               entry["manifest"], opposite_entry["prepared_png"],
+                                               opposite_entry["manifest"])
         except (PreflightError, OSError, ValueError, TypeError) as exc:
             raise ExperimentError(f"V6 scissor preflight failed: {exc}") from exc
-        if len(clean_assets) != 1 or clean_assets[0]["role"] != "start-frame" or (
-                clean_assets[0]["verification"] != "rehashed_from_local_bytes" or
-                clean_assets[0]["sha256"] != source_preflight["prepared_png_sha256"]):
-            raise ExperimentError("V6 scissor pilot must submit exactly one locally verified prepared start-frame matching preflight")
+        expected_assets = [("start-frame", source_preflight["prepared_png_sha256"])]
+        if has_opposite:
+            expected_assets.append(("opposite-pose-reference", source_preflight["opposite_pose_reference"]["prepared_png_sha256"]))
+        if len(clean_assets) != len(expected_assets) or any(
+            asset["role"] != role or asset["verification"] != "rehashed_from_local_bytes" or asset["sha256"] != digest
+            for asset, (role, digest) in zip(clean_assets, expected_assets)
+        ):
+            raise ExperimentError("V6 scissor pilot requires a prepared start-frame: ordered verified start-frame A and only optional opposite-pose-reference C matching their panel preflights")
         try:
             requested_spec = json.loads(spec.read_text(encoding="utf-8"))
         except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
