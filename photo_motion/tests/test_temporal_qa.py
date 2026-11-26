@@ -10,7 +10,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 import photo_motion.temporal_qa as temporal_module
-from photo_motion.temporal_qa import _cuts, _holds, analyze, main
+from photo_motion.temporal_qa import _cadence_consistency, _cuts, _holds, analyze, main
 
 
 FFMPEG = bool(shutil.which("ffmpeg") and shutil.which("ffprobe"))
@@ -224,6 +224,26 @@ class TestTemporalVideoQA(unittest.TestCase):
 
 
 class TestTemporalLogic(unittest.TestCase):
+    def test_nominal_rate_disagrees_with_real_timestamps_after_bad_concat(self):
+        # Real failure mode: 142 displayed frames span 5.875 seconds although
+        # their presentation timestamps still advance at 24 fps. An MP4
+        # declares 142/5.875 = ~24.17 fps instead of the actual 24-fps cadence.
+        points = [i / 24 for i in range(142)]
+        result = _cadence_consistency(points, 142 / 5.875, 5.875, 142)
+        self.assertEqual(result["verdict"], "REVIEW_RATE_OR_DURATION_MISMATCH")
+        self.assertAlmostEqual(result["timestamp_cadence_fps"], 24)
+        self.assertAlmostEqual(result["reported_duration_frame_discrepancy"], 1)
+
+    def test_exact_cfr_has_consistent_timestamp_rate_and_duration(self):
+        points = [i / 24 for i in range(142)]
+        result = _cadence_consistency(points, 24, 142 / 24, 142)
+        self.assertEqual(result["verdict"], "SCREEN_SPACE_TIMING_ALIGNED_NOT_FORM_APPROVAL")
+        self.assertLess(result["reported_duration_frame_discrepancy"], 0.01)
+
+    def test_missing_true_timestamps_cannot_prove_cadence(self):
+        result = _cadence_consistency([], 24, 1, 24)
+        self.assertEqual(result["verdict"], "NOT_EVALUATED")
+
     def test_holds_require_min_duration(self):
         # Three low-change transitions at 10 fps are only 0.3 s.
         self.assertEqual(_holds([0, 0, 0, 9, 0, 0], [], 10, .5, .5, []), [])
