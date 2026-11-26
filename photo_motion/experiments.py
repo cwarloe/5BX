@@ -375,7 +375,34 @@ def _validate_request(request):
                              "verification": "rehashed_from_local_bytes" if actual else "declared_unverified"})
     source_preflight = None
     entry = request.get("source_preflight")
-    if isinstance(entry, dict) and entry.get("authority") == "V10_REPLAYED_SHARED_CANVAS_FRAMES":
+    if isinstance(entry, dict) and entry.get("authority") == "V12_REVIEWED_APEX_B002_FRAMES_360P":
+        from .preflight_v12_apex_frames import (
+            verify_sources as verify_v12_sources, verify_ui_observation,
+            V12PreflightError, FLOW_SETTINGS, FLOW_MODEL, FLOW_QUOTE_CREDITS,
+        )
+        required = {"authority", "v10_source_paths", "b_apex_image",
+                    "independent_b_qa", "flow_ui_observation"}
+        if request["exercise_id"] != "chart1-scissor-jump" or set(entry) != required:
+            raise ExperimentError("V12 requires exact corrected V10 chain, independently reviewed B002 and fresh Flow UI evidence")
+        try:
+            source_preflight = verify_v12_sources(
+                spec, entry["v10_source_paths"], entry["b_apex_image"],
+                entry["independent_b_qa"])
+            source_preflight = verify_ui_observation(entry["flow_ui_observation"], source_preflight)
+        except (V12PreflightError, OSError, ValueError, TypeError) as exc:
+            raise ExperimentError(f"V12 A*->B002 precredit HOLD: {exc}") from exc
+        expected_assets = [("start-frame", source_preflight["start_sha256"]),
+                           ("end-frame", source_preflight["end_sha256"])]
+        if len(clean_assets) != 2 or any(
+                asset["role"] != role or asset["verification"] != "rehashed_from_local_bytes"
+                or asset["sha256"] != digest
+                for asset, (role, digest) in zip(clean_assets, expected_assets)):
+            raise ExperimentError("V12 requires exactly ordered locally rehashed A* and B002 source images")
+        if (request["provider"] != "Google Flow" or request["model"] != FLOW_MODEL
+                or json.dumps(request["settings"], sort_keys=True) != json.dumps(FLOW_SETTINGS, sort_keys=True)
+                or Decimal(estimate) != Decimal(FLOW_QUOTE_CREDITS)):
+            raise ExperimentError("V12 differs from fresh Omni 1.2 Flash silent Frames/360p/3s/x1 three-credit quote")
+    elif isinstance(entry, dict) and entry.get("authority") == "V10_REPLAYED_SHARED_CANVAS_FRAMES":
         # This is NOT a V7/V8 direct-source exception. Both sent endpoints
         # must be exactly replayed derivative PNGs, independently QA-attested,
         # and linked to pinned original A/C + generated canvas provenance.

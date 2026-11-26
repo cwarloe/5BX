@@ -188,7 +188,16 @@ empty background, and cannot grant exercise-form or release acceptance.
 The [V11 read-only airborne-apex candidate preflight](V11_APEX_CANDIDATE.md)
 tests a separately generated B* still against exact V10 source replay and
 independent full-body/marker/clearance measurements. It **cannot authorize
-Flow credits** or form/release acceptance; current B* review remains HOLD.
+Flow credits** or form/release acceptance. B*002 passed the limited independent
+diagnostic-source review; it has **not** been accepted as historically correct
+exercise form or a video.
+
+The [V12 A*→B*002 360p Frames precredit gate](V12_APEX_FRAMES_PRECREDIT.md)
+adds separate, tightly pinned prospective paid authority for only that reviewed
+source pair and output profile. It requires actual fresh attestation of both
+correct Flow endpoint tiles, selected model, 3-credit quote, silent-video
+setting and reconciled immutable ledger before reserving. Merely passing V11
+still-image QA does not grant paid authority or any final approval.
 
 The first actual-video engineering smoke run is documented in [`diagnostics/video10-kneeling-pushup-2026-11-26.md`](diagnostics/video10-kneeling-pushup-2026-11-26.md). It checked the original blue-shirt Flow video 10 and found a contact/loop registration issue worth measuring before any approval. The raw private MP4 and extracted frames are not committed here.
 
