@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "authority": "V15_SYNTHETIC_MOTION_GUIDE_INGREDIENTS_360P_EXPERIMENTAL",
+  "exercise_id": "chart1-scissor-jump",
+  "method": "VIDEO_INGREDIENTS_PHOTOGRAPHIC_IDENTITY_PLUS_NEUTRAL_3D_MOTION",
+  "source_defect": "V12_V14_GROUNDED_RUNNING_INSTEAD_OF_TWO_SCISSOR_FLIGHTS",
+  "hypothesis": "CAN_MODEL_TRANSFER_TWO_JUMPS_FROM_NEUTRAL_GUIDE_TO_FIXED_PHOTO_IDENTITY",
+  "provider": "Google Flow",
+  "model": "Omni 1.2 Flash",
+  "settings": {
+    "duration_seconds": 3,
+    "aspect_ratio": "16:9",
+    "variants": 1,
+    "seed": null,
+    "generation_mode": "Ingredients",
+    "resolution": "360p",
+    "return_silent_videos": true
+  },
+  "max_quoted_credits": "3",
+  "identity_image_sha256": "777abf5ca478cf03688824f49380cc1a77bb06987bb13a983d1890993fd17a38",
+  "guide_video_sha256": "1a8fb1c47ef5de21cfe0b519815f81b8cd97771ff12b8ceda02124cf86c06b5d",
+  "guide_manifest_sha256": "7fc18c45223aaca4b9e72c502aae2d78d410e78a8dd1a71dfef1f4bbac229cab",
+  "guide_generator_script_sha256": "c9d30d5af5553150f599eca4f1e33111b04b1068c7ecde5ad8644d5f3706a090",
+  "guide_airborne_windows_1_based": [[12, 21], [40, 48]],
+  "submitted_prompt_sha256": "e481d4d1015cb01799869b003b9df23995e1bacef1756b089a441782cc017208",
+  "identity_source": "REPLAYED_V10_ASTAR_EXPERIMENTAL_DERIVATIVE",
+  "guide_source": "ORIGINAL_DETERMINISTIC_NONHUMAN_BLENDER_MANNEQUIN",
+  "human_motion_capture": false,
+  "human_form_verified": false,
+  "parent_v6_crop_byte_replay_verified": false,
+  "photographic_video_release_approval": "NOT_GRANTED",
+  "status": "EXPERIMENTAL_METHOD_TEST_REQUIRES_FRESH_FLOW_AND_LEDGER"
+}
