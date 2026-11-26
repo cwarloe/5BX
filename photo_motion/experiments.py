@@ -375,7 +375,42 @@ def _validate_request(request):
                              "verification": "rehashed_from_local_bytes" if actual else "declared_unverified"})
     source_preflight = None
     entry = request.get("source_preflight")
-    if isinstance(entry, dict) and entry.get("authority") == "V9_DIRECT_A_OR_C_OUTPAINT_IMAGE_EDIT":
+    if isinstance(entry, dict) and entry.get("authority") == "V10_REPLAYED_SHARED_CANVAS_FRAMES":
+        # This is NOT a V7/V8 direct-source exception. Both sent endpoints
+        # must be exactly replayed derivative PNGs, independently QA-attested,
+        # and linked to pinned original A/C + generated canvas provenance.
+        from .preflight_v10_shared_canvas import (
+            verify_segment as verify_v10_segment, SharedCanvasPreflightError,
+            V10_SETTINGS,
+        )
+        required = {"authority", "original_a_png", "original_c_png", "canvas_jpeg",
+                    "a_annotation", "c_annotation", "canvas_annotation",
+                    "shared_manifest", "derived_a_png", "derived_c_png",
+                    "independent_qa_report", "segment_role"}
+        if request["exercise_id"] != "chart1-scissor-jump" or set(entry) != required:
+            raise ExperimentError("V10 requires the exact replayable A/C/canvas source and independent QA paths")
+        try:
+            source_preflight = verify_v10_segment(
+                spec, entry["original_a_png"], entry["original_c_png"],
+                entry["canvas_jpeg"], entry["shared_manifest"],
+                entry["derived_a_png"], entry["derived_c_png"],
+                a_annotation=entry["a_annotation"], c_annotation=entry["c_annotation"],
+                canvas_annotation=entry["canvas_annotation"],
+                independent_qa_report=entry["independent_qa_report"],
+                expected_role=entry["segment_role"])
+        except (SharedCanvasPreflightError, OSError, ValueError, TypeError) as exc:
+            raise ExperimentError(f"V10 shared-canvas source preflight failed: {exc}") from exc
+        expected_assets = [("start-frame", source_preflight["start_sha256"]),
+                           ("end-frame", source_preflight["end_sha256"])]
+        if len(clean_assets) != 2 or any(
+                asset["role"] != role or asset["verification"] != "rehashed_from_local_bytes"
+                or asset["sha256"] != digest
+                for asset, (role, digest) in zip(clean_assets, expected_assets)):
+            raise ExperimentError("V10 requires exactly two ordered locally rehashed A*/C* derived endpoints")
+        if (request["provider"] != "Google Flow" or request["model"] != "Omni 1.2 Flash"
+                or request["settings"] != V10_SETTINGS or Decimal(estimate) != Decimal("9")):
+            raise ExperimentError("V10 differs from the observed Omni 1.2 Flash Frames/720p/3s/x1 nine-credit quote")
+    elif isinstance(entry, dict) and entry.get("authority") == "V9_DIRECT_A_OR_C_OUTPAINT_IMAGE_EDIT":
         # A new, zero-credit still-image experiment. Its *input* is a directly
         # authenticated V7 A or C PNG. A generated outpaint is never promoted
         # into a V7/V8 motion input or an accepted identity master here.

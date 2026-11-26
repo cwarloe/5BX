@@ -172,6 +172,12 @@ authenticates only an **original A or C photographic PNG** before a single
 experimental Flow image edit. Its generated stills are unreviewed derived
 images, not verified V7/V8 motion sources or approved exercise videos.
 
+The separately qualified [V10 shared-canvas Frames pilot](V10_SHARED_CANVAS_FRAMES.md)
+requires exact deterministic replay of two **derived** A*/C* endpoint PNGs
+from the surviving original A/C inputs and one pinned experimental canvas
+JPEG, plus an independently bound source-pair QA report, before any paid
+segment reservation. It never upgrades V7/V8 source claims or approves form.
+
 The first actual-video engineering smoke run is documented in [`diagnostics/video10-kneeling-pushup-2026-11-26.md`](diagnostics/video10-kneeling-pushup-2026-11-26.md). It checked the original blue-shirt Flow video 10 and found a contact/loop registration issue worth measuring before any approval. The raw private MP4 and extracted frames are not committed here.
 
 ## Additional real-video diagnostics
