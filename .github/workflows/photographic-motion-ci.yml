@@ -38,10 +38,26 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Install video inspection dependencies
+      - name: Ensure video inspection dependencies
+        shell: bash
         run: |
-          sudo apt-get update
-          sudo apt-get install -y ffmpeg
+          set -euo pipefail
+          # Runner images vary: only install if either required executable is missing.
+          if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v ffprobe >/dev/null 2>&1; then
+            echo 'FFmpeg/FFprobe missing; installing without optional apt recommendations.'
+            # Reuse image apt indexes when possible; refresh and retry if stale.
+            if ! sudo apt-get install -y --no-install-recommends ffmpeg; then
+              sudo apt-get update
+              sudo apt-get install -y --no-install-recommends ffmpeg
+            fi
+          else
+            echo 'Using preinstalled FFmpeg and FFprobe.'
+          fi
+          # Fail closed if apt reported success but either executable is unusable.
+          command -v ffmpeg
+          command -v ffprobe
+          ffmpeg -version
+          ffprobe -version
           python3 -m pip install 'Pillow>=10,<13' 'numpy>=1.26,<3'
       - name: Validate current photographic movement contracts
         run: python3 -m photo_motion validate photo_motion/specs/*.json
