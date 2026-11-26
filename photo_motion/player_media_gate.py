@@ -248,6 +248,16 @@ def evaluate(candidate, repo_root=REPO_ROOT):
                     blockers.append("player asset contains audio; require a separately hashed silent derivative")
                 if details["codec"] != "h264":
                     blockers.append("player asset must use H.264 for the current player")
+                # Browser video presentation may apply MP4 track rotation even
+                # though ffprobe's coded width/height match the manifest.
+                for raw_rotation in details["display_rotations_degrees"]:
+                    try:
+                        rotation = float(raw_rotation)
+                    except (TypeError, ValueError):
+                        rotation = float("nan")
+                    if not math.isfinite(rotation) or abs(rotation) > 1e-6:
+                        blockers.append("player asset has nonzero or unreadable display rotation; framing differs from coded dimensions")
+                        break
                 if trusted_slot is not None:
                     multiples = trusted_slot / details["duration_seconds"]
                     if abs(multiples - round(multiples)) > EPS_SECONDS / details["duration_seconds"] or multiples < 1:
