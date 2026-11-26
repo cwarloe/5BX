@@ -11,6 +11,24 @@ Purpose: make the image/video experiments reproducible in Google Flow and portab
 - Likely cause to test: the recent Flow-native still sequence branched from **08 sit-up video -> saved frame / pose edit -> 10 knee push-up video -> saved frame / pose edit -> 12 prone video -> saved frame / pose edit -> 13 prone video**. Re-synthesizing a whole person at each step can accumulate changes. This is an inference, not a demonstrated causal ablation. Video 14 was made with deterministic ffmpeg reversal of part of video 13, so its palette drift was already present in 13.
 - **Next controlled experiment:** create one approved identity image per chart. For every exercise and every start/peak position, independently derive from that *same immutable chart identity reference*, not a child of a previously generated exercise video. Compare image crops of face, tank, shorts and shoes against the chart master before video generation. Generate each full exercise contact card jointly to minimize within-card drift.
 
+## Image fidelity / framing drift (checked from saved MP4s)
+
+The source videos 07, 08, 10, 13 and 14 are **all encoded at 1280×720, 24 frames/second**. There is no progressive fall from HD to SD, but image *perceived fidelity* visibly changes.
+
+| Video | Measured H.264 video bitrate | Camera / texture observation |
+| --- | --- | --- |
+| 07 olive/gray knee push-up | ~2.41 Mbps | Boy is large in frame, finely resolved face, hair, shoe and fabric; grassy backdrop is simple and relatively soft. |
+| 08 blue/charcoal sit-up | ~3.52 Mbps | Still detailed, different full-body horizontal composition. |
+| 10 blue/charcoal knee push-up | ~2.58 Mbps | Camera pulls much farther back than 07; the child's face and fabric occupy fewer actual pixels, with sharper/busier distant trees. |
+| 13 pale-blue/blue-gray prone extension | ~2.28 Mbps | Smaller subject; face, shirt and surface textures feel softer/less resolved; generative reconstruction also changed shirt/shorts. |
+| 14 edited version of 13 | ~2.20 Mbps | Same 720p frames, but additional H.264 encoding can modestly soften detail; inherited from 13 rather than a new generator pass. |
+
+**Interpretation:** 07's stronger detail comes chiefly from **closer framing and high-contrast fine fabric/hair/face textures**, not a higher pixel dimension or higher bitrate. Even the original 05 blue/charcoal kneeling still looks detailed because its boy is large in frame. Fixed 720p makes subject size a first-order driver of usable facial/wardrobe detail. These are visual inferences from the samples and codec metadata; bitrate is scene-dependent and not a standalone quality score.
+
+**Process change:** At the *still-image* stage, record native source size, boy's approximate subject occupancy, face/cloth crispness, lighting, background distraction and supplied camera distance. Prefer the most detailed source still available and keep the boy large enough for facial identity to be verified, while preserving head-to-shoe visibility and margins. For a comparative experiment, use similar subject size/crop, lighting and output resolution; do not compare a knee push-up close-up against an extra-wide scene and attribute the entire difference to the model. Avoid unnecessary edit/export/re-encode generations.
+
+**Olive/gray alternative character — preserve separately:** Video 07 represents a **valid alternate photographic identity/style to keep for later multi-character or later-chart use**, not an unwanted mistake to erase. [Source video 07](https://drive.google.com/file/d/1X6nDp2pYoizf7GJ8kGfW8wVM6QcHpKi3/view), [720p alternate reference PNG](https://drive.google.com/file/d/1b3LOnoVNlbsDiNmhEe8e7Lg-NQ9DjbTq/view). The PNG is a decoded still from 07 at ~0.1 seconds; it is **not** the uncompressed original. The original higher-quality image asset was named "Fully Raised Kneeling Pushup Profile-3.png" in the older Flow project; retrieve/export the source if available before treating the 720p screenshot as a production master. This alternate differs in facial age/style, close haircut, build, clothing and composition from the later blue/charcoal boy; **do not unintentionally blend these two models inside one chart**.
+
 ## Exact captured Flow prompts (copy verbatim from these records)
 
 1. **07 knee push-up** (olive tank / gray shorts, earlier identity): the exact executed 6-second Flow text is in [PHOTO_FLOW_VIDEO_PILOTS_2026-11-25.md](PHOTO_FLOW_VIDEO_PILOTS_2026-11-25.md), section "Exact Flow request, 07". Result: credible single-frame full-cycle movement, different older identity; not the canonical current boy.
