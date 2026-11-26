@@ -21,6 +21,9 @@
 | 41S | Chart 6 chest-slap push-up 41R | Raise the obscured far palm clear of track during airborne phase B | **HOLD — IDENTITY AND MOTION** | Both palms are visibly airborne, but upper arms still read too developed. The unsupported ballistic phase must be tested in video. |
 | 29F | 29E V/forehead sequence | Lower exact forehead contact priority, target neutral elbows and an achievable partial pike | **HOLD — DIAGNOSTIC ONLY** | Forehead raised, but the near elbow still flexes sharply around head and far elbow remains obscured; **not** a demonstrated elbow fix. |
 | 29G | Earlier `02_almost_there` standalone pose + v2 identity reference | New partial-pike with forehead off track and both hands planted | **HOLD — NOT A VERIFIED ELBOW FIX** after independent second review | Near elbow near right-angle, far elbow nearly straight/partially hidden: mismatched arm loading. Forehead position behind BOTH palms ambiguous. Curly hair/athletic shoulders drift older. No four-panel card or video. |
+| 29H | Direct pose-preserving edit of older `02_almost_there` target photograph | Retain natural near-straight bilateral elbows and noncontact forehead gap while cosmetically matching v2 | **INDEPENDENT GEOMETRY PASS / IDENTITY HOLD** | Second reviewer confirmed both palms planted, forehead clearly feet-side of both palms and above track, no cocked elbows. Face poorly visible, older-looking shoulder contours, curly hair, and possibly extra dark wristband details persist. Geometry may seed next attempt, but is not a v2 master or video anchor. |
+| 32T | Fresh four-panel wide-hand push-up with v2 as shape authority and 32R pose-only | Reset the too-athletic 32S shoulder silhouette | **REJECT FOR IDENTITY / DIAGNOSTIC MECHANICS ONLY** | All support/joint contacts survive; self-QA still sees trained shoulder/upper arms, especially plank frames. A fresh 35mm rebuild did **not** solve the identity drift. |
+| 41T | Fresh/targeted youth-identity edit of 41S chest slap | Retain airborne palms and body-chest touch with softer youth shoulders | **HOLD — NOT PROMOTED** | Motion continuity survives, but independent agent's local QA sees no meaningful reduction in athletic upper-arm mass; use 41S only as the clearer motion diagnostic. |
 
 **Master identity:** fair, smooth-skinned American 13–14-year-old boy; naturally messy but controlled dark hair; average proportions with ordinary chest/waist/thigh girths, no sculpted deltoids/quads/abs, no visible mature body hair; medium-blue tank, charcoal shorts, dark socks, gray/yellow running shoes, wristband, red track and wooded grass. Do not thin the legs/rear or make him younger when softening muscle definition.
 
@@ -36,6 +39,10 @@
 - `v_pike_elbow/29F_C3_ForeheadPike_NaturalElbow_ExactEditPrompt.md`, `v_pike_elbow/29F_SUBMITTED_PROMPT_VERBATIM.md` (if independently accepted, add a separate QA report).
 - `v_pike_elbow/29G_Standalone_RelaxedElbows_ExactSubmittedPrompt.md` and `v_pike_elbow/29G_Standalone_RelaxedElbows_StrictQA.md`: more natural standalone partial-pike experiment, but **not identity-accepted**.
 - `v_pike_elbow/29G_SECOND_REVIEW.md`: independent stricter veto of bilateral elbow symmetry/forehead-to-palm relationship, superseding the early 'anatomy plausible' rating. 
+- `v_pike_elbow/29H_PoseLocked_ExactSubmittedPrompt.md`, `v_pike_elbow/29H_PoseLocked_StrictQA.md`: pose-preserving 02 reference test; **geometry only**, youth identity not matched.
+- `v_pike_elbow/29H_SECOND_REVIEW.md`: independent geometry pass and explicit age/appearance production veto.
+- `chest_slap_identity/41T_C6_ChestSlap_YouthIdentity_ExactSubmittedPrompt.md` and `...SkepticalQA.md`: failed cosmetic follow-up, no meaningful shoulder correction.
+- `chart4_ex4/32T_C4_EX4_ExactPrompt.md` and `32T_C4_EX4_Strict_QA.md`: independent-master fresh-build approach still rejected for muscular shoulder silhouette.
 - `CHARTS4_TO_6_UPPER_BODY_SOFTNESS_REVIEW.md` and 32S prompt/QA under `chart4_ex4/` in the parallel source batch.
 - 34R prompt and QA under `lower_body_softness_audit/` in the parallel source batch.
 
