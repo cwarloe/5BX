@@ -241,7 +241,7 @@ def main(argv=None):
         print(f"Wrote {out}: {len(data['overviews'])} photographic chart views, "
               f"{len(data['items'])} numbered outputs, "
               f"{len(data['high_res'])} linked full-resolution stills, "
-              f"{len(data['review_queue'])} decisions needing human eyes; approval still pending")
+              f"{len(data['review_queue'])} optional early-feedback questions; approval still pending")
         return
     if args.chart is None:
         parser.error("--chart is required for legacy artwork reviews (or pass --photos)")

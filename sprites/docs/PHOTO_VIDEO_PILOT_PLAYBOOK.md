@@ -63,15 +63,16 @@ Review the original-resolution video at normal speed and key frames (opening, mi
 
 **Status vocabulary:**
 
-- `REVIEW`: strongest unresolved candidate; owner approval and/or full-speed QA pending.
+- `REVIEW`: historical label for an unresolved candidate; it does **not** mean ready for final owner review or block other production.
 - `CANDIDATE`: usable source still/card or anchor, with outstanding exercise form or identity checks.
 - `PARTIAL`: coherent subset of the move, but incomplete recovery or not a smooth loop.
 - `REJECT`: materially wrong anatomy, body mechanics, age, multiple-body ghost, limb swap or broken registration; preserve privately for lessons, never label as production-ready.
-- `APPROVED`: use **only after explicit Charles approval** of this exact asset, not automatically from an assistant's `PASS` or a successful render.
+- `READY_FOR_REVIEW`: complete directly playable exercise cycle, agent QA (technical, anatomical, full-speed motion and loop), exact inputs and prompt, and a one-question review packet are linked. Agent production is complete; Charles has **not** accepted it for use. Producers may pull another ready exercise while this waits.
+- `DONE` / `APPROVED`: use **only after explicit Charles acceptance** of this exact video revision, not automatically from an assistant's `PASS` or a successful render. A rejected revision re-enters rework.
 
 For every run record: UTC date; exercise/chart; original pose reference; identity anchor; input frame filename and SHA-256; complete still and video prompts; generator/model/settings; frame layout or time beats; output filenames; assistant QA and precise failure; owner decision; next prompt change (only one targeted change per retry). Retain rejected examples with their reason, so a later agent does not repeat the same dead end.
 
-Deliver **individually playable MP4s** (not ZIPs or GitHub file-tree detours) to the owner's [5BX Video Review Drive folder](https://drive.google.com/drive/folders/1W9dWViCZENv2UvoZ_k0EME8h9xRUWNKY). Use an easy-to-scan mobile filename like `05_REVIEW__Knee_Pushup__Up_Down_Up__2026-11-25.mp4`; reserve leading numbers for review order and update the folder's `00_START_HERE__VIDEO_STATUS_AND_REVIEW_ORDER.txt` with a short summary, status and what feedback is needed. Keep the private footage private until owner release approval. GitHub should carry **source code, prompts, process docs and safe metadata**, not become the phone-first video review interface.
+Deliver **individually playable MP4s** (not ZIPs or GitHub file-tree detours) to the owner's [5BX Video Review Drive folder](https://drive.google.com/drive/folders/1W9dWViCZENv2UvoZ_k0EME8h9xRUWNKY). Use an easy-to-scan mobile filename like `05_REVIEW__Knee_Pushup__Up_Down_Up__2026-11-25.mp4`; reserve leading numbers for review order and update the folder's `00_START_HERE__VIDEO_STATUS_AND_REVIEW_ORDER.txt` with a short summary, status and what feedback is needed. Archive partial/diagnostic runs without asking Charles to inspect each one; request a final decision only at `READY_FOR_REVIEW` or for a truly unresolved requirement, safety or authorization blocker. Keep the private footage private until owner release approval. GitHub should carry **source code, prompts, process docs and safe metadata**, not become the phone-first video review interface.
 
 ## 6. Prototype integration is a separate gate
 

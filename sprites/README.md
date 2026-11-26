@@ -38,7 +38,7 @@ python3 sprites/kit/review_board.py --photos --out review-photos.html
 python3 sprites/kit/review_board.py --photos --chart 1 --out review-photo-chart1.html
 ```
 
-Open the resulting HTML: the exception-only review queue comes first, followed
+Open the resulting HTML: the optional early-feedback questions come first, followed
 by chart overview contact sheets, the latest supported refinement and individual
 numbered image/video links. The traveler identifies contact cards, standalone
 stills, comparison/diagnostic images and actual video links separately. The
@@ -48,7 +48,12 @@ links and source/QA references. The set is deliberately not inflated with
 cropped contact-sheet panels or unverified source files. The gallery is derived
 from the existing `docs/photo_batches/2026-11-26` mobile
 review index and chart inventories, so there is **no second tracking ledger**.
-If thumbnails are unavailable because Drive permissions block embedding, each
+Those early questions do **not** block an agent's normal work. Agents complete
+all internal QA and one-cycle video checks, then label a fully verified,
+directly playable exact revision `READY FOR REVIEW`. Only Charles's explicit
+acceptance of that video makes it `DONE` / `APPROVED`; agents can continue on
+another ready exercise while review is pending. If thumbnails are unavailable
+because Drive permissions block embedding, each
 card still opens its original output directly in Drive/Flow. Exact prompts,
 defects, hashes and QA judgments remain linked in the existing GitHub records.
 These are experimental candidates, **not** approved video or workout instruction;

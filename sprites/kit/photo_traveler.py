@@ -209,7 +209,7 @@ def _current_refinements(index, charts):
 
 
 def _review_queue(index, latest, items, charts, limit=3):
-    """Show only live candidate decisions and explicit human-eyes requests.
+    """Show existing early-feedback questions, not a mandatory approval queue.
 
     This is a read-only inbox. Approval happens in the existing review record,
     never through a decorative button or an assistant-generated PASS.
@@ -330,8 +330,10 @@ def _flow_rows(items, latest, review_queue):
         elif review:
             station = "Human review"
             state = "NEEDS EYES"
-            blocker = "A specific owner judgment is requested; no form approval is recorded."
-            action = review.get("question") or "Answer the question in the existing QA source."
+            blocker = ("An optional early-feedback question is recorded; it is not a "
+                       "production HOLD or a final-review-ready video.")
+            action = ("Continue internal QA and video testing. If feedback is later useful: " +
+                      (review.get("question") or "consult the linked QA question."))
         elif kind in ("image", "contact card", "standalone still", "diagnostic"):
             station = "Still / form QA"
             state = "CONDITIONAL" if "conditional" in item.get("title", "").casefold() else "UNVERIFIED"
@@ -462,12 +464,13 @@ def _flow_board(data):
               <div class="flow-copy"><strong>Chart {row["chart"]} · test family {_esc(row["work_id"])}</strong>
                 <span class="flow-status">{_esc(row["state"])}</span>
                 <p>Current source: {_esc(row["revision"])}</p>
-                <p><b>Blocker / gate:</b> {_esc(row["blocker"])}</p>
+                <p><b>Gate / status:</b> {_esc(row["blocker"])}</p>
                 <p><b>Next:</b> {_esc(row["next_action"])}</p>
                 <a href="{_esc(record)}" target="_blank" rel="noopener noreferrer">QA/source record ↗</a>
               </div></article>''')
-        columns.append(f'''<section class="flow-lane" aria-label="{_esc(station)}">
-          <h3>{_esc(station)} <span>{len(present)}</span></h3>
+        displayed_station = ("Early feedback (optional)" if station == "Human review" else station)
+        columns.append(f'''<section class="flow-lane" aria-label="{_esc(displayed_station)}">
+          <h3>{_esc(displayed_station)} <span>{len(present)}</span></h3>
           {''.join(cards) if cards else '<p class="flow-empty">No indexed item with this evidenced status.</p>'}
           </section>''')
     control = data.get("wip", {})
@@ -477,7 +480,9 @@ def _flow_board(data):
     # The index documents outputs and QA, not when agents pulled work.
     caution = ("Live assignments, blocked age, and per-stage cycle time are not recorded "
                "in these notes; the displayed counts are indexed work families, NOT active WIP. "
-               "Ready/generating states cannot be inferred. No final human form approvals are claimed.")
+               "Ready/generating states cannot be inferred. Early-feedback requests do not "
+               "block agent work; verified ready-for-owner-review videos free production WIP. "
+               "No final human form approvals are claimed.")
     return f'''<section id="production-flow" class="group">
       <div class="heading"><h2>Production flow · Kanban-lite evidence view</h2>
         <a href="https://github.com/cwarloe/5BX/blob/main/sprites/docs/PHOTOGRAPHIC_PRODUCTION_STANDARD_WORK.md"
@@ -556,9 +561,10 @@ def render_gallery(data, chart=None):
     latest = (f'<section class="group"><h2>Latest refinements and safety holds</h2>'
               f'<div class="grid refinements">{changes}</div></section>') if changes else ""
     review = (f'<section id="human-review" class="group">'
-              f'<h2>Only these need human eyes · {len(data["review_queue"])} decisions</h2>'
-              f'<p class="hint">Click an output to inspect it. Decisions are recorded in the existing review notes; '
-              f'this page does not approve or change assets.</p>'
+              f'<h2>Recorded early-feedback questions · {len(data["review_queue"])} shown</h2>'
+              f'<p class="hint">Optional: agents continue internal QA and video work without waiting on these. '
+              f'Only a fully checked, playable cycle is READY FOR REVIEW; only Charles can mark it DONE. '
+              f'This page does not approve or change assets.</p>'
               f'<div class="grid review-grid">{decisions}</div></section>') if decisions else ""
     flow = _flow_board(data)
     metrics = _metric_panel(data)
@@ -646,7 +652,7 @@ def main(argv=None):
     args.out.write_text(render_gallery(data, args.chart), encoding="utf-8")
     print(f"Wrote {args.out}: {len(data['overviews'])} chart overviews, "
           f"{len(data['items'])} numbered products, {len(data['high_res'])} full-res still links, "
-          f"{len(data['latest'])} recent updates, {len(data['review_queue'])} human decisions; "
+          f"{len(data['latest'])} recent updates, {len(data['review_queue'])} optional early-feedback questions; "
           "zero form approvals granted")
 
 
