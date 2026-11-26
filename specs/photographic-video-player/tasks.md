@@ -8,7 +8,7 @@ evidence; all engineering tasks follow Charles's requirements approval on
 
 - [x] 1. Implement typed empty registry, exact action/chart/exercise identity,
       canonical SHA URL and full-repeat slot timing (R1.1–5, R2.3, R2.6).
-- [ ] 2. Implement invisible-before-validation video lifecycle, strict
+- [x] 2. Implement invisible-before-validation video lifecycle, strict
       metadata/clock sync, pause/skip/error/reduced-motion cleanup (R2.1–7, R3.4).
 - [ ] 3. Integrate dev-flag-only photographic preview with explicit HOLD
       states and **zero sprite renders/preloads**; preserve production (R3.1–3).
