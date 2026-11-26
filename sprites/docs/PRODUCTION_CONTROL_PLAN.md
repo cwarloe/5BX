@@ -2,6 +2,13 @@
 
 Status: **Draft standard work / proposed controls**, 2026-11-21. See [the proposed requirements](../../specs/sprite-production-line/requirements.md). This document does not claim that proposed automation has shipped.
 
+**Current photographic implementation (2026-11-26):** Use
+[`PHOTOGRAPHIC_PRODUCTION_STANDARD_WORK.md`](PHOTOGRAPHIC_PRODUCTION_STANDARD_WORK.md)
+for the active photographic workflow, review queue, defect escalation and
+release pilot. This document preserves the earlier design rationale and legacy
+sprite-specific observations; its proposed-station status cells are not a
+live report of newer photographic work.
+
 ## Purpose
 
 Treat exercise-video creation as a repeatable manufacturing process: **make the right movement once, confirm it early, reuse approved components, measure defects, improve the constraint**. Avoid producing attractive but anatomically wrong video, unnecessary paid retakes, and bulk re-renders after a local change.

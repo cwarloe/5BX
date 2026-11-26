@@ -24,6 +24,7 @@ ID_RANGES = {1: (15, 20), 2: (21, 25), 3: (26, 29),
 LINK = re.compile(r"\[([^\]]+)\]\((https?://[^)]+)\)")
 DRIVE = re.compile(r"^/file/d/([A-Za-z0-9_-]+)/view/?$")
 HIGH_RES_LABEL = re.compile(r"\b(?:high[- ]resolution|full[- ]resolution|standalone)\b", re.I)
+REVISION = re.compile(r"\b(\d{2}[A-Z]?)\b")
 
 
 def _plain(value):
@@ -38,6 +39,44 @@ def _lines_in_section(source, title_words):
             continue
         if active and line.lstrip().startswith("- "):
             yield line.lstrip()[2:]
+
+
+def _sections(source):
+    """Read headings in their original order; do not equate 'round 2' with latest."""
+    heading = None
+    lines = []
+    for line in source.splitlines():
+        if line.startswith("## "):
+            if heading is not None:
+                yield heading, lines
+            heading, lines = line[3:].strip(), []
+        elif heading is not None:
+            lines.append(line)
+    if heading is not None:
+        yield heading, lines
+
+
+def _chart_for_revision(revision):
+    if revision is None:
+        return None
+    number = int(revision[:2])
+    return next((n for n, (lo, hi) in ID_RANGES.items() if lo <= number <= hi), None)
+
+
+def _asset_kind(label, url):
+    """Describe the actual linked output, independent of pixel dimensions."""
+    s = label.casefold()
+    if urlparse(url).netloc == "flow.google.com" or "video" in s or "clip" in s:
+        return "video"
+    if any(x in s for x in ("comparison", "before/after", " vs ", "close-up", "closeup")):
+        return "comparison"
+    if any(x in s for x in ("four-frame", "four-phase", "4-phase", "contact sheet", "card", "four-pose")):
+        return "contact card"
+    if HIGH_RES_LABEL.search(s) or "single frame" in s or "start frame" in s:
+        return "standalone still"
+    if "diagnostic" in s or "tracking" in s:
+        return "diagnostic"
+    return "image"
 
 
 def _image_url(url):
@@ -92,7 +131,8 @@ def _high_res_stills(folder, index, charts):
             for link in LINK.finditer(line):
                 label = _plain(link.group(1))
                 url = link.group(2)
-                if not HIGH_RES_LABEL.search(label) or not _image_url(url) or url in seen:
+                if (_asset_kind(label, url) != "standalone still" or
+                        not _image_url(url) or url in seen):
                     continue
                 chart_match = re.search(r"\bChart\s+([1-6])\b", line, re.I)
                 chart = source_chart or (int(chart_match.group(1)) if chart_match else None)
@@ -112,8 +152,103 @@ def _high_res_stills(folder, index, charts):
                     state = "HOLD"
                 stills.append({"chart": chart, "title": title, "url": url,
                                "summary": _plain(line), "state": state,
+                               "kind": "standalone still",
                                "source": source_name})
     return sorted(stills, key=lambda item: item["chart"])
+
+
+def _current_refinements(index, charts):
+    """Prefer current 'Latest test' sections over older round-number headings.
+
+    For a numbered exercise, show only its newest revision. Keep the earlier
+    attempts in the linked record, not in the current-output slot.
+    """
+    sections = list(_sections(index))
+    current = [(title, lines) for title, lines in sections
+               if title.casefold().startswith("latest test")]
+    if not current:
+        # Older batches used a 'Most recent round N' heading. Preserve this
+        # compatibility path, but don't prefer it when newer sections exist.
+        return [{"title": _plain(link.group(1)), "url": link.group(2),
+                 "summary": _plain(line), "state": _state(_plain(line)),
+                 "kind": _asset_kind(_plain(link.group(1)), link.group(2)),
+                 "source": INDEX}
+                for heading, lines in sections if heading.casefold().startswith("most recent")
+                for line in lines if line.lstrip().startswith("- ")
+                for link in [_first_link(line)] if link is not None
+                if not charts or any(f"Chart {n}" in line for n in charts)]
+    output = []
+    seen_exercises = set()
+    for heading, lines in current:
+        revision = next(iter(REVISION.findall(heading)), None)
+        chart = _chart_for_revision(revision)
+        family = revision[:2] if revision else None
+        if chart not in charts or family in seen_exercises:
+            continue
+        seen_exercises.add(family)
+        linked = [(link, _plain(link.group(1)), line)
+                  for line in lines for link in LINK.finditer(line)]
+        if not linked:
+            continue
+        candidate = next(((link, label, line) for link, label, line in linked
+                          if revision in label and _asset_kind(label, link.group(2))
+                          in ("contact card", "standalone still", "video")), None)
+        if candidate is None:
+            candidate = next(((link, label, line) for link, label, line in linked
+                              if _asset_kind(label, link.group(2)) != "comparison"), linked[0])
+        link, label, line = candidate
+        comparison = next((l.group(2) for l, name, _ in linked
+                           if _asset_kind(name, l.group(2)) == "comparison"), None)
+        output.append({"chart": chart, "revision": revision, "title": label,
+                       "url": link.group(2), "summary": _plain(line),
+                       "state": _state(label), "kind": _asset_kind(label, link.group(2)),
+                       "comparison": comparison, "source": INDEX})
+    return output
+
+
+def _review_queue(index, latest, items, charts):
+    """Show only live candidate decisions and explicit human-eyes requests.
+
+    This is a read-only inbox. Approval happens in the existing review record,
+    never through a decorative button or an assistant-generated PASS.
+    """
+    queue = []
+    seen_urls = set()
+    for entry in latest:
+        if (entry.get("revision") and entry["state"] not in ("HOLD", "REJECT")
+                and "review candidate" in entry["summary"].casefold()):
+            instruction = re.search(r"\bcompare\s+([^.;]+)", entry["summary"], re.I)
+            queue.append({**entry, "state": "NEEDS EYES",
+                          "question": ("Compare " + instruction.group(1) if instruction else
+                                       "Does this corrected pose look natural and retain the intended movement?")})
+            seen_urls.add(entry["url"])
+    for heading, lines in _sections(index):
+        if "what needs human eyes" not in heading.casefold():
+            continue
+        for line in lines:
+            if not line.lstrip().startswith("- "):
+                continue
+            match = REVISION.search(_plain(line[:100]))
+            revision = match.group(1) if match else None
+            chart = _chart_for_revision(revision)
+            if chart not in charts:
+                continue
+            link = _first_link(line)
+            asset = next((x for x in items if x.get("test") == revision), None)
+            url = link.group(2) if link else (asset or {}).get("url")
+            if not url or url in seen_urls:
+                continue
+            seen_urls.add(url)
+            brief = _plain(line).lstrip("- ").split(":", 1)[0]
+            questions = re.findall(r"[^.!?]*\?", _plain(line))
+            queue.append({"chart": chart, "revision": revision, "title": brief,
+                          "url": url, "summary": _plain(line), "state": "NEEDS EYES",
+                          "kind": _asset_kind(_plain(link.group(1)), url) if link else
+                                  (asset or {}).get("kind", "video"),
+                          "question": questions[0].strip() if questions else
+                                      _plain(line).split(":", 1)[-1].strip(),
+                          "source": INDEX})
+    return queue[:3]
 
 
 def gallery_data(repo_root, chart=None):
@@ -144,19 +279,13 @@ def gallery_data(repo_root, chart=None):
             title = label if label.startswith(number) else f"{number} — {label}"
             items.append({"chart": n, "test": number, "title": title,
                           "url": link.group(2), "summary": _plain(line),
-                          "state": _state(title), "source": INVENTORIES[n]})
-    # Latest safety/identity vetoes take precedence over the original still
-    # inventory; never silently upgrade a candidate based on an older label.
-    latest = []
-    for line in _lines_in_section(index, ("most recent",)):
-        link = _first_link(line)
-        if link:
-            latest.append({"title": _plain(link.group(1)), "url": link.group(2),
-                           "summary": _plain(line), "state": _state(_plain(line))})
-    if chart:
-        latest = [x for x in latest if f"Chart {chart}" in x["summary"]]
+                          "state": _state(title), "kind": _asset_kind(title, link.group(2)),
+                          "source": INVENTORIES[n]})
+    latest = _current_refinements(index, charts)
+    review_queue = _review_queue(index, latest, items, charts)
     return {"overviews": [overviews[n] for n in charts], "items": items,
-            "latest": latest, "high_res": _high_res_stills(folder, index, charts),
+            "latest": latest, "review_queue": review_queue,
+            "high_res": _high_res_stills(folder, index, charts),
             "record": PHOTO_DIR / INDEX}
 
 
@@ -176,18 +305,25 @@ def _tile(item, kind):
     open_label = "Open full-resolution still ↗" if kind == "still" else "Open output ↗"
     source_link = (f'<a class="source-link" target="_blank" rel="noopener" '
                    f'href="https://github.com/cwarloe/5BX/blob/main/{PHOTO_DIR}/{_esc(item["source"])}">'
-                   'Source / QA notes ↗</a>' if kind == "still" else "")
+                   'Source / QA notes ↗</a>' if kind in ("still", "review", "refinement") else "")
+    question = (f'<p class="question"><strong>Review question:</strong> {_esc(item["question"])}</p>'
+                if kind == "review" and item.get("question") else "")
+    comparison = (f'<a class="source-link" target="_blank" rel="noopener" '
+                  f'href="{_esc(item["comparison"])}">Before/after comparison ↗</a>'
+                  if item.get("comparison") else "")
+    asset_type = f'<span class="asset-type">{_esc(item["kind"])}</span>' if item.get("kind") else ""
     return f'''<article class="tile {kind}">
       <a class="preview" target="_blank" rel="noopener noreferrer" href="{_esc(item['url'])}">
         {image}<span class="open">{open_label}</span></a>
-      <div class="body"><div class="tag {css}">{_esc(state)}</div><h3>{_esc(title)}</h3>
-      <p>{_esc(description)}</p>{source_link}</div></article>'''
+      <div class="body"><div class="tag {css}">{_esc(state)}</div>{asset_type}<h3>{_esc(title)}</h3>
+      {question}<p>{_esc(description)}</p>{comparison} {source_link}</div></article>'''
 
 
 def render_gallery(data, chart=None):
     title = f"Chart {chart}" if chart else "Charts 1–6"
     overview = "".join(_tile(x, "overview") for x in data["overviews"])
     changes = "".join(_tile(x, "refinement") for x in data["latest"])
+    decisions = "".join(_tile(x, "review") for x in data["review_queue"])
     sections = []
     for top in data["overviews"]:
         n = top["chart"]
@@ -201,6 +337,11 @@ def render_gallery(data, chart=None):
           <div class="grid products">{tiles}</div></section>''')
     latest = (f'<section class="group"><h2>Latest refinements and safety holds</h2>'
               f'<div class="grid refinements">{changes}</div></section>') if changes else ""
+    review = (f'<section id="human-review" class="group">'
+              f'<h2>Only these need human eyes · {len(data["review_queue"])} decisions</h2>'
+              f'<p class="hint">Click an output to inspect it. Decisions are recorded in the existing review notes; '
+              f'this page does not approve or change assets.</p>'
+              f'<div class="grid review-grid">{decisions}</div></section>') if decisions else ""
     stills = "".join(_tile(x, "still") for x in data["high_res"])
     high_res = (f'<section id="high-resolution-stills" class="group">'
                 f'<h2>Individual higher-resolution photo stills</h2>'
@@ -233,6 +374,9 @@ color:white;border-radius:7px;padding:6px 9px;font-size:.8rem;font-weight:700}}
 display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}}
 .tag {{display:inline-block;font-size:.68rem;letter-spacing:.04em;font-weight:800;color:#765000;
 background:#fff0c7;padding:4px 7px;border-radius:6px}} .tag.hold {{background:#ffe0dd;color:#932e27}}
+.asset-type {{display:inline-block;margin-left:7px;color:#536574;font-size:.74rem;text-transform:capitalize}}
+.question {{background:#eaf6ff;border-left:4px solid #257da6;border-radius:4px;padding:8px;color:#1c4760!important}}
+.review {{border:2px solid #9bbccc}} .review .preview {{height:210px}}
 .source-link {{display:inline-block;margin-top:10px;font-size:.8rem}}
 footer {{color:#526574;font-size:.82rem;margin:30px 0}}
 @media(max-width:600px) {{main {{padding:12px}} header.hero {{padding:18px}} .grid {{gap:11px}}}}
@@ -243,6 +387,7 @@ footer {{color:#526574;font-size:.82rem;margin:30px 0}}
 <p class="alert">Experimental images and video. No human-approved exercise forms or verified final workout videos are implied by this gallery. Safety and identity holds remain active.</p>
 {high_res_jump}
 <p><a href="{_esc(record)}" target="_blank" rel="noopener">Canonical mobile index and current decisions ↗</a></p></header>
+{review}
 <section class="group"><h2>Chart overviews · open the products</h2>
 <div class="grid overview-grid">{overview}</div></section>{latest}
 {''.join(sections)}
@@ -263,7 +408,7 @@ def main(argv=None):
     args.out.write_text(render_gallery(data, args.chart), encoding="utf-8")
     print(f"Wrote {args.out}: {len(data['overviews'])} chart overviews, "
           f"{len(data['items'])} numbered products, {len(data['high_res'])} full-res still links, "
-          f"{len(data['latest'])} recent updates; "
+          f"{len(data['latest'])} recent updates, {len(data['review_queue'])} human decisions; "
           "zero form approvals granted")
 
 

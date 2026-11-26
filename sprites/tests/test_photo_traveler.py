@@ -77,6 +77,52 @@ class PhotoTravelerTest(unittest.TestCase):
         # The original legacy implementation remains available through the CLI.
         self.assertIsNotNone(review_board.review_items)
 
+    def test_latest_revision_supersedes_older_card_without_misclassifying_frames(self):
+        folder = self.root / photo_traveler.PHOTO_DIR
+        (folder / photo_traveler.INDEX).write_text("""# mobile index
+## Latest test — 34K lifts the background elbow
+- [34J vs 34K close mobile comparison](https://drive.google.com/file/d/comp34k/view) | [34K full-resolution four-frame card](https://drive.google.com/file/d/card34k/view). Review candidate, not approved; compare elbow heights.
+## Latest test — 34J hides the far arm
+- [34H vs 34J comparison](https://drive.google.com/file/d/comp34j/view) | [34J full-resolution four-frame card](https://drive.google.com/file/d/card34j/view). Review candidate only.
+1. [Chart 1 overview](https://drive.google.com/file/d/c1/view).
+2. [Chart 2 overview](https://drive.google.com/file/d/c2/view).
+3. [Chart 3 overview](https://drive.google.com/file/d/c3/view).
+4. [Chart 4 overview](https://drive.google.com/file/d/c4/view).
+5. [Chart 5 overview](https://drive.google.com/file/d/c5/view).
+6. [Chart 6 overview](https://drive.google.com/file/d/c6/view).
+## What needs human eyes next
+- **Scissor test 19:** [straight-arm card](https://drive.google.com/file/d/scissor19/view). Does the rear shoulder reach look appropriate?
+- **Flow 20:** Watch alternating foot lifts, consistent outfit and loop seam.
+""", encoding="utf-8")
+        (folder / photo_traveler.INVENTORIES[4]).write_text("""# Chart 4
+## Fast mobile review
+- [34 — waist-high stationary run](https://drive.google.com/file/d/card34/view).
+""", encoding="utf-8")
+        (folder / photo_traveler.INVENTORIES[1]).write_text("""# Chart 1
+## Direct mobile links
+- [19 — scissor test](https://drive.google.com/file/d/scissor19/view).
+- [20 — actual Flow video](https://flow.google.com/project/flow20).
+""", encoding="utf-8")
+        data = photo_traveler.gallery_data(self.root, chart=4)
+        self.assertEqual(len(data["latest"]), 1)
+        self.assertEqual(data["latest"][0]["revision"], "34K")
+        self.assertEqual(data["latest"][0]["kind"], "contact card")
+        self.assertEqual(data["latest"][0]["comparison"],
+                         "https://drive.google.com/file/d/comp34k/view")
+        self.assertEqual(data["high_res"], [])  # a full-res four-frame card is not a solo still
+        self.assertEqual(len(data["review_queue"]), 1)
+        self.assertEqual(data["review_queue"][0]["revision"], "34K")
+        html = photo_traveler.render_gallery(data, chart=4)
+        self.assertIn("Only these need human eyes", html)
+        self.assertIn("card34k", html)
+        self.assertNotIn("card34j", html)
+
+        chart1 = photo_traveler.gallery_data(self.root, chart=1)
+        self.assertEqual([x["revision"] for x in chart1["review_queue"]], ["19", "20"])
+        self.assertEqual(chart1["review_queue"][1]["url"],
+                         "https://flow.google.com/project/flow20")
+        self.assertEqual(chart1["review_queue"][1]["kind"], "video")
+
     def test_thumbnail_urls_are_not_guessed_for_other_sites(self):
         self.assertIsNone(photo_traveler._image_url("https://flow.google.com/project/clip"))
         self.assertIsNone(photo_traveler._image_url("https://drive.google.com/file/d/invalid/edit"))
