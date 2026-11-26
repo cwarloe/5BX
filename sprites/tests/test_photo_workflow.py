@@ -103,6 +103,12 @@ class WorkflowTest(unittest.TestCase):
             "Malformed link-like prose: ](" + URL + ")",
             "[Play a different take](" + URL + "?revision=unapproved)",
             "[Play a different take](" + URL + "-obsolete)",
+            "`[Play example](" + URL + ")`",
+            "```markdown\n[Play example](" + URL + ")\n```",
+            "~~~markdown\n[Play example](" + URL + ")\n~~~",
+            "<!-- [Play superseded take](" + URL + ") -->",
+            "<!--\n[Play superseded take](" + URL + ")\n-->",
+            "    [Play indented example](" + URL + ")",
         ):
             with self.subTest(text=text):
                 index.write_text(text)
