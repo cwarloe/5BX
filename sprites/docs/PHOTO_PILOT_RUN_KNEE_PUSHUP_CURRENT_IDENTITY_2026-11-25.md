@@ -40,3 +40,13 @@ Status: 09 photo-card candidate — READY FOR NEXT FLOW TEST / HUMAN REVIEW.
 5. Ask for one Omni 1.2 Flash 6-second UP→DOWN→UP push-up video. Flow quoted 18 credits; a one-time approval was given. **Video #10 render in progress; movement and identity not yet QA-approved.**
 
 **Critical lesson:** Flow's agent cannot turn a Google Drive URL pasted in chat into an actual attached frame, and the cloud browser's file picker could not access our local/Drive asset. Saving a frame from a video *inside Flow* and transforming that native image bypasses the transfer barrier. Keep the newer four-frame external card separately as pose QA, not as the rendered video's source. 
+
+
+## Video #10: completed Flow candidate
+
+[**Watch blue-shirt kneeling push-up video #10 in Google Flow**](https://flow.google.com/project/21f1691f-1259-4af7-9061-61f0c5c47e23/edit/34fcb840-0a51-4a21-af61-ffd32de896ad)
+
+- Six seconds, Omni 1.2 Flash, 18 Flow credits; source is **the Flow-native edited still** extracted from sit-up video 08, *not* the local 09 four-frame card.
+- Assistant snapshot QA: 0:00 correct UP with planted palms/knees and raised feet; 2:10 LOW with natural elbow bend, stable knees and no obvious duplicated limbs; 3:12 press-up transition, no sampled ghosting; 5:06 returns to full UP.
+- Minor open QA: head angles farther down at end; shoe height changes slightly. Watch at normal speed for the seam and occluded far arm before deciding APPROVE or REJECT.
+- **Status: STRONG REVIEW CANDIDATE, not user-approved.** Full video is in Flow; no new MP4 in Drive, no Mixer deployment.
