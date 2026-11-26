@@ -60,7 +60,10 @@ class PlayerMediaAdmissionTests(unittest.TestCase):
         evidence.write_text("Synthetic test-only inspection; never real owner evidence.")
         batch = self.root / "sprites/docs/photo_batches/fixture"
         batch.mkdir(parents=True)
-        (batch / "MOBILE_REVIEW_INDEX.md").write_text(self.url)
+        # The canonical inventory requires an actual visible Markdown link,
+        # not a naked URL or incidental text substring (photo_workflow #73).
+        self.index_path = batch / "MOBILE_REVIEW_INDEX.md"
+        self.index_path.write_text("[Synthetic private review](" + self.url + ")\n")
         self.qa_path = batch / "CURRENT_QA.md"
         self.qa = {
             "schema_version": 1, "chart": 1, "exercise": 5,
@@ -121,6 +124,12 @@ class PlayerMediaAdmissionTests(unittest.TestCase):
         self.assertEqual(report["canonical_qa_source"],
                          "sprites/docs/photo_batches/fixture/CURRENT_QA.md")
         self.assertIn("NOT_EVALUATED", " ".join(report["blockers"]))
+
+    def test_bare_index_url_is_not_a_canonical_review_link(self):
+        self.index_path.write_text("Unlinked URL only: " + self.url + "\n")
+        report = self.evaluate()
+        self.assert_held(report)
+        self.assertIn("not registered in the canonical mobile index", " ".join(report["blockers"]))
 
     def test_absent_or_pending_or_stale_canonical_record_is_held(self):
         self.qa_path.unlink()
