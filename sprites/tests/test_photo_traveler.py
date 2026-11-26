@@ -124,7 +124,8 @@ class PhotoTravelerTest(unittest.TestCase):
         self.assertEqual(len(data["review_queue"]), 1)
         self.assertEqual(data["review_queue"][0]["revision"], "34K")
         html = photo_traveler.render_gallery(data, chart=4)
-        self.assertIn("Only these need human eyes", html)
+        self.assertIn("Recorded early-feedback questions", html)
+        self.assertIn("only Charles can mark it DONE", html)
         self.assertIn("card34k", html)
         self.assertNotIn("card34j", html)
 

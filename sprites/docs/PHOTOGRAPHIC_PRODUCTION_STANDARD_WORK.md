@@ -15,7 +15,7 @@ not create a second spreadsheet, status ledger or separate review database.
 | 2. Controlled still | One numbered job, exact prompt, identity and pose references, direct source output and revision | Reject wrong limbs, impossible anatomy, wrong age or an untraceable source. |
 | 3. Automated intake | Image dimensions, frame completeness, source hash when available, count/spacing and format | Technical PASS is **not** a form approval. |
 | 4. Independent form inspection | Anatomical left/right and near/far lineage, hands/fingers, occlusion, supports, contacts and historical movement | Preserve named reasons for HOLD/REJECT and do not silently promote earlier grades. |
-| 5. Human exception review | Only the unresolved output, an enlarged before/after when useful, one concrete question | Charles's judgment is captured in the existing QA note; an assistant review remains provisional. |
+| 5. Exception handling | Resolve uncertainties with documented references and independent checks; record one concrete question only if necessary | Early owner feedback is optional. An unanswerable safety, scope or authority decision is a real HOLD; other production continues. |
 | 6. One-cycle video | Complete movement, no fade/ghost, fixed camera, anatomy, stable identity and seamless start/end | A coherent contact card or first video frame does not prove this gate. |
 | 7. Release and learn | Approved exact asset, input/version links, full playback review, lessons and next preventive test | No unreviewed media is described as instructional or released automatically. |
 
@@ -40,8 +40,9 @@ status ledger or letting operators click an approval button.
 | GENERATING | A numbered controlled output or generation attempt is linked with the exact submitted prompt | The anatomy has passed |
 | TECHNICAL QC | An intake result on that exact asset is recorded | Form or identity approval |
 | FORM QC | An independent anatomy/occlusion/movement assessment is recorded | Charles has approved the result |
-| NEEDS EYES | A concrete, unresolved owner question and matching asset link exist | A human decision has already occurred |
+| NEEDS EYES | An optional early-feedback question or a genuinely blocking owner decision is recorded, with a matching asset link | Production must pause, or the candidate is ready for final review |
 | VIDEO QC | A **playable video** and a one-cycle motion/loop review are recorded | A still, card, or first frame is a full video |
+| READY FOR REVIEW | Exact playable video and all non-owner gates passed, with a concise review packet linked in the existing QA note | Owner acceptance, release, or a finished exercise |
 | APPROVED | Named owner decision for the exact asset plus all required prior gates | Approval transfers to a later revision |
 | HOLD / REWORK / REJECT | A named defect or stop condition exists | A worker can bypass the hold with a new internal PASS |
 | UNKNOWN / EXPERIMENTAL | Evidence cannot establish a current release stage | It is safe to invent the missing stage |
@@ -72,19 +73,51 @@ avatar identity master; an exact prompt or controlled generation plan; and a
 clear named check that determines whether the output can advance. Otherwise
 keep the job in discovery/experiment or on hold.
 
-**Definition of Done (one exercise):** the exact revision and all inputs are
-traceable; still anatomy and owner form judgment are recorded; a playable
-one-cycle video has been checked throughout for limb lineage, movement,
-appearance and seamless loop; the final video has an explicit named approval;
-and the output/decision is linked from the existing QA record. None of these
-criteria may be satisfied by an image-model assertion alone.
+**Definition of Ready for Review (agent handoff):** the exact exercise,
+revision, prompt, inputs and output are traceable; a directly playable
+one-cycle video is available; technical checks, independent form inspection,
+full-motion and loop checks have been completed with specific results; and
+the linked existing QA note states remaining uncertainties and the agent's
+recommendation in one concise review question. This is a **completed agent
+production task**, not permission to publish or use the video. A contact
+card, first frame, model-generated PASS, or unverified Flow preview cannot
+cross this gate.
 
-The initial release-lane WIP limit of **two exercises** is an *operating rule*,
-not yet an automatically enforced lock. Pull the next ready exercise only
-after a slot is freed; a worker can perform independent `EXPERIMENTAL`
+**Definition of Done (owner acceptance):** Charles has personally reviewed
+and explicitly accepted the exact ready-for-review video revision for use;
+the named decision and asset identity are recorded in the existing QA note.
+Only this event makes that revision `DONE` / `APPROVED`. Rejection returns it
+to rework with the named reason. No other agent may infer the decision.
+
+### Autonomous work and escalation policy
+
+- Agents own ordinary decisions about prompts, experimental methods, QA,
+  regression testing, retries, versioned notes, and moving a technically
+  finished item to `READY FOR REVIEW`. They should follow existing historical
+  exercise and avatar contracts rather than seeking approval for each step.
+- **Do not make Charles a production station.** Optional early-feedback
+  questions may be shown, but producers continue on the best defensible route
+  without waiting. Only request an intermediate decision when a material
+  requirement or safety interpretation cannot be resolved from authoritative
+  references, or an access, permission, spending or scope boundary requires
+  Charles's action. Ask one concrete question with evidence, alternatives and
+  a recommended path; continue unrelated ready work in parallel.
+- Moving an exercise to `READY FOR REVIEW` frees its agent-production WIP slot.
+  It enters a visible owner-review buffer, **not** the `DONE` count. Other
+  exercises can be pulled while it awaits Charles's review. Keep the review
+  buffer visible so ready products are not forgotten.
+- Agents may not silently change the meaning of an exercise, the accepted
+  character identity, the intended release criteria, or a previously accepted
+  artifact. Do not assume authorization for new paid usage, private-media
+  disclosure, or an irreversible deployment.
+
+The initial **active agent-production** WIP limit of **two exercises** is an
+*operating rule*, not yet an automatically enforced lock. Pull the next ready
+exercise once one is completed for owner review or otherwise leaves active
+work; a worker can perform independent `EXPERIMENTAL`
 research without claiming a third release slot. When blocked, display the
-reason and next required action; count blocked release jobs against WIP rather
-than hiding them. A small, output-first board should show both WIP and blocker
+reason and next required action; count *active* blocked production jobs against
+WIP rather than hiding them. A small, output-first board should show both WIP and blocker
 age **only if** dated evidence exists. No inferred dates, artificial deadlines,
 or ceremonial daily stand-ups are needed. A short asynchronous change note
 with the output and blocker is sufficient.
@@ -191,10 +224,14 @@ ceremonies or requiring Charles to maintain a separate project board.
 - **VIDEO:** a playable motion clip, not a card or an unverified model preview.
 - **COMPARISON / DIAGNOSTIC:** evidence for an edit or identity test, never an
   automatically selected production master.
-- **CANDIDATE / NEEDS EYES:** can be shown for review, not used for release.
+- **CANDIDATE / NEEDS EYES:** may request optional early feedback; agents keep
+  working unless the note identifies a real blocker. Neither is a final
+  review-ready video or release approval.
+- **READY FOR REVIEW:** all agent-controlled gates are complete; a playable
+  full-cycle video is queued for Charles's decision, not yet accepted for use.
 - **HOLD / REJECT / SUPERSEDED:** preserved for lessons; not passed downstream.
-- **APPROVED:** only an explicit named human form verdict on that exact
-  revision after the relevant still/video gates.
+- **DONE / APPROVED:** only Charles's explicit named acceptance of that exact
+  video revision after the relevant still/video gates.
 
 The traveler is intentionally read-only and does not offer a fake Approve
 button. Its exception queue is an inbox of **questions**, not a substitute for
