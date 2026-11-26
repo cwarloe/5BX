@@ -45,6 +45,8 @@ import {
   unlockAudio,
 } from "@/lib/sfx";
 import { resumeSpeech, setVoiceEnabled, speak, speakCount, stopSpeech } from "@/lib/voice";
+import { PhotographicExerciseVideo } from "@/components/photographic-exercise-video";
+import { APPROVED_PHOTO_REGISTRY, photoWorkSlot } from "@/lib/photo-video";
 
 const VICTORY_LINES = [
   { at: 0.4, text: "CHART 1 COMPLETE!" },
@@ -168,6 +170,11 @@ function Pines() {
 }
 
 export function WorkoutApp() {
+  // The existing published sprite experience stays unchanged. Photographic
+  // development preview can be enabled only in a development build, and still
+  // admits no footage until an owner-approved registry is generated.
+  const photoPreview =
+    import.meta.env.DEV && import.meta.env.VITE_PHOTO_PLAYER_PREVIEW === "1";
   const sim = useRef<Sim>(createSim());
   const [view, setView] = useState<Sim>(() => snapshot(sim.current));
   const [sfxOn, setSfxOn] = useState(true);
@@ -346,17 +353,19 @@ export function WorkoutApp() {
   }, []);
 
   useEffect(() => {
-    const actions = Object.keys(FRAME_COUNTS) as Action[];
-    for (const action of actions) {
-      for (let frame = 0; frame < FRAME_COUNTS[action]; frame += 1) {
-        const img = new Image();
-        img.src = spriteSrc(action, frame);
+    if (!photoPreview) {
+      const actions = Object.keys(FRAME_COUNTS) as Action[];
+      for (const action of actions) {
+        for (let frame = 0; frame < FRAME_COUNTS[action]; frame += 1) {
+          const img = new Image();
+          img.src = spriteSrc(action, frame);
+        }
       }
     }
     return () => {
       releaseWake();
     };
-  }, [releaseWake]);
+  }, [photoPreview, releaseWake]);
 
   const level = LEVELS[view.levelId];
   const action = actionOf(view, level);
@@ -369,6 +378,16 @@ export function WorkoutApp() {
   const shaking = view.phase === "outro" && view.phaseElapsed >= 2.62 && view.phaseElapsed < 3.15;
   const shadow = shadowAmount(view.phase, view.phaseElapsed);
   const upcoming = nextOf(view, level);
+  const photoSlot =
+    view.phase === "work" && exercise
+      ? photoWorkSlot(
+          action,
+          level.chart,
+          view.index,
+          view.phaseElapsed,
+          exercise.seconds,
+        )
+      : null;
   const paused =
     !view.running && (view.phase === "intro" || view.phase === "work" || view.phase === "outro");
   const status =
@@ -395,28 +414,43 @@ export function WorkoutApp() {
       <p className="sr-only" aria-live="polite">
         {status}
       </p>
-      <section className={shaking ? "stage shake" : "stage"} aria-label="Workout stage">
-        <div className="sky" />
-        <div className="sun" aria-hidden />
-        <div className="ground" />
-        <Pines />
-        <div
-          className="contact-shadow"
-          style={{ transform: `translateX(-50%) scaleX(${shadow.toFixed(3)})`, opacity: Math.max(0.12, shadow) }}
-          aria-hidden
-        />
-        <div className={action === "crash" ? "athlete splat" : "athlete"}>
-          <div className="athlete-motion" style={{ transform: athleteMotion(view.phase, view.phaseElapsed) }}>
-            <img
-              src={spriteSrc(action, frameIndex(action, view))}
-              alt=""
-              className={view.phase === "idle" || view.phase === "intro" ? "ghost" : undefined}
-              draggable={false}
+      <section className={photoPreview ? "stage photographic-stage" : shaking ? "stage shake" : "stage"} aria-label="Workout stage">
+        {photoPreview ? (
+          <div className="photographic-player-stage">
+            <PhotographicExerciseVideo
+              registry={APPROVED_PHOTO_REGISTRY}
+              slot={photoSlot}
+              playing={view.running}
+              label={exercise?.name ?? "5BX workout"}
+              buildBase={import.meta.env.BASE_URL || "/"}
             />
           </div>
-        </div>
+        ) : (
+          <>
+            <div className="sky" />
+            <div className="sun" aria-hidden />
+            <div className="ground" />
+            <Pines />
+            <div
+              className="contact-shadow"
+              style={{ transform: `translateX(-50%) scaleX(${shadow.toFixed(3)})`, opacity: Math.max(0.12, shadow) }}
+              aria-hidden
+            />
+            <div className={action === "crash" ? "athlete splat" : "athlete"}>
+              <div className="athlete-motion" style={{ transform: athleteMotion(view.phase, view.phaseElapsed) }}>
+                <img
+                  src={spriteSrc(action, frameIndex(action, view))}
+                  alt=""
+                  className={view.phase === "idle" || view.phase === "intro" ? "ghost" : undefined}
+                  draggable={false}
+                />
+              </div>
+            </div>
+          </>
+        )}
 
         <header className="hud-top">
+          {photoPreview ? <p className="photo-preview-label">PHOTOGRAPHIC PREVIEW — UNRELEASED</p> : null}
           {view.phase === "idle" || view.phase === "intro" ? (
             <>
               <p className="kicker">— CHART 1 —</p>
@@ -474,7 +508,7 @@ export function WorkoutApp() {
             <span className="hud-label">NEXT</span>
             {upcoming ? (
               <div className="mini">
-                <img src={spriteSrc(upcoming.action, 0)} alt="" />
+                {!photoPreview ? <img src={spriteSrc(upcoming.action, 0)} alt="" /> : null}
                 <span>{upcoming.name}</span>
               </div>
             ) : (

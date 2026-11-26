@@ -1,6 +1,6 @@
 # Requirements: photographic video-first exercise playback
 
-Status: Draft — engineering implementation staged; release HOLD
+Status: Approved for engineering implementation by Charles in project chat on 2026-11-26; photographic video release HOLD
 Owner: Charles
 Last updated: 2026-11-26
 
@@ -86,8 +86,12 @@ existing public UI unchanged until approved video footage exists.
 4. A user requesting reduced motion SHALL not silently autoplay exercise video;
    deliberate opt-in may enable it for the preview session.
 
-## Open questions
+## Approval boundary and remaining question
 
-- Owner review of this engineering specification before any release decision.
+Charles explicitly approved merging these requirements and proceeding with
+engineering in the project chat on 2026-11-26. This records a requirements
+decision, **not** authenticated acceptance of any exercise-video revision.
+
 - Which trusted external owner-approval event will generate the first nonempty
-  registry? Until established, all media entries remain absent.
+  registry? Until established, all media entries remain absent and no exercise
+  footage may be published through the photographic player.
