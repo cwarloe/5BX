@@ -29,6 +29,12 @@ The source videos 07, 08, 10, 13 and 14 are **all encoded at 1280×720, 24 frame
 
 **Olive/gray alternative character — preserve separately:** Video 07 represents a **valid alternate photographic identity/style to keep for later multi-character or later-chart use**, not an unwanted mistake to erase. [Source video 07](https://drive.google.com/file/d/1X6nDp2pYoizf7GJ8kGfW8wVM6QcHpKi3/view), [720p alternate reference PNG](https://drive.google.com/file/d/1b3LOnoVNlbsDiNmhEe8e7Lg-NQ9DjbTq/view). The PNG is a decoded still from 07 at ~0.1 seconds; it is **not** the uncompressed original. The original higher-quality image asset was named "Fully Raised Kneeling Pushup Profile-3.png" in the older Flow project; retrieve/export the source if available before treating the 720p screenshot as a production master. This alternate differs in facial age/style, close haircut, build, clothing and composition from the later blue/charcoal boy; **do not unintentionally blend these two models inside one chart**.
 
+## Prototype camera policy — Charles decision (2026-11-25)
+
+**Use a fixed, static camera for all current video experiments.** No zoom, pan, pullback or moving-camera edits until movement mechanics, loop quality and chart-local character identity have reached reliable acceptance. A wide shot is **deliberately acceptable and sometimes necessary**, especially the final exercise's running-in-place / hop movement; the entire character, shoes and jumping arc need room. Do not treat the wider background itself as a defect or "correct" it through a camera move.
+
+This qualifies the image-fidelity findings above: a closer olive/blue reference can look sharper because the subject occupies more pixels, but our prototype prioritizes **correctly visible whole-body motion in a single locked shot** over maximum face size. Where finer detail is needed, improve the source render, model fidelity, texture, lighting and export quality while retaining the appropriate fixed framing. Reconsider cinematic tracking/reframing only as a separate later experiment after form is robust.
+
 ## Exact captured Flow prompts (copy verbatim from these records)
 
 1. **07 knee push-up** (olive tank / gray shorts, earlier identity): the exact executed 6-second Flow text is in [PHOTO_FLOW_VIDEO_PILOTS_2026-11-25.md](PHOTO_FLOW_VIDEO_PILOTS_2026-11-25.md), section "Exact Flow request, 07". Result: credible single-frame full-cycle movement, different older identity; not the canonical current boy.
