@@ -5,6 +5,7 @@ from pathlib import Path
 
 from photo_motion.__main__ import _prompt
 from photo_motion.contract import load_spec, validate
+from photo_motion.extended_contract import validate_extended
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -18,6 +19,13 @@ class TestMotionContract(unittest.TestCase):
     def test_known_specs_validate(self):
         self.assertEqual(validate(self.scissor), [])
         self.assertEqual(validate(self.pushup), [])
+
+    def test_audio_policy_rejects_unknown_enforcement_values(self):
+        low_run = load_spec(ROOT / "specs" / "chart1-stationary-low-run.json")
+        self.assertEqual(low_run["audio_policy"], "forbid")
+        self.assertEqual(validate_extended(low_run), [])
+        low_run["audio_policy"] = "silence-maybe"
+        self.assertIn("audio_policy must be", " ".join(validate_extended(low_run)))
 
     def test_core_motion_cannot_claim_unrelated_chart_or_exercise(self):
         for base, chart, exercise in (

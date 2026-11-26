@@ -99,6 +99,7 @@ def probe(video):
     raw = _run(["ffprobe", "-v", "error", "-show_format", "-show_streams", "-of", "json", str(video)])
     data = json.loads(raw)
     streams = [s for s in data.get("streams", []) if s.get("codec_type") == "video"]
+    audio_streams = [s for s in data.get("streams", []) if s.get("codec_type") == "audio"]
     if len(streams) != 1:
         raise ValueError(f"expected exactly one video stream, found {len(streams)}")
     stream = streams[0]
@@ -112,8 +113,41 @@ def probe(video):
         "fps": _fraction(stream.get("avg_frame_rate")),
         "codec": stream.get("codec_name"),
         "pixel_format": stream.get("pix_fmt"),
-        "frame_count_reported": stream.get("nb_frames")
+        "frame_count_reported": stream.get("nb_frames"),
+        "audio_stream_count": len(audio_streams),
+        "audio_codecs": [s.get("codec_name") for s in audio_streams]
     }
+
+
+def _audio_levels(video, stream_count):
+    """Read audio levels without writing or modifying media.
+
+    A finite PCM peak means some decoded sample was nonzero, *not* that the
+    sound is perceptually audible. An audio stream violates a forbid policy
+    regardless of its level, including a perfectly silent track.
+    """
+    results = []
+    for index in range(stream_count):
+        cmd = ["ffmpeg", "-nostdin", "-hide_banner", "-loglevel", "info",
+               "-i", str(video), "-map", f"0:a:{index}", "-vn", "-af",
+               "volumedetect", "-f", "null", "-"]
+        proc = subprocess.run(cmd, capture_output=True, text=True, check=False)
+        entry = {"stream_index": index, "mean_volume_dbfs": None,
+                 "peak_volume_dbfs": None, "has_nonzero_pcm_samples": None}
+        if proc.returncode:
+            entry["analysis_warning"] = "Could not decode audio stream for volume screening"
+        else:
+            for metric, key in (("mean_volume", "mean_volume_dbfs"),
+                                ("max_volume", "peak_volume_dbfs")):
+                matches = re.findall(rf"{metric}:\s*(-?inf|-?\d+(?:\.\d+)?)\s*dB", proc.stderr)
+                if matches and matches[-1] != "-inf":
+                    entry[key] = float(matches[-1])
+                elif not matches:
+                    entry["analysis_warning"] = "Audio decoder returned no volume metric"
+            if "analysis_warning" not in entry:
+                entry["has_nonzero_pcm_samples"] = entry["peak_volume_dbfs"] is not None
+        results.append(entry)
+    return results
 
 
 def _phase_samples(spec, info):
@@ -179,6 +213,10 @@ def inspect(spec, spec_path, video_path, out_dir, recipe_path=None):
     video_sha256 = file_sha256(video)
     spec_sha256 = file_sha256(spec_path)
     info = probe(video)
+    audio_policy = spec.get("audio_policy", "unspecified")
+    if audio_policy not in {"unspecified", "forbid"}:
+        raise ValueError(f"unsupported audio_policy {audio_policy!r}")
+    audio_levels = _audio_levels(video, info["audio_stream_count"])
     provenance = read_recipe(recipe_path) if recipe_path else None
     # Never replace a previous diagnostic, even if a caller accidentally
     # reuses the same output path. Each run needs its own evidence directory.
@@ -205,6 +243,11 @@ def inspect(spec, spec_path, video_path, out_dir, recipe_path=None):
         warnings.append("Clip has a frame dimension below 360px")
     if all(row["screen_space_mae_0_to_255"] < 0.5 for row in pairwise):
         warnings.append("All sampled phases look nearly identical at thumbnail resolution; verify the video contains real movement")
+    if audio_policy == "forbid" and info["audio_stream_count"]:
+        warnings.append(f"Audio policy forbids sound, but MP4 contains {info['audio_stream_count']} audio stream(s); inspect or remove audio in a separate derived deliverable")
+    for item in audio_levels:
+        if item.get("analysis_warning"):
+            warnings.append(f"Audio stream {item['stream_index']}: {item['analysis_warning']}")
     # FFprobe and each FFmpeg sample are separate readers. Reject results if
     # a concurrent producer/rename replaces the source or movement contract.
     if file_sha256(video) != video_sha256:
@@ -216,7 +259,10 @@ def inspect(spec, spec_path, video_path, out_dir, recipe_path=None):
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
         "source_video": str(video), "source_video_sha256": video_sha256,
         "spec_file": str(Path(spec_path).resolve()), "spec_sha256": spec_sha256,
-        "video": info, "contact_sheet": board.name, "frames": samples,
+        "video": info,
+        "audio": {"policy": audio_policy, "streams": audio_levels,
+                  "interpretation": "A nonzero decoded PCM sample is not proof of audibility; an existing audio track breaches a forbid policy even when silent."},
+        "contact_sheet": board.name, "frames": samples,
         "screen_space_start_end_mae_0_to_255": seam,
         "consecutive_sample_screen_space_differences": pairwise,
         "screen_space_metric_warning": "A low pixel difference does not prove correct anatomy, continuity or a smooth loop; a high difference may come from background compression or lighting.",
