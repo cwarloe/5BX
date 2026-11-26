@@ -267,6 +267,57 @@ class PlayerMediaAdmissionTests(unittest.TestCase):
         self.assertEqual(report["technical_evidence"], "HOLD")
         self.assertIn("frame count/FPS differs", " ".join(report["blockers"]))
 
+    def test_rotated_display_matrix_cannot_masquerade_as_landscape_player_clip(self):
+        """A portrait-display MP4 retains landscape coded dimensions in ffprobe.
+
+        The browser may honor its 90-degree display matrix, so the player
+        cannot trust width/height alone for full-body framing admission.
+        """
+        rotated = self.private / "synthetic-rotated-display.mp4"
+        command = ["ffmpeg", "-nostdin", "-hide_banner", "-loglevel", "error",
+                   "-display_rotation:v:0", "90", "-i", str(self.video_path),
+                   "-c", "copy", str(rotated)]
+        proc = subprocess.run(command, capture_output=True, text=True, check=False)
+        if proc.returncode:
+            self.skipTest("FFmpeg build lacks display_rotation; exact synthetic rotation unavailable")
+        video_data = json.loads(subprocess.run(
+            ["ffprobe", "-v", "error", "-show_streams", "-of", "json", str(rotated)],
+            capture_output=True, text=True, check=True).stdout)
+        video_stream = next(s for s in video_data["streams"] if s.get("codec_type") == "video")
+        display_rotations = [s.get("rotation") for s in video_stream.get("side_data_list", [])
+                             if s.get("side_data_type") == "Display Matrix"]
+        if display_rotations != [90]:
+            self.skipTest("FFmpeg did not encode a verifiable 90-degree display matrix")
+
+        item = copy.deepcopy(self.candidate)
+        digest = file_sha256(rotated)
+        item["video"].update({"local_path": str(rotated), "sha256": digest})
+        self.qa["video"]["sha256"] = digest
+        self.qa["inspection"]["video_sha256"] = digest
+        self.qa["owner_decision"]["video_sha256"] = digest
+        self._write_qa()
+
+        report = self.evaluate(item)
+        self.assert_held(report)
+        self.assertEqual(report["technical_evidence"], "HOLD")
+        self.assertIn("display rotation", " ".join(report["blockers"]))
+
+    def test_unreadable_display_rotation_metadata_fails_closed(self):
+        # Portable branch coverage even on FFmpeg builds that cannot create
+        # the real display-matrix regression fixture above.
+        real_probe = gate.probe
+
+        def unknown_rotation(path):
+            info = real_probe(path)
+            info["display_rotations_degrees"] = [None]
+            return info
+
+        with mock.patch.object(gate, "probe", side_effect=unknown_rotation):
+            report = self.evaluate()
+        self.assert_held(report)
+        self.assertEqual(report["technical_evidence"], "HOLD")
+        self.assertIn("unreadable display rotation", " ".join(report["blockers"]))
+
     def test_declared_duration_must_match_native_duration_to_browser_tolerance(self):
         """A self-consistent 5s MP4 cannot be relabeled 4.99s and pass intake.
 
