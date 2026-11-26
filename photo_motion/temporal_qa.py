@@ -264,6 +264,42 @@ def _cuts(deltas, timestamps, fps):
             for index, score in enumerate(deltas) if score > threshold]
 
 
+def _cadence_consistency(timestamps, declared_fps, reported_duration, decoded_count):
+    """Compare real frame PTS cadence to container average rate and duration.
+
+    A concat can produce 142 genuine 24-fps frames but an MP4 reporting
+    142/5.875 ~= 24.17 fps; each individual PTS gap still looks regular.
+    This is an informational screen only: VFR and edited media can also
+    legitimately disagree with the median timestamp cadence.
+    """
+    result = {
+        "verdict": "NOT_EVALUATED",
+        "timestamp_cadence_fps": None,
+        "reported_average_fps": round(declared_fps, 6),
+        "reported_duration_seconds": round(reported_duration, 6),
+        "reported_duration_frame_discrepancy": None,
+        "relative_rate_discrepancy": None,
+        "timing_source": "original_decoded_frame_timestamps",
+    }
+    if len(timestamps) != decoded_count or decoded_count < 2:
+        return result
+    steps = [b - a for a, b in zip(timestamps, timestamps[1:])]
+    if any(not math.isfinite(step) or step <= 0 for step in steps):
+        return result  # duplicate or nonmonotonic timestamps have separate warnings
+    observed_fps = 1 / statistics.median(steps)
+    relative_rate = abs(observed_fps - declared_fps) / declared_fps
+    duration_discrepancy = abs(reported_duration * observed_fps - decoded_count)
+    result.update({
+        "timestamp_cadence_fps": round(observed_fps, 6),
+        "relative_rate_discrepancy": round(relative_rate, 6),
+        "reported_duration_frame_discrepancy": round(duration_discrepancy, 6),
+        "verdict": ("REVIEW_RATE_OR_DURATION_MISMATCH"
+                    if relative_rate > 0.005 or duration_discrepancy > 0.6
+                    else "SCREEN_SPACE_TIMING_ALIGNED_NOT_FORM_APPROVAL"),
+    })
+    return result
+
+
 def analyze(video_path, *, expected_holds=(), still_threshold=0.5, minimum_hold_seconds=0.5,
             expect_loop=False, background_rois=(), check_motion_reversal=False):
     """Inspect a real video and return JSON-safe evidence, not approval."""
@@ -303,9 +339,15 @@ def analyze(video_path, *, expected_holds=(), still_threshold=0.5, minimum_hold_
     if _sha256(video) != source_sha256:
         raise RuntimeError("source video changed during temporal inspection; discard these results")
     warnings = []
-    if len(timestamps) != decoded_count:
+    authentic_timestamps = len(timestamps) == decoded_count
+    if not authentic_timestamps:
         warnings.append("Frame timestamps unavailable or inconsistent with decoded count; time positions use average FPS")
         timestamps = [i / fps for i in range(decoded_count)]
+    cadence = _cadence_consistency(
+        timestamps if authentic_timestamps else [], fps, info["duration_seconds"], decoded_count
+    )
+    if cadence["verdict"] == "REVIEW_RATE_OR_DURATION_MISMATCH":
+        warnings.append("Decoded frame cadence disagrees with reported average FPS or duration; inspect VFR, trim and concat timing before using this clip as a loop")
     step = [timestamps[i] - timestamps[i - 1] for i in range(1, len(timestamps))]
     expected_step = 1 / fps
     pacing = [{"at_seconds": round(timestamps[i], 3), "step_seconds": round(gap, 5)}
@@ -390,6 +432,7 @@ def analyze(video_path, *, expected_holds=(), still_threshold=0.5, minimum_hold_
         "potential_abrupt_cuts_total": len(cuts),
         "frame_pacing_anomalies": pacing[:100],
         "frame_pacing_anomalies_total": len(pacing),
+        "cadence_consistency": cadence,
         "technical_warnings": warnings,
         "interpretation": (
             "Screen-space motion screening only. Intentional holds are legitimate; moving backgrounds, grain and lighting "
