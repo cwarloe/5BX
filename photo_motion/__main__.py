@@ -26,6 +26,9 @@ def _prompt(spec):
         "Required chronological physical phases; times are targets, never permission to dissolve between stills.",
         "Structured physical states below are mandatory: SUPPORT and CONTACTS describe actual foot/hand/body contact, and LIMBS name the same physical anatomy across time. Resolve any conflict with the descriptive pose text BEFORE submitting the prompt:"
     ]
+    if spec.get("track_provenance"):
+        lines.append("ORIGINAL SOURCE MARKER AUTHORITY: "
+                     + json.dumps(spec["track_provenance"], sort_keys=True, separators=(",", ":")))
     for phase in spec["phases"]:
         physical = {key: value for key, value in phase.items()
                     if key not in ("id", "time_seconds", "pose")}
