@@ -199,6 +199,13 @@ def join_segments(first_file, second_file, output_dir, *,
         raise ValueError(f"C seam screen-space MAE {c_seam_mae:.4f} exceeds "
                          f"declared threshold {max_c_seam_mae:.4f}; manual review required")
 
+    # The finished cycle will repeat from the final A back to the original A.
+    # Measure that distinct boundary too, but do not turn pixel similarity into
+    # a motion/form verdict or silently reuse the C-join threshold for it.
+    original_a = _frame_rgb(first, 0, widths, heights)
+    recovered_a = _frame_rgb(second, frames[1]-1, widths, heights)
+    outer_loop_mae = _seam_mae(recovered_a, original_a)
+
     source_packets = [_packet_hashes(path) for path in sources]
     source_decoded_sha = _decoded_rgb_sequence_sha256(sources)
     ffmpeg_version = _run(["ffmpeg", "-version"]).splitlines()[0]
@@ -256,6 +263,9 @@ def join_segments(first_file, second_file, output_dir, *,
             "c_join": {"last_A_to_C_vs_first_C_to_A_rgb_mae_0_to_255": round(c_seam_mae, 6),
                        "screen_space_threshold_passed": True,
                        "manual_pose_identity_and_motion_review": "NOT_EVALUATED"},
+            "outer_loop": {"last_C_to_A_vs_first_A_to_C_rgb_mae_0_to_255": round(outer_loop_mae, 6),
+                           "threshold": None,
+                           "manual_seam_and_motion_review": "NOT_EVALUATED"},
             "preview": {"path": str(out / destination.name), "sha256": output_sha,
                         "decoded_frames": output_frames, "probe": output_info,
                         "decoded_rgb_sequence_sha256": joined_decoded_sha},
@@ -273,7 +283,7 @@ def join_segments(first_file, second_file, output_dir, *,
                 "This is a technical preview, not exercise form or production approval.",
                 "A low C-seam pixel difference does not establish the correct opposite stance, limb identity or a natural transition.",
                 "Source segment roles and A/C endpoint poses are declared by the operator, not inferred or proven by video pixels.",
-                "Opening A/closing A loop seam is NOT evaluated by this tool.",
+                "The outer A loop seam has a screen-space metric only; no acceptance threshold, natural-motion assessment or form review has been performed.",
                 "Any raw provider audio defect must remain recorded even if separately derived silent inputs were used.",
                 "Current or future Flow credit estimates must be verified in the live interface; this offline tool spends none."
             ]

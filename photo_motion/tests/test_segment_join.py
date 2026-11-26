@@ -57,6 +57,9 @@ class SegmentJoinTest(unittest.TestCase):
         self.assertTrue(result["verification"]["encoded_video_packets_identical_in_source_order"])
         self.assertTrue(result["verification"]["no_output_audio"])
         self.assertEqual(result["c_join"]["last_A_to_C_vs_first_C_to_A_rgb_mae_0_to_255"], 0)
+        self.assertEqual(result["outer_loop"]["last_C_to_A_vs_first_A_to_C_rgb_mae_0_to_255"], 0)
+        self.assertIsNone(result["outer_loop"]["threshold"])
+        self.assertEqual(result["outer_loop"]["manual_seam_and_motion_review"], "NOT_EVALUATED")
         self.assertEqual(result["form_and_release_approval"], HOLD)
         self.assertEqual(file_sha256(self.first), self.sha1)
         self.assertEqual(file_sha256(self.second), self.sha2)
@@ -73,6 +76,23 @@ class SegmentJoinTest(unittest.TestCase):
                           first_sha256="a"*64, second_sha256=self.sha2,
                           expected_fps=8, expected_frames_per_segment=8)
         self.assertFalse((self.root / "failed").exists())
+
+    def test_outer_loop_metric_exposes_a_mismatch_without_claiming_form_pass(self):
+        # First source is red throughout. Second begins red (good C seam) but
+        # ends blue (bad final-A to initial-A loop seam).
+        command = ["ffmpeg", "-nostdin", "-v", "error", "-y", "-f", "lavfi",
+                   "-i", "color=c=red:s=160x90:r=8:d=0.5", "-f", "lavfi",
+                   "-i", "color=c=blue:s=160x90:r=8:d=0.5", "-filter_complex",
+                   "[0:v][1:v]concat=n=2:v=1:a=0[v]", "-map", "[v]",
+                   "-c:v", "libx264", "-pix_fmt", "yuv420p", "-g", "8",
+                   "-bf", "0", "-an", str(self.second)]
+        subprocess.run(command, capture_output=True, check=True)
+        self.sha2 = file_sha256(self.second)
+        result = self._join(directory="outer_mismatch")
+        self.assertEqual(result["c_join"]["last_A_to_C_vs_first_C_to_A_rgb_mae_0_to_255"], 0)
+        self.assertGreater(result["outer_loop"]["last_C_to_A_vs_first_A_to_C_rgb_mae_0_to_255"], 10)
+        self.assertEqual(result["outer_loop"]["manual_seam_and_motion_review"], "NOT_EVALUATED")
+        self.assertEqual(result["form_and_release_approval"], HOLD)
 
     def test_seam_mismatch_fails_before_output(self):
         self._make(self.second, "blue")

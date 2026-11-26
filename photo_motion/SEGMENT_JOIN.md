@@ -61,14 +61,21 @@ audio defect**: retain its receipt and, if appropriate, create a separate
 bitstream-verified silent review derivative with `silent_derivative.py` before
 trying this join.
 
+The manifest additionally records `outer_loop` screen-space RGB mean absolute
+difference between the **last C→A frame** and **first A→C frame**. This is a
+diagnostic measurement, not a pass/fail threshold: a low value can occur even
+when the character freezes, dissolves, or returns with incorrect limb identity.
+The original endpoint frames and continuous final motion still need separate
+human assessment before any seamless-loop claim.
+
 ## Nonautomatable release gates
 
 Technical packet/frame equivalence does **not** demonstrate the historical 5BX
 movement. Independently review every frame for both **distinct airborne
 exchanges**, the correct physical orange/teal arm-and-leg reversal, planted C
 midpoint, return to A, shoe contacts, safe human anatomy and preserved subject
-identity. Also assess the **outer A-end→A-start loop seam**, which this command
-does not measure. No frame interpolation is added. The raw originals and
+identity. Also assess the **outer A-end→A-start loop seam** independently of
+its reported pixel metric. No frame interpolation is added. The raw originals and
 compiled preview remain experimental until Charles explicitly accepts the
 actual one-cycle instructional video for final release.
 
