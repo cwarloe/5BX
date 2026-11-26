@@ -14,7 +14,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from .video_qa import file_sha256, probe
+from .video_qa import _verify_full_video_decode, file_sha256, probe
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -36,6 +36,7 @@ ROOT_KEYS = {"schema_version", "chart", "exercise", "action", "revision", "video
 PLAYBACK_KEYS = {"mode", "runtime_slot_seconds"}
 EPS_SECONDS = 0.02
 EPS_FPS = 0.01
+PLAYER_TIMING_EPS_SECONDS = 0.001  # Must not exceed game/src/lib/photo-video.ts tolerance.
 
 
 def _source_runtime(repo_root, action):
@@ -217,8 +218,18 @@ def evaluate(candidate, repo_root=REPO_ROOT):
                 if digest != video["sha256"]:
                     blockers.append("local media SHA-256 mismatch")
                 details = probe(path)
+                # Container metadata and frame count alone can overlook
+                # recoverable bitstream errors between sampled frames.
+                _verify_full_video_decode(path)
+                verified["full_stream_decode"] = "PASS"
                 details["frame_count"] = _decoded_frame_count(path)
                 verified.update(details)
+                if not math.isfinite(details["fps"]) or details["fps"] <= 0:
+                    blockers.append("verified native frame rate is invalid for browser playback")
+                else:
+                    decoded_duration = details["frame_count"] / details["fps"]
+                    if abs(decoded_duration - details["duration_seconds"]) > PLAYER_TIMING_EPS_SECONDS:
+                        blockers.append("decoded frame count/FPS differs from native duration required by browser player")
                 for key in ("duration_seconds", "fps"):
                     if abs(details[key] - video[key]) > (EPS_SECONDS if key == "duration_seconds" else EPS_FPS):
                         blockers.append(f"ffprobe {key} mismatch")
