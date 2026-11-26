@@ -6,6 +6,7 @@ import subprocess
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from photo_motion.segment_join import HOLD, join_segments
 from photo_motion.video_qa import file_sha256
@@ -123,6 +124,20 @@ class SegmentJoinTest(unittest.TestCase):
                           first_sha256=self.sha1, second_sha256=self.sha1,
                           expected_fps=8, expected_frames_per_segment=8)
         self.assertFalse((self.root / "same").exists())
+
+    def test_concurrent_output_file_is_not_overwritten_or_deleted(self):
+        competitor = self.root / "race" / "two_segment_preview.mp4"
+
+        def simulate_competitor(_source, _target):
+            competitor.write_bytes(b"USER_EVIDENCE")
+            raise FileExistsError("concurrent output file")
+
+        with patch("photo_motion.segment_join.os.link",
+                   side_effect=simulate_competitor):
+            with self.assertRaisesRegex(FileExistsError, "concurrent output"):
+                self._join(directory="race")
+        self.assertEqual(competitor.read_bytes(), b"USER_EVIDENCE")
+        self.assertFalse((competitor.parent / "two_segment_manifest.json").exists())
 
     def test_byte_identical_distinct_paths_rejected(self):
         shutil.copyfile(self.first, self.second)
