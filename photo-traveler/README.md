@@ -29,7 +29,14 @@ Visit `http://localhost:8000/`. Published from the 5BX repo root, its intended p
 2. Add or revise the corresponding `cards` entry in `data.json` with stable test ID, chart, current disposition, one primary link, note, compare/diagnostic variants and stills.
 3. Do not infer human form approval from an assistant self-review or machine image-QA PASS. If a pose has unsafe elbow/knee angles, mark `hold`; explicit user-rejected takes remain accessible only as variants.
 4. Run `node photo-traveler/test_traveler.cjs` before publishing.
+   Run `node photo-traveler/test_sw_exemption.cjs` if the root PWA service-worker navigation rules change.
 5. Open the traveler at mobile width, test a direct full-resolution Drive link, a prompt link, the status filter, and any new thumbnail fallback. Thumbnail previews may be blocked by Google account permissions; the direct full-resolution Drive link is authoritative.
 6. Once the companion [card consistency checker](../sprites/docs/photo_batches/2026-11-26/card_consistency_qa/README.md) emits a structured QA result for a new card, the result may be added as separate evidence, **never as automatic human approval**.
 
 This initial ledger includes **28 photographic pilots** across all six charts, plus variant comparisons and individual high-resolution still references. It is deliberately not a second app, sprite-asset registry or animation generator.
+
+## Production PWA cache boundary
+
+The root workout app registers an offline-first `sw.js`. It originally exempted only the sibling arcade game. A same-origin navigation to `/photo-traveler/` would otherwise be cached under the root workout `./index.html` key, risking a wrong offline home screen. Release `5bx-v20` adds a narrow `photo-traveler/` route exemption for the gallery page and manifest; the existing workout page, assets and game paths retain their original behavior.
+
+The app home now has a single non-disruptive link beneath **Today's targets** reading **Explore experimental photo exercise poses**. It opens the gallery separately and does not alter workouts, progress data or pose assets.
