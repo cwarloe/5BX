@@ -40,9 +40,19 @@ Full guide: https://github.com/cwarloe/lessons-learned/blob/main/SPEC_DRIVEN_DEV
 - Specs live in `specs/<feature-slug>/` (requirements.md, design.md, tasks.md).
   Start a new one by copying `specs/_template/`.
 - Before writing code for a feature, read its spec. If there is no spec and the
-  change qualifies, write `requirements.md` first and wait for Charles to
-  approve it, then design, then tasks.
+  change qualifies, write `requirements.md` first. For a new, unapproved feature,
+  wait for Charles to approve the requirements before design and implementation.
+  For a feature already inside an **explicitly approved workstream**, an agent
+  may continue through design, tasks, tests and a low-risk engineering PR without
+  repeating that approval ceremony. Record the approved scope and acceptance
+  evidence in the spec or PR; new material scope changes still require approval.
 - Work one task at a time; check it off in the commit that completes it.
 - If the code needs to differ from the spec, update the spec first.
 - A feature is done when every acceptance criterion maps to a passing test or a
   named manual check.
+
+This procedural exception never overrides `AGENTS.md`: Charles still accepts
+each final exercise video, and historical motion/safety, avatar identity,
+paid usage, private-data access and public release decisions retain their
+separate approval boundaries. A passing test or an agent's assertion cannot
+stand in for the owner decision.
