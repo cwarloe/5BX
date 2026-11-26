@@ -31,6 +31,16 @@ so that production cannot inherit an unapproved diagnostic video.
    state, never select a cartoon sprite.
 3. Release-gate provenance and file hash remain build-time responsibilities;
    runtime metadata parsing SHALL NOT be mistaken for owner acceptance.
+4. Admission SHALL bind every clip to the exact chart, exercise, action,
+   revision, and immutable SHA-256 bytes that Charles accepted. The 40-second
+   running portion and 5-second scissor-jump portion of Chart 1 Exercise 5
+   SHALL have distinct action-level approvals, but share the existing canonical
+   exercise QA record and owner decision authority (no duplicate ledger).
+5. Playback URLs SHALL be immutable and content-addressed under an explicitly
+   owner-controlled same-origin path (or a separately approved strict origin
+   allowlist). Arbitrary HTTPS hosts, path traversal, and arbitrary MP4 names
+   SHALL fail admission. Deployment SHALL verify served bytes match the exact
+   owner-approved local digest; a well-formed SHA-256 string alone is not proof.
 
 ### R2. Reliable workout synchronization
 
@@ -45,6 +55,21 @@ to the 5BX movement schedule through pause, skip, and interval changes.
    a 6-second clip SHALL NOT silently trim, speed, or loop into a 5-second slot.
 4. A mismatch between decoded media duration and reviewed manifest SHALL fail
    closed, and video elements SHALL release old media on unmount/segment change.
+5. No photographic frame SHALL become visible and no playback SHALL start
+   until the trusted source/byte identity and loaded MP4 metadata/duration have
+   both passed checks. On failure the source SHALL remain invisible, be released,
+   and present an unavailable state.
+6. The **decoded playable** clip duration, not only the declared manifest or
+   container duration, SHALL tile the complete slot without truncation. The
+   actual decoded duration SHALL NOT exceed the slot, even by one frame; a
+   declared or measured 5.01s or 5.05s jump SHALL be rejected for a 5.00s
+   slot. Short-ending loops (for example 4.95s in 5.00s) SHALL also be held
+   unless they meet a documented, measured sub-frame seam tolerance and have
+   independently passed a full-loop A→C→A visual review. Exactly 5.00s passes
+   the duration check but still requires all other admission gates.
+7. Synchronization tolerance to the simulation clock SHALL be specified,
+   measured, and tested; pause, resume, segment swap, reduced-motion opt-in,
+   error, and unmount SHALL all pause and release the preceding media correctly.
 
 ### R3. Safe staging and accessibility
 
