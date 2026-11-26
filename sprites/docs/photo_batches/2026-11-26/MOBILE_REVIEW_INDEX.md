@@ -4,7 +4,7 @@ Updated 2026-11-26 UTC. All assets are experimental; **no human final exercise-f
 
 1. [**Chart 1 overview — tests 15–21**](https://drive.google.com/file/d/1mvivfArCHRDNdut3KyuVy1UfMlIiRr-a/view). Contains toe touch, partial sit-up, alternate leg raise, kneeling push-up, improved scissor, one Flow-video status tile and Chart 2 back extension.
 2. [**Chart 2 overview — tests 21–25**](https://drive.google.com/file/d/1zgvzRdV--CnF_5qmrxskkfWtHp5iMIQ0/view). Five preferred still candidates with exercise-specific QA warnings.
-3. [**Chart 3 overview — tests 26–29**](https://drive.google.com/file/d/1eqWJDLNBOqAWZJ69cMcH7rjAG80xaN1R/view). Honest conditional/reject labels, including the corrected chin-ahead/forehead-behind-hands challenge.
+3. [**Chart 3 overview — tests 26–29**](https://drive.google.com/file/d/1eqWJDLNBOqAWZJ69cMcH7rjAG80xaN1R/view). **SAFETY UPDATE: 29E V/forehead push-up ON HOLD** because a later human review caught implausibly cocked elbows; earlier contact-sheet conditional label is superseded. Other tiles retain their original assistant-level QA.
 4. [**Chart 4 overview — tests 30–34**](https://drive.google.com/file/d/1xzxHO0VknBmxp-B0ipEI6iFQPy92fF91/view). Five independently reviewed conditional still candidates, including high-knee near/far alternation corrected by temporary markers.
 5. [**Chart 5 overview — tests 35–38 + 35R retry**](https://drive.google.com/file/d/1QbA9BcxEmY4JcRZavWm476yl7836GlfY/view). **35 original REJECT** juxtaposed with marker-guided **35R clean CONDITIONAL**, plus three other conditionals.
 6. [**Chart 6 overview — tests 39–42B**](https://drive.google.com/file/d/1hnT68egEREp_H8c4MchhG3UmQjjLmx66/view). Four new exercises plus waist-high run reuse; age-appropriate range, explicit remaining form caveats.
