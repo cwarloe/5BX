@@ -5,7 +5,15 @@ import json
 import sys
 from pathlib import Path
 
-from .contract import load_spec, validate, validate_file
+from .contract import load_spec, validate
+from .extended_contract import EXTENDED, validate_extended
+
+
+def _check_spec(spec):
+    """Route additional photographic movements through their own form rules."""
+    if not isinstance(spec, dict):
+        return validate(spec)
+    return validate_extended(spec) if spec.get("movement_type") in EXTENDED else validate(spec)
 
 
 def _prompt(spec):
@@ -43,7 +51,11 @@ def main(argv=None):
     if args.command == "validate":
         ok = True
         for path in args.spec:
-            issues = validate_file(path)
+            try:
+                spec = load_spec(path)
+                issues = _check_spec(spec)
+            except (OSError, ValueError, KeyError, TypeError, json.JSONDecodeError) as error:
+                issues = [str(error)]
             print(f"{'FAIL' if issues else 'PASS'} {path}")
             for issue in issues:
                 print(f"  - {issue}")
@@ -51,7 +63,7 @@ def main(argv=None):
         return 0 if ok else 1
     try:
         spec = load_spec(args.spec)
-        issues = validate(spec)
+        issues = _check_spec(spec)
         if issues:
             for issue in issues:
                 print(f"ERROR: {issue}", file=sys.stderr)
