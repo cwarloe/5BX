@@ -97,6 +97,47 @@ class TestTemporalVideoQA(unittest.TestCase):
         self.assertGreaterEqual(report["potential_abrupt_cuts_total"], 1)
         self.assertTrue(any(.9 <= cut["at_seconds"] <= 1.1 for cut in report["potential_abrupt_cuts"]))
 
+    def test_loop_seam_is_measured_but_warns_only_if_requested(self):
+        video = self.encode("color=c=red:s=320x180:r=24:d=1", name="not-loop.mp4",
+                            other_inputs=["-f", "lavfi", "-i", "color=c=blue:s=320x180:r=24:d=1"],
+                            filters=["-filter_complex", "[0:v][1:v]concat=n=2:v=1:a=0[v]", "-map", "[v]"])
+        normal = analyze(video)
+        self.assertGreater(normal["first_last_seam_mae_0_to_255"], 20)
+        self.assertFalse(normal["expect_loop"])
+        self.assertFalse(any("loop seam" in warning.lower() for warning in normal["technical_warnings"]))
+        loop = analyze(video, expect_loop=True)
+        self.assertTrue(loop["expect_loop"])
+        self.assertTrue(any("loop seam" in warning.lower() for warning in loop["technical_warnings"]))
+        self.assertEqual(loop["loop_seam_screen_space_verdict"], "REVIEW_DISCONTINUITY")
+        self.assertEqual(loop["exercise_form_and_release_approval"], "NOT_EVALUATED")
+
+    def test_static_loop_has_zero_seam_but_never_form_pass(self):
+        video = self.encode("color=c=red:s=320x180:r=24:d=2")
+        report = analyze(video, expect_loop=True)
+        self.assertLess(report["first_last_seam_mae_0_to_255"], .2)
+        self.assertEqual(report["loop_seam_screen_space_verdict"], "SCREEN_SPACE_ALIGNED_NOT_FORM_APPROVAL")
+        self.assertEqual(report["exercise_form_and_release_approval"], "NOT_EVALUATED")
+
+    def test_static_background_roi_reports_framewise_change_and_terminal_drift(self):
+        video = self.encode("color=c=red:s=320x180:r=24:d=1", name="region-change.mp4",
+                            other_inputs=["-f", "lavfi", "-i", "color=c=blue:s=320x180:r=24:d=1"],
+                            filters=["-filter_complex", "[0:v][1:v]concat=n=2:v=1:a=0[v]", "-map", "[v]"])
+        report = analyze(video, background_rois=[(0.01, 0.01, .20, .20)])
+        self.assertEqual(len(report["background_roi_diagnostics"]), 1)
+        roi = report["background_roi_diagnostics"][0]
+        self.assertEqual(roi["normalized_xyxy"], [0.01, 0.01, .2, .2])
+        self.assertGreater(roi["first_last_mae_0_to_255"], 20)
+        self.assertGreater(roi["maximum_frame_transition_mae_0_to_255"], 20)
+        self.assertTrue(any("background ROI" in warning for warning in report["technical_warnings"]))
+
+    def test_bad_background_rois_fail_closed_before_writing_report(self):
+        video = self.encode("color=c=red:s=320x180:r=24:d=1")
+        for bad in ((0, 0, 0, .5), (-.1, 0, .1, .2), (0, 0, 2, 1),
+                    (0, 0, math.nan, .2), (True, 0, .5, .5), (.2, .1, .2, .5)):
+            with self.subTest(roi=bad):
+                with self.assertRaisesRegex(ValueError, "background ROI"):
+                    analyze(video, background_rois=[bad])
+
     def test_cli_writes_json_away_from_source(self):
         video = self.encode("testsrc2=size=320x180:rate=24:duration=1")
         path = self.root / "report.json"
@@ -104,6 +145,20 @@ class TestTemporalVideoQA(unittest.TestCase):
         self.assertTrue(path.exists())
         self.assertEqual(json.loads(path.read_text())["exercise_form_and_release_approval"], "NOT_EVALUATED")
         self.assertEqual(main([str(video), "--report", str(video)]), 2)
+
+    def test_cli_accepts_explicit_loop_and_background_regions(self):
+        video = self.encode("color=c=red:s=320x180:r=24:d=1")
+        destination = self.root / "loop-and-background.json"
+        self.assertEqual(main([str(video), "--expect-loop", "--background-roi", "0.1:0.1:0.25:0.25",
+                               "--report", str(destination)]), 0)
+        report = json.loads(destination.read_text())
+        self.assertTrue(report["expect_loop"])
+        self.assertEqual(len(report["background_roi_diagnostics"]), 1)
+        self.assertEqual(report["loop_seam_screen_space_verdict"], "SCREEN_SPACE_ALIGNED_NOT_FORM_APPROVAL")
+        invalid_destination = self.root / "not-created.json"
+        self.assertEqual(main([str(video), "--background-roi", "0.1:bad:0.25:0.25",
+                               "--report", str(invalid_destination)]), 2)
+        self.assertFalse(invalid_destination.exists())
 
 
 class TestTemporalLogic(unittest.TestCase):

@@ -56,7 +56,36 @@ def _frame_times(video):
     return times
 
 
-def _stream_differences(video, width=WIDTH, height=HEIGHT):
+def _validate_background_rois(rois, width=WIDTH, height=HEIGHT):
+    """Map explicit person-free rectangles to the analysis grid.
+
+    ROI coordinates are normalized to the full original video frame. These
+    rectangles must be chosen by the reviewer, never inferred as background.
+    """
+    if rois is None:
+        return []
+    if not isinstance(rois, (list, tuple)):
+        raise ValueError("background ROIs must be a list of normalized rectangles")
+    validated = []
+    for index, roi in enumerate(rois):
+        if not isinstance(roi, (list, tuple)) or len(roi) != 4:
+            raise ValueError(f"background ROI {index} must have four normalized coordinates")
+        if any(type(value) not in (int, float) or not math.isfinite(value)
+               for value in roi):
+            raise ValueError(f"background ROI {index} requires finite numeric coordinates")
+        x0, y0, x1, y1 = roi
+        if not (0 <= x0 < x1 <= 1 and 0 <= y0 < y1 <= 1):
+            raise ValueError(f"background ROI {index} must satisfy 0 <= min < max <= 1")
+        px0, py0 = int(round(x0 * width)), int(round(y0 * height))
+        px1, py1 = int(round(x1 * width)), int(round(y1 * height))
+        if px1 - px0 < 2 or py1 - py0 < 2:
+            raise ValueError(f"background ROI {index} is less than two pixels on the analysis grid")
+        validated.append({"normalized_xyxy": [float(v) for v in roi],
+                          "pixels_xyxy": [px0, py0, px1, py1]})
+    return validated
+
+
+def _stream_differences(video, width=WIDTH, height=HEIGHT, background_rois=()):
     """Decode all frames in order; return screen-space differences only.
 
     Each delta belongs to frame i versus i-1. No optical-flow, pose identity,
@@ -65,18 +94,21 @@ def _stream_differences(video, width=WIDTH, height=HEIGHT):
     if not shutil.which("ffmpeg"):
         raise RuntimeError("ffmpeg binary is required")
     command = [
-        "ffmpeg", "-nostdin", "-hide_banner", "-v", "error", "-i", str(video),
+        "ffmpeg", "-nostdin", "-hide_banner", "-v", "error", "-xerror", "-err_detect", "explode",
+        "-i", str(video),
         "-an", "-sn", "-dn", "-vf", f"scale={width}:{height},format=gray",
         "-fps_mode", "passthrough", "-f", "rawvideo", "-pix_fmt", "gray", "pipe:1"
     ]
     process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     frame_size = width * height
     all_scores, border_scores, count = [], [], 0
+    roi_scores = [[] for _ in background_rois]
     # The center contains most of the person in our fixed-camera experiments.
     # The outer border is a background/camera diagnostic, not camera proof.
     border = np.ones((height, width), dtype=bool)
     border[height // 5: 4 * height // 5, width // 5: 4 * width // 5] = False
     previous = None
+    first = None
     try:
         while True:
             frame = process.stdout.read(frame_size)
@@ -86,17 +118,29 @@ def _stream_differences(video, width=WIDTH, height=HEIGHT):
                 raise RuntimeError(f"truncated decoded frame: {len(frame)} of {frame_size} bytes")
             current = np.frombuffer(frame, dtype=np.uint8).reshape((height, width))
             count += 1
+            if first is None:
+                first = current.copy()
             if previous is not None:
                 difference = np.abs(current.astype(np.int16) - previous.astype(np.int16))
                 all_scores.append(float(difference.mean()))
                 border_scores.append(float(difference[border].mean()))
+                for roi, scores in zip(background_rois, roi_scores):
+                    x0, y0, x1, y1 = roi["pixels_xyxy"]
+                    scores.append(float(difference[y0:y1, x0:x1].mean()))
             previous = current.copy()
         errors = process.stderr.read().decode("utf-8", errors="replace")
         if process.wait() != 0:
             raise RuntimeError(f"ffmpeg decoding failed: {errors[-600:]}")
         if count < 2:
             raise ValueError("need at least two decoded video frames")
-        return count, all_scores, border_scores
+        difference = np.abs(first.astype(np.int16) - previous.astype(np.int16))
+        seam = float(difference.mean())
+        seam_border = float(difference[border].mean())
+        roi_seams = []
+        for roi in background_rois:
+            x0, y0, x1, y1 = roi["pixels_xyxy"]
+            roi_seams.append(float(difference[y0:y1, x0:x1].mean()))
+        return count, all_scores, border_scores, seam, seam_border, roi_scores, roi_seams
     finally:
         if process.poll() is None:
             process.kill()
@@ -146,11 +190,15 @@ def _cuts(deltas, timestamps, fps):
             for index, score in enumerate(deltas) if score > threshold]
 
 
-def analyze(video_path, *, expected_holds=(), still_threshold=0.5, minimum_hold_seconds=0.5):
+def analyze(video_path, *, expected_holds=(), still_threshold=0.5, minimum_hold_seconds=0.5,
+            expect_loop=False, background_rois=()):
     """Inspect a real video and return JSON-safe evidence, not approval."""
     video = Path(video_path).resolve()
     if not video.is_file():
         raise FileNotFoundError(video)
+    if type(expect_loop) is not bool:
+        raise ValueError("expect_loop must be a boolean")
+    regions = _validate_background_rois(background_rois)
     # A digest of a *different* later file must never be attached to decoded
     # frames from this take. Check both sides of the multi-process inspection.
     source_sha256 = _sha256(video)
@@ -168,7 +216,8 @@ def analyze(video_path, *, expected_holds=(), still_threshold=0.5, minimum_hold_
     fps = info["fps"]
     if not fps:
         raise ValueError("video frame rate missing")
-    decoded_count, delta, border = _stream_differences(video)
+    (decoded_count, delta, border, seam, seam_border,
+     roi_changes, roi_seams) = _stream_differences(video, background_rois=regions)
     timestamps = _frame_times(video)
     if _sha256(video) != source_sha256:
         raise RuntimeError("source video changed during temporal inspection; discard these results")
@@ -193,6 +242,35 @@ def analyze(video_path, *, expected_holds=(), still_threshold=0.5, minimum_hold_
         warnings.append("Entire clip appears nearly static in screen-space metrics")
     if statistics.median(border) > 3:
         warnings.append("Background/border pixels change substantially; inspect for camera motion, relighting or background drift")
+    loop_threshold = max(5.0, 3.0 * statistics.median(delta))
+    if expect_loop:
+        loop_verdict = ("REVIEW_DISCONTINUITY" if seam > loop_threshold
+                        else "SCREEN_SPACE_ALIGNED_NOT_FORM_APPROVAL")
+        if loop_verdict == "REVIEW_DISCONTINUITY":
+            warnings.append("Requested loop seam has excessive first/last screen-space difference; review the actual motion seam")
+    else:
+        loop_verdict = "NOT_REQUESTED"
+
+    region_reports = []
+    for roi, values, first_last in zip(regions, roi_changes, roi_seams):
+        maximum = max(values)
+        median = statistics.median(values)
+        # A region may be intentionally empty background yet move because of
+        # an errant hand or a matte seam. Report change, not its cause.
+        outliers = [{"frame_index": i + 1, "at_seconds": round(timestamps[i + 1], 4),
+                     "mae_0_to_255": round(value, 4)}
+                    for i, value in enumerate(values) if value > max(8.0, 5.0 * median)]
+        if maximum > 10 or first_last > 10:
+            warnings.append("Selected static background ROI changed; inspect for scene drift, foreground intrusion or matte artifacts")
+        region_reports.append({
+            "normalized_xyxy": roi["normalized_xyxy"],
+            "analysis_grid_xyxy": roi["pixels_xyxy"],
+            "median_frame_transition_mae_0_to_255": round(median, 4),
+            "maximum_frame_transition_mae_0_to_255": round(maximum, 4),
+            "first_last_mae_0_to_255": round(first_last, 4),
+            "large_change_events_total": len(outliers),
+            "large_change_events": outliers[:100],
+        })
     return {
         "tool": "photo_motion.temporal_qa", "schema_version": 1,
         "source_video": str(video), "source_video_sha256": source_sha256,
@@ -202,6 +280,12 @@ def analyze(video_path, *, expected_holds=(), still_threshold=0.5, minimum_hold_
         "median_frame_difference": round(statistics.median(delta), 4),
         "max_frame_difference": round(max(delta), 4),
         "median_border_difference": round(statistics.median(border), 4),
+        "first_last_seam_mae_0_to_255": round(seam, 4),
+        "first_last_border_seam_mae_0_to_255": round(seam_border, 4),
+        "expect_loop": expect_loop,
+        "loop_seam_review_threshold_mae_0_to_255": round(loop_threshold, 4),
+        "loop_seam_screen_space_verdict": loop_verdict,
+        "background_roi_diagnostics": region_reports,
         "near_identical_frame_transitions": sum(x <= still_threshold for x in delta),
         "total_frame_transitions": len(delta),
         "expected_hold_windows": [{"start_seconds": a, "end_seconds": b} for a, b in expected_holds],
@@ -213,7 +297,9 @@ def analyze(video_path, *, expected_holds=(), still_threshold=0.5, minimum_hold_
         "technical_warnings": warnings,
         "interpretation": (
             "Screen-space motion screening only. Intentional holds are legitimate; moving backgrounds, grain and lighting "
-            "can mask frozen anatomy. Frame deltas cannot establish physical left/right identity, real exercise form, "
+            "can mask frozen anatomy. Optional static ROIs are reviewer-declared, not automatically discovered; "
+            "their changes can be due to camera, matte, body intrusion or lighting. First/last seam alignment "
+            "cannot prove anatomical continuity or natural looping. Frame deltas cannot establish physical left/right identity, real exercise form, "
             "single-body coherence, absence of ghost limbs, or seamless anatomical looping. These need visual review."
         ),
         "exercise_form_and_release_approval": "NOT_EVALUATED"
@@ -227,6 +313,9 @@ def main(argv=None):
     parser.add_argument("--hold", action="append", default=[], metavar="START:END", help="Intentional hold window in seconds; may repeat")
     parser.add_argument("--still-threshold", type=float, default=0.5, help="Max frame-to-frame grayscale MAE counted visually still")
     parser.add_argument("--minimum-hold", type=float, default=0.5, help="Minimum continuous visually still span in seconds")
+    parser.add_argument("--expect-loop", action="store_true", help="Warn on large first/last seam (not an exercise/loop approval)")
+    parser.add_argument("--background-roi", action="append", default=[], metavar="X0:Y0:X1:Y1",
+                        help="Reviewer-selected person-free normalized rectangle; repeatable")
     args = parser.parse_args(argv)
     try:
         if args.video.resolve() == args.report.resolve():
@@ -235,8 +324,15 @@ def main(argv=None):
         for item in args.hold:
             start, stop = (float(v) for v in item.split(":"))
             windows.append((start, stop))
+        rois = []
+        for item in args.background_roi:
+            parts = item.split(":")
+            if len(parts) != 4:
+                raise ValueError("background ROI needs X0:Y0:X1:Y1")
+            rois.append(tuple(float(value) for value in parts))
         result = analyze(args.video, expected_holds=windows,
-                         still_threshold=args.still_threshold, minimum_hold_seconds=args.minimum_hold)
+                         still_threshold=args.still_threshold, minimum_hold_seconds=args.minimum_hold,
+                         expect_loop=args.expect_loop, background_rois=rois)
         args.report.parent.mkdir(parents=True, exist_ok=True)
         with args.report.open("x", encoding="utf-8") as handle:
             handle.write(json.dumps(result, indent=2) + "\n")
