@@ -7,6 +7,7 @@ It targets a documented problem in the 2026-11-25 Flow pilots: a blue shirt appe
 ## Inputs and execution
 
 1. Select the immutable approved identity reference for the specific **chart**. Changing it requires explicit owner decision; do not use a screenshot generated from a previous exercise as the next chart master.
+   The owner-approved Chart 1 master remains `artifacts/character_master_candidates/2026-11-25/identity_sheet_v2_hair_arm_refinement.png`. A nine-panel working card and written identity spec, approved by the owner as a reference aid, are in [`sprites/docs/identity/BOY_REFERENCE_CARD_V1.md`](../sprites/docs/identity/BOY_REFERENCE_CARD_V1.md). That card is not a master replacement, and its generated panels are not production approval.
 2. Obtain actual MP4 phase frames with `python3 -m photo_motion inspect ...`. These are output PNGs, not artwork replacements.
 3. Mark **specific, small, solid-color garment or hair patches** corresponding to the same physical region in the master and each video frame. A human or an independently validated landmark detector can supply these boxes. The code never automatically guesses where the body is.
 4. Save an annotation manifest beside the PNGs with normalized image coordinates. For example:

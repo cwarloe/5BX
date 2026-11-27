@@ -8,6 +8,7 @@
 
 - Chart 1 movement text: `repo_5bx_brightboy/sprites/docs/CHARTS-2-6.md` (derived from the original booklet data).
 - Primary identity: `artifacts/character_master_candidates/2026-11-25/identity_sheet_v2_hair_arm_refinement.png` (approved v2).
+- Owner-approved nine-panel identity working card, which is not a master replacement: [`sprites/docs/identity/BOY_REFERENCE_CARD_V1.md`](../../identity/BOY_REFERENCE_CARD_V1.md).
 - Verified Drive copy of approved blue/charcoal master: https://drive.google.com/file/d/1kS-KxLMAoH1eDa2__XYajM5E3fr58HGT/view (local SHA-256 `e305b5b7787df0bacaafad70f02e4f7a2d96535893680b78ddc3b7c6860fb28d`).
 - Documentary 35mm photographic appearance, blue tank, charcoal shorts, dark socks, gray/yellow running shoes, black wristband; ordinary fair-skinned 13–14-year-old with soft unmuscular physique and natural messy hair.
 - **One chart-wide identity and wardrobe.** Distinct later charts may intentionally use a different boy/outfit, including the reserved olive/gray alternate.
