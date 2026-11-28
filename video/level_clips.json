@@ -1,0 +1,51 @@
+{
+ "_about": "Which looping studio MP4 (output of tools/video_finish, with its .json report) plays each exercise, and how many COUNTED reps one loop shows. Counting follows the booklet: ex3 counts one when the second leg comes down (one loop = both legs = 1); ex5 counts each LEFT-foot landing. cycle_frames is worked out from the file and the report's 'loop xN'.",
+ "order": [
+  "toe",
+  "situp_headonly",
+  "legraise",
+  "kneepushup",
+  "run",
+  "scissor"
+ ],
+ "clips": {
+  "toe": {
+   "file": "tools/video_finish/out/toe.mp4",
+   "report": "tools/video_finish/out/toe.json",
+   "reps_per_loop": 1
+  },
+  "situp": {
+   "file": "tools/video_finish/out/situp.mp4",
+   "report": "tools/video_finish/out/situp.json",
+   "reps_per_loop": 1
+  },
+  "legraise": {
+   "file": "tools/video_finish/out/legraise.mp4",
+   "report": "tools/video_finish/out/legraise.json",
+   "reps_per_loop": 1
+  },
+  "kneepushup": {
+   "file": "tools/video_finish/out/kneepushup.mp4",
+   "report": "tools/video_finish/out/kneepushup.json",
+   "reps_per_loop": 1
+  },
+  "run": {
+   "file": "tools/video_finish/out/run.mp4",
+   "report": "tools/video_finish/out/run.json",
+   "reps_per_loop": 3.5,
+   "_measured": "2026-11-28: footfall period 13 frames (raised-shoe autocorrelation on the studio render), loop 91 frames = 7 footfalls = 3.5 left-foot landings. An odd footfall count means the near/far legs swap at the loop joint; it is invisible from the side but worth fixing in the next run render (ask for an even number of strides)."
+  },
+  "scissor": {
+   "file": "tools/video_finish/out/scissor.mp4",
+   "report": "tools/video_finish/out/scissor.json",
+   "reps_per_loop": 2,
+   "_measured": "2026-11-28: hop period about 0.54 s, loop 28 frames = 2 hops. This clip is a placeholder bounce, not a verified scissor exchange."
+  },
+  "situp_headonly": {
+   "file": "tools/video_finish/out/situp_headonly.mp4",
+   "report": "tools/video_finish/out/situp_headonly.json",
+   "reps_per_loop": 1,
+   "_note": "Used instead of 'situp': the original source rises to a near-full sit-up; this salvage edit keeps the small head-and-shoulders curl (matches Orban's Chart 1 picture)."
+  }
+ }
+}

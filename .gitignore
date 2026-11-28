@@ -7,3 +7,7 @@ node_modules/
 __pycache__/
 *.pyc
 video/.work/
+
+# tools/video_finish working files and review renders (review MP4s go to Drive, not Git)
+tools/video_finish/work/
+tools/video_finish/out/
