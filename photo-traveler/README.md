@@ -1,4 +1,4 @@
-# 5BX photographic pilot: mobile production traveler
+# 5BX photographic pilot: mobile production traveler\n\n## Chart 1 working traveler\n\n**[Open the Chart 1 video production traveler](chart1.html)** for the practical, five-exercise handoff. It is one self-contained HTML file: expand/collapse each exercise, open cards and high-resolution PNGs in order, copy prompts, review existing loops, and prepare a shareable new-video handoff. It opens directly from disk as well as from GitHub Pages. The root 5BX workout generator links to it. Returned video links saved in the traveler use browser-local storage only; copy the handoff to share it with the production team. The gallery below remains an independent archive of six-chart historical experiments.
 
 Status: **experimental, read-only**. This complements the older sprite production traveler in `sprites/kit/review_board.py`; it does not promote any photo into the shipped exercise kit.
 
