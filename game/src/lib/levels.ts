@@ -93,7 +93,10 @@ export const RUN_BANNERS = [
 export const FRAME_COUNTS: Record<Action, number> = {
   idle: 4,
   toe: 4,           // Chart 1: arms up, floor, stretch up, backbend
-  "toe-multi": 6,   // Chart 3+: arms up, outside L, between, press, outside R, backbend
+  // Chart 3+ needs 6 beats (arms up, outside L, between, press, outside R, backbend), but only 4 frames
+  // exist so far: floor, arms up, backbend, floor. Declaring 6 requested 4.png and 5.png, which 404.
+  // Raise this when the missing poses are drawn (scripts/sprite-frames.test.mjs checks every declared frame exists).
+  "toe-multi": 4,
   situp: 2,         // Chart 1: lying, partial (see heels)
   back: 3,          // Chart 1: lying, right leg, left leg
   pushup: 2,        // Chart 1: chest down, arms straight (knees down)

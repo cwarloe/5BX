@@ -1,8 +1,14 @@
 # Requirements: Complete Chart 1 and add Charts 2–3
 
-Status: Draft
+Status: **Parked** (2026-11-27). Not approved, not in progress.
 Owner: Charles
-Last updated: 2026-11-20 (moved into cwarloe/5BX)
+Last updated: 2026-11-27
+
+> **Why parked:** this spec covers the cartoon arcade game in `game/`. The project's main line has since moved
+> to the photographic Mark character and finished exercise videos (see `AGENTS.md` and `photo-traveler/`), so
+> its three open questions below were never answered. Nothing here is pending. If the arcade game becomes a
+> priority again, start by re-reading the open questions; the sprite-art question may be answered by the
+> photographic or cartoon assets that exist by then.
 
 ## Problem
 
