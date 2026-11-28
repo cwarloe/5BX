@@ -1,0 +1,40 @@
+#!/usr/bin/env node
+"use strict";
+const fs=require("node:fs");
+const assert=require("node:assert/strict");
+const vm=require("node:vm");
+const html=fs.readFileSync(require("node:path").join(__dirname,"chart1.html"),"utf8");
+const match=html.match(/<script>([\s\S]*?)<\/script>/);
+assert.ok(match,"Traveler has an inline script so the HTML works as one file");
+new Function(match[1]);
+assert.ok(!/fetch\s*\(/.test(match[1]),"Standalone HTML does not need a separate data.json fetch");
+assert.ok(!html.includes("1odMu_JB1_-2BxcLu99Xm_rs8t2ze6P9d"),"Deliberately discarded sit-up video is absent");
+assert.match(html,/5BX workout generator/,"Original workout generator is linked");
+assert.match(html,/Copy handoff to ChatGPT/,"Manual video return path exists");
+assert.match(html,/Upload to Grok folder/,"Ordered source packet has direct link");
+
+const elements=new Map();
+function get(id){
+  if(!elements.has(id)) elements.set(id,{id,innerHTML:"",value:"",dataset:{},hidden:false,addEventListener(){},style:{}});
+  return elements.get(id);
+}
+const document={
+  getElementById:get,
+  addEventListener(){},
+  querySelectorAll(){return []}
+};
+const context={document,localStorage:{getItem:()=>null},navigator:{},window:{isSecureContext:false},setTimeout(){return 1},clearTimeout(){},console};
+vm.runInNewContext(match[1],context,{timeout:2500});
+const listing=get("exercise-list").innerHTML;
+assert.equal((listing.match(/class="exercise"/g)||[]).length,5,"Five top-level exercise panels");
+assert.equal((listing.match(/class="sub-task"/g)||[]).length,2,"Run and scissor are distinct stages of exercise 5");
+assert.equal((listing.match(/data-copy="/g)||[]).length,8,"Six main prompts plus two focused fallbacks");
+assert.ok((listing.match(/class="asset"/g)||[]).length>=25,"All reference cards and individual PNGs are visible as linked thumbnails");
+assert.ok(listing.includes("THE NEAR/FRONT LEG REMAINS COMPLETELY ON THE FLOOR"),"Leg isolation in actual prompt");
+assert.ok(listing.includes("AUTHORITATIVE MOVEMENT SOURCE"),"Sit-up uses the user's new motion source");
+assert.ok(listing.includes("tousled brown hair"),"Original run prompt is present");
+assert.ok(listing.includes("LOW-IMPACT scissor exchanges"),"Original scissor prompt is present");
+assert.ok(listing.includes("Return" )||listing.includes("Returned Flow"),"Video handoff is visible");
+for(const id of ["toe","situp","leg","knee","five"]) assert.ok(listing.includes(`id="exercise-${id}"`),id+" is linkable");
+assert.equal(get("shared-links").innerHTML.match(/class="link/g).length,4,"Four shared assets");
+console.log("PASS: Chart 1 HTML traveler renders five workflows, six prompts, images, clips, QA, and handoff without external data");
