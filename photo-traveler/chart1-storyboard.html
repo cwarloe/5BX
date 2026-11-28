@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>5BX Chart 1 · 11-Minute Film Storyboard · Charles Fit Club</title>
+<style>
+:root{font:15px/1.44 system-ui,-apple-system,"Segoe UI",sans-serif;color:#253022;background:#e8e6d8}
+*{box-sizing:border-box}body{margin:0}button,select{font:inherit}button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #b85426;outline-offset:2px}
+.mast{background:#293828;color:#f8f3df;border-bottom:5px solid #b25127}.wrap{max-width:1580px;margin:auto;padding:20px clamp(14px,3vw,42px)}.brand{font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:#d7cba6;font-size:.79rem}.mast h1{font-size:clamp(1.7rem,4.2vw,3.2rem);line-height:1.08;margin:11px 0}.mast p{max-width:950px;color:#e6e1d0;margin:8px 0 0}.mast-links{display:flex;gap:9px;flex-wrap:wrap;margin-top:17px}.mast-links a{background:#f3f1e5;color:#273f2d;border-radius:7px;text-decoration:none;font-weight:780;padding:8px 12px;font-size:.85rem}
+.topband{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:19px 0}.metric{background:#fffef8;border:1px solid #cdcbb8;padding:13px 16px;border-radius:9px}.metric b{display:block;color:#30503a;font-size:1.65rem;line-height:1.1}.metric span{font-size:.83rem;color:#61705d}.panel{background:#fffdf5;border:1px solid #c8c7b3;border-radius:11px;margin:15px 0;padding:17px;box-shadow:0 2px 8px #26332312}.panel h2{margin:0 0 9px;font-size:1.23rem}.panel p{margin:7px 0}.controls{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin:12px 0}.controls label{font-weight:800}select,button{background:#fff;border:1px solid #9aa693;border-radius:7px;padding:9px 12px;color:#2e412e}button{cursor:pointer;font-weight:750}button:hover{background:#e9f0e1}.print-btn{background:#34523a;color:white}.print-btn:hover{background:#27402d}.hint{border-left:4px solid #b25127;background:#f6f0dc;padding:10px 13px;border-radius:5px;font-size:.88rem}.legend{display:flex;gap:15px;flex-wrap:wrap;color:#5b6858;font-size:.82rem}.dot{display:inline-block;width:11px;height:11px;margin-right:5px;border-radius:3px;vertical-align:-1px}.dot.move{background:#385c43}.dot.card{background:#bd6b3d}.dot.edit{background:#ccac47}
+.timeline{display:flex;overflow:hidden;border-radius:8px;background:#ece7d7;height:57px;border:1px solid #b5b6a5;margin-top:14px}.timeline>div{min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;border-right:2px solid #fff9;font-weight:850;font-size:.9rem;color:white}.timeline small{font-size:.68rem;font-weight:550}.t1{background:#3a6745;flex:120}.t2{background:#536b3d;flex:60}.t3{background:#687348;flex:60}.t4{background:#456c63;flex:60}.t5{background:#934f31;flex:360}.runtimes{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:9px}.runtimes div{font-size:.75rem;color:#5e675c}.runtimes strong{display:block;color:#293d2d}
+.storyhead{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;margin:26px 0 12px}.storyhead h2{font-size:1.6rem;margin:0}.storyhead p{margin:3px 0;color:#657262}.storyboard{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.shot{min-width:0;background:#fffdf7;border:1px solid #c9cbb8;border-radius:7px;overflow:hidden;box-shadow:0 2px 6px #1b26101d;position:relative}.shot-number{position:absolute;z-index:2;top:8px;left:9px;background:#253e2bdd;color:white;font-weight:800;font-size:.7rem;border-radius:4px;padding:4px 7px;letter-spacing:.08em}.visual{aspect-ratio:16/9;position:relative;background:white;display:flex;align-items:center;justify-content:center}.visual img{max-width:100%;max-height:100%;width:100%;height:100%;object-fit:contain;display:block}.visual .fallback{display:none;position:absolute;inset:0;align-items:center;justify-content:center;color:#687467;text-align:center;padding:25px;font-size:.88rem}.visual.broken img{display:none}.visual.broken .fallback{display:flex}.shot-text{padding:11px 12px 13px;min-height:100px}.shot-text .meta{font-size:.69rem;letter-spacing:.08em;text-transform:uppercase;font-weight:800;color:#8b593b}.shot-text h3{font-size:.96rem;line-height:1.22;margin:5px 0}.shot-text p{font-size:.82rem;line-height:1.33;color:#64715e;margin:4px 0 0}.shot-text a{display:inline-block;font-size:.73rem;color:#43614b;margin-top:5px}.slate{background:#ece6d4}.slate .visual{background:#344432;color:#f5efdb;text-align:center;padding:35px}.slate .visual::before{content:"CFC";border:2px solid #dca06f;border-radius:50%;color:#f5f0de;display:grid;place-items:center;width:51px;height:51px;margin-right:18px;flex:none;font-weight:900}.slate .slate-type{text-align:left;max-width:75%}.slate .slate-type small{display:block;color:#dfc6ad;letter-spacing:.15em;font-size:.7rem}.slate .slate-type b{font-size:clamp(1rem,2vw,1.7rem);line-height:1.1;display:block;letter-spacing:.03em}.slate .slate-type em{display:block;font-size:.8rem;color:#e3dac0;margin-top:7px;font-style:normal}.slate .shot-text{background:#f1eddf}.title-slate .visual{background:#263626}.title-slate .slate-type b{font-size:clamp(1.15rem,2.2vw,2rem)}.repeat .visual{background:repeating-linear-gradient(135deg,#e5e8dc,#e5e8dc 15px,#f4f4ec 15px,#f4f4ec 30px);color:#3a5741;flex-direction:column;gap:7px}.repeat .visual b{font-size:2.4rem}.repeat .visual small{font-weight:800;letter-spacing:.08em}.repeat .shot-text{background:#f4f6ed}.cue .visual{background:#f0e4cf;color:#754b2e;flex-direction:column;gap:7px}.cue .visual b{font-size:1.8rem}.cue .shot-text{background:#fcf6e9}.overlay-name{position:absolute;top:15px;left:16px;text-align:left;font-size:.68rem;letter-spacing:.09em;font-weight:900;color:#263d2a;text-shadow:0 1px 0 #fffb}.overlay-name small{display:block;font-size:.55rem;letter-spacing:0;color:#4f6551}.timer{position:absolute;right:14px;top:12px;width:42px;height:42px;border:4px solid #476d4b;border-right-color:#d8e4d4;border-radius:50%;background:#ffffffdb;display:grid;place-items:center;font-size:.65rem;color:#2b472f;font-weight:900}.chapter-label{grid-column:1/-1;border-top:3px solid #b65c2d;padding-top:15px;margin-top:13px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}.chapter-label h3{font-size:1.15rem;margin:0}.chapter-label span{color:#5b675b;font-size:.85rem}.chapter-note{background:#f4edd9;color:#6e5737;padding:4px 10px;border-radius:30px;font-weight:750;font-size:.76rem}.warning{background:#fff3dc;border-left:4px solid #c18c3c;padding:12px;margin:17px 0;border-radius:5px;font-size:.86rem}.footer{padding:16px 0 40px;color:#5e6d5d;font-size:.85rem}.footer a{color:#36563d}
+@media(max-width:1050px){.storyboard{grid-template-columns:repeat(3,minmax(0,1fr))}.topband{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:650px){.storyboard{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.shot-text{padding:9px;min-height:115px}.shot-text h3{font-size:.84rem}.shot-text p{font-size:.72rem}.slate .visual{padding:13px}.slate .visual::before{display:none}.slate .slate-type{max-width:100%}.overlay-name{display:none}.timer{width:34px;height:34px;top:8px;right:8px}.runtimes{grid-template-columns:repeat(2,1fr)}.mast-links a{font-size:.76rem}.wrap{padding:13px}}
+@media print{@page{size:landscape;margin:10mm}body{background:white}.mast{background:white;color:#263626;border-bottom:2px solid #a44b21}.mast p{color:#354936}.mast-links,.controls,.print-btn,.footer{display:none}.wrap{max-width:none;padding:8px}.panel{box-shadow:none}.storyboard{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.shot{box-shadow:none;break-inside:avoid}.chapter-label{break-after:avoid;break-inside:avoid}.storyhead{margin-top:15px}.visual{print-color-adjust:exact;-webkit-print-color-adjust:exact}.slate .visual,.repeat .visual,.cue .visual{print-color-adjust:exact;-webkit-print-color-adjust:exact}}
+/* Film-frame preview: these are composition overlays, never baked into pose masters. */
+.storyboard{grid-template-columns:repeat(3,minmax(0,1fr))}
+.visual{container-type:inline-size;overflow:hidden;isolation:isolate}
+.visual img.actor{width:100%;height:100%;max-width:none;max-height:none;object-fit:contain;transform-origin:var(--actor-origin,50% 90%);transform:translate(var(--actor-shift,0%),var(--actor-y,0%)) scale(var(--actor-scale,1));transition:transform .18s ease}
+.source-mode .visual img.actor{transform:none}
+.shot-number{position:absolute;top:auto;bottom:2.4cqw;left:auto;right:2.8cqw;transform:none;z-index:7;border-radius:4px;background:#af5b31e6;color:#fff;font-size:clamp(12px,2.1cqw,23px);padding:.35em .7em;white-space:nowrap;pointer-events:none;letter-spacing:.12em}
+.hud-title{position:absolute;top:4.8cqw;left:4.2cqw;z-index:4;width:60%;text-align:left;color:#263c2c;text-transform:uppercase;font-family:Impact,"Arial Black",system-ui,sans-serif;font-weight:900;font-stretch:condensed;line-height:1.03;letter-spacing:.025em;font-size:clamp(19px,5.4cqw,100px);pointer-events:none}
+.hud-tip{display:block;margin-top:.4em;font:800 clamp(11px,2.1cqw,37px)/1.15 system-ui,sans-serif;letter-spacing:.02em;color:#4f6451}
+.hud-time{position:absolute;top:3.6cqw;right:3.6cqw;z-index:4;display:grid;place-items:center;width:clamp(55px,12.6cqw,194px);aspect-ratio:1;border-radius:50%;background:conic-gradient(#b65b2e 0deg 286deg,#c9d4c9 286deg 360deg);box-shadow:0 1px 4px #28402b22;pointer-events:none}
+.hud-time::before{content:"";position:absolute;inset:7%;border-radius:50%;background:#fdfdf9}
+.hud-time span{z-index:1;color:#27412e;font:900 clamp(16px,3.2cqw,50px)/1 system-ui,sans-serif;letter-spacing:-.025em;font-variant-numeric:tabular-nums}
+.slate .visual::before{content:none}
+.slate .visual{display:block;background:#2b3d2f;color:#f4edd8;text-align:left;padding:0}
+.slate .slate-type{position:absolute;top:18%;left:5%;max-width:85%;text-align:left}
+.slate .slate-type small{font-size:clamp(8px,1.75cqw,24px);color:#e0bd95;font-weight:800}
+.slate .slate-type b{font:900 clamp(18px,5cqw,72px)/.98 Impact,"Arial Black",sans-serif;letter-spacing:.02em;color:#f6f0dd}
+.slate .slate-type em{font-size:clamp(9px,1.9cqw,27px);font-style:normal}
+.slate .visual::after{content:"";position:absolute;height:1.3%;background:#b4562b;left:0;right:0;bottom:0}
+.title-slate .visual{background:linear-gradient(115deg,#243528 0%,#304636 68%,#26372b 100%)}
+.title-slate .slate-type{top:17%;left:5%}
+.title-slate .slate-type b{display:block;max-width:88%;font:900 clamp(26px,7.2cqw,102px)/.92 Impact,"Arial Black",sans-serif}
+.title-slate .slate-type em{display:block;margin-top:1.2em;font-weight:850;color:#d3b99a;letter-spacing:.08em}
+.mission-brand{position:absolute;right:5%;bottom:9%;display:flex;align-items:center;gap:.5em;font:800 clamp(10px,1.6cqw,28px) system-ui,sans-serif;letter-spacing:.11em;color:#e9e0c9}
+.mission-brand mark{display:grid;place-items:center;width:3.2em;height:3.2em;border:2px solid #d89568;border-radius:50%;background:#a14a26;color:#fff6e7;font-weight:950;letter-spacing:0}
+.preview-btn{background:transparent;border:1px solid #c2c8b7;padding:4px 9px;margin-top:7px;border-radius:5px;color:#365941;font-size:.75rem;cursor:pointer}
+.preview-btn:hover{background:#e7eddf}
+#frame-dialog{max-width:min(96vw,1300px);width:min(96vw,1300px);border:0;border-radius:12px;padding:14px;background:#fafaf5;box-shadow:0 15px 80px #17251777}
+#frame-dialog::backdrop{background:#112019cc}
+.dialog-head{display:flex;justify-content:space-between;align-items:center;gap:16px;margin:0 0 10px;color:#284431}
+.dialog-head strong{font-size:clamp(14px,2vw,23px)}
+#dialog-stage .visual{width:100%;border:1px solid #c4c7b9}
+#dialog-stage .visual .fallback{font-size:1.1rem}
+@media(max-width:1050px){.storyboard{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:650px){.storyboard{grid-template-columns:1fr}.overlay-name{display:block}.shot-text{min-height:0}.hud-title{font-size:5.4cqw}.hud-tip{font-size:2.1cqw}}
+@media print{.storyboard{grid-template-columns:repeat(4,minmax(0,1fr))}.preview-btn,#frame-dialog{display:none}}
+.studio-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin:13px 0}
+.studio-card{min-width:0;background:#f3f0e7;border:1px solid #cbd0c0;border-radius:9px;overflow:hidden}
+.studio-card .studio-caption{padding:10px 12px;font-size:.85rem;color:#526251}
+.studio-card .studio-caption strong{display:block;color:#28442c;font-size:.97rem}
+.studio-card .studio-caption a{color:#365c3e}
+.studio-card.studio-wide{max-width:1120px;margin:13px auto}
+.studio-preview{position:relative;aspect-ratio:16/9;overflow:hidden;container-type:inline-size;background:#ead7bf}
+.studio-preview img{display:block;width:100%;height:100%;object-fit:cover}
+.studio-checks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-top:9px}
+.studio-checks div{background:#f3f3e8;border-left:4px solid #a65a35;border-radius:5px;padding:10px;font-size:.82rem}
+.studio-checks b{display:block;color:#294b33}
+.studio-checks .open{border-color:#c18e41}
+.studio-callout{border-left:4px solid #456e4c;background:#eff4e9;padding:11px 13px;font-size:.88rem;border-radius:5px}
+.studio-prompt{width:100%;min-height:170px;resize:vertical;border:1px solid #b9c4b4;border-radius:6px;padding:11px;background:white;font:14px/1.42 system-ui,sans-serif}
+@media(max-width:700px){.studio-grid,.studio-checks{grid-template-columns:1fr}}
+@media print{.studio-grid{grid-template-columns:1fr 1fr}.studio-checks{grid-template-columns:repeat(3,1fr)}details#first-test{display:none}}
+</style>
+</head>
+<body>
+<header class="mast"><div class="wrap">
+  <div class="brand">Charles Fit Club · Pick a mission. Show up.</div>
+  <h1>Chart 1 · The complete 11-minute storyboard</h1>
+  <p>Old-school production boards, left to right and top to bottom. The movement boards retain proven white-background references; the first integrated gym frame below previews the intended finished look. The full sequence, loop cues, scissor exchanges, and cards remain in one place.</p>
+  <nav class="mast-links"><a href="https://cwarloe.github.io/5BX/photo-traveler/chart1.html">Open visual traveler</a><a href="https://cwarloe.github.io/5BX/photo-traveler/chart1-storyboard.html">Open latest GitHub storyboard</a><a href="https://github.com/cwarloe/5BX/blob/main/data/5bx-charts.json">Original Chart 1 timing and counts</a><a href="https://drive.google.com/drive/folders/1PgxwrzJxRksHS8nKYxURzpG86bl0VoxY">Chart 1 assets</a><a href="https://drive.google.com/file/d/11-qZjVdIGFykAHoyeBRGyXNKGj2OmT2y/view">Current scissor card</a></nav>
+</div></header>
+<main class="wrap">
+  <section class="topband" aria-label="Production totals">
+    <div class="metric"><b>11:00</b><span>Exact movement time</span></div>
+    <div class="metric"><b>11:30</b><span>Proposed full playback with cards and ending</span></div>
+    <div class="metric"><b>5</b><span>Exercises; final exercise has two movements</span></div>
+    <div class="metric"><b id="frame-total">—</b><span>Storyboard panels, counting transitions</span></div>
+  </section>
+  <section class="panel">
+    <h2>Master timing · exercise clock</h2>
+    <p>The historical 5BX program uses <strong>2 + 1 + 1 + 1 + 6 minutes</strong>. Our proposed film adds a 6-second opening, a 4-second card before each exercise and a 4-second closing. Those <strong>30 seconds are outside</strong> the 11-minute exercise clock.</p>
+    <div class="timeline" aria-label="Eleven-minute exercise breakdown"><div class="t1">01<small>2:00</small></div><div class="t2">02<small>1:00</small></div><div class="t3">03<small>1:00</small></div><div class="t4">04<small>1:00</small></div><div class="t5">05A + 05B<small>6:00</small></div></div>
+    <div class="runtimes"><div><strong>00:10–02:10</strong>Toe touch</div><div><strong>02:14–03:14</strong>Partial sit-up</div><div><strong>03:18–04:18</strong>Alternating raise</div><div><strong>04:22–05:22</strong>Knee push-up</div><div><strong>05:26–11:26</strong>Run + scissors</div></div>
+    <div class="controls"><label for="level">Chart 1 target level</label><select id="level"><option>D-</option><option>D</option><option>D+</option><option>C-</option><option>C</option><option>C+</option><option>B-</option><option>B</option><option>B+</option><option>A-</option><option>A</option><option>A+</option></select><label for="framing-mode">Character framing</label><select id="framing-mode"><option value="production">Video scale (proposed)</option><option value="source">Original full image</option></select><button type="button" class="print-btn" id="print">Print / save PDF</button></div>
+    <p id="level-note" class="hint" aria-live="polite"></p>
+    <div class="legend"><span><i class="dot move"></i>White pose reference / movement order</span><span><i class="dot card"></i>Editable title/interstitial</span><span><i class="dot edit"></i>Editorial loop or event cue</span></div>
+    <p class="hint">Movement thumbnails use proposed 16:9 actor framing, not yet verified final gym scale. The integrated studio reference below is the new physical scale anchor. Mark's hands can crop high during the standing stretch, but his head and hair remain visible. Switch to <strong>Original full image</strong> for white-reference comparisons. The circular timer is a visual sample, not a live 11-minute clock.</p>
+  </section>
+  <section class="panel" id="studio-calibration">
+    <h2>Current locked studio · first-frame calibration</h2>
+    <p><strong>November 27, 2026:</strong> Small photographic studio with a single warm cream wall, nearly full-frame olive mat, left window partially shaded, a small cabinet beside the left rack, a matching rack at right, and two full-size loose hex dumbbells at the far-right mat corner. No green upper wall, orange wall stripe, or embedded club logo. The brand remains on editable cards/overlays until placement is deliberately approved.</p>
+    <div class="studio-grid">
+      <div class="studio-card"><div class="studio-preview"><img src="https://drive.google.com/thumbnail?id=1DdSgKyiXkuz7cjaL3XJZsU7QsDo2FtMx&amp;sz=w1600" alt="Locked empty cream-wall gym studio with olive mat, rack equipment, cabinet and two loose dumbbells in the right corner"></div><div class="studio-caption"><strong>00 · Clean background master</strong>Use this single room image as the visual reference for every exercise. <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1DdSgKyiXkuz7cjaL3XJZsU7QsDo2FtMx/view">Open PNG</a></div></div>
+      <div class="studio-card"><div class="studio-preview"><img src="https://drive.google.com/thumbnail?id=1gjGBvEIfNMmhZSelI4EvkM4_3KyADcFM&amp;sz=w1600" alt="Mark, facing viewer right with empty hands overhead in the fixed cream-wall gym"><span class="shot-number">FRAME 04 · GYM TEST</span><div class="hud-title">TOE TOUCH<span class="hud-tip">BEND COMFORTABLY</span></div><div class="hud-time"><span>2:00</span></div></div><div class="studio-caption"><strong>01 · Toe-touch first-frame candidate · torso under review</strong>This initial composited still is not approved: Mark looks somewhat squat through the torso. The title and timer here are editable HTML previews. <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1gjGBvEIfNMmhZSelI4EvkM4_3KyADcFM/view">Open clean PNG</a></div></div>
+    </div>
+    <div class="studio-card studio-wide"><div class="studio-preview"><img src="https://drive.google.com/thumbnail?id=1PFkD4FvpDx1rLuqzPhRo_162jEszsNnS&amp;sz=w1800" alt="Five versions of middle-school Mark at a shared physical scale on the same gym mat: standing toe touch, running in place, kneeling push-up, lying supine and lying prone"></div><div class="studio-caption"><strong>02 · New five-exercise proportion check · review image</strong>All five starting positions in one compact studio: toe-touch standing, run-in-place, kneeling push-up, supine partial sit-up rest, and prone alternating-leg-raise rest. One continuous mat and unchanged room props make mismatched child scale or shortened torsos visible. This is a comparison composite, not footage and not five simultaneous people in the finished workout. <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1PFkD4FvpDx1rLuqzPhRo_162jEszsNnS/view">Open high-resolution comparison</a></div></div>
+    <p class="studio-callout"><strong>Flow test choice:</strong> Once the torso/scale candidate is accepted, start with one approved boy-in-studio frame as the main animation anchor. Keep the empty studio as the fixed composition reference; the white pose card and existing successful motion guide the exercise. The earlier Flow pilots performed best with one approved start frame, so test that before supplying a large stack of keyframes. A separate white-boy-plus-gym approach remains a fallback if Flow can hold placement without ghosting or drift.</p>
+    <div class="studio-checks"><div class="open"><b>Visual identity · scale review</b>Use the approved Chart 1 Mark master for physical proportions and face. Early middle-school appearance, no facial or underarm hair, soft ordinary build, blue tank/charcoal shorts/complete shoes. Compare standing torso to the five-position image before promoting an individual start.</div><div class="open"><b>Video geometry · QA pending</b>Identical camera, back wall, blind, cabinet, rack edges, rack dumbbells, and two corner weights from frame to frame. Compare stationary anchors for jitter, scaling or background morphing.</div><div class="open"><b>Motion and loops · QA pending</b>At least three visible repetitions in a usable edit; retain true alternation, foot contacts, natural wrists, a matching first/last pose, and no ghosted limbs. Start with the shortest sound clip and extend or edit it.</div></div>
+    <details id="first-test"><summary><strong>Provisional Flow motion test · toe touch (use when start is accepted)</strong></summary><p>Attach the selected, corrected <em>boy-in-gym</em> first frame as the video starting image. Use the white pose reference only if the model needs additional motion guidance.</p><textarea class="studio-prompt" readonly aria-label="Toe touch first gym motion proof prompt">Animate this exact photographic first frame as one short, natural toe-touch/backward-stretch cycle. The single youthful middle-school boy stays facing viewer-right in side profile, in the same blue sleeveless shirt, charcoal shorts, black socks and intact gray-yellow shoes. Both feet remain planted in the same place. Begin standing upright with empty hands comfortably overhead; bend at the hips toward the shoes; rise smoothly with arms overhead; make a small gentle backward stretch; return to the identical upright starting pose. Use natural arms, separate hands and shoes, and realistic child proportions with no facial or underarm hair. LOCK the source gym, camera and physical scale: one cream back wall, window/blind and cabinet at left, stationary dumbbell racks on both sides, two separate full-size dumbbells in the far-right floor corner, fixed olive mat and contact shadows. No room movement, zoom, pan, duplicated boy, ghosted limbs, melting shoes, title, timer, captions or audio. This is a short proof for a later three-repetition edit.</textarea></details>
+  </section>
+  <div class="storyhead"><div><h2>Shot-by-shot boards</h2><p>All panels below are ordered sequentially; the repetition blocks show where an edited loop fills the allotted time.</p></div><span class="chapter-note">PRE-PRODUCTION · ORDER REVIEW</span></div>
+  <div class="storyboard" id="boards"></div>
+  <dialog id="frame-dialog"><div class="dialog-head"><strong id="dialog-title">Video frame preview</strong><button type="button" id="dialog-close">Close</button></div><div id="dialog-stage"></div></dialog>
+  <section class="warning"><strong>Motion QA still open:</strong> The alternating-leg-raise images show first lift, both-feet-down bridge, and second lift, but physical leg identity still needs confirmation in motion. The scissor stills now use synchronized six-phase, near-leading and far-leading cards. Rear palms in phases 03–05 (storyboard frames 39–41 at D−) have been corrected with relaxed wrists and forward thumbs; the existing scissor video is still not accepted as a true leg exchange. For running, frames 33–34 now use the supplied high-knee photo and a descending video still; their distinct heights are clear, while the exact <em>far-leg</em> identity is still difficult to prove from the almost side-on view. This storyboard commits to the intended sequence, not certified motion.</section>
+  <section class="panel"><h2>Editorial decisions captured here</h2><p>White-background exercise PNGs remain the approved <em>movement references</em>, not the planned finished backdrop. The intended finished footage uses the same small cream-wall gym in every exercise, with a consistent child-sized physical scale and distance, adjusted only by real position within the studio—not arbitrary enlargement per pose. Raised arms may crop above frame while the head remains visible. Exercise/interstitial cards and the title/tip and timer are editable HTML overlays, not baked into video. Enlarged dark-green titles and tips appear top-left on the cream backdrop, the circular countdown top-right, and small frame numbers bottom-right for storyboard review only.</p><p>The first toe-touch gym composite is a provisional test because torso length appears compressed; use the five-pose proportion card and original approved character master to settle that before video production. Background jitter checks will use the left blind/cabinet, wall edge, both dumbbell racks, and two floor weights. Title-card length, end-card length, and the scissor burst's exact placement within six minutes remain provisional. The 2/1/1/1/6 exercise timing is from the 5BX source, and scissor bursts are triggered by <em>counted steps</em>, not arbitrary seconds.</p></section>
+  <footer class="footer">White pose masters, the selected running references, and <a href="https://drive.google.com/file/d/1iMFAxa1Uctf7L2rz3iiRj6sr6ExE2T1Z/view">the supplied running source video</a> are together in the <a href="https://drive.google.com/drive/folders/1iP3t0UICbsi_46wegAp6xBk90wVjef-A">Exercise 5 working folder</a>. The <a href="https://drive.google.com/file/d/11-qZjVdIGFykAHoyeBRGyXNKGj2OmT2y/view">current six-phase scissor card</a>, <a href="https://drive.google.com/file/d/1baNY4NnYAqGIgreNJHzAU3tQwbBFL25V/view">near-leading card</a>, and <a href="https://drive.google.com/file/d/1y-9d3KCd2lxPt2n7y92grUVTyOR0Ioti/view">far-leading card</a> are built from the same six PNGs. The clean gym, gym toe-touch test, and five-pose comparison are in the Chart 1 assets hub. <a href="https://github.com/cwarloe/5BX/blob/main/photo-traveler/chart1-storyboard.html">GitHub source</a> and the Drive HTML copy are this storyboard's current versions. Reference thumbnails may require Google sign-in. This planning storyboard is not a finished video or movement-form certification.</footer>
+</main>
+<script>
+"use strict";
+const data={
+ toe:{start:"1hxrn--x0LzU0xtnHjL-UPJGCfYDFLpXN",fold:"1BpqZCpKeCUM3LjJNIcolFDN4tWdc8C24",back:"1hULGlrZk8mI0Hn3l1JvMc0kzMREf23nn"},
+ sit:{rest:"1qg0TX6bZh_8BwT6vnhdUdXn_zXhI70ii",early:"1_SZThyzbBwZIglMmZZnBt7C5EN-zeT5Z",peak:"1tJSMcB20Bc-kO1NOH4VBe_FS2zDPleiI"},
+ leg:{rest:"12fwK4zr6D1YlRcEY3aVsKDtbM53OdKYT",first:"1T_n4yeX6G5nqENxYD4zeqa1eCcD8uFhS",bridge:"1rG9D7a5jBPmjVSBin2jHz-q7O-_rn2qe",second:"1PA6XhL-Dr6L7I_F3IsIxwGuWJvjcECOB",end:"13Y8LddGTMecZ3XrcR4L-1ILbA05nNEhR"},
+ knee:{up:"106cIL2p0kORGoUVJNRsfmkK3QLhY6Mm6",half:"1ifjSapFYXwm0bBMCYaNPQxVZLzWpNneE",down:"1hx_XYAVvVf4mo9pjkymjscSykBwoXPO4"},
+ run:{heel:"1paEPR1bg0-_KiZfw9I3deCcN6IgRM8Te",knee:"1CgtdW1xEL56UCDcLEnsEW-ivzYeGXTQj",plant:"1JI92nMorLpJnb-0WBkD19keeJCd9it4k",oppositeHeel:"1deZUHew5_URNhOkFzCp9R90ON7kLlDnf",oppositeKnee:"14HuMAyFh5xWPmgSVjO12QvUHCeW2XU1O",oppositePlant:"1WmgLrbkm93x3frhe9wMrZfEbkcy5IR6_"},
+ sc:{near:"19by811IBOKMOyz6nBWGdgOp__uIPTV9_",nearAir:"13tKHD6LK9CfKuXwQ5Dz17KAC840T6A6v",farLand:"1WnS4BLa1jBATfXy45J-KcLw_scnsWNNO",far:"1ZAZcKd7eU4UEWK6f9qyHLFlzfxKzWdm0",farAir:"1p-mPHiT6jraViSZZfrgsR9zSuL5TAlZR",nearLand:"1RkKLOzVtqW-VSMdCzdDAgawbMKLA0ML3"}
+};
+const levels={"D-":[2,3,4,2,100],"D":[3,4,5,3,145],"D+":[4,5,6,3,175],"C-":[6,7,8,4,205],"C":[7,8,10,5,235],"C+":[8,9,12,6,260],"B-":[10,11,13,7,280],"B":[12,12,14,8,305],"B+":[14,13,15,9,320],"A-":[16,15,16,11,335],"A":[18,17,17,12,375],"A+":[20,18,18,13,400]};
+const durations={1:"00:10–02:10 · 2:00",2:"02:14–03:14 · 1:00",3:"03:18–04:18 · 1:00",4:"04:22–05:22 · 1:00",5:"05:26–11:26 · 6:00"};
+const hudNames={1:"TOE TOUCH",2:"PARTIAL SIT-UP",3:"ALTERNATING LEG RAISE",4:"KNEELING PUSH-UP",5:"RUN IN PLACE"};
+const hudTips={1:"BEND COMFORTABLY",2:"LIFT HEAD & SHOULDERS",3:"OTHER FOOT STAYS DOWN",4:"PRESS UP WITH CONTROL",5:"LIGHT FEET · STAY IN PLACE"};
+const hudTimes={1:"2:00",2:"1:00",3:"1:00",4:"1:00",5:"6:00"};
+const scaleByPose={
+ "1hxrn--x0LzU0xtnHjL-UPJGCfYDFLpXN":1.2,
+ "1BpqZCpKeCUM3LjJNIcolFDN4tWdc8C24":1.13,
+ "1hULGlrZk8mI0Hn3l1JvMc0kzMREf23nn":1.2,
+ "106cIL2p0kORGoUVJNRsfmkK3QLhY6Mm6":0.77,
+ "1hx_XYAVvVf4mo9pjkymjscSykBwoXPO4":0.74,
+ "1ifjSapFYXwm0bBMCYaNPQxVZLzWpNneE":0.78,
+ "1paEPR1bg0-_KiZfw9I3deCcN6IgRM8Te":1.0,
+ "1CgtdW1xEL56UCDcLEnsEW-ivzYeGXTQj":1.05,
+ "14HuMAyFh5xWPmgSVjO12QvUHCeW2XU1O":0.99,
+ "1WmgLrbkm93x3frhe9wMrZfEbkcy5IR6_":0.99,
+ "19by811IBOKMOyz6nBWGdgOp__uIPTV9_":0.88,
+ "13tKHD6LK9CfKuXwQ5Dz17KAC840T6A6v":0.92,
+ "1ZAZcKd7eU4UEWK6f9qyHLFlzfxKzWdm0":0.88
+};
+function stageFraming(s){
+ const e=s.exercise;
+ const scissor=e===5&&/^5B/.test(s.meta||"");
+ const base=e===1?1.2:e===2?0.70:e===3?1:e===4?0.78:scissor?0.88:1.02;
+ const origin=e===1||e===5?"50% 100%":e===2?"50% 78%":e===3?"50% 85%":"50% 89%";
+ const shift=e===4?"4%":e===3?"2%":"0%";
+ const y=e===4&&s.image===data.knee.down?"3%":"0%";
+ return `--actor-scale:${scaleByPose[s.image]??base};--actor-origin:${origin};--actor-shift:${shift};--actor-y:${y}`;
+}
+const shots=[];
+const add=(kind,title,desc,meta,image,overlay)=>shots.push({kind,title,desc,meta,image,overlay});
+const photo=(title,desc,img,meta,overlay)=>add("photo",title,desc,meta,img,overlay);
+const slate=(title,desc,meta,small)=>add("slate",title,desc,meta,null,small);
+const cue=(title,desc,meta)=>add("cue",title,desc,meta);
+const rep=(title,desc,meta)=>add("repeat",title,desc,meta);
+const chapter=(title,desc)=>add("chapter",title,desc);
+function render(level){
+ shots.length=0;const [r1,r2,r3,r4,steps]=levels[level];let scissorSets=0;
+ slate("PICK A MISSION. SHOW UP.","Six-second mission-themed opening. The club name appears once, as a small brand mark.","00:00–00:06 · title","11 MINUTES · 5BX CHART 1");
+ chapter("EXERCISE 1 · TOE TOUCH + BACK STRETCH",durations[1]);
+ slate("01 · TOE TOUCH","Editable exercise title and tip; 4 seconds before timer starts.","00:06–00:10 · exercise card","BEND COMFORTABLY");
+ photo("01 · Starting stretch","Feet planted, arms raised. Start/restart keyframe.",data.toe.start,"Timed workout · 2:00","TOE TOUCH");
+ photo("02 · Forward fold","Bend from hips; hands move toward floor.",data.toe.fold,"Movement phase 2");
+ photo("03 · Return upright","Use original arms-up pose as midpoint, without making a new image.",data.toe.start,"Movement phase 3");
+ photo("04 · Gentle back stretch","Small controlled extension, then return to upright.",data.toe.back,"Movement phase 4");
+ photo("05 · Return to start","Same upright frame prepares the next repetition.",data.toe.start,"Movement phase 5");
+ rep("LOOP THE COMPLETE CYCLE",`${r1} counted movements at ${level}; repeat clean three-rep footage as needed across the allotted 2:00. The source video, not the front-facing card, governs final camera angle.`,"02:00 exercise window");
+ chapter("EXERCISE 2 · PARTIAL SIT-UP",durations[2]);
+ slate("02 · PARTIAL SIT-UP","Editable card; 4 seconds. Only a head/shoulder lift.","02:10–02:14 · exercise card","SEE YOUR HEELS");
+ photo("01 · Lie flat","Head on viewer-left, shoes on right, arms at sides.",data.sit.rest,"Timed workout · 1:00","PARTIAL SIT-UP");
+ photo("02 · Raise head","Small head-and-upper-shoulder movement; legs remain straight.",data.sit.early,"Movement phase 2");
+ photo("03 · Peak of partial raise","Look toward heels; no seated/full sit-up.",data.sit.peak,"Movement phase 3");
+ photo("04 · Lower to mat","Return gently to the exact start frame.",data.sit.rest,"Movement phase 4");
+ rep("LOOP THE HEAD RAISE",`${r2} counted movements at ${level}; reuse the constrained head-lift portion, not the later full-sit-up section of old footage.`,"01:00 exercise window");
+ chapter("EXERCISE 3 · ALTERNATING SINGLE-LEG RAISE",durations[3]);
+ slate("03 · ALTERNATING RAISE","Editable card; 4 seconds. One leg rises at a time.","03:14–03:18 · exercise card","OTHER FOOT STAYS DOWN");
+ photo("01 · Both feet down","Prone start. Keep both legs grounded.",data.leg.rest,"Timed workout · 1:00","ALTERNATING LEG RAISE");
+ photo("02 · First leg rises","Only one leg lifts; other shoe remains in floor contact.",data.leg.first,"Movement phase 2");
+ photo("03 · Bridge: BOTH down","The raised leg comes fully down before the opposite leg begins.",data.leg.bridge,"Movement phase 3 · key bridge");
+ photo("04 · Other leg rises","The opposite physical leg should lift, with first leg down. Confirm identity in the finished video.",data.leg.second,"Movement phase 4 · QA check");
+ photo("05 · Both feet down","The end returns to original floor contact.",data.leg.end,"Movement phase 5");
+ rep("LOOP THE TWO-LEG PAIR",`${r3} counted movements at ${level}; one full alternate pair includes both grounded bridge and end. Verify real near/far leg identity.`,"01:00 exercise window");
+ chapter("EXERCISE 4 · KNEELING PUSH-UP",durations[4]);
+ slate("04 · KNEELING PUSH-UP","Editable card; 4 seconds. Knees stay planted; model the hard press upward.","04:18–04:22 · exercise card","PRESS UP WITH CONTROL");
+ photo("01 · Arms extended","Start high on hands and knees.",data.knee.up,"Timed workout · 1:00","KNEELING PUSH-UP");
+ photo("02 · Lower to the mat","Descend smoothly from the extended-arm position. The lowering phase can be relatively simple.",data.knee.down,"Movement phase 2 · down");
+ photo("03 · Press halfway UP","This intermediate pose is on the difficult upward press, not the descent. Knees and palms stay anchored, trunk aligned; small independent foot adjustments are natural.",data.knee.half,"Movement phase 3 · effort / form");
+ photo("04 · Finish the press","Extend the arms fully from halfway up. Keep knees down and hips aligned as the body rises.",data.knee.up,"Movement phase 4 · top");
+ rep("LOOP THE FULL PUSH-UP",`${r4} counted movements at ${level}; intended order: high → low → halfway UP → high. Concentrate motion QA on the press, not the descent.`,"01:00 exercise window");
+ chapter("EXERCISE 5 · RUN IN PLACE + SCISSOR JUMPS",durations[5]);
+ slate("05 · RUN + SCISSORS","One editable card introduces both movements; 4 seconds.","05:22–05:26 · exercise card","10 HOPS EVERY 75 STEPS");
+ let left=steps,block=0;
+ while(left>0){
+   const n=Math.min(75,left);block++;
+   photo(`RUN ${block} · Heel recovery`,`Source video 0.00 s: rear heel bends up while the supporting shoe stays near the same floor point.`,data.run.heel,`5A · run ${n} counted steps`,"RUN IN PLACE");
+   photo("Run · Forward knee","Source video 0.25 s: one knee travels forward while the other leg supports him.",data.run.knee,"5A · running phase 2");
+   photo("Run · Foot placement","Source video 0.50 s: the advancing shoe approaches the floor while the other trails behind.",data.run.plant,"5A · running phase 3");
+   photo("Run · Back-leg lift begins","Keep the frame-32 transition: back leg begins the next swing while the front/supporting shoe holds its place.",data.run.oppositeHeel,"5A · alternate leg phase 4");
+   photo("Run · Back-leg knee highest","FRAME 33 · Your supplied high-resolution photo. This is the peak of the second leg's forward drive; the supporting leg stays below him.",data.run.oppositeKnee,"5A · alternate leg phase 5 · peak");
+   photo("Run · Same knee descending","FRAME 34 · New video at 1.25 s. The raised knee has come partway down, still in front of the body, before the next leg exchange.",data.run.oppositePlant,"5A · alternate leg phase 6 · descent");
+   rep(`RUN ${n} STEPS`,`Use the six poses as the visual sequence for ${n} counted left-foot contacts, then edit a continuous running clip to match. Frames 33–34 come from your newly supplied photo/video; confirm the <em>same far leg</em> rises and descends across frames 32–34 before approving the loop.`,"5A · repeated full-stride loop");
+   left-=n;
+   if(n===75){scissorSets++;
+     cue(`SCISSOR SET ${scissorSets}`,`After 75 counted left-foot contacts: transition to 10 gentle split-leg exchanges, then return to running if the step target remains.`,"5A → 5B · step-triggered cue");
+     photo("01 · Near leg leading","Modest split stance, feet down. No arm windup.",data.sc.near,"5B · scissor jump phase 1","SCISSOR JUMPS");
+     photo("02 · Near-leading airborne","A small two-foot flight; start exchanging lead legs.",data.sc.nearAir,"5B · scissor jump phase 2");
+     photo("03 · Opposite lead lands","The far leg leads in the opposite split. Rear palm faces viewer, thumb forward and wrist relaxed.",data.sc.farLand,"5B · scissor jump phase 3");
+     photo("04 · Opposite stance holds","Clear grounded opposite split, with the corrected rear palm visible and thumb forward.",data.sc.far,"5B · scissor jump phase 4");
+     photo("05 · Second exchange airborne","Another small hop; rear palm stays naturally oriented with thumb forward.",data.sc.farAir,"5B · scissor jump phase 5");
+     photo("06 · Original lead lands","Return toward first split stance, both feet grounded.",data.sc.nearLand,"5B · scissor jump phase 6");
+     rep("COMPLETE 10 SCISSOR JUMPS","Use the six ordered poses as the exchange model; loop to reach 10 jumps. Do not insert an unexplained arm-swing preparation.","5B · ten counted exchanges");
+   }
+ }
+ cue("END OF SIX-MINUTE BLOCK","Let the final motion settle at the correct floor-contact pose; cut at a matched seam, then switch to the closing card.","11:26 · exercise clock reaches 11:00");
+ slate("MISSION COMPLETE","Closing card; 4 seconds after the 11:00 workout.","11:26–11:30 · end card","SHOW UP AGAIN TOMORROW");
+ document.getElementById("level-note").textContent=`Chart 1 ${level}: ${r1} toe touches · ${r2} partial sit-ups · ${r3} alternate-leg-raise counts · ${r4} knee push-ups · ${steps} counted left-foot running steps · ${scissorSets} burst${scissorSets===1?"":"s"} of 10 scissor jumps. Exact movement time stays 11:00 at every level; these are target counts, not artificially assigned shot durations.`;
+ let exercise=0;
+ for(const s of shots){
+   if(s.kind==="chapter"){const match=s.title.match(/^EXERCISE (\d+)/);if(match)exercise=Number(match[1]);}
+   s.exercise=exercise;
+ }
+ const div=document.getElementById("boards");div.innerHTML=shots.map((s,i)=>{
+  if(s.kind==="chapter")return `<div class="chapter-label"><h3>${s.title}</h3><span>${s.desc}</span></div>`;
+  const id=String(shots.slice(0,i+1).filter(t=>t.kind!=="chapter").length).padStart(2,"0");
+  let visual="";
+  const label=`<span class="shot-number">FRAME ${id}</span>`;
+  if(s.kind==="photo"){
+    const isScissor=s.exercise===5&&/^5B/.test(s.meta||"");
+    const name=isScissor?"SCISSOR JUMPS":hudNames[s.exercise];
+    const tip=isScissor?"SMALL JUMPS · STEADY ARMS":hudTips[s.exercise];
+    const time=hudTimes[s.exercise];
+    visual=`<div class="visual">${label}<img class="actor" loading="lazy" style="${stageFraming(s)}" src="https://drive.google.com/thumbnail?id=${encodeURIComponent(s.image)}&sz=w1600${isScissor?'&v=scissor-hand-v2':''}" alt="${s.title}" onerror="this.parentElement.classList.add('broken')"><span class="fallback">Reference unavailable in preview. Open original below.</span><div class="hud-title">${name}<span class="hud-tip">${tip}</span></div><div class="hud-time"><span>${time}</span></div></div>`;
+  }else if(s.kind==="slate"){
+    const first=id==="01";
+    const wording=first?`<small>11 MINUTES · 5BX CHART 1</small><b>PICK A MISSION.<br>SHOW UP.</b><em>FIVE MOVEMENTS. ONE COMMITMENT.</em>`:`<small>${s.overlay||"CHART 1"}</small><b>${s.title}</b><em>${s.kind==="slate"&&id==="01"?"": "GET READY · STAY IN CONTROL"}</em>`;
+    visual=`<div class="visual">${label}<div class="slate-type">${wording}</div><div class="mission-brand"><mark>CFC</mark>CHARLES FIT CLUB</div></div>`;
+  }else if(s.kind==="repeat")visual=`<div class="visual">${label}<b>↻</b><small>EDITED REPEAT / LOOP</small></div>`;
+  else visual=`<div class="visual">${label}<b>75 → 10</b><small>STEPS → SCISSOR HOPS</small></div>`;
+  return `<article class="shot ${s.kind} ${s.kind==="slate"&&id==="01"?"title-slate":""}">${visual}<div class="shot-text"><div class="meta">${s.meta||""}</div><h3>${s.title}</h3><p>${s.desc}</p>${s.image?`<a target="_blank" rel="noopener" href="https://drive.google.com/file/d/${encodeURIComponent(s.image)}/view">Open white reference ↗</a>`:""}<button type="button" class="preview-btn" data-frame="${id}">View video frame</button></div></article>`
+ }).join("");
+ document.getElementById("frame-total").textContent=shots.filter(s=>s.kind!=="chapter").length;
+}
+document.getElementById("level").addEventListener("change",e=>render(e.target.value));
+document.getElementById("framing-mode").addEventListener("change",e=>document.body.classList.toggle("source-mode",e.target.value==="source"));
+document.getElementById("boards").addEventListener("click",e=>{
+ const btn=e.target.closest(".preview-btn");if(!btn)return;
+ const card=btn.closest(".shot"),stage=card.querySelector(".visual").cloneNode(true);
+ const image=stage.querySelector("img.actor");
+ if(image)image.src=image.src.replace(/sz=w\d+/,"sz=w2000");
+ document.getElementById("dialog-title").textContent=`Frame ${btn.dataset.frame} · ${card.querySelector("h3").textContent}`;
+ document.getElementById("dialog-stage").replaceChildren(stage);
+ document.getElementById("frame-dialog").showModal();
+});
+document.getElementById("dialog-close").addEventListener("click",()=>document.getElementById("frame-dialog").close());
+document.getElementById("print").addEventListener("click",()=>window.print());
+render("D-");
+</script>
+</body>
+</html>
