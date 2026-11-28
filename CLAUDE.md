@@ -17,6 +17,7 @@ material into another one.
 | `sprites/qc-line/` | A second, smaller pipeline (sheet QC, cut-out manifest, he/she prompt tokens, mats drawn in code). To be ported into the kit, then deleted |
 | branch `sprite-boy-demo` | The built 5BX Workout Mixer demo page (generated; about 57 MB, not on `main`). Hosted on Cloudflare Pages at https://workout-mixer.pages.dev/, not on GitHub Pages; how to refresh it is in `sprites/OVERVIEW.md` |
 | `tools/video_finish/` | Turns a white-background clip into a looping gym video at the reference proportion: loop finder, measuring, person cut-out, placement, checks. Settings and per-clip data in its `config.json`; order of steps, rules and known mistakes in its `README.md` |
+| `tools/gravity_check/` | **TEST ONLY.** Measures how floaty an AI-generated jump is (apparent gravity from the pelvis's arc) and retimes airborne frames to 9.81 m/s². Not wired into any pipeline; first test used a legacy outdoor-track clip. See its `README.md` |
 | `specs/` | Feature specs (see below) |
 | `.github/workflows/pages.yml` | Publishes the app at `/5BX/` and the game at `/5BX/game/` |
 
