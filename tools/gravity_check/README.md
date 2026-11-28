@@ -66,6 +66,17 @@ barely rising is itself impossible. Retiming fixes timing, not poses.
 The re-measured gravity reads a little under 9.81 because fitting a parabola to 7–10 blurred frames
 is noisy. The airtime-versus-rise check is the stronger test.
 
+## Second test (2026-11-28): exercise 5 source clips (white background, test only)
+
+These are the original white-background clips that exercise 5 of the Chart 1 prototype was built from.
+Measured with `--height-m 1.55`. Results are review findings only; nothing here is approved.
+
+| Clip | Feet both off the floor? | Pelvis movement | Apparent g in flight | Verdict |
+|---|---|---|---|---|
+| `05A_RUN_SOURCE_USER_VIDEO17_WHITE.mp4` (run in place) | **No.** One foot always down; the lower foot never clears about 3 cm | Bobs about 4.5 cm; peak downward acceleration 2.2 m/s² | n/a (no flight) | **Physically fine.** Gravity can't look wrong without a flight. The real issue is pace (about 55 counted steps/min) |
+| `REVIEW__Mark_Gentle_Scissor_Flow_6sec.mp4` (gentle scissor) | **No.** The lower foot never clears about 4 cm | Bobs 13 cm: a knee bounce; peak downward acceleration 5.2 m/s² | n/a (no flight) | **Not floaty, but not a jump either.** A 3–4 in hop needs 6–7 airborne frames |
+| `REVIEW__Ten_Hops_12p5sec_Workprint.mp4` (ten hops) | **Yes.** 10 flights, feet about 10 cm up | Rises 30 cm from crouch to top | **5.1 m/s²** (r² 0.998 on every hop) | **About half gravity.** Retiming flights 1.36–1.41x re-measures at **9.2 m/s²**; 12.5 s becomes 11.5 s. A mild fix. (Form note: these are feet-together tuck hops, not a scissor switch) |
+
 ## Known limits
 - The scale assumes a level side view with the person at one distance. A height error of x% shifts
   `g` by x% and the speed-up by about x/2 %.
