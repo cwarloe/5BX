@@ -1,0 +1,194 @@
+{
+ "input": "generated_video_19.mp4 (LEGACY outdoor-track test clip, not committed)",
+ "fps": 24.0,
+ "height_m": 1.55,
+ "px_per_m": 200.0,
+ "seconds_in": 16.04,
+ "seconds_out": 8.5,
+ "median_g_before": 0.94,
+ "median_g_after": 8.16,
+ "flights_before": [
+  {
+   "start_frame": 47,
+   "end_frame": 78,
+   "frames": 32,
+   "airtime_s": 1.333,
+   "pelvis_rise_m": 0.228,
+   "g_apparent": 0.94,
+   "fit_r2": 0.99,
+   "speedup": 3.23
+  },
+  {
+   "start_frame": 91,
+   "end_frame": 114,
+   "frames": 24,
+   "airtime_s": 1.0,
+   "pelvis_rise_m": 0.092,
+   "g_apparent": 0.96,
+   "fit_r2": 0.979,
+   "speedup": 3.2
+  },
+  {
+   "start_frame": 128,
+   "end_frame": 153,
+   "frames": 26,
+   "airtime_s": 1.083,
+   "pelvis_rise_m": 0.11,
+   "g_apparent": 0.7,
+   "fit_r2": 0.956,
+   "speedup": 3.75
+  },
+  {
+   "start_frame": 167,
+   "end_frame": 199,
+   "frames": 33,
+   "airtime_s": 1.375,
+   "pelvis_rise_m": 0.169,
+   "g_apparent": 0.66,
+   "fit_r2": 0.963,
+   "speedup": 3.85
+  },
+  {
+   "start_frame": 212,
+   "end_frame": 240,
+   "frames": 29,
+   "airtime_s": 1.208,
+   "pelvis_rise_m": 0.128,
+   "g_apparent": 0.56,
+   "fit_r2": 0.98,
+   "speedup": 4.2
+  },
+  {
+   "start_frame": 253,
+   "end_frame": 275,
+   "frames": 23,
+   "airtime_s": 0.958,
+   "pelvis_rise_m": 0.128,
+   "g_apparent": 1.04,
+   "fit_r2": 0.943,
+   "speedup": 3.08
+  },
+  {
+   "start_frame": 286,
+   "end_frame": 305,
+   "frames": 20,
+   "airtime_s": 0.833,
+   "pelvis_rise_m": 0.169,
+   "g_apparent": 2.18,
+   "fit_r2": 0.977,
+   "speedup": 2.12
+  },
+  {
+   "start_frame": 314,
+   "end_frame": 336,
+   "frames": 23,
+   "airtime_s": 0.958,
+   "pelvis_rise_m": 0.145,
+   "g_apparent": 1.34,
+   "fit_r2": 0.949,
+   "speedup": 2.71
+  },
+  {
+   "start_frame": 356,
+   "end_frame": 379,
+   "frames": 24,
+   "airtime_s": 1.0,
+   "pelvis_rise_m": 0.068,
+   "g_apparent": 0.74,
+   "fit_r2": 0.959,
+   "speedup": 3.64
+  }
+ ],
+ "flights_after": [
+  {
+   "start_frame": 46,
+   "end_frame": 55,
+   "frames": 10,
+   "airtime_s": 0.417,
+   "pelvis_rise_m": 0.185,
+   "g_apparent": 8.84,
+   "fit_r2": 0.943,
+   "speedup": 1.05
+  },
+  {
+   "start_frame": 65,
+   "end_frame": 72,
+   "frames": 8,
+   "airtime_s": 0.333,
+   "pelvis_rise_m": 0.075,
+   "g_apparent": 6.26,
+   "fit_r2": 0.872,
+   "speedup": 1.25
+  },
+  {
+   "start_frame": 84,
+   "end_frame": 90,
+   "frames": 7,
+   "airtime_s": 0.292,
+   "pelvis_rise_m": 0.083,
+   "g_apparent": 8.16,
+   "fit_r2": 0.921,
+   "speedup": 1.1
+  },
+  {
+   "start_frame": 102,
+   "end_frame": 109,
+   "frames": 8,
+   "airtime_s": 0.333,
+   "pelvis_rise_m": 0.058,
+   "g_apparent": 3.45,
+   "fit_r2": 0.506,
+   "speedup": 1.69
+  },
+  {
+   "start_frame": 120,
+   "end_frame": 126,
+   "frames": 7,
+   "airtime_s": 0.292,
+   "pelvis_rise_m": 0.098,
+   "g_apparent": 9.71,
+   "fit_r2": 0.966,
+   "speedup": 1.01
+  },
+  {
+   "start_frame": 137,
+   "end_frame": 143,
+   "frames": 7,
+   "airtime_s": 0.292,
+   "pelvis_rise_m": 0.076,
+   "g_apparent": 7.14,
+   "fit_r2": 0.856,
+   "speedup": 1.17
+  },
+  {
+   "start_frame": 152,
+   "end_frame": 161,
+   "frames": 10,
+   "airtime_s": 0.417,
+   "pelvis_rise_m": 0.157,
+   "g_apparent": 8.33,
+   "fit_r2": 0.972,
+   "speedup": 1.09
+  },
+  {
+   "start_frame": 168,
+   "end_frame": 176,
+   "frames": 9,
+   "airtime_s": 0.375,
+   "pelvis_rise_m": 0.131,
+   "g_apparent": 8.29,
+   "fit_r2": 0.893,
+   "speedup": 1.09
+  },
+  {
+   "start_frame": 194,
+   "end_frame": 199,
+   "frames": 6,
+   "airtime_s": 0.25,
+   "pelvis_rise_m": 0.01,
+   "g_apparent": 5.1,
+   "fit_r2": 0.799,
+   "speedup": 1.39
+  }
+ ]
+}
