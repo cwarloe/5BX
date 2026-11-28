@@ -96,20 +96,26 @@ def body_box(alpha, thresh=0.5):
     return int(xs.min()), int(ys.min()), int(xs.max()), int(ys.max())
 
 
-def target_length_px(cfg, kind):
+def contact_frac(cfg, clip_cfg):
+    """Where the clip's lowest point (feet, or body on the floor) sits, as a fraction of frame height."""
+    return cfg["proportion"]["contact_line_frac"][clip_cfg.get("placement", "standing")]
+
+
+def target_length_px(cfg, kind, contact):
+    """On-screen body length at a given depth: size_per_depth[kind] x (contact - horizon) x frame height.
+    Things nearer the camera (lower contact line) are bigger, as on any flat floor seen in perspective."""
     P, H = cfg["proportion"], cfg["canvas"]["height"]
-    frac = P["lying_length_frac"] if kind == "lying" else P["standing_height_frac"]
-    return frac * H
+    return P["size_per_depth"][kind] * (contact - P["horizon_frac"]) * H
 
 
 def placement(cfg, clip_cfg, W, H, union_box):
-    """Fixed scale and offset for a clip: its lowest point on the contact line, its extent centred on the mat.
+    """Fixed scale and offset for a clip: its lowest point on its contact line, its extent centred on the mat.
     One transform for the whole clip, so Mark never slides."""
-    C = cfg["canvas"]; P = cfg["proportion"]
-    s = target_length_px(cfg, clip_cfg["body_kind"]) / float(clip_cfg["body_length_px"])
+    C = cfg["canvas"]; P = cfg["proportion"]; contact = contact_frac(cfg, clip_cfg)
+    s = target_length_px(cfg, clip_cfg["body_kind"], contact) / float(clip_cfg["body_length_px"])
     x0, y0, x1, y1 = union_box
     ox = round(P["center_x_frac"] * C["width"] - (x0 + x1) / 2 * s)
-    oy = round(P["contact_line_frac"] * C["height"] - y1 * s)
+    oy = round(contact * C["height"] - y1 * s)
     return s, ox, oy, round(W * s), round(H * s)
 
 
@@ -205,7 +211,8 @@ def composite(clip, src, out, cfg_path=None):
     head = min(tops) if tops else None
     rep = {"clip": clip, "out": out, "scale": round(s, 4), "placed": [ox, oy, sw, sh], "frames_cut_out": len(comp),
            "loop": f"{L['mode']} x{N}", "seconds": round(N * len(order) / C["fps"], 1),
-           "body_height_on_canvas_px": round(target_length_px(cfg, c["body_kind"])),
+           "body_length_on_canvas_px": round(target_length_px(cfg, c["body_kind"], contact_frac(cfg, c))),
+           "placement": c.get("placement", "standing"),
            "head_top_y": None if head is None else round(head), "head_visible": head is not None and head >= 0,
            "visible_cut_lines": cuts}
     json.dump(rep, open(os.path.splitext(out)[0] + ".json", "w"), indent=1)

@@ -4,17 +4,16 @@
   "canvas": {"width": 1280, "height": 720, "fps": 24},
 
   "plate": {
-    "file": "plates/cfc_gym_mat_front_1672x941.png",
-    "about": "Charles Fit Club gym, centred wall branding above a foreground mat (from Charles, 2026-11-27). Scaled to the canvas."
+    "file": "plates/studio_two_dumbbells_1672x941.png",
+    "about": "Minimal fitness studio, peach wall, dark mat with orange edge, dumbbell racks both sides (from Charles, 2026-11-27, 'Minimal_fitness_studio_with_two_dumbbells.png'). Mat back edge ~0.71, front edge ~0.98 of frame height. Previous plate kept as plates/cfc_gym_mat_front_1672x941.png."
   },
 
   "proportion": {
-    "standing_height_frac": 0.50,
-    "lying_length_frac": 0.58,
-    "contact_line_frac": 0.836,
+    "horizon_frac": 0.444,
+    "size_per_depth": {"standing": 1.634, "lying": 1.667, "kneeling": 1.248},
+    "contact_line_frac": {"standing": 0.95, "floor": 0.90},
     "center_x_frac": 0.5,
-    "max_standing_height_frac": 0.50,
-    "about": "Measured from Charles's proportion reference (Drive 1bN2nxYXNHUsX0zWDCo3nK2FvME5kNWOC, 'Centered_wall_branding_above_a_ee8de63e_2K.png', 2730x1536) with the same person cut-out the tool uses: the standing boy is 0.501 of frame height with his feet at 0.836; the prone boy at the same depth is 0.581 long. Charles: 'I don't want them to be any bigger than that.' Everyone is placed front and centre at one depth, so the same rule applies to every exercise."
+    "about": "Size depends on depth: on-screen length = size_per_depth[body_kind] x (contact line - horizon), as fractions of frame height. Measured 2026-11-27 with the same cut-out model from Charles's white-background proportion check ('Five-position_exercise_scale_comparison.png', 1672x941; same layout as the in-room version, which the dumbbell rack spoils for cut-outs): prone 0.830 long at contact 0.942 and supine 0.530 long at 0.762 give the horizon at 0.444 and lying 1.667; standing arms-up boy 0.652 head to feet at 0.843 gives standing 1.634 (the runner agrees within 5%); kneeling boy 0.448 wide, feet to head, at 0.803 gives kneeling 1.248. body_kind 'kneeling' means body_length_px is the feet-to-head WIDTH in the push-up. Charles: standing moves at the very front of the frame; floor moves a small bit back (contact_line_frac). With these values standing Mark is ~0.83 of frame height, lying ~0.76 long, kneeling ~0.57 wide."
   },
 
   "loop": {
@@ -40,6 +39,7 @@
   "clips": {
     "toe": {
       "title": "1 Toe touch",
+      "placement": "standing",
       "drive_id": "19o8ThEVPF1vKSVa1PQTUKsxGMSoCAe8L",
       "drive_name": "REVIEW__Mark_Toe_Touch_Flow_6sec.mp4",
       "body_length_px": 632, "body_kind": "standing",
@@ -49,6 +49,7 @@
     },
     "situp": {
       "title": "2 Head-only partial sit-up",
+      "placement": "floor",
       "drive_id": "1ZTFqdaE1vB131JGPpJa7Vo71phE5anh6",
       "drive_name": "SOURCE__Mark_White_BG_HeadLift_FullClip_2026-11-27.mp4",
       "body_length_px": 863, "body_kind": "lying",
@@ -59,6 +60,7 @@
     },
     "legraise": {
       "title": "3 Alternating prone leg raise",
+      "placement": "floor",
       "drive_id": "1qsoEJseKk2mBahA_vHEKKGNfc8-HLjBd",
       "drive_name": "REVIEW__Mark_Alternate_Leg_Raise_Flow_8sec.mp4",
       "body_length_px": 977, "body_kind": "lying",
@@ -68,15 +70,17 @@
     },
     "kneepushup": {
       "title": "4 Kneeling push-up",
+      "placement": "floor",
       "drive_id": "1fIwL0Da3m-lD9zCcQKtkX0ovmXZDoLKM",
       "drive_name": "REVIEW__KneePushup__BlueShirt_WhiteBackground_6sec.mp4",
-      "body_length_px": 1160, "body_kind": "standing",
-      "measured": "CALIBRATED to Charles's proportion reference: the kneeling boy there is 0.372 of frame height wide (feet to head) at contact line 0.761; corrected to the front depth (the reference's supine/prone pair shrinks about 2.7x per unit of contact-line height) that is about 0.465, i.e. 335 px at 720p. The source is about 1078 px wide, so the equivalent standing height is about 1160 px. (A first estimate from shin length, 1550, made him visibly too small.)",
+      "body_length_px": 1068, "body_kind": "kneeling",
+      "measured": "feet-to-head WIDTH, median of 12 frames from video_finish.py measure (max 1107). Sized with the kneeling rule from the proportion check. (Earlier tries: shin-length estimate 1550 made him too small; a calibration against the first reference image did not carry over.)",
       "loop": {"start": 4, "end": 141, "mode": "cut", "joint": 1.64},
       "notes": "Most zoomed-in source (about 2.2-3x the standing clips). A wider re-render ('full body, camera farther back') would look sharper than shrinking."
     },
     "run": {
       "title": "5A Run in place",
+      "placement": "standing",
       "drive_id": "1iMFAxa1Uctf7L2rz3iiRj6sr6ExE2T1Z",
       "drive_name": "05A_RUN_SOURCE_USER_VIDEO17_WHITE.mp4",
       "body_length_px": 1032.5, "body_kind": "standing",
@@ -86,6 +90,7 @@
     },
     "scissor": {
       "title": "5B Gentle scissor hops",
+      "placement": "standing",
       "drive_id": "10I8cyJ8m0w82OELa8Vi54iU0k6tVyLRv",
       "drive_name": "REVIEW__Mark_Gentle_Scissor_Flow_6sec.mp4",
       "body_length_px": 642, "body_kind": "standing",

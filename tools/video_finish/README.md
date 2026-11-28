@@ -1,7 +1,7 @@
 # Video finishing: white-background clip → looping gym video
 
 Turns a white-background exercise clip of Mark (from Flow or Grok) into a looping review MP4 on the Charles Fit Club
-gym plate, at the same proportion for every exercise. Built and tested on the six Chart 1 white clips, 2026-11-27.
+studio plate, sized by depth so every exercise is in proportion. Built and tested on the six Chart 1 white clips, 2026-11-27.
 
 - **Settings and per-clip data:** [`config.json`](config.json). Every number in it was measured, and each says how.
   Change a value there, never in the code.
@@ -31,10 +31,11 @@ gym plate, at the same proportion for every exercise. Built and tested on the si
 
 | Rule | Value | Why |
 |---|---|---|
-| Standing height | 50% of frame height | Charles's proportion reference (Drive `1bN2nxYXNHUsX0zWDCo3nK2FvME5kNWOC`): standing boy 0.501. "I don't want them to be any bigger than that." |
-| Lying length | 58% of frame height | Same reference: prone boy at the same depth is 0.581 long (feet and head extend the line) |
-| Contact line | 83.6% down the frame | Feet (or body on the floor) of the reference figures at the front of the mat |
-| Position | centred, one depth for every exercise | Front and centre; same depth means the same scale rule applies to every move |
+| Size depends on depth | on-screen length = `size_per_depth[kind]` × (contact line − horizon) | Flat floor in perspective: nearer is bigger. Measured from Charles's white proportion check (`Five-position_exercise_scale_comparison.png`): horizon 0.444; standing 1.634, lying 1.667, kneeling 1.248 (feet-to-head width). Standing, lying and the runner agree within 5% |
+| Standing moves | feet at 95% down the frame → about 83% of frame height tall | Charles: standing moves at the very front of the frame |
+| Floor moves | body at 90% down → lying about 76% long, knee push-up about 57% wide | Charles: floor moves a small bit back from the standing spot |
+| Position | centred | Front and centre |
+| Measure on white | use the white-background version of a proportion check | Dumbbell racks and furniture break the cut-out and shrink the measurements (the rack clipped the kneeling boy's feet: 0.384 instead of 0.448) |
 | One transform per clip | fixed scale and offset | Tracking per frame makes Mark slide around the mat |
 | Head and hair | always inside the frame | Hands may leave the top of the screen; the head may not. The report checks every frame |
 | No mid-air cut lines | source edges stay off-canvas | If Mark touches an edge of the source frame and that edge lands inside the canvas, the body ends at a straight line in mid-air |
@@ -54,7 +55,8 @@ gym plate, at the same proportion for every exercise. Built and tested on the si
   enough for both sides.
 - **Frames after a scene change** (the sit-up source flips him round at ~frame 104): set `usable_until_frame`.
 - **Hair detection fooled by the wristband** (both dark): the check uses the largest dark-brown area.
-- **Too big.** 79% of frame height looked dramatic but broke proportion; the reference caps it at 50%.
+- **One size for every depth.** The first rule (standing = 50% of frame height everywhere) ignored perspective; when the room was zoomed in and floor moves moved behind standing moves, sizes had to come from depth. Re-measure from a new proportion check whenever the room or camera changes.
+- **Measuring on a busy background.** The in-room proportion check under-measured two figures where they overlapped a dumbbell rack; the white version fixed it.
 
 ## What to ask for in a render (so finishing just works)
 
