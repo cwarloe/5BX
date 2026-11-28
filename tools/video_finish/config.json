@@ -58,6 +58,17 @@
       "usable_until_frame": 104,
       "notes": "After frame ~104 the clip flips him round; never use frames past it. The clip ends before he is fully back down, so a forward cut jumps (3.49); ping-pong (forward then backward) has no joint."
     },
+    "situp_headonly": {
+      "title": "2 Head-and-shoulders partial sit-up (salvage edit)",
+      "placement": "floor",
+      "drive_id": "1SKXu1BQ9Bd-vAEfOXwQoRLQ7PnGAHq3v",
+      "drive_name": "02_Mark_White_HeadOnly_3Rep_8p5s_SALVAGE_WORKPRINT.mp4",
+      "body_length_px": 864,
+      "body_kind": "lying",
+      "measured": "bounding-box width lying flat, median of 12 sampled frames (2026-11-28)",
+      "loop": {"start": 68, "end": 136, "mode": "cut", "joint": 0.89},
+      "notes": "Review alternative to 'situp': the source clip rises to a near-full sit-up (~60 degrees) between frames ~30 and ~80, which is more than the Chart 1 small curl. This 3-rep salvage edit keeps only the small lift. It is a re-encoded edit, not an original; use only until a clean small-curl render exists."
+    },
     "legraise": {
       "title": "3 Alternating prone leg raise",
       "placement": "floor",

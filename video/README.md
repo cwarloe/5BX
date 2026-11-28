@@ -162,3 +162,31 @@ image was meant, this note is filed in the wrong place.
 on the way here, with the images themselves in `design/`. Read it before
 changing the style — several of the obvious-looking alternatives are already
 ruled out, some of them by the pipeline rather than by taste.
+
+## Photographic per-level renderer (`render_level.py`)
+
+`video/chart.py` above builds the cartoon Sprite Boy video from stills. `render_level.py` does the same job
+for the photographic Mark clips. It takes the looping studio MP4s from `tools/video_finish` and renders any
+Chart and level as a follow-along video, with a rep or step counter.
+
+```bash
+python3 tools/video_finish/video_finish.py all --work tools/video_finish/work --out tools/video_finish/out
+python3 video/render_level.py --chart 1 --level D- --out out/5bx_c1_D-.mp4
+python3 video/render_level.py --chart 1 --all --out-dir out/          # all 12 levels
+python3 video/render_level.py --chart 1 --level A+ --plan-only        # timeline only, no video
+python3 -m unittest discover -s video/tests
+```
+
+- **Numbers come only from `data/5bx-charts.json`:** seconds per exercise, reps and steps per level, the
+  jump rule, and the app's cadence floor/ceiling and transition seconds. Exercise 5 uses the same plan as
+  `app.js` (`Metro.plan`): a jump set after every full 75-step block except the one that finishes the target.
+- **Clips are never slowed down.** When a level needs fewer reps than fit, `--pacing spread` (default) puts
+  a rest hold, on the starting pose, after each rep. `--pacing front` does all reps first, then holds.
+  When a level needs a clip sped up more than `--max-speed` (1.6x), the render still fits the time but
+  writes a warning. Warnings mean the source clip is too slow for that level.
+- `level_clips.json` maps each exercise to its studio clip and says how many **counted** reps one loop
+  shows (ex3 counts one when the second leg comes down; ex5 counts left-foot landings).
+- `level_cards.json` holds the draft wording. Its long-term home is the exercise contract (see
+  `specs/production-framework`).
+- Each MP4 gets a `.build.json` next to it: input hashes, code revision, the full timeline, warnings and
+  the output hash. Every render is a review candidate; Charles approves final videos.

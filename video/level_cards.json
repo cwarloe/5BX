@@ -1,0 +1,23 @@
+{
+  "_about": "DRAFT wording for cards and overlays, written to the 2026-11-27 middle-school standard (Orban's pictures decide; keep the defining beat, relax range). Long-term this text belongs in each exercise contract (specs/production-framework, PR #125). The V2 cue-card review in Drive may replace it.",
+  "opening": {"kicker": "CHARLES FIT CLUB  ·  5BX CHART {chart}  ·  LEVEL {level}", "title": "PICK A MISSION.",
+              "lines": ["Today's targets:", "• Toe touch {r1}  ·  Sit-up {r2}", "• Leg raise {r3}  ·  Knee push-up {r4}", "• Run in place {steps} steps", "11 minutes of work. Go at your own pace."]},
+  "closing": {"kicker": "CHARLES FIT CLUB  ·  5BX CHART {chart}  ·  LEVEL {level}", "title": "MISSION COMPLETE",
+              "lines": ["You showed up.", "Same time tomorrow."]},
+  "done_banner": "SET DONE · REST",
+  "done_banner_run": "STEPS DONE · EASY JOG",
+  "exercises": {
+    "1":  {"title": "TOE TOUCH", "unit": "toe touches", "tip": "Reach high, fold down, rise and lean back a little",
+           "cues": ["Feet apart, arms overhead", "Fold down, knees can bend", "Small lean back at the top"]},
+    "2":  {"title": "PARTIAL SIT-UP", "unit": "sit-ups", "tip": "Lift head and shoulders until you see your toes",
+           "cues": ["Lie on your back, legs straight", "Arms stay at your sides", "Small curl, then lie back down"]},
+    "3":  {"title": "LEG RAISE", "unit": "leg raises", "tip": "Lift your head and one leg, then switch",
+           "cues": ["Lie face down, palms under thighs", "Small lift, leg fairly straight", "Count 1 when the second leg comes down"]},
+    "4":  {"title": "KNEE PUSH-UP", "unit": "push-ups", "tip": "Chest to the floor, then push to straight arms",
+           "cues": ["Knees stay on the floor", "Hands under shoulders", "Body straight from the knees"]},
+    "5":  {"title": "RUN IN PLACE", "unit": "steps", "tip": "Count each left-foot landing",
+           "cues": ["Lift feet about 4 inches", "Every 75 steps: 10 scissor jumps", "Stay relaxed, steady rhythm"]},
+    "5b": {"title": "SCISSOR JUMPS", "unit": "jumps", "tip": "Opposite arm forward, switch legs in the air",
+           "cues": ["Small hop", "Switch legs in the air"]}
+  }
+}
