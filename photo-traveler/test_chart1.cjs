@@ -32,6 +32,11 @@ assert.equal((listing.match(/data-copy="/g)||[]).length,8,"Six main prompts plus
 assert.ok((listing.match(/class="asset"/g)||[]).length>=25,"All reference cards and individual PNGs are visible as linked thumbnails");
 assert.ok(listing.includes("THE NEAR/FRONT LEG REMAINS COMPLETELY ON THE FLOOR"),"Leg isolation in actual prompt");
 assert.ok(listing.includes("AUTHORITATIVE MOVEMENT SOURCE"),"Sit-up uses the user's new motion source");
+assert.ok(listing.includes("Review Flow loop"),"Alternate leg raise recovers the existing Flow source and review");
+assert.ok(listing.includes("1qsoEJseKk2mBahA_vHEKKGNfc8-HLjBd"),"Original eight-second Flow source is linked");
+assert.ok(listing.includes("1FA0bYUeQvd37W9o1Q3zDoZpPgAhP4DE7"),"Existing three-cycle review is linked");
+assert.ok(listing.includes("Find exact source prompt in Flow"),"Grok prompt is not mislabeled as exact Flow provenance");
+assert.ok(!listing.includes("Previous gray-background loop · HOLD"),"Obsolete gray-background hold label removed");
 assert.ok(listing.includes("tousled brown hair"),"Original run prompt is present");
 assert.ok(listing.includes("LOW-IMPACT scissor exchanges"),"Original scissor prompt is present");
 assert.ok(listing.includes("Return" )||listing.includes("Returned Flow"),"Video handoff is visible");
