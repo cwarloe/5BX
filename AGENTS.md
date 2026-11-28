@@ -6,6 +6,17 @@ Create a consistent, believable, high-quality 5BX workout series and carry it th
 
 The team has learned a great deal from experiments. The productive habit now is **use what works, finish the next stage, and keep the exercises moving**. A good reference card and its major-pose images form a handoff to video production. They can remain settled while we work on motion, editing, timing, and the final workout. We can revisit a still when a meaningful production issue emerges.
 
+## Active production-source gate (Charles directive, 2026-11-27)
+
+**Mandatory before any Grok, Google Flow, or other video generation.** These are current decisions, not optional style preferences.
+
+1. **Source order:** Charles's latest explicit direction > current Google Drive `00_CHART1_TRAVELER__OPEN_FIRST.md` and its per-exercise working folder > current approved image/card and clean prompt > historical experiments. Search recent Drive and GitHub first; do not pick a reference merely because it appears in Flow/Grok history.
+2. **Approved image family:** Use the current **white-background, photorealistic Mark** exercise cards and individual high-resolution poses from the designated Drive exercise folder. For Chart 1 Exercise 5b, the current set is the **six accepted white-background pose PNGs**, six-phase card, two leg-leading cards, and clean scissor prompt linked by the traveler and `QA_SCISSOR.txt`. Existing verified white-background loop footage is the first editing candidate. Verify the actual images before submission.
+3. **Hard exclusion:** Do not upload, reference, condition on, regenerate from, or reuse any outdoor running-track/grass/trees assets, old marker-based track images, legacy Flow scene/video history, or rejected/archived images for new video runs. These remain diagnostic history only. This overrides any older traveler line or prompt suggesting outdoor references as extra conditioning.
+4. **Motion:** Small, modest schoolboy exercise movements; scissor hop about 3–4 inches, correct physical near/far leg exchange, compact relaxed arm swing rather than straight shoulder-height/90-degree arms, no ballet, gymnastics, extreme split, sprint, long leap, or unnatural anatomy. Same youthful character identity, shorts, footwear, and stable camera.
+5. **Presentation:** The eventual studio back wall is **cream**, not olive drab; do not place a permanent logo on that wall. Olive drab, burnt orange, and cream belong on cue-card graphics. The Charles Fit Club logo/stencil may appear subtly on the opening/exercise graphics, not as a giant wall graphic. Keep title/countdown upper right and instructions readable.
+6. **Preflight evidence:** Before spending credits, record the exact Drive URL/file IDs of each chosen approved reference, prompt text and exercise/version, plus a short visual check confirming WHITE background and correct identity/poses. If any input conflicts with these rules, **do not generate**; locate the correct current working asset or report the gap. Once generated, record provider, output link and a frame-level pass/reject result. No generated video is final until Charles approves the exact output.
+
 ## Creative judgment and momentum
 
 - Begin by locating the strongest existing asset, exact prompt, and most recent practical assessment. Current Chart 1 Google Drive exercise folders and loop-review links are the best starting points. Grok, Flow, and archives can fill a genuine discovery gap.
