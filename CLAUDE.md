@@ -16,6 +16,7 @@ material into another one.
 | `sprites/` | The sprite kit: builds the exercise video from pose strips, makes the ChatGPT/Grok prompts and batches, keys sheets, checks backgrounds. Start at `sprites/OVERVIEW.md` |
 | `sprites/qc-line/` | A second, smaller pipeline (sheet QC, cut-out manifest, he/she prompt tokens, mats drawn in code). To be ported into the kit, then deleted |
 | branch `sprite-boy-demo` | The built 5BX Workout Mixer demo page (generated; about 57 MB, not on `main`). Hosted on Cloudflare Pages at https://workout-mixer.pages.dev/, not on GitHub Pages; how to refresh it is in `sprites/OVERVIEW.md` |
+| `tools/video_finish/` | Turns a white-background clip into a looping gym video at the reference proportion: loop finder, measuring, person cut-out, placement, checks. Settings and per-clip data in its `config.json`; order of steps, rules and known mistakes in its `README.md` |
 | `specs/` | Feature specs (see below) |
 | `.github/workflows/pages.yml` | Publishes the app at `/5BX/` and the game at `/5BX/game/` |
 
