@@ -1,0 +1,97 @@
+{
+  "_about": "Settings and per-clip data for tools/video_finish. Every number here was measured, not guessed; see README.md for how. Change a value here, not in the code.",
+
+  "canvas": {"width": 1280, "height": 720, "fps": 24},
+
+  "plate": {
+    "file": "plates/cfc_gym_mat_front_1672x941.png",
+    "about": "Charles Fit Club gym, centred wall branding above a foreground mat (from Charles, 2026-11-27). Scaled to the canvas."
+  },
+
+  "proportion": {
+    "standing_height_frac": 0.50,
+    "lying_length_frac": 0.58,
+    "contact_line_frac": 0.836,
+    "center_x_frac": 0.5,
+    "max_standing_height_frac": 0.50,
+    "about": "Measured from Charles's proportion reference (Drive 1bN2nxYXNHUsX0zWDCo3nK2FvME5kNWOC, 'Centered_wall_branding_above_a_ee8de63e_2K.png', 2730x1536) with the same person cut-out the tool uses: the standing boy is 0.501 of frame height with his feet at 0.836; the prone boy at the same depth is 0.581 long. Charles: 'I don't want them to be any bigger than that.' Everyone is placed front and centre at one depth, so the same rule applies to every exercise."
+  },
+
+  "loop": {
+    "joint_smooth_below": 1.5,
+    "joint_visible_above": 3.0,
+    "window_frames": 2,
+    "min_cycle_seconds": 1.0,
+    "must_cover_fraction_of_motion": 0.5,
+    "target_seconds": 15,
+    "about": "Joint score = change across the loop joint divided by the clip's median frame-to-frame change. Under 1.5 reads as continuous; 1.5-3 a slight hitch; over 3 a visible jump."
+  },
+
+  "matte": {
+    "model": "u2net_human_seg",
+    "about": "Brightness keying fails on these clips: Mark's grey shoes (~220) match the white studio backdrop (216-230) and the floor shadow is only slightly darker. The person-segmentation model separates both. ~1.1 s per 720p frame on CPU."
+  },
+
+  "limits": {
+    "parallel_jobs": 2,
+    "about": "Each job holds its frames in memory; six at once ran out of memory in a 7 GB workspace. Two at a time is safe."
+  },
+
+  "clips": {
+    "toe": {
+      "title": "1 Toe touch",
+      "drive_id": "19o8ThEVPF1vKSVa1PQTUKsxGMSoCAe8L",
+      "drive_name": "REVIEW__Mark_Toe_Touch_Flow_6sec.mp4",
+      "body_length_px": 632, "body_kind": "standing",
+      "measured": "bounding-box height at frames 20-26 (arms forward, head to feet)",
+      "loop": {"start": 2, "end": 113, "mode": "cut", "joint": 1.62},
+      "notes": "Only one repetition, so the joint shows a slight hitch; re-render with 2-3 repetitions. Flow cropped the raised hands at the top of the frame, so at the reference size the fingertips end at a straight line in mid-air: re-render with empty space above the raised hands. No backbend at the top, unlike the card's fourth pose."
+    },
+    "situp": {
+      "title": "2 Head-only partial sit-up",
+      "drive_id": "1ZTFqdaE1vB131JGPpJa7Vo71phE5anh6",
+      "drive_name": "SOURCE__Mark_White_BG_HeadLift_FullClip_2026-11-27.mp4",
+      "body_length_px": 863, "body_kind": "lying",
+      "measured": "bounding-box width lying flat, frames 0-8",
+      "loop": {"start": 0, "end": 104, "mode": "pingpong", "joint": 3.49},
+      "usable_until_frame": 104,
+      "notes": "After frame ~104 the clip flips him round; never use frames past it. The clip ends before he is fully back down, so a forward cut jumps (3.49); ping-pong (forward then backward) has no joint."
+    },
+    "legraise": {
+      "title": "3 Alternating prone leg raise",
+      "drive_id": "1qsoEJseKk2mBahA_vHEKKGNfc8-HLjBd",
+      "drive_name": "REVIEW__Mark_Alternate_Leg_Raise_Flow_8sec.mp4",
+      "body_length_px": 977, "body_kind": "lying",
+      "measured": "bounding-box width lying flat, frames 0-8 and 60-70, with the vignette excluded (value < 150)",
+      "loop": {"start": 6, "end": 186, "mode": "cut", "joint": 2.24, "min_cycle_seconds": 5.5},
+      "notes": "Alternating exercise: the loop must contain BOTH legs. With the default minimum length the finder chose a 3.3 s loop of one leg, so this clip needs min_cycle_seconds 5.5."
+    },
+    "kneepushup": {
+      "title": "4 Kneeling push-up",
+      "drive_id": "1fIwL0Da3m-lD9zCcQKtkX0ovmXZDoLKM",
+      "drive_name": "REVIEW__KneePushup__BlueShirt_WhiteBackground_6sec.mp4",
+      "body_length_px": 1160, "body_kind": "standing",
+      "measured": "CALIBRATED to Charles's proportion reference: the kneeling boy there is 0.372 of frame height wide (feet to head) at contact line 0.761; corrected to the front depth (the reference's supine/prone pair shrinks about 2.7x per unit of contact-line height) that is about 0.465, i.e. 335 px at 720p. The source is about 1078 px wide, so the equivalent standing height is about 1160 px. (A first estimate from shin length, 1550, made him visibly too small.)",
+      "loop": {"start": 4, "end": 141, "mode": "cut", "joint": 1.64},
+      "notes": "Most zoomed-in source (about 2.2-3x the standing clips). A wider re-render ('full body, camera farther back') would look sharper than shrinking."
+    },
+    "run": {
+      "title": "5A Run in place",
+      "drive_id": "1iMFAxa1Uctf7L2rz3iiRj6sr6ExE2T1Z",
+      "drive_name": "05A_RUN_SOURCE_USER_VIDEO17_WHITE.mp4",
+      "body_length_px": 1032.5, "body_kind": "standing",
+      "measured": "median bounding-box height over the clip (portrait 784x1168 source)",
+      "loop": {"start": 80, "end": 171, "mode": "cut", "joint": 0.88},
+      "notes": "Many strides; loops smoothly."
+    },
+    "scissor": {
+      "title": "5B Gentle scissor hops",
+      "drive_id": "10I8cyJ8m0w82OELa8Vi54iU0k6tVyLRv",
+      "drive_name": "REVIEW__Mark_Gentle_Scissor_Flow_6sec.mp4",
+      "body_length_px": 642, "body_kind": "standing",
+      "measured": "median bounding-box height over the clip",
+      "loop": {"start": 56, "end": 84, "mode": "cut", "joint": 1.63},
+      "notes": "A small bounce, not the split-leg exchange (traveler: not a valid scissor). The top of the hair touches the top of the source frame in the hops."
+    }
+  }
+}

@@ -1,0 +1,6 @@
+# Plus ffmpeg/ffprobe on PATH.
+numpy
+scipy
+pillow
+rembg          # person cut-out; downloads the u2net_human_seg model (~176 MB) on first use
+onnxruntime
